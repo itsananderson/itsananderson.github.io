@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Will Anderson</title>
+	<title>Pass Dynamic Flags to NuGet With PowerShell Splatting - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="After David wrote these nice blog posts at my request, I figured I should probably give Octopress the old college try. Mar 30th, 2014 Blogging, &hellip;">
+	<meta name="description" content="While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,135 +77,9 @@
 	
 		
 	
-	<div id="content" class="inner">
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/03/30/hello-octopress/">
-		
-			Hello, Octopress!</a>
-	</h2>
-	<div class="entry-content">
-		<p>After <a href="https://twitter.com/druttka">David</a> wrote <a href="http://www.davidruttka.com/blog/2014/03/29/moving-from-wordpress-to-github-pages-using-jekyll-via-octopress/">these</a> nice <a href="http://www.davidruttka.com/blog/2014/03/29/setting-up-octopress-for-github-pages/">blog posts</a> at my request, I figured I should probably give Octopress the old college try.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-30T09:48:36-07:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/blogging/'>Blogging</a>, <a class='category' href='/blog/categories/octopress/'>Octopress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/03/29/testing-whether-an-npm-module-is-installed/">
-		
-			Testing Whether an NPM Module Is Installed</a>
-	</h2>
-	<div class="entry-content">
-		<p>Node doesn&rsquo;t have a well documented way of checking whether a module is available.
-This is usually fine. You just include a package.json in your project, and expect people to run <code>npm install</code>.
-This is how most popular Node frameworks work.</p>
-
-<p>But what if you have a devDependency entry that you want to include only if it is installed?
-I searched for an answer and didn&rsquo;t find anything conclusive, so I&rsquo;m documenting what I <em>did</em> find in case I forget later.</p>
-
-<p>Buried in NPM&rsquo;s package.json documentation is <a href="https://www.npmjs.org/doc/json.html#optionalDependencies">an example</a>
-for handling a package that may or may not be installed. In short, you use a try/catch. Here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">program</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">program</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;commander&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">er</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Any code to run if this module doesn&#39;t exist</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">program</span><span class="p">.</span><span class="nx">version</span><span class="p">(</span><span class="s1">&#39;0.0.1&#39;</span><span class="p">)</span> <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s1">&#39;-n, --name[name]&#39;</span><span class="p">,</span> <span class="s1">&#39;Your name&#39;</span><span class="p">)</span>
-</span><span class='line'>         <span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-29T10:12:23-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/">
-		
-			Pass Dynamic Flags to NuGet With PowerShell Splatting</a>
-	</h2>
-	<div class="entry-content">
-		<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Pass Dynamic Flags to NuGet With PowerShell Splatting</h2>
+	<div class="entry-content"><p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -299,10 +173,7 @@ I found that they have a pretty customized argument parser, which seems to make 
 
 <p>So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
 This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective.</p>
-
-		
-		
-	</div>
+</div>
 
 
 <div class="meta">
@@ -330,73 +201,20 @@ This is actually somewhat intuitive from a classic CMD standpoint, but not so mu
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
 		
-		<a href="/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/">
 		
-			Using &#8220;Controller as&#8221; Syntax in Angular Routes</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
-the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
-The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$routeProvider</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;Views/Home/Index.html&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;HomeCtrl&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">controllerAs</span><span class="o">:</span> <span class="s1">&#39;vm&#39;</span>
-</span><span class='line'>    <span class="p">})</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">otherwise</span><span class="p">({</span> <span class="nx">redirectTo</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span> <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
-
+		<a class="addthis_button_tweet"></a>
+		
 		
 		
 	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-03T09:33:58-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2013</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
-
-
-</div>
 	
 </div>
-</article>
 
-<nav id="pagenavi">
-    
-    
-    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
-</nav></div>
+
+</div>
 	<footer id="footer" class="inner">Copyright &copy; 2014
 
     Will Anderson
