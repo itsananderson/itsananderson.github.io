@@ -3,7 +3,7 @@ layout: post
 title: "Hello, Octopress!"
 date: 2014-03-30 09:48:36 -0700
 comments: true
-categories: Octopress, Blogging
+categories: Octopress Blogging
 ---
 
 After [David](https://twitter.com/druttka) wrote [these](http://www.davidruttka.com/blog/2014/03/29/moving-from-wordpress-to-github-pages-using-jekyll-via-octopress/) nice [blog posts](http://www.davidruttka.com/blog/2014/03/29/setting-up-octopress-for-github-pages/) at my request, I figured I should probably give Octopress the old college try.
