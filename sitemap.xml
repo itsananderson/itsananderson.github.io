@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://willi.am//blog/2013/10/09/creating-an-angular-markdown-preview/</loc>
+        <lastmod>2014-03-31T17:59:56-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am//blog/2013/12/03/using-controller-as-syntax-in-angular-routes/</loc>
         <lastmod>2014-03-30T10:37:49-07:00</lastmod>
     </url>
@@ -20,11 +24,11 @@
     </url>
     <url>
         <loc>http://willi.am//blog/archives/</loc>
-        <lastmod>2014-03-30T10:38:01-07:00</lastmod>
+        <lastmod>2014-03-31T17:59:56-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am//</loc>
-        <lastmod>2014-03-30T10:38:01-07:00</lastmod>
+        <lastmod>2014-03-31T17:59:56-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am//robots.txt</loc>
