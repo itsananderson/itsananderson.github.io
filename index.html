@@ -24,7 +24,7 @@
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
 <nav id="main-nav"><ul class="main">
-	<li><a href="/">Blog</a></li>
+	<li><a href="/plugins">WordPress Plugins</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </nav>
@@ -32,7 +32,7 @@
 	<div class="alignleft menu">
 		<a class="button">Menu</a>
 		<div class="container"><ul class="main">
-	<li><a href="/">Blog</a></li>
+	<li><a href="/plugins">WordPress Plugins</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </div>
@@ -600,6 +600,67 @@ There&rsquo;s more to Git (which I&rsquo;m still learning about), but this shoul
 
 
 	<a class='category' href='/blog/categories/github/'>GitHub</a>, <a class='category' href='/blog/categories/windows/'>Windows</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/12/15/new-plugin-wp-sendgrid/">
+		
+			New Plugin WP SendGrid</a>
+	</h2>
+	<div class="entry-content">
+		<p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
+At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time
+(because Twilio&rsquo;s API is so easy to use!), so I wrote another plugin called <a href="http://www.itsananderson.com/plugins/wp-sendgrid/">WP SendGrid</a> using the SendGrid API.</p>
+
+<p>This plugin extends WordPress&#8217; <code>wp_mail()</code> function to use SendGrid&rsquo;s API for all emails.
+This was useful to me because I&rsquo;ve never been able to figure out how to get PHP to send emails in Windows.
+In the past, when I&rsquo;ve worked on projects that send emails, I always had to upload it to a Linux server to test the email functionality.
+If anything didn&rsquo;t work, I had to edit locally, then upload again to test it.
+After a few iterations, that gets really old.
+With WP SendGrid, I can send emails from my local machine, so debugging issues is <strong>much</strong> easier.</p>
+
+<p>Fast-forward a few months.
+This week I decided to spend a little more time polishing the plugin.
+I&rsquo;d only spent about 45 minutes on it at the HackDay, which shows how simple it is to use SendGrid&rsquo;s API.
+What I put together was enough to meet my needs, but I was using hardcoded values, and wasn&rsquo;t considering every edge-case.
+After a few more hours of work, I had a complete plugin with a nice configuration UI.</p>
+
+<p>If you develop for WordPress on Windows, or you have trouble sending email from PHP on another platform, you&rsquo;ll want to check this plugin out.
+<a href="http://www.itsananderson.com/plugins/wp-sendgrid/">Visit the plugin page</a>.</p>
+
+<p>If you run into any issues, let me know by submitting a ticket on the <a href="https://github.com/codeawhile/wp-sendgrid">GitHub</a> project.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-15T08:49:43-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/sendgrid/'>SendGrid</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>

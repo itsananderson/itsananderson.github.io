@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://willi.am//blog/2011/12/15/new-plugin-wp-sendgrid/</loc>
+        <lastmod>2014-03-31T23:53:35-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am//blog/2011/12/15/configuring-github-on-windows/</loc>
         <lastmod>2014-03-31T23:46:53-07:00</lastmod>
     </url>
@@ -28,11 +32,19 @@
     </url>
     <url>
         <loc>http://willi.am//blog/archives/</loc>
-        <lastmod>2014-03-31T23:46:53-07:00</lastmod>
+        <lastmod>2014-03-31T23:53:35-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am//</loc>
-        <lastmod>2014-03-31T23:46:53-07:00</lastmod>
+        <lastmod>2014-03-31T23:53:35-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am//plugins/</loc>
+        <lastmod>2014-04-01T00:11:50-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am//plugins/wp-sendgrid/</loc>
+        <lastmod>2014-03-31T23:58:56-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am//robots.txt</loc>

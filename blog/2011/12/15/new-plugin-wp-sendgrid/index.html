@@ -3,12 +3,12 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Using "Controller As" Syntax in Angular Routes - Will Anderson</title>
+	<title>New Plugin WP SendGrid - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
-the &hellip;">
+	<meta name="description" content="A couple of months ago, I had the opportunity to attend an API Hackday event in Bloomington.
+At the event, I created some cool WordPress tools using &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,29 +79,28 @@ the &hellip;">
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h2 class="title">Using "Controller as" Syntax in Angular Routes</h2>
-	<div class="entry-content"><p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
-the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
-The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p>
+	<h2 class="title">New Plugin WP SendGrid</h2>
+	<div class="entry-content"><p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
+At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time
+(because Twilio&rsquo;s API is so easy to use!), so I wrote another plugin called <a href="http://www.itsananderson.com/plugins/wp-sendgrid/">WP SendGrid</a> using the SendGrid API.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$routeProvider</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;Views/Home/Index.html&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;HomeCtrl&#39;</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">controllerAs</span><span class="o">:</span> <span class="s1">&#39;vm&#39;</span>
-</span><span class='line'>    <span class="p">})</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">otherwise</span><span class="p">({</span> <span class="nx">redirectTo</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span> <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>This plugin extends WordPress&#8217; <code>wp_mail()</code> function to use SendGrid&rsquo;s API for all emails.
+This was useful to me because I&rsquo;ve never been able to figure out how to get PHP to send emails in Windows.
+In the past, when I&rsquo;ve worked on projects that send emails, I always had to upload it to a Linux server to test the email functionality.
+If anything didn&rsquo;t work, I had to edit locally, then upload again to test it.
+After a few iterations, that gets really old.
+With WP SendGrid, I can send emails from my local machine, so debugging issues is <strong>much</strong> easier.</p>
 
+<p>Fast-forward a few months.
+This week I decided to spend a little more time polishing the plugin.
+I&rsquo;d only spent about 45 minutes on it at the HackDay, which shows how simple it is to use SendGrid&rsquo;s API.
+What I put together was enough to meet my needs, but I was using hardcoded values, and wasn&rsquo;t considering every edge-case.
+After a few more hours of work, I had a complete plugin with a nice configuration UI.</p>
 
-<p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
+<p>If you develop for WordPress on Windows, or you have trouble sending email from PHP on another platform, you&rsquo;ll want to check this plugin out.
+<a href="http://www.itsananderson.com/plugins/wp-sendgrid/">Visit the plugin page</a>.</p>
+
+<p>If you run into any issues, let me know by submitting a ticket on the <a href="https://github.com/codeawhile/wp-sendgrid">GitHub</a> project.</p>
 </div>
 
 
@@ -118,11 +117,11 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
   
 
 
-<time datetime="2013-12-03T09:33:58-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2013</time></div>
+<time datetime="2011-12-15T08:49:43-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
-	<a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+	<a class='category' href='/blog/categories/sendgrid/'>SendGrid</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>
