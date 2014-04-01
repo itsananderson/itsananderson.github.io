@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Windows | Will Anderson]]></title>
+  <link href="http://willi.am//blog/categories/windows/atom.xml" rel="self"/>
+  <link href="http://willi.am//"/>
+  <updated>2014-03-31T23:48:14-07:00</updated>
+  <id>http://willi.am//</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring GitHub on Windows]]></title>
+    <link href="http://willi.am//blog/2011/12/15/configuring-github-on-windows/"/>
+    <updated>2011-12-15T22:21:44-08:00</updated>
+    <id>http://willi.am//blog/2011/12/15/configuring-github-on-windows</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you.</p>
+
+<h2>Getting Started</h2>
+
+<p>First you need to grab a copy of <a href="http://code.google.com/p/msysgit/">Git for Windows</a>.
+Once you&rsquo;ve downloaded the latest version, launch it and go through the license and location screens.
+Once you get to the &ldquo;Select Components&rdquo; screen, make sure both Context menu entries are selected.
+If you want, select the TrueType font option.
+That one shouldn&rsquo;t really matter.</p>
+
+<p><img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="http://willi.am//images/post-images/select-components.png" width="539" height="428" /></p>
+
+<p>Jump ahead a few more frames and you&rsquo;ll get to the SSH executable option.
+Choose &ldquo;OpenSSH&rdquo;, unless you have a compelling reason to use Plink.</p>
+
+<p><img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="http://willi.am//images/post-images/openssh.png" width="546" height="432" /></p>
+
+<p>Run through the rest of the frames, accepting the defaults.
+You now have Git installed on your machine, but we&rsquo;re not quite done yet.
+GitHub uses public/private key encryption.
+This means you don&rsquo;t commit with a username and password, like most SVN setups.
+Instead, you tell GitHub your public key, then use your private key to authenticate.</p>
+
+<h2>Generating a Public Key</h2>
+
+<p>GitHub has a detailed article on setting up your SSH keys on Mac/Windows/Linux.
+I recommend <a href="https://help.github.com/articles/generating-ssh-keys">checking it out</a>.</p>
+
+<h2>Clone a Repository From GitHub</h2>
+
+<p>You&rsquo;re just about there.
+Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
+Make sure SSH is selected.</p>
+
+<p><img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="http://willi.am//images/post-images/github-url.png" width="664" height="33" /></p>
+
+<p>Open up Git Bash.
+You should be able to find it in your start menu.
+&ldquo;cd&rdquo; to the directory where you plan on checking out your code.
+For example, if you want your code to be located in C:\programming\project then you want to &ldquo;cd&rdquo; to C:\programming.</p>
+
+<p>Type out &ldquo;git clone &rdquo;, but don&rsquo;t hit enter yet.
+Go to the top left corner of the Git Bash window and click.
+In the menu that pops up, select Edit &ndash;> Paste to paste the URL of your repository, but still don&rsquo;t hit enter.
+Finally, type the name you want to call the project folder.
+In our example, you&rsquo;d want something like this:</p>
+
+<p><code>git clone git@github.com:itsananderson/wp-sendgrid.git project</code></p>
+
+<p>Now you can hit enter :)</p>
+
+<p>If you entered a passphrase for your private key, it will ask you for it.
+If all goes well, your repository should be downloaded.</p>
+
+<h2>Some Sample Commands</h2>
+
+<p>This isn&rsquo;t really a tutorial on Git commands, but here are a few to get you started:</p>
+
+<p>```bash</p>
+
+<h1>See what files have changed:</h1>
+
+<p>git status</p>
+
+<h1>Add a file (new or modified, it doesn&rsquo;t matter. You need to add it to commit it)</h1>
+
+<p>git add file.php</p>
+
+<h1>Add several files:</h1>
+
+<p>git add *.php</p>
+
+<h1>Commit your changes locally (just stores a local snapshot of your changes):</h1>
+
+<p>git commit -m &ldquo;Your commit message here&rdquo;</p>
+
+<h1>Push your changes up to GitHub:</h1>
+
+<p>git push -u origin master</p>
+
+<h1>Pull down updates from GitHub:</h1>
+
+<p>git pull
+```</p>
+
+<p>That&rsquo;s about it.
+There&rsquo;s more to Git (which I&rsquo;m still learning about), but this should hopefully be enough to help you get started.</p>
+]]></content>
+  </entry>
+  
+</feed>
