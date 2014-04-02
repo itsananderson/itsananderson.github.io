@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Password | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/password/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-04-01T18:55:14-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[New Plugin: Minimum Password Strength]]></title>
+    <link href="http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength/"/>
+    <updated>2011-12-14T14:09:34-08:00</updated>
+    <id>http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength</id>
+    <content type="html"><![CDATA[<p>A couple of years ago I released a plugin called
+&ldquo;<a href="/plugins/minimum-password-length/">Minimum Password Length</a>&rdquo;.
+It&rsquo;s been pretty popular, mostly thanks to some
+<a href="http://www.bloggingpro.com/archives/2009/08/23/wordpress-plugin-minimum-password-length/">link love</a>.
+Ever since I released the plugin, I&rsquo;ve been thinking &ldquo;wouldn&rsquo;t it be nice to do something similar,
+but harness the WordPress password strength meter?&rdquo;.
+Well, I finally took the time to do that, and so we have the <a href="/plugins/minimum-password-strength/">Minimum Password Strength</a> plugin.</p>
+
+<p>This is also a special plugin, because it&rsquo;s the first one I&rsquo;ve simultaneously published on GitHub and my site.
+I plan on uploading my other plugins to GitHub at some point
+(in fact, I uploaded <a href="/plugins/short-comment-filter/">Short Comment Filter</a> a few days ago),
+but Minimum Password Strength is the first one that&rsquo;s there from the start.</p>
+]]></content>
+  </entry>
+  
+</feed>

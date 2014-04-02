@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Will Anderson]]></title>
-  <link href="http://willi.am//atom.xml" rel="self"/>
-  <link href="http://willi.am//"/>
-  <updated>2014-04-01T00:12:43-07:00</updated>
-  <id>http://willi.am//</id>
+  <link href="http://willi.am/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-04-01T18:55:14-07:00</updated>
+  <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
     
@@ -15,18 +15,18 @@
   
   <entry>
     <title type="html"><![CDATA[Hello, Octopress!]]></title>
-    <link href="http://willi.am//blog/2014/03/30/hello-octopress/"/>
+    <link href="http://willi.am/blog/2014/03/30/hello-octopress/"/>
     <updated>2014-03-30T09:48:36-07:00</updated>
-    <id>http://willi.am//blog/2014/03/30/hello-octopress</id>
+    <id>http://willi.am/blog/2014/03/30/hello-octopress</id>
     <content type="html"><![CDATA[<p>After <a href="https://twitter.com/druttka">David</a> wrote <a href="http://www.davidruttka.com/blog/2014/03/29/moving-from-wordpress-to-github-pages-using-jekyll-via-octopress/">these</a> nice <a href="http://www.davidruttka.com/blog/2014/03/29/setting-up-octopress-for-github-pages/">blog posts</a> at my request, I figured I should probably give Octopress the old college try.</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Testing Whether an NPM Module Is Installed]]></title>
-    <link href="http://willi.am//blog/2014/03/29/testing-whether-an-npm-module-is-installed/"/>
+    <link href="http://willi.am/blog/2014/03/29/testing-whether-an-npm-module-is-installed/"/>
     <updated>2014-03-29T10:12:23-07:00</updated>
-    <id>http://willi.am//blog/2014/03/29/testing-whether-an-npm-module-is-installed</id>
+    <id>http://willi.am/blog/2014/03/29/testing-whether-an-npm-module-is-installed</id>
     <content type="html"><![CDATA[<p>Node doesn&rsquo;t have a well documented way of checking whether a module is available.
 This is usually fine. You just include a package.json in your project, and expect people to run <code>npm install</code>.
 This is how most popular Node frameworks work.</p>
@@ -68,9 +68,9 @@ for handling a package that may or may not be installed. In short, you use a try
   
   <entry>
     <title type="html"><![CDATA[Pass Dynamic Flags to NuGet With PowerShell Splatting]]></title>
-    <link href="http://willi.am//blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/"/>
+    <link href="http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/"/>
     <updated>2014-02-07T09:24:32-08:00</updated>
-    <id>http://willi.am//blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting</id>
+    <id>http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting</id>
     <content type="html"><![CDATA[<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -170,9 +170,9 @@ This is actually somewhat intuitive from a classic CMD standpoint, but not so mu
   
   <entry>
     <title type="html"><![CDATA[Using "Controller As" Syntax in Angular Routes]]></title>
-    <link href="http://willi.am//blog/2013/12/03/using-controller-as-syntax-in-angular-routes/"/>
+    <link href="http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/"/>
     <updated>2013-12-03T09:33:58-08:00</updated>
-    <id>http://willi.am//blog/2013/12/03/using-controller-as-syntax-in-angular-routes</id>
+    <id>http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
 the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
 The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p>
@@ -200,9 +200,9 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
   
   <entry>
     <title type="html"><![CDATA[Creating an Angular Markdown Preview]]></title>
-    <link href="http://willi.am//blog/2013/10/09/creating-an-angular-markdown-preview/"/>
+    <link href="http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/"/>
     <updated>2013-10-09T17:56:26-07:00</updated>
-    <id>http://willi.am//blog/2013/10/09/creating-an-angular-markdown-preview</id>
+    <id>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
 
 <p>Because I like to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for things like my dev journal, I have been wanting to implement my own Markdown preview tool that I could customize to work just the way I want. When I first started learning Angular, I decided to see how easy it would be to write an Angular Markdown preview tool using Angular. Turns out it&rsquo;s super simple.</p>
@@ -246,9 +246,9 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
   
   <entry>
     <title type="html"><![CDATA[Configuring GitHub on Windows]]></title>
-    <link href="http://willi.am//blog/2011/12/15/configuring-github-on-windows/"/>
+    <link href="http://willi.am/blog/2011/12/15/configuring-github-on-windows/"/>
     <updated>2011-12-15T22:21:44-08:00</updated>
-    <id>http://willi.am//blog/2011/12/15/configuring-github-on-windows</id>
+    <id>http://willi.am/blog/2011/12/15/configuring-github-on-windows</id>
     <content type="html"><![CDATA[<p>If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you.</p>
 
 <h2>Getting Started</h2>
@@ -259,12 +259,12 @@ Once you get to the &ldquo;Select Components&rdquo; screen, make sure both Conte
 If you want, select the TrueType font option.
 That one shouldn&rsquo;t really matter.</p>
 
-<p><img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="http://willi.am//images/post-images/select-components.png" width="539" height="428" /></p>
+<p><img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="http://willi.am/images/post-images/select-components.png" width="539" height="428" /></p>
 
 <p>Jump ahead a few more frames and you&rsquo;ll get to the SSH executable option.
 Choose &ldquo;OpenSSH&rdquo;, unless you have a compelling reason to use Plink.</p>
 
-<p><img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="http://willi.am//images/post-images/openssh.png" width="546" height="432" /></p>
+<p><img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="http://willi.am/images/post-images/openssh.png" width="546" height="432" /></p>
 
 <p>Run through the rest of the frames, accepting the defaults.
 You now have Git installed on your machine, but we&rsquo;re not quite done yet.
@@ -283,7 +283,7 @@ I recommend <a href="https://help.github.com/articles/generating-ssh-keys">check
 Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
 Make sure SSH is selected.</p>
 
-<p><img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="http://willi.am//images/post-images/github-url.png" width="664" height="33" /></p>
+<p><img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="http://willi.am/images/post-images/github-url.png" width="664" height="33" /></p>
 
 <p>Open up Git Bash.
 You should be able to find it in your start menu.
@@ -351,9 +351,9 @@ There&rsquo;s more to Git (which I&rsquo;m still learning about), but this shoul
   
   <entry>
     <title type="html"><![CDATA[New Plugin WP SendGrid]]></title>
-    <link href="http://willi.am//blog/2011/12/15/new-plugin-wp-sendgrid/"/>
+    <link href="http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid/"/>
     <updated>2011-12-15T08:49:43-08:00</updated>
-    <id>http://willi.am//blog/2011/12/15/new-plugin-wp-sendgrid</id>
+    <id>http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid</id>
     <content type="html"><![CDATA[<p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
 At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time
 (because Twilio&rsquo;s API is so easy to use!), so I wrote another plugin called <a href="http://www.itsananderson.com/plugins/wp-sendgrid/">WP SendGrid</a> using the SendGrid API.</p>
@@ -375,6 +375,26 @@ After a few more hours of work, I had a complete plugin with a nice configuratio
 <a href="http://www.itsananderson.com/plugins/wp-sendgrid/">Visit the plugin page</a>.</p>
 
 <p>If you run into any issues, let me know by submitting a ticket on the <a href="https://github.com/codeawhile/wp-sendgrid">GitHub</a> project.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[New Plugin: Minimum Password Strength]]></title>
+    <link href="http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength/"/>
+    <updated>2011-12-14T14:09:34-08:00</updated>
+    <id>http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength</id>
+    <content type="html"><![CDATA[<p>A couple of years ago I released a plugin called
+&ldquo;<a href="http://willi.am/plugins/minimum-password-length/">Minimum Password Length</a>&rdquo;.
+It&rsquo;s been pretty popular, mostly thanks to some
+<a href="http://www.bloggingpro.com/archives/2009/08/23/wordpress-plugin-minimum-password-length/">link love</a>.
+Ever since I released the plugin, I&rsquo;ve been thinking &ldquo;wouldn&rsquo;t it be nice to do something similar,
+but harness the WordPress password strength meter?&rdquo;.
+Well, I finally took the time to do that, and so we have the <a href="http://willi.am/plugins/minimum-password-strength/">Minimum Password Strength</a> plugin.</p>
+
+<p>This is also a special plugin, because it&rsquo;s the first one I&rsquo;ve simultaneously published on GitHub and my site.
+I plan on uploading my other plugins to GitHub at some point
+(in fact, I uploaded <a href="http://willi.am/plugins/short-comment-filter/">Short Comment Filter</a> a few days ago),
+but Minimum Password Strength is the first one that&rsquo;s there from the start.</p>
 ]]></content>
   </entry>
   

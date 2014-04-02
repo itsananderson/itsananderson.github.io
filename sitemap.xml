@@ -1,53 +1,69 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://willi.am//blog/2011/12/15/new-plugin-wp-sendgrid/</loc>
+        <loc>http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength/</loc>
+        <lastmod>2014-04-01T18:50:20-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid/</loc>
         <lastmod>2014-03-31T23:53:35-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//blog/2011/12/15/configuring-github-on-windows/</loc>
+        <loc>http://willi.am/blog/2011/12/15/configuring-github-on-windows/</loc>
         <lastmod>2014-03-31T23:46:53-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//blog/2013/10/09/creating-an-angular-markdown-preview/</loc>
+        <loc>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/</loc>
         <lastmod>2014-03-31T17:59:56-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//blog/2013/12/03/using-controller-as-syntax-in-angular-routes/</loc>
+        <loc>http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/</loc>
         <lastmod>2014-03-30T10:37:49-07:00</lastmod>
     </url>
     <url>
         <loc>
-            http://willi.am//blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/
+            http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/
         </loc>
         <lastmod>2014-03-30T10:37:53-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//blog/2014/03/29/testing-whether-an-npm-module-is-installed/</loc>
+        <loc>http://willi.am/blog/2014/03/29/testing-whether-an-npm-module-is-installed/</loc>
         <lastmod>2014-03-30T10:37:57-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//blog/2014/03/30/hello-octopress/</loc>
+        <loc>http://willi.am/blog/2014/03/30/hello-octopress/</loc>
         <lastmod>2014-03-30T10:38:01-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//blog/archives/</loc>
-        <lastmod>2014-03-31T23:53:35-07:00</lastmod>
+        <loc>http://willi.am/blog/archives/</loc>
+        <lastmod>2014-04-01T18:50:20-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//</loc>
-        <lastmod>2014-03-31T23:53:35-07:00</lastmod>
+        <loc>http://willi.am/</loc>
+        <lastmod>2014-04-01T18:50:20-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//plugins/</loc>
-        <lastmod>2014-04-01T00:11:50-07:00</lastmod>
+        <loc>http://willi.am/plugins/</loc>
+        <lastmod>2014-04-01T18:51:49-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//plugins/wp-sendgrid/</loc>
+        <loc>http://willi.am/plugins/minimum-password-length/</loc>
+        <lastmod>2014-04-01T18:50:20-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/minimum-password-strength/</loc>
+        <lastmod>2014-04-01T18:52:28-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/short-comment-filter/</loc>
+        <lastmod>2014-04-01T18:50:20-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/wp-sendgrid/</loc>
         <lastmod>2014-03-31T23:58:56-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am//robots.txt</loc>
+        <loc>http://willi.am/robots.txt</loc>
         <lastmod>2014-03-30T09:34:55-07:00</lastmod>
     </url>
 </urlset>

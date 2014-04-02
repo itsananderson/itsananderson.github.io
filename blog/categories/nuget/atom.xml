@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: NuGet | Will Anderson]]></title>
-  <link href="http://willi.am//blog/categories/nuget/atom.xml" rel="self"/>
-  <link href="http://willi.am//"/>
-  <updated>2014-04-01T00:12:43-07:00</updated>
-  <id>http://willi.am//</id>
+  <link href="http://willi.am/blog/categories/nuget/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-04-01T18:55:14-07:00</updated>
+  <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Pass Dynamic Flags to NuGet With PowerShell Splatting]]></title>
-    <link href="http://willi.am//blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/"/>
+    <link href="http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/"/>
     <updated>2014-02-07T09:24:32-08:00</updated>
-    <id>http://willi.am//blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting</id>
+    <id>http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting</id>
     <content type="html"><![CDATA[<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
 
 <p>```powershell

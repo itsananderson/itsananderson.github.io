@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://willi.am//sitemap.xml 
+Sitemap: http://willi.am/sitemap.xml 
