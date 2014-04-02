@@ -14,7 +14,7 @@ Minimum Password Strength uses the same method to calculate a password's strengt
 but forces users to meet a minimum strength rule before they can change their password.
 By default, passwords must have "Medium" strength, but administrators can change
 this to require at least "Weak", "Medium", or "Strong".
-To change the minimum strength, go to Settings -> Password Strength after installing Minimum Password Strength.
+To change the minimum strength, go to Settings &rarr; Password Strength after installing Minimum Password Strength.
 
 For now, all users have the same password strength requirements,
 but the next release will allow administrators to select different strength requirements for different roles.
