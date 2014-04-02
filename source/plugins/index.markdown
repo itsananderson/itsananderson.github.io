@@ -13,12 +13,12 @@ I enjoy developing plugins for WordPress and I love working on new ideas. Here i
 	<li><a href="http://www.itsananderson.com/plugins/code-snippets/">Code Snippets</a></li>
 	<li><a href="http://www.itsananderson.com/plugins/dev-profiles/">Dev Profiles</a></li>
 	<li><a href="http://www.itsananderson.com/plugins/enable-codepress/">Enable CodePress</a></li>
-	<li><a href="http://www.itsananderson.com/plugins/minimum-password-length/">Minimum Password Length</a></li>
-	<li><a href="http://www.itsananderson.com/plugins/minimum-password-strength/">Minimum Password Strength</a></li>
+	<li><a href="/plugins/minimum-password-length/">Minimum Password Length</a></li>
+	<li><a href="/plugins/minimum-password-strength/">Minimum Password Strength</a></li>
 	<li><a href="http://www.itsananderson.com/plugins/naughty-monkey/">Naughty Monkey</a></li>
 	<li><a href="http://www.itsananderson.com/plugins/random-headers/">Random Headers</a></li>
 	<li><a href="http://www.itsananderson.com/plugins/remove-editor-and-install-pages/">Remove Editor/Install Pages</a></li>
-	<li><a href="http://www.itsananderson.com/plugins/short-comment-filter/">Short Comment Filter</a></li>
+	<li><a href="/plugins/short-comment-filter/">Short Comment Filter</a></li>
 	<li><a href="/plugins/wp-sendgrid/">WP SendGrid</a></li>
 </ul>
 
