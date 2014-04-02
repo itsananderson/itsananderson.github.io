@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "plugins"
+title: "WordPress Plugins"
 date: 2014-04-01 00:09
 comments: true
 sharing: true
