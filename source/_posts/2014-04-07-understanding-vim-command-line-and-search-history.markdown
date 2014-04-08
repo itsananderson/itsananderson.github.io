@@ -16,7 +16,6 @@ Don't dispair. You've discovered Vim's command line history. This is the list of
 
 There are actually two modes you can get into:
 Command Line History, and Search History.
-
 We'll cover both
 
 If you didn't want to get into your command/search history, you can easily get back to normal mode by hitting `CTRL+C` twice
