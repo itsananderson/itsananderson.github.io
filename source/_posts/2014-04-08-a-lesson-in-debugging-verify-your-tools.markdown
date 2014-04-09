@@ -13,7 +13,7 @@ Worse than that, I was pairing with [two](http://www.davidruttka.com/) [co-worke
 
 We spent the day debugging an "off by one (and sometimes two)" error.
 
-David, one of my coworkers, [also blogged this experience](http://comingsoon.com).
+David, one of my coworkers, [also blogged this experience](http://www.davidruttka.com/blog/2014/04/09/principles-of-debugging-a-postmortem/).
 It's an entertaining read.
 Check it out.
 
