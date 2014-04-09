@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-04-09T11:11:49-07:00</updated>
+  <updated>2014-04-09T11:14:05-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -21,7 +21,7 @@
     <content type="html"><![CDATA[<p>This is a cautionary tale</p>
 
 <p>Yesterday I wasted a day of dev time.
-Worse than that, I was pairing with <a href="http://www.davidruttka.com/">two</a> <a href="http://msarchet.com/">co-workers</a> most of the day, so in the end we wasted about 2.5 days of dev time.</p>
+Worse than that, I was pairing with <a href="http://www.davidruttka.com/">two</a> of my <a href="http://msarchet.com/">co-workers</a> most of the day, so in the end we wasted about 2.5 days of dev time.</p>
 
 <p>We spent the day debugging an &ldquo;off by one (and sometimes two)&rdquo; error.</p>
 
