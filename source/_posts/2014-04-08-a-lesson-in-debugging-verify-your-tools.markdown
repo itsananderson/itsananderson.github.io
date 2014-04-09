@@ -22,8 +22,8 @@ The Problem
 
 The bug seemed simple.
 They always do.
-When you requested something by ID from our API, it returned with almost valid data.
-Except that the ID property in the JSON (a long) was frequently incremented or decremented by 1 or 2.
+When you requested something by Id from our API, it returned with almost valid data.
+Except that the Id property in the JSON (a long) was frequently incremented or decremented by 1 or 2.
 
 We originally saw the issue in an Angular app.
 We were suspicious about potential JavaScript numeric issues, so of course we opened up Fiddler to get at the "real" data
