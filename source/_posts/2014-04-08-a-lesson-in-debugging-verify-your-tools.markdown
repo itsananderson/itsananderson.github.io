@@ -9,7 +9,7 @@ categories: Debugging JavaScript Fiddler
 This is a cautionary tale
 
 Yesterday I wasted a day of dev time.
-Worse than that, I was pairing with [two](http://www.davidruttka.com/) [co-workers](http://msarchet.com/) most of the day, so in the end we wasted about 2.5 days of dev time.
+Worse than that, I was pairing with [two](http://www.davidruttka.com/) of my [co-workers](http://msarchet.com/) most of the day, so in the end we wasted about 2.5 days of dev time.
 
 We spent the day debugging an "off by one (and sometimes two)" error.
 
