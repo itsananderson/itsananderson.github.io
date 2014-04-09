@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Debugging, | Will Anderson]]></title>
+  <title><![CDATA[Category: Debugging | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/debugging/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-04-09T11:07:03-07:00</updated>
+  <updated>2014-04-09T11:11:49-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
