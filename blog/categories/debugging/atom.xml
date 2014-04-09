@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Debugging, | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/debugging/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-04-09T11:00:44-07:00</updated>
+  <updated>2014-04-09T11:07:03-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -87,7 +87,7 @@ When we finally looked at the raw data in Fiddler, we saw that the correct Ids w
 Fiddler&rsquo;s JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively &ldquo;snapped&rdquo; all Ids to multiples of 4.</p>
 
 <p>The problem wasn&rsquo;t with our API directly.
-The problem was the way JavaScript/JScript handle large numbers</p>
+The problem was the way JavaScript and JScript handle large numbers.</p>
 
 <h2>Lesson Learned</h2>
 
