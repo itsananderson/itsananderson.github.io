@@ -3,7 +3,7 @@ layout: post
 title: "A Lesson in Debugging: Verify Your Tools"
 date: 2014-04-08 08:10:41 -0700
 comments: true
-categories: Debugging, JavaScript, Fiddler
+categories: Debugging JavaScript Fiddler
 ---
 
 This is a cautionary tale
