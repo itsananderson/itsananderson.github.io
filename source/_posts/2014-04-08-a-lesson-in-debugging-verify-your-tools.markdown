@@ -81,7 +81,7 @@ When we finally looked at the raw data in Fiddler, we saw that the correct Ids w
 Fiddler's JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively "snapped" all Ids to multiples of 4.
 
 The problem wasn't with our API directly.
-The problem was the way JavaScript/JScript handle large numbers
+The problem was the way JavaScript and JScript handle large numbers.
 
 Lesson Learned
 ---------------
