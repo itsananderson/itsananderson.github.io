@@ -77,8 +77,11 @@ Then it hit me.
 Fiddler is written in JScript, which means it has the same 64 bit float limitations.
 
 By implicitly trusting Fiddler's JSON viewer, we assumed the problem was incorrect data coming from our server.
-In fact, when we looked at the raw data in Fiddler, the correct Ids were coming across the wire.
-Fiddler's JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively "snapped" all Ids to multiples of 4
+When we finally looked at the raw data in Fiddler, we saw that the correct Ids were coming across the wire.
+Fiddler's JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively "snapped" all Ids to multiples of 4.
+
+The problem wasn't with our API directly.
+The problem was the way JavaScript/JScript handle large numbers
 
 Lesson Learned
 ---------------
