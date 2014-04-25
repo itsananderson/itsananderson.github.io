@@ -34,3 +34,5 @@ var app = angular.module('app', [])
 		}
 	});
 ```
+
+**Update** 4/25/14: In newer versions of Angular you'll need to include `angular-sanitize.js` on the page, and bind with the `ng-bind-html` attribute. Props to [Dick](https://twitter.com/michaeldick) and [Julien](http://konpa.fr) for pointing this out.
