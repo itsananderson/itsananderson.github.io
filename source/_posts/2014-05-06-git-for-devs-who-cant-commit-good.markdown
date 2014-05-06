@@ -125,7 +125,7 @@ This is useful for in a number of cases:
 * You had a typo in one of your changes
 * You had a typo, or missing information in your commit message
  
-### Squazhing Commits
+### Squashing Commits
 
 Sometimes you'll have silly commits like "forgot a file", and you don't need them to be distinct.
 For the sake of your commit history, it can be good to flatten those commits.
@@ -146,5 +146,3 @@ bf582d6 Implement foo foo
 If your changes from `Address feedback` are just cleanups to `Implement foo foo`, you probably don't need that extra commit sitting in your commit history.
 
 I could walk through the process of rebasing, but there's already a pretty thorough tutorial on [squashing commits with rebase](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html)
-
-
