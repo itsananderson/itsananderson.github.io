@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T16:34:36-07:00</updated>
+  <updated>2014-05-06T16:36:36-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -139,7 +139,7 @@ You&rsquo;ll also get a chance to change the commit message.</p>
 </ul>
 
 
-<h3>Squazhing Commits</h3>
+<h3>Squashing Commits</h3>
 
 <p>Sometimes you&rsquo;ll have silly commits like &ldquo;forgot a file&rdquo;, and you don&rsquo;t need them to be distinct.
 For the sake of your commit history, it can be good to flatten those commits.
