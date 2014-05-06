@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T16:36:36-07:00</updated>
+  <updated>2014-05-06T16:48:14-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -160,6 +160,12 @@ This allows you to pretend that you never make any mistakes :)</p>
 <p>If your changes from <code>Address feedback</code> are just cleanups to <code>Implement foo foo</code>, you probably don&rsquo;t need that extra commit sitting in your commit history.</p>
 
 <p>I could walk through the process of rebasing, but there&rsquo;s already a pretty thorough tutorial on <a href="http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html">squashing commits with rebase</a></p>
+
+<h2>In Conclusion</h2>
+
+<p>Making throughful, atomic, thoroughly commented commits takes some practice, but it&rsquo;s totally worth it.</p>
+
+<p>In the next couple weeks, I plan to write some follow-up posts that cover other techniques for managing your commit history.</p>
 ]]></content>
   </entry>
   
