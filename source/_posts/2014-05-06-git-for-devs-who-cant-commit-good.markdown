@@ -146,3 +146,10 @@ bf582d6 Implement foo foo
 If your changes from `Address feedback` are just cleanups to `Implement foo foo`, you probably don't need that extra commit sitting in your commit history.
 
 I could walk through the process of rebasing, but there's already a pretty thorough tutorial on [squashing commits with rebase](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html)
+
+In Conclusion
+-------------
+
+Making throughful, atomic, thoroughly commented commits takes some practice, but it's totally worth it.
+
+In the next couple weeks, I plan to write some follow-up posts that cover other techniques for managing your commit history.
