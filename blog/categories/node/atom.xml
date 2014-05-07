@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T21:34:49-07:00</updated>
+  <updated>2014-05-06T21:43:42-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -34,9 +34,9 @@
 
 <p>Since Azure first looks for a server.js file when it starts a site, the easiest solution I&rsquo;ve found is to add a <code>server.js</code> file with the following contents.</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">www</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:javascript %}
+require(&lsquo;./bin/www&rsquo;);
+{% endcodeblock %}</p>
 
 <p>Now, when Azure starts your site, it will require server.js, which will require bin/www, which will require app.js. After that somewhat convoluted redirection chain, all will again be right in the world.</p>
 
@@ -50,16 +50,8 @@ Long story short, code duplication sucks.</p>
 
 <h3>Express Scaffold Fix</h3>
 
-<p>There are probably a few ways Express could fix this, but here&rsquo;s the simplest I can think of:</p>
-
-<ul>
-<li>Scrap the funny business with app.js and bin/www.</li>
-<li>Put the main server logic in index.js.
-If you want this code to be consumable as a module, make it as simple as possible by putting the module entry point at the most logical place (index.js).</li>
-<li>Move bin/www to app.js.
-Since that was the entry point in Express 3.x, it is presumably safest to keep that as the entry point.</li>
-</ul>
-
+<p>There are probably a few ways Express could fix this, but the simplest I can think of would be to add a server.js that does the same thing as my workaround.
+If that&rsquo;s not desirable for all sites, they could add a &ldquo;Azure compatibility&rdquo; flag that explicitly adds the sever.js workaround.</p>
 
 <h3>Azure Fix</h3>
 
