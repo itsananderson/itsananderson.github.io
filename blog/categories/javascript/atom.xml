@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: JavaScript | Will Anderson]]></title>
+  <title><![CDATA[Category: JavaScript, | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T21:43:42-07:00</updated>
+  <updated>2014-05-06T21:44:07-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -14,112 +14,42 @@
 
   
   <entry>
-    <title type="html"><![CDATA[A Lesson in Debugging: Verify Your Tools]]></title>
-    <link href="http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/"/>
-    <updated>2014-04-08T08:10:41-07:00</updated>
-    <id>http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools</id>
-    <content type="html"><![CDATA[<p>This is a cautionary tale</p>
+    <title type="html"><![CDATA[Creating an Angular Markdown Preview]]></title>
+    <link href="http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/"/>
+    <updated>2013-10-09T17:56:26-07:00</updated>
+    <id>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
 
-<p>Yesterday I wasted a day of dev time.
-Worse than that, I was pairing with <a href="http://www.davidruttka.com/">two</a> of my <a href="http://msarchet.com/">co-workers</a> most of the day, so in the end we wasted about 2.5 days of dev time.</p>
+<p>Because I like to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for things like my dev journal, I have been wanting to implement my own Markdown preview tool that I could customize to work just the way I want. When I first started learning Angular, I decided to see how easy it would be to write an Angular Markdown preview tool using Angular. Turns out it&rsquo;s super simple.</p>
 
-<p>We spent the day debugging an &ldquo;off by one (and sometimes two)&rdquo; error.</p>
+<p>If you&rsquo;d rather skip straight to the demo, you can <a href="http://itsananderson.azurewebsites.net/markdown">view the finished markdown preview</a>.</p>
 
-<p>David, one of my coworkers, <a href="http://www.davidruttka.com/blog/2014/04/09/principles-of-debugging-a-postmortem/">also blogged this experience</a>.
-It&rsquo;s an entertaining read.
-Check it out.</p>
+<p>I won&rsquo;t go into great detail about the purpose of Angular, since it&rsquo;s readily available elsewhere. In this project, I just wanted a simple way to bind to a textbox so that I could update an HTML Markdown preview. Angular&rsquo;s declarative binding makes it an excellent choice for this.</p>
 
-<h2>The Problem</h2>
+<h3>Rendering an Angular Markdown Preview</h3>
 
-<p>The bug seemed simple.
-They always do.
-When you requested something by Id from our API, it returned with almost valid data.
-Except that the Id property in the JSON (a long) was frequently incremented or decremented by 1 or 2.</p>
+<p>Since I didn&rsquo;t want to write my own markdown converter, I decided to look for an existing one. I quickly settled on this <a href="https://npmjs.org/package/markdown">markdown npm package</a>. I installed the package, then moved the converter code into my &lsquo;lib/js&rsquo; folder so that it would be accessible from my web app.</p>
 
-<p>We originally saw the issue in an Angular app.
-We were suspicious about potential JavaScript numeric issues, so of course we opened up Fiddler to get at the &ldquo;real&rdquo; data</p>
+<p>To make the front-end as simple as possible, I decided to <a href="http://docs.angularjs.org/guide/dev_guide.templates.filters.creating_filters">create an Angular filter</a> to provide the conversion from Markdown to HTML.</p>
 
-<h2>The Fiddler Inspection</h2>
-
-<p>When we inspected the requests in Fiddler and looked at the JSON viewer, same &ldquo;off by [1-2]&rdquo; issue.
-In our minds, this confirmed that Angular and JavaScript weren&rsquo;t the issue.</p>
-
-<p>After going through the &ldquo;disable stuff until it works&rdquo; process with our API, we were still seeing the same problem.
-The only thing that fixed the issue was having Fiddler request XML instead of JSON. &ldquo;Ahh&rdquo;, we thought, &ldquo;The issue must be with our JSON serializer&rdquo;</p>
-
-<h2>Checking the Serializer</h2>
-
-<p>We spent a few minutes in LINQPad performing serializations with Json.NET, duplicating the problematic object as closely as possible.
-The object serialized without issue, which confirmed in our minds that Json.NET does not, in fact, mangle long values during serialization</p>
-
-<h2>The Reduction</h2>
-
-<p>We decided to build a reduction by creating an empty WebApi project and adding components until we reproduced the issue.
-We added a dummy controller that returns an object identical to the one with the serialization issues.
-We opened the new URL in the browser, and the serialization issues weren&rsquo;t there.
-We should have checked the reduction in Fiddler, but we didn&rsquo;t.</p>
-
-<h2>Patterns Emerge</h2>
-
-<p>Early on in our debugging session, I noticed that even Ids either remained unchanged or incremented/decremented by two.
-Odd Ids, on the other hand, always either incremented or decremented by one.</p>
-
-<p>I initially identified a simplified version of that pattern where even Ids don&rsquo;t change, so when counter-examples emerged, I abandoned the search for a pattern.</p>
-
-<p>As the afternoon wore on, we decided to generate a consecutive sequence of Ids to see if we could identify a pattern.
-What we discovered is that for large Ids, the numbers began &ldquo;snapping&rdquo; to multiples of four.
-Small Ids (like, say, 207) didn&rsquo;t change.</p>
-
-<h2>The Final Puzzle Piece</h2>
-
-<p>While David spun a series of object serializations through LINQPad, I began combining keywords in Bing to see if I could find anyone else with the same issue.</p>
-
-<p>Around the time David realized that LINQPad was spitting out serialized Ids with correct values, I discovered <a href="http://stackoverflow.com/questions/6571339/how-to-correctly-serialize-c-sharp-long-number-using-controllers-json-method-in">this StackOverflow post on &ldquo;correctly&rdquo; serializing longs</a>.
-As the answer explains, JavaScript doesn&rsquo;t have longs.
-All numbers are 64 bit floats.
-We&rsquo;d considered this, but had dismissed it because Fiddler was showing the same issue.</p>
-
-<p>Then it hit me.
-Fiddler is written in JScript, which means it has the same 64 bit float limitations.</p>
-
-<p>By implicitly trusting Fiddler&rsquo;s JSON viewer, we assumed the problem was incorrect data coming from our server.
-When we finally looked at the raw data in Fiddler, we saw that the correct Ids were coming across the wire.
-Fiddler&rsquo;s JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively &ldquo;snapped&rdquo; all Ids to multiples of 4.</p>
-
-<p>The problem wasn&rsquo;t with our API directly.
-The problem was the way JavaScript and JScript handle large numbers.</p>
-
-<h2>Lesson Learned</h2>
-
-<p>When debugging an issue like this, look at the raw data.
-Not some data viewer over the data.
-The <em>raw</em> data</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Using "Controller As" Syntax in Angular Routes]]></title>
-    <link href="http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/"/>
-    <updated>2013-12-03T09:33:58-08:00</updated>
-    <id>http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
-the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
-The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p>
+<p>The code is pretty simple. The markdown npm package adds a &ldquo;markdown&rdquo; object to the &ldquo;window&rdquo; global, so it&rsquo;s easy to access the converter.</p>
 
 <p>```javascript
-$routeProvider</p>
+var app = angular.module(&lsquo;app&rsquo;, [])</p>
 
-<pre><code>.when('/', {
-    templateUrl: 'Views/Home/Index.html',
-    controller: 'HomeCtrl',
-    controllerAs: 'vm'
-})
-.otherwise({ redirectTo: '/' });
+<pre><code>.filter('markdown', function() {
+    return function(text) {
+        if (typeof text == "undefined") {
+            return "";
+        }
+        return markdown.toHTML(String(text));
+    }
+});
 </code></pre>
 
 <p>```</p>
 
-<p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
+<p><strong>Update</strong> 4/25/14: In newer versions of Angular you&rsquo;ll need to include <code>angular-sanitize.js</code> on the page, and bind with the <code>ng-bind-html</code> attribute. Props to <a href="https://twitter.com/michaeldick">Dick</a> and <a href="http://konpa.fr">Julien</a> for pointing this out.</p>
 ]]></content>
   </entry>
   

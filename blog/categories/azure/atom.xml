@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T21:34:49-07:00</updated>
+  <updated>2014-05-06T21:43:42-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -50,16 +50,8 @@ Long story short, code duplication sucks.</p>
 
 <h3>Express Scaffold Fix</h3>
 
-<p>There are probably a few ways Express could fix this, but here&rsquo;s the simplest I can think of:</p>
-
-<ul>
-<li>Scrap the funny business with app.js and bin/www.</li>
-<li>Put the main server logic in index.js.
-If you want this code to be consumable as a module, make it as simple as possible by putting the module entry point at the most logical place (index.js).</li>
-<li>Move bin/www to app.js.
-Since that was the entry point in Express 3.x, it is presumably safest to keep that as the entry point.</li>
-</ul>
-
+<p>There are probably a few ways Express could fix this, but the simplest I can think of would be to add a server.js that does the same thing as my workaround.
+If that&rsquo;s not desirable for all sites, they could add a &ldquo;Azure compatibility&rdquo; flag that explicitly adds the sever.js workaround.</p>
 
 <h3>Azure Fix</h3>
 
