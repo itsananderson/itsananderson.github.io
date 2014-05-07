@@ -41,13 +41,8 @@ There are a couple of things that would properly solve this problem instead of j
 
 ### Express Scaffold Fix
 
-There are probably a few ways Express could fix this, but here's the simplest I can think of:
-
-* Scrap the funny business with app.js and bin/www.
-* Put the main server logic in index.js.
-  If you want this code to be consumable as a module, make it as simple as possible by putting the module entry point at the most logical place (index.js).
-* Move bin/www to app.js.
-  Since that was the entry point in Express 3.x, it is presumably safest to keep that as the entry point.
+There are probably a few ways Express could fix this, but the simplest I can think of would be to add a server.js that does the same thing as my workaround.
+If that's not desirable for all sites, they could add a "Azure compatibility" flag that explicitly adds the sever.js workaround.
 
 ### Azure Fix
 
