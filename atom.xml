@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T16:48:14-07:00</updated>
+  <updated>2014-05-06T21:34:49-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,78 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Running Express 4 Sites On Azure]]></title>
+    <link href="http://willi.am/blog/2014/05/07/running-express-4-sites-on-azure/"/>
+    <updated>2014-05-07T06:57:05-07:00</updated>
+    <id>http://willi.am/blog/2014/05/07/running-express-4-sites-on-azure</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve created an Express 4 app with the new scaffold utility recently, you may have noticed that it doesn&rsquo;t work in Azure. When you try to load the site, it fails with the following error:</p>
+
+<blockquote><p>The page cannot be displayed because an internal server error has occurred.</p></blockquote>
+
+<h2>The Diagnosis</h2>
+
+<p>This is because of the new structure Express creates for its apps. Instead of app.js being the expected entry point, Express now specifies bin/www as the entry point for starting the server.</p>
+
+<p>I suspect the reason for this is so that the newly scaffolded app can be consumed as a module, allowing the consumer to worry about port binding etc. Unfortunately, this causes problems for Azure.</p>
+
+<p>When Azure starts a Node.js site, it looks for either a server.js or an app.js. As far as I can tell from my admittedly limited testing, it doesn&rsquo;t seem look at package.json for an alternate entry point. Because of this, when it includes app.js, nothing ever binds to the listening port, so the app immediately exits on startup.</p>
+
+<h2>The Workaround</h2>
+
+<p>Since Azure first looks for a server.js file when it starts a site, the easiest solution I&rsquo;ve found is to add a <code>server.js</code> file with the following contents.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./bin/www&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, when Azure starts your site, it will require server.js, which will require bin/www, which will require app.js. After that somewhat convoluted redirection chain, all will again be right in the world.</p>
+
+<p>The Azure documentation has an <a href="http://azure.microsoft.com/en-us/documentation/articles/cloud-services-nodejs-develop-deploy-express-app/">alternative workaround</a> (see steps 4 and 5 of &ldquo;Install Express&rdquo;), but I don&rsquo;t care for it.
+The problem with their solution is that it duplicates the code from bin/www into server.js, which means any updates you make to bin/www will also need to be applied to server.js.
+Long story short, code duplication sucks.</p>
+
+<h2>The Solution</h2>
+
+<p>There are a couple of things that would properly solve this problem instead of just working around it.</p>
+
+<h3>Express Scaffold Fix</h3>
+
+<p>There are probably a few ways Express could fix this, but here&rsquo;s the simplest I can think of:</p>
+
+<ul>
+<li>Scrap the funny business with app.js and bin/www.</li>
+<li>Put the main server logic in index.js.
+If you want this code to be consumable as a module, make it as simple as possible by putting the module entry point at the most logical place (index.js).</li>
+<li>Move bin/www to app.js.
+Since that was the entry point in Express 3.x, it is presumably safest to keep that as the entry point.</li>
+</ul>
+
+
+<h3>Azure Fix</h3>
+
+<p>In my oppinion, Azure should have a way to specify the entry-point in package.json rather than hardcoding to app.js and server.js.</p>
+
+<p>The conventional <code>npm start</code> configuration is a logical place to begin, since it&rsquo;s a <a href="https://www.npmjs.org/doc/misc/npm-scripts.html">supported spec from npm</a>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "scripts": {
+</span><span class='line'>        "start" : "&lt;path&gt;"
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Azure relies on iisnode, which probably can&rsquo;t consume package.json directly.
+However, Azure could look at a setting in package.json during the site setup process (when it does stuff like package restore), and configure web.config, just like it does now to switch between app.js and server.js.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Git for Devs Who Can't Commit Good]]></title>
