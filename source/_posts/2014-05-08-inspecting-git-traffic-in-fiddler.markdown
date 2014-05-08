@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Inspecting Git Traffic in Fiddler"
-date: 2014-05-07 11:32:26 -0700
+date: 2014-05-08 7:32:26 -0700
 comments: true
 categories: Git Fiddler 
 ---
