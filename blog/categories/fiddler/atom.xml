@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Fiddler | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/fiddler/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-06T21:44:23-07:00</updated>
+  <updated>2014-05-08T08:50:23-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Inspecting Git Traffic in Fiddler]]></title>
+    <link href="http://willi.am/blog/2014/05/08/inspecting-git-traffic-in-fiddler/"/>
+    <updated>2014-05-08T07:32:26-07:00</updated>
+    <id>http://willi.am/blog/2014/05/08/inspecting-git-traffic-in-fiddler</id>
+    <content type="html"><![CDATA[<p>If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make Git send traffic through Fiddler.</p>
+
+<p><code>
+git config --global http.proxy 127.0.0.1:8888
+git config --global http.sslVerify false
+</code></p>
+
+<p>This tells Git to use Fiddler as the proxy, and to turn off SSL certificate verification (so it doesn&rsquo;t balk at Fiddler&rsquo;s cert).</p>
+
+<p>Make sure Fiddler&rsquo;s actually running, or Git won&rsquo;t be able to connect.</p>
+
+<p>If you just want to use Fiddler for a single repository, run the commands from within that repository without the <code>--global</code> flag. Obviously this work for the <code>git clone</code> command, so you&rsquo;ll have to use a global configuration if you want to inspect that.</p>
+
+<p>When you&rsquo;re done, make sure you undo your changes:</p>
+
+<p><code>
+git config --global --unset http.proxy
+git config --global --unset http.sslVerify
+</code></p>
+
+<p>Again, remove the <code>--global</code> flag if you&rsquo;re just inspecting traffic for a single repository.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Lesson in Debugging: Verify Your Tools]]></title>

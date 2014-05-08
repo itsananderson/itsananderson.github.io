@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you&rsquo;ve created an Express 4 app with the new scaffold utility recently, you may have noticed that it doesn&rsquo;t work in Azure. When you &hellip;">
+	<meta name="description" content="If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,6 +77,69 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/05/08/inspecting-git-traffic-in-fiddler/">
+		
+			Inspecting Git Traffic in Fiddler</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make Git send traffic through Fiddler.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global http.proxy 127.0.0.1:8888
+</span><span class='line'>git config --global http.sslVerify false</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This tells Git to use Fiddler as the proxy, and to turn off SSL certificate verification (so it doesn&rsquo;t balk at Fiddler&rsquo;s cert).</p>
+
+<p>Make sure Fiddler&rsquo;s actually running, or Git won&rsquo;t be able to connect.</p>
+
+<p>If you just want to use Fiddler for a single repository, run the commands from within that repository without the <code>--global</code> flag. Obviously this work for the <code>git clone</code> command, so you&rsquo;ll have to use a global configuration if you want to inspect that.</p>
+
+<p>When you&rsquo;re done, make sure you undo your changes:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global --unset http.proxy
+</span><span class='line'>git config --global --unset http.sslVerify</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, remove the <code>--global</code> flag if you&rsquo;re just inspecting traffic for a single repository.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-08T07:32:26-07:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/fiddler/'>Fiddler</a>, <a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -953,143 +1016,6 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
 
 
 	<a class='category' href='/blog/categories/angular/'>Angular,</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript,</a>, <a class='category' href='/blog/categories/markdown/'>Markdown</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/12/15/configuring-github-on-windows/">
-		
-			Configuring GitHub on Windows</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you.</p>
-
-<h2>Getting Started</h2>
-
-<p>First you need to grab a copy of <a href="http://code.google.com/p/msysgit/">Git for Windows</a>.
-Once you&rsquo;ve downloaded the latest version, launch it and go through the license and location screens.
-Once you get to the &ldquo;Select Components&rdquo; screen, make sure both Context menu entries are selected.
-If you want, select the TrueType font option.
-That one shouldn&rsquo;t really matter.</p>
-
-<p><img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="/images/post-images/select-components.png" width="539" height="428" /></p>
-
-<p>Jump ahead a few more frames and you&rsquo;ll get to the SSH executable option.
-Choose &ldquo;OpenSSH&rdquo;, unless you have a compelling reason to use Plink.</p>
-
-<p><img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="/images/post-images/openssh.png" width="546" height="432" /></p>
-
-<p>Run through the rest of the frames, accepting the defaults.
-You now have Git installed on your machine, but we&rsquo;re not quite done yet.
-GitHub uses public/private key encryption.
-This means you don&rsquo;t commit with a username and password, like most SVN setups.
-Instead, you tell GitHub your public key, then use your private key to authenticate.</p>
-
-<h2>Generating a Public Key</h2>
-
-<p>GitHub has a detailed article on setting up your SSH keys on Mac/Windows/Linux.
-I recommend <a href="https://help.github.com/articles/generating-ssh-keys">checking it out</a>.</p>
-
-<h2>Clone a Repository From GitHub</h2>
-
-<p>You&rsquo;re just about there.
-Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
-Make sure SSH is selected.</p>
-
-<p><img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="/images/post-images/github-url.png" width="664" height="33" /></p>
-
-<p>Open up Git Bash.
-You should be able to find it in your start menu.
-&ldquo;cd&rdquo; to the directory where you plan on checking out your code.
-For example, if you want your code to be located in C:\programming\project then you want to &ldquo;cd&rdquo; to C:\programming.</p>
-
-<p>Type out &ldquo;git clone &rdquo;, but don&rsquo;t hit enter yet.
-Go to the top left corner of the Git Bash window and click.
-In the menu that pops up, select Edit &ndash;> Paste to paste the URL of your repository, but still don&rsquo;t hit enter.
-Finally, type the name you want to call the project folder.
-In our example, you&rsquo;d want something like this:</p>
-
-<p><code>git clone git@github.com:itsananderson/wp-sendgrid.git project</code></p>
-
-<p>Now you can hit enter :)</p>
-
-<p>If you entered a passphrase for your private key, it will ask you for it.
-If all goes well, your repository should be downloaded.</p>
-
-<h2>Some Sample Commands</h2>
-
-<p>This isn&rsquo;t really a tutorial on Git commands, but here are a few to get you started:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># See what files have changed:</span>
-</span><span class='line'>git status
-</span><span class='line'>
-</span><span class='line'><span class="c"># Add a file (new or modified, it doesn&#39;t matter. You need to add it to commit it)</span>
-</span><span class='line'>git add file.php
-</span><span class='line'>
-</span><span class='line'><span class="c"># Add several files:</span>
-</span><span class='line'>git add *.php
-</span><span class='line'>
-</span><span class='line'><span class="c"># Commit your changes locally (just stores a local snapshot of your changes):  </span>
-</span><span class='line'>git commit -m <span class="s2">&quot;Your commit message here&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Push your changes up to GitHub:</span>
-</span><span class='line'>git push -u origin master
-</span><span class='line'>
-</span><span class='line'><span class="c"># Pull down updates from GitHub:</span>
-</span><span class='line'>git pull
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That&rsquo;s about it.
-There&rsquo;s more to Git (which I&rsquo;m still learning about), but this should hopefully be enough to help you get started.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-15T22:21:44-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/github/'>GitHub</a>, <a class='category' href='/blog/categories/windows/'>Windows</a>
 
 
 </div>
