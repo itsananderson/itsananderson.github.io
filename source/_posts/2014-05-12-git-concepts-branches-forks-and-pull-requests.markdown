@@ -32,7 +32,7 @@ Forks
 Forking is a concept that exists outside Git.
 In the old days, forking an open source project meant splitting off from the original project, either to continue development or move in a different direction.
 
-These days a fork is just an implementation detail of several open source code hosting websites.
+These days a fork is simply a feature of several open source code hosting websites.
 If I want to introduce a change to an open source project, I obviously can't just edit the repository directly.
 Instead, what I have to do is fork the repository, which creates a copy of that repository that belongs to me.
 I can then modify that fork and, if desired, propose those changes back to the original repository.
@@ -52,10 +52,10 @@ In most cases, your repository is a fork of the other repository, and you're req
 
 Pull requests can also be used as a code review workflow within a single repository.
 I've done this for some of my own open source projects.
-It works really well for teams that are working together on a project.
+It's really useful for teams who work together on a project.
 
 If you're not already doing your feature work in a branch, you should learn to [commit good](http://willi.am/blog/2014/05/06/git-for-devs-who-cant-commit-good/).
-Once you're doing your work in a branch, pull requests become second nature.
+Once you're doing your work in a branch, pull requests are the next logical step.
 As soon as you're at a point where you're not embarassed by your code, create a pull request.
 You can continue pushing new changes to your branch for reviewers to see.
 By starting the feedback loop as early as possible, your peers can help catch issues that you'd otherwise have to spend a long time undoing.
