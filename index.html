@@ -7,7 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make &hellip;">
+	<meta name="description" content="My team recently started migrating our source control from TFVC to Git (yay!).
+There&rsquo;s been some confusion about a few Git and DVCS related &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,6 +78,105 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/05/12/git-concepts-branches-forks-and-pull-requests/">
+		
+			Git Concepts: Branches, Forks, and Pull Requests</a>
+	</h2>
+	<div class="entry-content">
+		<p>My team recently started migrating our source control from TFVC to Git (yay!).
+There&rsquo;s been some confusion about a few Git and DVCS related terms.
+If you&rsquo;re also confused, don&rsquo;t worry. You&rsquo;re not the only one.</p>
+
+<iframe class="youtube-player" type="text/html" width="640" height="385" src="https://www.youtube.com/embed/k2vJNNAQZlg" allowfullscreen frameborder="0">
+</iframe>
+
+
+<p>Let&rsquo;s talk about some basic Git concepts.</p>
+
+<h2>Branches</h2>
+
+<p>Branches are a core concept in Git.
+Unlike centralized version control, branches in Git don&rsquo;t show up as folders in the file system.
+Instead, your project folder only contains the contents of one branch, which you &ldquo;checkout&rdquo; into your working directory.</p>
+
+<p>Internally, branches are basically a pointer to a commit, designed to move forward when new commits are created.</p>
+
+<p>See <a href="http://www.git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging">this page on git branches</a> for more details.</p>
+
+<h2>Forks</h2>
+
+<p>Forking is a concept that exists outside Git.
+In the old days, forking an open source project meant splitting off from the original project, either to continue development or move in a different direction.</p>
+
+<p>These days a fork is just an implementation detail of several open source code hosting websites.
+If I want to introduce a change to an open source project, I obviously can&rsquo;t just edit the repository directly.
+Instead, what I have to do is fork the repository, which creates a copy of that repository that belongs to me.
+I can then modify that fork and, if desired, propose those changes back to the original repository.</p>
+
+<p>GitHub has a pretty good <a href="https://help.github.com/articles/fork-a-repo">article on forking repositories</a>.
+It also talks about creating pull requests.</p>
+
+<h2>Pull Requests</h2>
+
+<p>One of the most easily misunderstood concepts in Git is the pull request.
+Part of the reason for the confusion is that in most current pull request workflows, nobody ever &ldquo;pulls&rdquo; changes.
+&ldquo;Merge request&rdquo; would be a more accurate term.</p>
+
+<p>When you create a pull request on an open source project, you&rsquo;re usually asking that changes from a branch in your repository be merged with a branch on another repository.
+In most cases, your repository is a fork of the other repository, and you&rsquo;re requesting to merge your changes into their master branch.</p>
+
+<p>Pull requests can also be used as a code review workflow within a single repository.
+I&rsquo;ve done this for some of my own open source projects.
+It works really well for teams that are working together on a project.</p>
+
+<p>If you&rsquo;re not already doing your feature work in a branch, you should learn to <a href="http://willi.am/blog/2014/05/06/git-for-devs-who-cant-commit-good/">commit good</a>.
+Once you&rsquo;re doing your work in a branch, pull requests become second nature.
+As soon as you&rsquo;re at a point where you&rsquo;re not embarassed by your code, create a pull request.
+You can continue pushing new changes to your branch for reviewers to see.
+By starting the feedback loop as early as possible, your peers can help catch issues that you&rsquo;d otherwise have to spend a long time undoing.</p>
+
+<p>The other thing pull requests for team projects enables is multiple collaborators.
+Most other code review tools only belong to one person.
+This is a hassle if two people have collaborated on a feature.
+With pull requests, many collaborators can push to a single branch, and all changes can be reviewed as a single unit.</p>
+
+<p>Once again, GitHub has a good <a href="https://help.github.com/articles/using-pull-requests">article on pull requests</a>.
+This one is very specific to GitHub&rsquo;s pull request workflow.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-12T10:57:58-07:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -936,86 +1036,6 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
 
 
 	<a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2013/10/09/creating-an-angular-markdown-preview/">
-		
-			Creating an Angular Markdown Preview</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
-
-<p>Because I like to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for things like my dev journal, I have been wanting to implement my own Markdown preview tool that I could customize to work just the way I want. When I first started learning Angular, I decided to see how easy it would be to write an Angular Markdown preview tool using Angular. Turns out it&rsquo;s super simple.</p>
-
-<p>If you&rsquo;d rather skip straight to the demo, you can <a href="http://itsananderson.azurewebsites.net/markdown">view the finished markdown preview</a>.</p>
-
-<p>I won&rsquo;t go into great detail about the purpose of Angular, since it&rsquo;s readily available elsewhere. In this project, I just wanted a simple way to bind to a textbox so that I could update an HTML Markdown preview. Angular&rsquo;s declarative binding makes it an excellent choice for this.</p>
-
-<h3>Rendering an Angular Markdown Preview</h3>
-
-<p>Since I didn&rsquo;t want to write my own markdown converter, I decided to look for an existing one. I quickly settled on this <a href="https://npmjs.org/package/markdown">markdown npm package</a>. I installed the package, then moved the converter code into my &lsquo;lib/js&rsquo; folder so that it would be accessible from my web app.</p>
-
-<p>To make the front-end as simple as possible, I decided to <a href="http://docs.angularjs.org/guide/dev_guide.templates.filters.creating_filters">create an Angular filter</a> to provide the conversion from Markdown to HTML.</p>
-
-<p>The code is pretty simple. The markdown npm package adds a &ldquo;markdown&rdquo; object to the &ldquo;window&rdquo; global, so it&rsquo;s easy to access the converter.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="p">[])</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="s1">&#39;markdown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>              <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span>
-</span><span class='line'>          <span class="k">return</span> <span class="nx">markdown</span><span class="p">.</span><span class="nx">toHTML</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Update</strong> 4/25/14: In newer versions of Angular you&rsquo;ll need to include <code>angular-sanitize.js</code> on the page, and bind with the <code>ng-bind-html</code> attribute. Props to <a href="https://twitter.com/michaeldick">Dick</a> and <a href="http://konpa.fr">Julien</a> for pointing this out.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-09T17:56:26-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/angular/'>Angular,</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript,</a>, <a class='category' href='/blog/categories/markdown/'>Markdown</a>
 
 
 </div>
