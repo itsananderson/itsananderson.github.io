@@ -9,7 +9,7 @@ categories: ASP.NET Node
 Something cool that Scott Hanselman talked about in his [blog post on vNext](http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx)
 was the ability to save a C# file in Visual Studio and view the change in the browser without manually rebuilding.
 
-After spending a little time messing around with the CLI interfaces, I wanted similar functionality when editing C# files outside Visual Studio.
+After spending a little time messing around with the [newly released code](https://github.com/aspnet), I wanted similar functionality when editing C# files outside Visual Studio.
 I didn't see a documented way to do that, but there's an easy workaround if you have Node installed.
 
 First install the "nodemon" package.
