@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use &hellip;">
+	<meta name="description" content="While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,6 +77,140 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/">
+		
+			Pass Dynamic Flags to NuGet With PowerShell Splatting</a>
+	</h2>
+	<div class="entry-content">
+		<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
+</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
+</span><span class='line'><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
+</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="err">@</span><span class="p">{</span><span class="n">Properties</span><span class="p">=</span><span class="s2">&quot;Configuration=$configuration&quot;</span><span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Build</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Symbols</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
+</span><span class='line'>    <span class="n">popd</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
+HashSet of arguments, and throw an error like the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>nuget : Unknown option: &#39;-Build:True&#39;
+</span><span class='line'>At line:1 char:38
+</span><span class='line'>+ nuget pack $project $nugetArgs
+</span><span class='line'>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</span><span class='line'>    + CategoryInfo          : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException
+</span><span class='line'>    + FullyQualifiedErrorId : NativeCommandError
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Digging into the <a href="http://nuget.codeplex.com/SourceControl/latest#src/CommandLine/CommandLineParser.cs">source code</a>,
+I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
+(If I&rsquo;m wrong, leave a comment!)</p>
+
+<p>Fortunately, there&rsquo;s a <em>fairly</em> reasonable workaround: Pass an array of arguments rather than a HashSet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
+</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
+</span><span class='line'><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
+</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="s2">&quot;-Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;Configuration=$configuration&quot;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Build&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Symbols&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
+</span><span class='line'>    <span class="n">popd</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
+This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-07T09:24:32-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/nuget/'>NuGet</a>, <a class='category' href='/blog/categories/powershell/'>Powershell</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
