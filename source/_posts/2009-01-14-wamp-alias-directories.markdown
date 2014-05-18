@@ -3,7 +3,7 @@ layout: post
 title: "Wamp Alias Directories"
 date: 2009-01-14 13:45:43 -0700
 comments: true
-categories: Apache, Wamp
+categories: Apache Wamp
 ---
 
 I use <a href="http://www.wampserver.com/">Wamp Server</a> together with <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a> to develop PHP applications on my local machine.

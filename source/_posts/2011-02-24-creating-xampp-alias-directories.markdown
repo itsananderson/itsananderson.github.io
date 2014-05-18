@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Creating XAMPP Alias Directories"
-date: 2011-02-14 13:35:42 -0700
+date: 2011-02-24 13:35:42 -0700
 comments: true
-categories: Apache, XAMPP
+categories: Apache XAMPP
 ---
 
 If you've read my post on [adding aliases to WampServer](/blog/2009/01/14/wamp-alias-directories/),
