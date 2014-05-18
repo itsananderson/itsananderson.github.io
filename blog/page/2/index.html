@@ -722,8 +722,10 @@ For example, this is the custom search engine definition I have:</p>
 
 <ul>
 <li>&ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.</li>
-<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year. Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
-<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year. Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
+<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year.<br/>
+Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
+<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year.<br/>
+Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
 </ul>
 
 
@@ -750,6 +752,276 @@ For example, this is the custom search engine definition I have:</p>
 
 
 	<a class='category' href='/blog/categories/chrome/'>Chrome</a>, <a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman,</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/09/05/get-called-class-name-in-php/">
+		
+			Get Called Class Name in PHP</a>
+	</h2>
+	<div class="entry-content">
+		<p>I posted a few months ago about <a href="http://www.itsananderson.com/2011/04/using-static-methods-in-wordpress-plugins/">using static methods in WordPress plugins</a>.
+I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
+One part, however, was a source of some pain: Inheritance.
+This can be solved by utilizing PHP&rsquo;s <code>get_called_class()</code> function to get called class names in from your static functions.</p>
+
+<p>To make a long story short, getting the actual class name of the current object in an instance method is easy, just call <code>get_class( $this )</code>.
+The problem is, $this doesn&rsquo;t exist in a static method, and just calling get_class() returns the current class (basically the same as <strong>CLASS</strong>), which isn&rsquo;t helpful if you actually want the name of a child class.</p>
+
+<h2>Why You Might Want to Get Called Class Names</h2>
+
+<p>Consider a base class which has a <code>get_instance()</code> function, for creating an instance of the class, or returning an existing instance if it has already been instantiated.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nb">is_null</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Singleton</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>How to Get Called Class Names and Improve Extensibility</h2>
+
+<p>This is great, but the problem arises when we try to extend that singleton class.
+Ideally, the inherited get_instance() method would return an instance of the actual class, but with the above implementation, it would always return an instance of the Singleton class. Here&rsquo;s an alternative, which uses the get_called_class() function to get called class names.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instances</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$class</span> <span class="o">=</span> <span class="nb">get_called_class</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="k">empty</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nv">$class</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Child</span> <span class="k">extends</span> <span class="nx">Singleton</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Child class stuff</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh?</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-05T13:09:43-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/04/26/php-static-methods-in-wordpress-plugins/">
+		
+			PHP Static Methods in WordPress Plugins</a>
+	</h2>
+	<div class="entry-content">
+		<p><p style="background-color: #faa; padding: 5px">
+<strong>Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it difficult to mock dependencies for unit tests. I leave this post up for posterity, but I no longer recommend this design pattern.</strong><p></p>
+
+<p>This evening I was chatting with Nick Ohrn and I threw out an idea that I&rsquo;d been thinking about for a while. What if WordPress plugin developers used PHP static methods to namespace their plugins?</p>
+
+<h2>An Example Without PHP Static Methods</h2>
+
+<p>To understand what I&rsquo;m babbling on about, consider a very basic plugin that adds square brackets around post titles.</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
+</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
+</span><span class='line'><span class="cm"> </em>/</span>
+</span><span class='line'><span class="k">function</span> <span class="nf">ab_add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="s1">&#39;ab_add_brackets&#39;</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>It really doesn&rsquo;t get much simpler than that, but the problem is that there might be another plugin that uses the same prefix. Also, if you decide to change the prefix, you&rsquo;ll have to go through and change all of your hook and action registrations too. What a pain.</p>
+
+<h2>Class Namespaces, but no PHP Static Methods</h2>
+
+<p>The next option is to use a class as a namespacing tool. This is fairly common among more experienced WordPress developers.</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
+</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
+</span><span class='line'><span class="cm"> </em>/</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">class_exists</span><span class="p">(</span><span class="s1">&#39;Add_Brackets&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">class</span> <span class="nc">Add_Brackets</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;add_brackets&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span> <span class="k">null</span> <span class="o">==</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Add_Brackets</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">function</span> <span class="nf">add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">Add_Brackets</span><span class="o">::</span><span class="na">get_instance</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>Utilizing PHP Static Methods</h2>
+
+<p>What I propose is developers use static methods instead. There&rsquo;s very little difference between a singleton class with instance methods and a class with static methods, and simply using static methods can simplify your code. Check out this example.</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
+</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
+</span><span class='line'><span class="cm"> </em>/</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">class_exists</span><span class="p">(</span><span class="s1">&#39;Add_Brackets&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">class</span> <span class="nc">Add_Brackets</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nx"><strong>CLASS</strong></span><span class="p">,</span> <span class="s1">&#39;add_brackets&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">Add_Brackets</span><span class="o">::</span><span class="na">start</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>So that&rsquo;s that. All the advantages of namespacing with classes, with a small reduction in memory overhead (because you&rsquo;re passing around strings, rather than objects). Static methods are a PHP5 feature, but with PHP4 support being phased out in WordPress 3.2, this seems like a reasonable next step for WordPress developers to take.</p>
+
+<p>What do you think? Are there any issues with this technique that I&rsquo;ve missed? Are there any improvements that could be made? Let me know in the comments!</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-26T13:16:52-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>
