@@ -17,33 +17,15 @@ This package monitors a directory for file chanages and respawns a child process
 
 `npm install -g nodemon`
 
-Now that nodemon is installed, you need to figure out where the vNext's "K" command is located.
-It should be on your path, but for some reason nodemon can't find it without an absolute path.
+Now that nodemon is installed, you can use it to live-rerun your app.
 
-In cmd run: `where K`
+`nodemon --exec "K.cmd web" -e cs,json`
 
-In PowerShell run: `gcm K | select-object -ExpandProperty Definition`
+This tells Nodemon to watch for changes to *.cs and *.json files and to restart "K.cmd web" when changes are detected.
+Replace "web" with "run" or whatever startup command is configured for your project.
 
-Unfortunately, I don't think Git Bash is supported yet, since K.cmd doesn't seem to have a BASH counterpart.
+Note that if you're running in Git Bash on Windows (which I currently can't get working) or on a Linux/OSX machine, the --exec command will probably be either `K web` or `K.sh web`.
 
-Copy the full path output by the previous command.
-Now paste it into the following Nodemon command.
+![Live re-compiling with nodemon](/images/post-images/nodemon-k.png)
 
-`nodemon --exec "<path to K.cmd> run" -e cs,json`
-
-This tells Nodemon to watch for changes to *.cs and *.json files and to restart "K run" when changes are detected.
-Replace "run" with "web" as appropriate.
-
-A concrete example of this setup might look like this:
-
-```
-C:\Users\me\aspnet-home\samples\ConsoleApp>where K
-C:\Users\me\.kre\packages\KRE-svr50-x86.0.1-alpha-build-0421\bin\k.cmd
-
-C:\Users\me\aspnet-home\samples\ConsoleApp>nodemon --exec "C:\Users\me\.kre\packages\KRE-svr50-x86.0.1-alpha-build-0421\bin\k.cmd run" -e cs,json
-```
-
-This functionality may already exist in ASP.NET vNext, and I just haven't found it.
-If so, [let me know](https://twitter.com/itsananderson).
-If not, it's hopefully on the roadmap.
-For now this is a handy workaround.
+This functionality is [on the way for ASP.NET vNext](https://github.com/aspnet/Home/issues/22#issuecomment-43148021), but for now this is a handy workaround.
