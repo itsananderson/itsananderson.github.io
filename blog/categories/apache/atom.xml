@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Apache, | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/apache/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-05-18T13:56:36-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Creating XAMPP Alias Directories]]></title>
+    <link href="http://willi.am/blog/2011/02/14/creating-xampp-alias-directories/"/>
+    <updated>2011-02-14T12:35:42-08:00</updated>
+    <id>http://willi.am/blog/2011/02/14/creating-xampp-alias-directories</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve read my post on <a href="/blog/2009/01/14/wamp-alias-directories/">adding aliases to WampServer</a>,
+you may be curious about how to add aliases to XAMPP.
+While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
+Fortunately, creating XAMPP alias directories by hand is pretty easy.</p>
+
+<h2>Preparing to Create XAMPP Alias Directories</h2>
+
+<p>The first thing you&rsquo;ll want to do is add an alias directory to your XAMPP install.
+If you&rsquo;re running Windows, create the following folder.</p>
+
+<p><code>
+C:\xampp\apache\conf\alias
+</code></p>
+
+<p>Next, you&rsquo;ll need to change your Apache configuration file.
+You can find it under <code>C:\xampp\apache\conf\httpd.conf</code>.
+To make changes, you&rsquo;ll need to edit it as an administrator.
+If you&rsquo;re running Windows Vista or above, your best bet is to open Notepad as an administrator and then open httpd.conf.
+To open Notepad (or any other application) as an administrator, right-click on it and select &ldquo;Run as administrator&rdquo;.
+You can also launch Notepad as an administrator from the start menu with <code>Ctrl+Shift+Enter</code> while Notepad is selected.</p>
+
+<p>Once you&rsquo;ve opened httpd.conf, add the following to the end and save it.</p>
+
+<p><code>
+Include "conf/alias/*"
+</code></p>
+
+<p>Now Apache will look in the alias folder for more configuration files.
+This way you can add an alias by simply adding a new configuration file to the conf/alias/ folder.</p>
+
+<h2>Creating XAMPP Alias Directories</h2>
+
+<p>Let&rsquo;s add some XAMPP alias directories.
+Suppose you want to add an alias called &ldquo;dev&rdquo;.
+First, download <a href="/uploads/xampp-alias-template.txt">this alias template file</a> and place it in the alias folder.
+Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
+You&rsquo;ll need to edit the template (again, as an administrator) and replace &ldquo;DIRECTORY&rdquo; (it&rsquo;s there twice) with the path to the alias and &ldquo;ALIAS&rdquo; with the name of your alias.
+In our example, it looks something like this:</p>
+
+<p>```
+<directory "c:\users\foo\programming\dev"></p>
+
+<pre><code>#
+# Possible values for the Options directive are "None", "All",
+# or any combination of:
+#   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+#
+# Note that "MultiViews" must be named *explicitly* --- "Options All"
+# doesn't give it to you.
+#
+# The Options directive is both complicated and important.  Please see
+# http://httpd.apache.org/docs/2.2/mod/core.html#options
+# for more information.
+#
+Options Indexes FollowSymLinks Includes ExecCGI
+
+#
+# AllowOverride controls what directives may be placed in .htaccess files.
+# It can be "All", "None", or any combination of the keywords:
+#   Options FileInfo AuthConfig Limit
+#
+AllowOverride All
+
+#
+# Controls who can get stuff from this server.
+#     Order allow,deny
+Allow from all
+</code></pre>
+
+<p></Directory></p>
+
+<p>Alias /dev &ldquo;C:\users\foo\programming\dev&rdquo;
+```</p>
+
+<p>Restart Apache (you can do so from the XAMPP control panel) and check out <a href="http://localhost/dev.">http://localhost/dev.</a>
+You can repeat this process with other aliases to add more XAMPP alias directories.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Wamp Alias Directories]]></title>
+    <link href="http://willi.am/blog/2009/01/14/wamp-alias-directories/"/>
+    <updated>2009-01-14T12:45:43-08:00</updated>
+    <id>http://willi.am/blog/2009/01/14/wamp-alias-directories</id>
+    <content type="html"><![CDATA[<p>I use <a href="http://www.wampserver.com/">Wamp Server</a> together with <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a> to develop PHP applications on my local machine.
+This works well because I can do debugging (thanks to <a href="http://www.xdebug.org/">xdebug</a>) and can readily view and edit files.
+I usually don&rsquo;t like to place projects in the <code>c:\wamp\www</code> folder, preferring instead to place them in more logical places in my personal directory.
+Wamp alias directories are a great way to improve project organization.</p>
+
+<p>The easiest way to facilitate this is to create alias directories in Apache that point to these different locations. Wamp Server provides an interface for creating wamp alias directories for Apache.</p>
+
+<h2>Adding Wamp Alias Directories</h2>
+
+<p>Click on the tray icon and select Apache &rarr; Alias directories &rarr;  Add an alias. A new command prompt window opens where you can enter the alias information.</p>
+
+<p>Creating an alias like this, you&rsquo;ll probably notice that in order for the URL to work, you have to have a trailing slash at the end (e.g. <code>http://localhost/example/</code> will work while <code>http://localhost/example</code> won&rsquo;t). This can be a bit of a pain, but there is fortunately a quick fix.</p>
+
+<h2>Fixing Your Wamp Alias Directories</h2>
+
+<p>Click on the Wamp Server tray icon again and select Apache &rarr; Alias directories &rarr; [alias url] &ndash;> Edit alias. This will open the alias file in Notepad. Remove the trailing slash from the relative URL.</p>
+
+<p>For Example</p>
+
+<p><code>Alias /example/ "c:/path/to/example/"</code></p>
+
+<p>Would become</p>
+
+<p><code>Alias /example "c:/path/to/example/"</code></p>
+
+<p>Save the file and close Notepad. Wamp Server should restart automatically (if not, you can restart it manually from the tray icon). Once it has restarted, you&rsquo;re alias should now work with or without the trailing slash. Why Wamp Server doesn&rsquo;t do this automatically, I&rsquo;m not sure, but at least there&rsquo;s a simple fix.</p>
+
+<h2>Updating Wamp so Alias Directories Just Work</h2>
+
+<p>Thanks to Ozan Hazer for pointing out that you can actually change the alias template, and save yourself from having to perform multiple steps every time you add an alias.</p>
+
+<p>Open <code>c:\wamp\scripts\addAlias.php</code> and locate the line starting with <code>$newConfFileContents =</code>.</p>
+
+<p>```</p>
+
+<h1>Find:</h1>
+
+<p>$newConfFileContents = &lsquo;Alias /&rsquo;.$newAliasDir.&lsquo;/</p>
+
+<h1>Replace it with:</h1>
+
+<p>$newConfFileContents = &lsquo;Alias /&rsquo;.$newAliasDir.&lsquo;
+```</p>
+
+<p>Open <code>c:\wamp\scripts\refresh.php</code>.</p>
+
+<p>```</p>
+
+<h1>Find:</h1>
+
+<p>preg_match(&lsquo;|^Alias /&rsquo;.$newalias_dir.&lsquo;/ &ldquo;(.+)&rdquo;|&rsquo;,$alias_contents,$match);</p>
+
+<h1>Replace it with:</h1>
+
+<p>preg_match(&lsquo;|^Alias /&rsquo;.$newalias_dir.&lsquo;/ &ldquo;(.+)&rdquo;|&rsquo;,$alias_contents,$match);
+```</p>
+
+<p>Be sure to back up these files before you edit them, since breaking them could potentially break other Wamp functionality.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,6 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://willi.am/blog/2009/01/14/wamp-alias-directories/</loc>
+        <lastmod>2014-05-18T13:53:36-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/blog/2011/02/14/creating-xampp-alias-directories/</loc>
+        <lastmod>2014-05-18T13:54:58-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/blog/2011/04/16/wordcamp-seattle-slides-2011/</loc>
         <lastmod>2014-05-18T13:29:50-07:00</lastmod>
     </url>
@@ -90,11 +98,11 @@
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2014-05-18T13:29:50-07:00</lastmod>
+        <lastmod>2014-05-18T13:54:58-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2014-05-18T13:29:50-07:00</lastmod>
+        <lastmod>2014-05-18T13:54:58-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/plugins/code-snippets/</loc>

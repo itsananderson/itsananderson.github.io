@@ -1,0 +1,353 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="If you&rsquo;ve read my post on adding aliases to WampServer,
+you may be curious about how to add aliases to XAMPP.
+While WampServer has a nice (if &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/02/14/creating-xampp-alias-directories/">
+		
+			Creating XAMPP Alias Directories</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;ve read my post on <a href="/blog/2009/01/14/wamp-alias-directories/">adding aliases to WampServer</a>,
+you may be curious about how to add aliases to XAMPP.
+While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
+Fortunately, creating XAMPP alias directories by hand is pretty easy.</p>
+
+<h2>Preparing to Create XAMPP Alias Directories</h2>
+
+<p>The first thing you&rsquo;ll want to do is add an alias directory to your XAMPP install.
+If you&rsquo;re running Windows, create the following folder.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>C:\xampp\apache\conf\alias</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, you&rsquo;ll need to change your Apache configuration file.
+You can find it under <code>C:\xampp\apache\conf\httpd.conf</code>.
+To make changes, you&rsquo;ll need to edit it as an administrator.
+If you&rsquo;re running Windows Vista or above, your best bet is to open Notepad as an administrator and then open httpd.conf.
+To open Notepad (or any other application) as an administrator, right-click on it and select &ldquo;Run as administrator&rdquo;.
+You can also launch Notepad as an administrator from the start menu with <code>Ctrl+Shift+Enter</code> while Notepad is selected.</p>
+
+<p>Once you&rsquo;ve opened httpd.conf, add the following to the end and save it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include "conf/alias/*"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now Apache will look in the alias folder for more configuration files.
+This way you can add an alias by simply adding a new configuration file to the conf/alias/ folder.</p>
+
+<h2>Creating XAMPP Alias Directories</h2>
+
+<p>Let&rsquo;s add some XAMPP alias directories.
+Suppose you want to add an alias called &ldquo;dev&rdquo;.
+First, download <a href="/uploads/xampp-alias-template.txt">this alias template file</a> and place it in the alias folder.
+Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
+You&rsquo;ll need to edit the template (again, as an administrator) and replace &ldquo;DIRECTORY&rdquo; (it&rsquo;s there twice) with the path to the alias and &ldquo;ALIAS&rdquo; with the name of your alias.
+In our example, it looks something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;directory "c:\users\foo\programming\dev"&gt;
+</span><span class='line'>    #
+</span><span class='line'>    # Possible values for the Options directive are "None", "All",
+</span><span class='line'>    # or any combination of:
+</span><span class='line'>    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+</span><span class='line'>    #
+</span><span class='line'>    # Note that "MultiViews" must be named *explicitly* --- "Options All"
+</span><span class='line'>    # doesn't give it to you.
+</span><span class='line'>    #
+</span><span class='line'>    # The Options directive is both complicated and important.  Please see
+</span><span class='line'>    # http://httpd.apache.org/docs/2.2/mod/core.html#options
+</span><span class='line'>    # for more information.
+</span><span class='line'>    #
+</span><span class='line'>    Options Indexes FollowSymLinks Includes ExecCGI
+</span><span class='line'>
+</span><span class='line'>    #
+</span><span class='line'>    # AllowOverride controls what directives may be placed in .htaccess files.
+</span><span class='line'>    # It can be "All", "None", or any combination of the keywords:
+</span><span class='line'>    #   Options FileInfo AuthConfig Limit
+</span><span class='line'>    #
+</span><span class='line'>    AllowOverride All
+</span><span class='line'>
+</span><span class='line'>    #
+</span><span class='line'>    # Controls who can get stuff from this server.
+</span><span class='line'>    #     Order allow,deny
+</span><span class='line'>    Allow from all
+</span><span class='line'>&lt;/Directory&gt;
+</span><span class='line'>
+</span><span class='line'>Alias /dev "C:\users\foo\programming\dev"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart Apache (you can do so from the XAMPP control panel) and check out <a href="http://localhost/dev.">http://localhost/dev.</a>
+You can repeat this process with other aliases to add more XAMPP alias directories.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-14T12:35:42-08:00" pubdate data-updated="true">Feb 14<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/apache/'>Apache,</a>, <a class='category' href='/blog/categories/xampp/'>XAMPP</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/01/14/wamp-alias-directories/">
+		
+			Wamp Alias Directories</a>
+	</h2>
+	<div class="entry-content">
+		<p>I use <a href="http://www.wampserver.com/">Wamp Server</a> together with <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a> to develop PHP applications on my local machine.
+This works well because I can do debugging (thanks to <a href="http://www.xdebug.org/">xdebug</a>) and can readily view and edit files.
+I usually don&rsquo;t like to place projects in the <code>c:\wamp\www</code> folder, preferring instead to place them in more logical places in my personal directory.
+Wamp alias directories are a great way to improve project organization.</p>
+
+<p>The easiest way to facilitate this is to create alias directories in Apache that point to these different locations. Wamp Server provides an interface for creating wamp alias directories for Apache.</p>
+
+<h2>Adding Wamp Alias Directories</h2>
+
+<p>Click on the tray icon and select Apache &rarr; Alias directories &rarr;  Add an alias. A new command prompt window opens where you can enter the alias information.</p>
+
+<p>Creating an alias like this, you&rsquo;ll probably notice that in order for the URL to work, you have to have a trailing slash at the end (e.g. <code>http://localhost/example/</code> will work while <code>http://localhost/example</code> won&rsquo;t). This can be a bit of a pain, but there is fortunately a quick fix.</p>
+
+<h2>Fixing Your Wamp Alias Directories</h2>
+
+<p>Click on the Wamp Server tray icon again and select Apache &rarr; Alias directories &rarr; [alias url] &ndash;> Edit alias. This will open the alias file in Notepad. Remove the trailing slash from the relative URL.</p>
+
+<p>For Example</p>
+
+<p><code>Alias /example/ "c:/path/to/example/"</code></p>
+
+<p>Would become</p>
+
+<p><code>Alias /example "c:/path/to/example/"</code></p>
+
+<p>Save the file and close Notepad. Wamp Server should restart automatically (if not, you can restart it manually from the tray icon). Once it has restarted, you&rsquo;re alias should now work with or without the trailing slash. Why Wamp Server doesn&rsquo;t do this automatically, I&rsquo;m not sure, but at least there&rsquo;s a simple fix.</p>
+
+<h2>Updating Wamp so Alias Directories Just Work</h2>
+
+<p>Thanks to Ozan Hazer for pointing out that you can actually change the alias template, and save yourself from having to perform multiple steps every time you add an alias.</p>
+
+<p>Open <code>c:\wamp\scripts\addAlias.php</code> and locate the line starting with <code>$newConfFileContents =</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Find:
+</span><span class='line'>$newConfFileContents = 'Alias /'.$newAliasDir.'/
+</span><span class='line'>
+</span><span class='line'># Replace it with:
+</span><span class='line'>$newConfFileContents = 'Alias /'.$newAliasDir.'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Open <code>c:\wamp\scripts\refresh.php</code>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Find:
+</span><span class='line'>preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match);
+</span><span class='line'>
+</span><span class='line'># Replace it with:
+</span><span class='line'>preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match);</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Be sure to back up these files before you edit them, since breaking them could potentially break other Wamp functionality.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-14T12:45:43-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/apache/'>Apache,</a>, <a class='category' href='/blog/categories/wamp/'>Wamp</a>
+
+
+</div>
+	
+</div>
+</article>
+
+<nav id="pagenavi">
+    
+        <a href="/blog/page/2/" class="prev">Prev</a>
+    
+    
+    <div class="center"><a href="/blog/archives">Blog Archives</a></div>
+</nav></div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
