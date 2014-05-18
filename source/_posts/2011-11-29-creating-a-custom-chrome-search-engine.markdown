@@ -71,5 +71,7 @@ For example, this is the custom search engine definition I have:
 Search syntax is pretty simple.
 
 * "&lt;username>" to look up a user's current schedule.
-* "&lt;username> &lt;quarter>" to look up a user's schedule for a specific quarter this year. Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40
-* "&lt;username> &lt;year>&lt;quarter>" to look up a user's schedule for a specific quarter and academic year. Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012
+* "&lt;username> &lt;quarter>" to look up a user's schedule for a specific quarter this year.  
+  Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40
+* "&lt;username> &lt;year>&lt;quarter>" to look up a user's schedule for a specific quarter and academic year.  
+  Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012
