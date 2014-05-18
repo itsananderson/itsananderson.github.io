@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rose-Hulman, | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/rose-hulman/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-05-18T13:03:00-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Creating a Custom Chrome Search Engine]]></title>
+    <link href="http://willi.am/blog/2011/11/29/creating-a-custom-chrome-search-engine/"/>
+    <updated>2011-11-29T11:50:03-08:00</updated>
+    <id>http://willi.am/blog/2011/11/29/creating-a-custom-chrome-search-engine</id>
+    <content type="html"><![CDATA[<p>Custom search engines in Chrome are a pretty cool feature.
+For example, <a href="http://jetheis.com/blog/2011/11/28/accelerating-rose-hulman-schedule-lookup-with-google-chrome/">Jimmy Theis has a great blog post</a>
+about using them to look up someone&rsquo;s Rose-Hulman class schedule. The one shortcoming I&rsquo;ve found is that you can&rsquo;t do any processing of the actual search term.
+In other words, you have to blindly jump to the search engine URL without evaluating the actual query.</p>
+
+<p>In the case of the Rose-Hulman lookup page, there are actually two parameters that it would be nice to query on.
+The first is the username of the person you&rsquo;re looking up, and the second is which quarter (Fall, Winter, Spring, Summer) to show.
+With Chrome&rsquo;s custom search engines, you can&rsquo;t specify multiple parameters, so you have to hardcode the quarter parameter (which is hardly convenient).
+To resolve this problem, I wrote a simple PHP script that takes in the search a search query (like <code>anderswc 1</code> or <code>jetheis 201130</code>) and translates it to the correct schedule lookup page query (my fall schedule, or Jimmy&rsquo;s spring schedule last year).
+Here&rsquo;s the script:</p>
+
+<p>```php</p>
+
+<pre><code>&lt;?php
+
+function get_academic_year() {
+    if ( intval( date('n') ) &gt;= 8 ) {
+        return date( 'Y' ) + 1;
+    } else {
+        return intval( date( 'Y' ) );
+    }
+}
+
+function get_quarter() {
+    $month = intval( date( 'n' ) );
+    $day = intval( date( 'j' ) );
+
+    if ( 6 == $month || 7 == $month ) {
+        return 40;
+    } elseif ( ( 8 &lt;= $month &amp;&amp; 10 &gt;= $month ) || ( 11 == $month &amp;&amp; 20 &gt;= $day ) ) {
+        return 10;
+    } elseif ( 11 &lt;= $month || 2 &gt;= $month ) {
+        return 20;
+    } else {
+        return 30;
+    }
+}
+
+$search = $_GET['search'];
+
+$parts = explode( ' ', $search );
+
+if ( 1 == count( $parts ) ) {
+    $term = get_academic_year() . get_quarter();
+} else {
+    $term = $parts[1];
+    if ( strlen( $term ) == 1 ) {
+        $term = get_academic_year() . $term . '0';
+    } elseif ( strlen( $term ) == 2 ) {
+        $term = get_academic_year() . $term;
+    }
+    $term = intval( $term );
+}
+$url = 'https://prodweb.rose-hulman.edu/regweb-cgi/reg-sched.pl?termcode=' . $term . '&amp;view=tgrid&amp;id1=' . $parts[0] . '&amp;bt1=ID%2Username';
+
+header( 'Location: ' . $url );
+</code></pre>
+
+<p>```</p>
+
+<p>Now you can create a custom search engine to point to this script (I&rsquo;ve got a copy running at <a href="http://itsananderson.com/schedule.php">http://itsananderson.com/schedule.php</a>), and specify &ldquo;?search=%s&rdquo;.
+For example, this is the custom search engine definition I have:</p>
+
+<p><code>http://itsananderson.com/schedule.php?search=%s</code></p>
+
+<p>Search syntax is pretty simple.</p>
+
+<ul>
+<li>&ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.</li>
+<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year. Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
+<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year. Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

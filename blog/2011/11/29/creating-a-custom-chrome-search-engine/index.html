@@ -1,0 +1,260 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Creating a Custom Chrome Search Engine - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="Custom search engines in Chrome are a pretty cool feature.
+For example, Jimmy Theis has a great blog post
+about using them to look up someone&rsquo;s &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Creating a Custom Chrome Search Engine</h2>
+	<div class="entry-content"><p>Custom search engines in Chrome are a pretty cool feature.
+For example, <a href="http://jetheis.com/blog/2011/11/28/accelerating-rose-hulman-schedule-lookup-with-google-chrome/">Jimmy Theis has a great blog post</a>
+about using them to look up someone&rsquo;s Rose-Hulman class schedule. The one shortcoming I&rsquo;ve found is that you can&rsquo;t do any processing of the actual search term.
+In other words, you have to blindly jump to the search engine URL without evaluating the actual query.</p>
+
+<p>In the case of the Rose-Hulman lookup page, there are actually two parameters that it would be nice to query on.
+The first is the username of the person you&rsquo;re looking up, and the second is which quarter (Fall, Winter, Spring, Summer) to show.
+With Chrome&rsquo;s custom search engines, you can&rsquo;t specify multiple parameters, so you have to hardcode the quarter parameter (which is hardly convenient).
+To resolve this problem, I wrote a simple PHP script that takes in the search a search query (like <code>anderswc 1</code> or <code>jetheis 201130</code>) and translates it to the correct schedule lookup page query (my fall schedule, or Jimmy&rsquo;s spring schedule last year).
+Here&rsquo;s the script:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">get_academic_year</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">get_quarter</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$month</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;n&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  <span class="nv">$day</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;j&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="mi">6</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">7</span> <span class="o">==</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">40</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="p">(</span> <span class="mi">8</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="o">||</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">20</span> <span class="o">&gt;=</span> <span class="nv">$day</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">20</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">30</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$search</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$parts</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nv">$search</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">count</span><span class="p">(</span> <span class="nv">$parts</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nx">get_quarter</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://prodweb.rose-hulman.edu/regweb-cgi/reg-sched.pl?termcode=&#39;</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;&amp;view=tgrid&amp;id1=&#39;</span> <span class="o">.</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;&amp;bt1=ID%2Username&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">header</span><span class="p">(</span> <span class="s1">&#39;Location: &#39;</span> <span class="o">.</span> <span class="nv">$url</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can create a custom search engine to point to this script (I&rsquo;ve got a copy running at <a href="http://itsananderson.com/schedule.php">http://itsananderson.com/schedule.php</a>), and specify &ldquo;?search=%s&rdquo;.
+For example, this is the custom search engine definition I have:</p>
+
+<p><code>http://itsananderson.com/schedule.php?search=%s</code></p>
+
+<p>Search syntax is pretty simple.</p>
+
+<ul>
+<li>&ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.</li>
+<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year. Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
+<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year. Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
+</ul>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-29T11:50:03-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/chrome/'>Chrome</a>, <a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman,</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
