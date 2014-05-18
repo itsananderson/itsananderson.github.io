@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ASP.NET | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/asp-dot-net/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-14T00:27:20-07:00</updated>
+  <updated>2014-05-18T10:05:50-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -29,36 +29,18 @@ This package monitors a directory for file chanages and respawns a child process
 
 <p><code>npm install -g nodemon</code></p>
 
-<p>Now that nodemon is installed, you need to figure out where the vNext&rsquo;s &ldquo;K&rdquo; command is located.
-It should be on your path, but for some reason nodemon can&rsquo;t find it without an absolute path.</p>
+<p>Now that nodemon is installed, you can use it to live-rerun your app.</p>
 
-<p>In cmd run: <code>where K</code></p>
+<p><code>nodemon --exec "K.cmd web" -e cs,json</code></p>
 
-<p>In PowerShell run: <code>gcm K | select-object -ExpandProperty Definition</code></p>
+<p>This tells Nodemon to watch for changes to <em>.cs and </em>.json files and to restart &ldquo;K.cmd web&rdquo; when changes are detected.
+Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is configured for your project.</p>
 
-<p>Unfortunately, I don&rsquo;t think Git Bash is supported yet, since K.cmd doesn&rsquo;t seem to have a BASH counterpart.</p>
+<p>Note that if you&rsquo;re running in Git Bash on Windows (which I currently can&rsquo;t get working) or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code> or <code>K.sh web</code>.</p>
 
-<p>Copy the full path output by the previous command.
-Now paste it into the following Nodemon command.</p>
+<p><img src="/images/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
 
-<p><code>nodemon --exec "&lt;path to K.cmd&gt; run" -e cs,json</code></p>
-
-<p>This tells Nodemon to watch for changes to <em>.cs and </em>.json files and to restart &ldquo;K run&rdquo; when changes are detected.
-Replace &ldquo;run&rdquo; with &ldquo;web&rdquo; as appropriate.</p>
-
-<p>A concrete example of this setup might look like this:</p>
-
-<p>```
-C:\Users\me\aspnet-home\samples\ConsoleApp>where K
-C:\Users\me.kre\packages\KRE-svr50-x86.0.1-alpha-build-0421\bin\k.cmd</p>
-
-<p>C:\Users\me\aspnet-home\samples\ConsoleApp>nodemon &mdash;exec &ldquo;C:\Users\me.kre\packages\KRE-svr50-x86.0.1-alpha-build-0421\bin\k.cmd run&rdquo; -e cs,json
-```</p>
-
-<p>This functionality may already exist in ASP.NET vNext, and I just haven&rsquo;t found it.
-If so, <a href="https://twitter.com/itsananderson">let me know</a>.
-If not, it&rsquo;s hopefully on the roadmap.
-For now this is a handy workaround.</p>
+<p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
 ]]></content>
   </entry>
   
