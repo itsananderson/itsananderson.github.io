@@ -81,8 +81,20 @@
         <lastmod>2014-05-18T10:04:27-07:00</lastmod>
     </url>
     <url>
+        <loc>http://willi.am/plugins/code-snippets/</loc>
+        <lastmod>2014-05-18T11:56:32-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/dev-profiles/</loc>
+        <lastmod>2014-05-18T12:00:42-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/enable-codepress/</loc>
+        <lastmod>2014-05-18T12:06:30-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/plugins/</loc>
-        <lastmod>2014-04-27T12:57:47-07:00</lastmod>
+        <lastmod>2014-05-18T12:26:05-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/plugins/minimum-password-length/</loc>
@@ -91,6 +103,22 @@
     <url>
         <loc>http://willi.am/plugins/minimum-password-strength/</loc>
         <lastmod>2014-04-27T12:57:47-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/naughty-monkey/</loc>
+        <lastmod>2014-05-18T12:13:42-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/naughty-monkey/owner-ban-fix/</loc>
+        <lastmod>2014-05-18T12:13:11-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/random-headers/</loc>
+        <lastmod>2014-05-18T12:17:01-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/remove-editor-and-install-pages/</loc>
+        <lastmod>2014-05-18T12:26:01-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/plugins/short-comment-filter/</loc>
