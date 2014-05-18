@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WordPress | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/wordpress/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-18T13:56:36-07:00</updated>
+  <updated>2014-05-18T14:15:54-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -166,6 +166,62 @@ Add_Brackets::start();
 <p>The Simple Post Ratings plugin is available (also as a zip file) <a href="http://www.itsananderson.com/wp-content/uploads/simple-post-ratings.zip">here</a>.</p>
 
 <p>Here&rsquo;s a link to my WordCamp Seattle video on <a href="http://wordpress.tv/2011/05/06/will-anderson-using-ajax-in-plugins-and-themes/">WordPress.tv</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[WordPress Custom Post Statuses]]></title>
+    <link href="http://willi.am/blog/2011/02/19/wordpress-custom-post-statuses/"/>
+    <updated>2011-02-19T12:59:07-08:00</updated>
+    <id>http://willi.am/blog/2011/02/19/wordpress-custom-post-statuses</id>
+    <content type="html"><![CDATA[<p>WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of states and a WordPress custom post status. If you want to make certain posts stand out, or need a custom way to categorize your posts, this is simple way to do it.</p>
+
+<p>The following screenshot illustrates some of the default post states.</p>
+
+<p><img src="/images/post-images/wordpress-post-status-samples.png" alt="Before adding WordPress Custom Post Statuses" /></p>
+
+<h2>Adding a new WordPress Custom Post Status</h2>
+
+<p>Adding your own states is actually pretty easy. The following code snippet should get you going in the right direction.</p>
+
+<p>```php
+class My_Custom_Post_State {
+  function My_Custom_Post_State() {</p>
+
+<pre><code>$this-&gt;__construct();
+</code></pre>
+
+<p>  }
+  function __construct() {</p>
+
+<pre><code>add_filter( 'display_post_states', array( $this, 'custom_post_state' ) );
+</code></pre>
+
+<p>  }
+  function custom_post_state( $states ) {</p>
+
+<pre><code>global $post;
+$show_custom_state = null !== get_post_meta( $post-&gt;ID, '_some_costom_field' );
+if ( $show_custom_state ) {
+  $states[] = __( 'Custom State' );
+}
+return $states;
+</code></pre>
+
+<p>  }
+}
+new My_Custom_Post_State();
+```</p>
+
+<h2>Result of Adding a WordPress Custom Post Status</h2>
+
+<p>Assuming you have code elsewhere that is adding the custom field to posts, you&rsquo;ll see something like this.</p>
+
+<p><img src="/images/post-images/custom-state-sample.png" alt="After Adding WordPress Custom Post Statuses" /></p>
+
+<p>If you added code to add a custom field called <code>_some_custom_field</code> to certain posts, those posts would show up with the &lsquo;Custom State&rsquo; status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field.</p>
+
+<p>That&rsquo;s pretty much it. Obviously there are more useful examples, but this should be enough to get you started.</p>
 ]]></content>
   </entry>
   

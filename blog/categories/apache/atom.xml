@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Apache, | Will Anderson]]></title>
+  <title><![CDATA[Category: Apache | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/apache/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-18T13:56:36-07:00</updated>
+  <updated>2014-05-18T14:15:54-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Creating XAMPP Alias Directories]]></title>
-    <link href="http://willi.am/blog/2011/02/14/creating-xampp-alias-directories/"/>
-    <updated>2011-02-14T12:35:42-08:00</updated>
-    <id>http://willi.am/blog/2011/02/14/creating-xampp-alias-directories</id>
+    <link href="http://willi.am/blog/2011/02/24/creating-xampp-alias-directories/"/>
+    <updated>2011-02-24T12:35:42-08:00</updated>
+    <id>http://willi.am/blog/2011/02/24/creating-xampp-alias-directories</id>
     <content type="html"><![CDATA[<p>If you&rsquo;ve read my post on <a href="/blog/2009/01/14/wamp-alias-directories/">adding aliases to WampServer</a>,
 you may be curious about how to add aliases to XAMPP.
 While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
