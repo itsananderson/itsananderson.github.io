@@ -6,7 +6,7 @@ comments: true
 categories: WordPress
 ---
 
-[Bread Crumbs](http://en.wikipedia.org/wiki/Breadcrumb_(navigation)") are something that's been around for quite some time.
+<a href="http://en.wikipedia.org/wiki/Breadcrumb_(navigation)">Bread Crumbs</a> are something that's been around for quite some time.
 I first remember seeing them in <a title="ANGEL Learning" href="http://angellearning.com/">ANGEL</a> when my dad was working for the company in 2005. Similar things can be found in File Browsers, and browser history is really a kind of bread crumb.
 
 In my work for IRPA one of the concerns we've had is making it easy to navigate the site. Because WordPress has limited CMS functionality out of the box, navigation is sometimes difficult on sites with many nested pages. One of the solutions I looked at was Breadcrumbs because they can give users a quick look at their location in the site structure. Over the break (which I'm still enjoying) I've been able to finish implementing breadcrumbs on the IRPA Site.
