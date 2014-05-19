@@ -993,71 +993,38 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2009/01/14/wamp-alias-directories/">
+		<a href="/blog/2009/05/04/the-obscure-wordpress-get-option-parameter/">
 		
-			Wamp Alias Directories</a>
+			The Obscure WordPress Get_option Parameter</a>
 	</h2>
 	<div class="entry-content">
-		<p>I use <a href="http://www.wampserver.com/">Wamp Server</a> together with <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a> to develop PHP applications on my local machine.
-This works well because I can do debugging (thanks to <a href="http://www.xdebug.org/">xdebug</a>) and can readily view and edit files.
-I usually don&rsquo;t like to place projects in the <code>c:\wamp\www</code> folder, preferring instead to place them in more logical places in my personal directory.
-Wamp alias directories are a great way to improve project organization.</p>
+		<p>Any WordPress Plugin developer worth their salt knows about the <code>get_option</code> function, which allows options to be retrieved from the database. What I recently discovered is that this function accepts a second parameter, indicating a default value to be returned if the option doesn&rsquo;t exist in the database.</p>
 
-<p>The easiest way to facilitate this is to create alias directories in Apache that point to these different locations. Wamp Server provides an interface for creating wamp alias directories for Apache.</p>
+<p>Here&rsquo;s a simple example of the &ldquo;old&rdquo; and &ldquo;new&rdquo; ways of retrieving options from the database:</p>
 
-<h2>Adding Wamp Alias Directories</h2>
+<p>old:</p>
 
-<p>Click on the tray icon and select Apache &rarr; Alias directories &rarr;  Add an alias. A new command prompt window opens where you can enter the alias information.</p>
-
-<p>Creating an alias like this, you&rsquo;ll probably notice that in order for the URL to work, you have to have a trailing slash at the end (e.g. <code>http://localhost/example/</code> will work while <code>http://localhost/example</code> won&rsquo;t). This can be a bit of a pain, but there is fortunately a quick fix.</p>
-
-<h2>Fixing Your Wamp Alias Directories</h2>
-
-<p>Click on the Wamp Server tray icon again and select Apache &rarr; Alias directories &rarr; [alias url] &ndash;> Edit alias. This will open the alias file in Notepad. Remove the trailing slash from the relative URL.</p>
-
-<p>For Example</p>
-
-<p><code>Alias /example/ "c:/path/to/example/"</code></p>
-
-<p>Would become</p>
-
-<p><code>Alias /example "c:/path/to/example/"</code></p>
-
-<p>Save the file and close Notepad. Wamp Server should restart automatically (if not, you can restart it manually from the tray icon). Once it has restarted, you&rsquo;re alias should now work with or without the trailing slash. Why Wamp Server doesn&rsquo;t do this automatically, I&rsquo;m not sure, but at least there&rsquo;s a simple fix.</p>
-
-<h2>Updating Wamp so Alias Directories Just Work</h2>
-
-<p>Thanks to Ozan Hazer for pointing out that you can actually change the alias template, and save yourself from having to perform multiple steps every time you add an alias.</p>
-
-<p>Open <code>c:\wamp\scripts\addAlias.php</code> and locate the line starting with <code>$newConfFileContents =</code>.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Find:
-</span><span class='line'>$newConfFileContents = 'Alias /'.$newAliasDir.'/
-</span><span class='line'>
-</span><span class='line'># Replace it with:
-</span><span class='line'>$newConfFileContents = 'Alias /'.$newAliasDir.'</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span> <span class="s1">&#39;Option Name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span> <span class="k">false</span> <span class="o">===</span> <span class="nv">$option</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="s1">&#39;My real option value.&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Open <code>c:\wamp\scripts\refresh.php</code>.</p>
+<p>new:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Find:
-</span><span class='line'>preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match);
-</span><span class='line'>
-</span><span class='line'># Replace it with:
-</span><span class='line'>preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match);</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">&#39;option_name&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Be sure to back up these files before you edit them, since breaking them could potentially break other Wamp functionality.</p>
+<p>As you can see, this simplifies option retrieval and makes your code just a little easier to read.</p>
+
+<p><strong>EDIT:</strong> Thanks <a href="http://nickohrn.com/">Nick Ohrn</a> for pointing out a bug in the first code snippet. I&rsquo;ve updated it so nobody is confused.</p>
 
 		
 		
@@ -1077,11 +1044,11 @@ Wamp alias directories are a great way to improve project organization.</p>
   
 
 
-<time datetime="2009-01-14T12:45:43-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
+<time datetime="2009-05-04T22:18:54-07:00" pubdate data-updated="true">May 4<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
-	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/wamp/'>Wamp</a>
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>
@@ -1093,6 +1060,8 @@ Wamp alias directories are a great way to improve project organization.</p>
     
         <a href="/blog/page/2/" class="prev">Prev</a>
     
+    
+        <a href="/blog/page/4/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
