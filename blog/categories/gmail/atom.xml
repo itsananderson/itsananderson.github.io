@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Gmail | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/gmail/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-05-18T22:35:41-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using jQuery and Gmail's Plus-Addressing to Fight Email Spam]]></title>
+    <link href="http://willi.am/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam/"/>
+    <updated>2009-02-26T21:26:55-08:00</updated>
+    <id>http://willi.am/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam</id>
+    <content type="html"><![CDATA[<p>Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com&rdquo;). This does an OK job, but it&rsquo;s also a royal pain for the visitor, who has to type in, or fix your email address if they want to send you an email. The ultimate spam fighting question arises: &ldquo;How do you keep bots out while letting real users in&rdquo;. GMail&rsquo;s plus-addressing feature and jQuery might be able to bring us one step closer to an answer.</p>
+
+<p>If you use Google&rsquo;s email services (GMail or Google Apps), you have a powerful email feature available. Plus-addressing means that bill&#64;gmail.com, bill+something&#64;gmail.com and bill+anything&#64;gmail.com all point to the same email address. When deciding what address to deliver the message to, Google drops everything after the plus sign. you can then actually use filters to move items to folders inside your mailbox (for example, you could use example+bank&#64;gmail.com for your banking). Doing this also makes it just a little harder (though not impossible) for bots to get your real email address.</p>
+
+<p>By default, you probably don&rsquo;t want to display a &ldquo;plus address&rdquo; on a contact page, jQuery comes to our rescue here, allowing us to remove the &ldquo;plus&rdquo; part for users with JavaScript support. The following script looks for all email links and removes the &ldquo;plus&rdquo; portion from the href and the inner text.</p>
+
+<p>```javascript
+jQuery(document).ready(function(){</p>
+
+<pre><code>jQuery('a[href^=mailto:]').each(removeSpamProtection);
+</code></pre>
+
+<p>});</p>
+
+<p>function removeSpamProtection(index, element){</p>
+
+<pre><code>var link = jQuery(element);
+link.attr('href', link.attr('href').replace(/\+[a-zA-Z]*/, ''))
+    .text(link.text().replace(/\+[a-zA-Z]*/, ''));
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Now all visitors with JavaScript support will see something like:</p>
+
+<p><code>html
+&lt;a href="mailto:example@example.com"&gt;example@example.com&lt;/a&gt;
+</code></p>
+
+<p>Visitors without JavaScript support will see:</p>
+
+<p><code>html
+&lt;a href="mailto:example+spamblock@example.com"&gt;example+spamblock@example.com&lt;/a&gt;
+</code></p>
+
+<p>Normal visitors will see your real email address while bots and visitors without JavaScript will see something else. The bots will (hopefully) be confused by the plus sign. If not, they will be sending an email to an address that you can easily filter into a &ldquo;maybe spam&rdquo; folder.</p>
+
+<p>So there you have it. A very short piece of JavaScript (thanks to the wonders of jQuery) that you can include in your WordPress theme or install as a separate plugin.</p>
+
+<p>What do you do to protect your email online? Do you have another method that works better? If so, please share it in the comments!</p>
+]]></content>
+  </entry>
+  
+</feed>

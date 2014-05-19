@@ -151,6 +151,92 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam/">
+		
+			Using jQuery and Gmail&#8217;s Plus-Addressing to Fight Email Spam</a>
+	</h2>
+	<div class="entry-content">
+		<p>Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com&rdquo;). This does an OK job, but it&rsquo;s also a royal pain for the visitor, who has to type in, or fix your email address if they want to send you an email. The ultimate spam fighting question arises: &ldquo;How do you keep bots out while letting real users in&rdquo;. GMail&rsquo;s plus-addressing feature and jQuery might be able to bring us one step closer to an answer.</p>
+
+<p>If you use Google&rsquo;s email services (GMail or Google Apps), you have a powerful email feature available. Plus-addressing means that bill&#64;gmail.com, bill+something&#64;gmail.com and bill+anything&#64;gmail.com all point to the same email address. When deciding what address to deliver the message to, Google drops everything after the plus sign. you can then actually use filters to move items to folders inside your mailbox (for example, you could use example+bank&#64;gmail.com for your banking). Doing this also makes it just a little harder (though not impossible) for bots to get your real email address.</p>
+
+<p>By default, you probably don&rsquo;t want to display a &ldquo;plus address&rdquo; on a contact page, jQuery comes to our rescue here, allowing us to remove the &ldquo;plus&rdquo; part for users with JavaScript support. The following script looks for all email links and removes the &ldquo;plus&rdquo; portion from the href and the inner text.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">jQuery</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+</span><span class='line'>  <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;a[href^=mailto:]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">removeSpamProtection</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">removeSpamProtection</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">element</span><span class="p">){</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\+[a-zA-Z]*/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+</span><span class='line'>      <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">link</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\+[a-zA-Z]*/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now all visitors with JavaScript support will see something like:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;mailto:example@example.com&quot;</span><span class="nt">&gt;</span>example@example.com<span class="nt">&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Visitors without JavaScript support will see:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;mailto:example+spamblock@example.com&quot;</span><span class="nt">&gt;</span>example+spamblock@example.com<span class="nt">&lt;/a&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Normal visitors will see your real email address while bots and visitors without JavaScript will see something else. The bots will (hopefully) be confused by the plus sign. If not, they will be sending an email to an address that you can easily filter into a &ldquo;maybe spam&rdquo; folder.</p>
+
+<p>So there you have it. A very short piece of JavaScript (thanks to the wonders of jQuery) that you can include in your WordPress theme or install as a separate plugin.</p>
+
+<p>What do you do to protect your email online? Do you have another method that works better? If so, please share it in the comments!</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-02-26T21:26:55-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2009</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/gmail/'>Gmail</a>, <a class='category' href='/blog/categories/jquery/'>jQuery</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2009/01/14/wamp-alias-directories/">
 		
 			Wamp Alias Directories</a>
