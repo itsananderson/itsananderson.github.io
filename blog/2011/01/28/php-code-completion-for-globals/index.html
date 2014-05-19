@@ -1,0 +1,188 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>PHP Code Completion for Globals - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">PHP Code Completion for Globals</h2>
+	<div class="entry-content"><p>Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project.</p>
+
+<p><img src="/images/post-images/netbeans-code-completion.png" alt="" /></p>
+
+<p>The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects.</p>
+
+<h2>Concrete PHP Code Completion Example</h2>
+
+<p>The example I&rsquo;ll use is the $wpdb global variable defined in WordPress. It contains an instance of the &ldquo;wpdb&rdquo; class, which wraps around the database connection and provides a bunch of helper methods. It&rsquo;s defined in the global scope, so when you use it in another file, your IDE has no clue what type it is. This means it can&rsquo;t provide any PHP code completion.</p>
+
+<p>If you add the following code snippet to the beginning of your function (or file, if applicable), it will tell your IDE the type of the $wpdb variable without actually affecting the execution of your code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="k">false</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$wpdb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wpdb</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the code inside the if statement will never execute, but every IDE I&rsquo;ve ever used isn&rsquo;t smart enough to figure that out, so they assume the type of the $wpdb variable is now wpdb.</p>
+
+<p>When you add the snippet, you get PHP code completion suggestions that look something like this:</p>
+
+<p><img src="/images/post-images/netbeans-globals-code-completion.png" alt="" /></p>
+
+<p>The nice thing about doing this is that if you forget to remove the code snippet, it won&rsquo;t break anything. You&rsquo;ll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It&rsquo;s probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later.</p>
+
+<p><strong>Update</strong>: You can also do this with PHPDoc.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * @var $wpdb wpdb</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'><span class="k">global</span> <span class="nv">$wpdb</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This also gives your IDE a hint about what type $wpdb has, and doesn&rsquo;t polute your code with a bunch of non-executing statements.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T19:57:07-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/php/'>PHP</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

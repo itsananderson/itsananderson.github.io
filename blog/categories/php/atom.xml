@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: PHP | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/php/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-05-18T21:52:44-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[PHP Code Completion for Globals]]></title>
+    <link href="http://willi.am/blog/2011/01/28/php-code-completion-for-globals/"/>
+    <updated>2011-01-28T19:57:07-08:00</updated>
+    <id>http://willi.am/blog/2011/01/28/php-code-completion-for-globals</id>
+    <content type="html"><![CDATA[<p>Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project.</p>
+
+<p><img src="/images/post-images/netbeans-code-completion.png" alt="" /></p>
+
+<p>The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects.</p>
+
+<h2>Concrete PHP Code Completion Example</h2>
+
+<p>The example I&rsquo;ll use is the $wpdb global variable defined in WordPress. It contains an instance of the &ldquo;wpdb&rdquo; class, which wraps around the database connection and provides a bunch of helper methods. It&rsquo;s defined in the global scope, so when you use it in another file, your IDE has no clue what type it is. This means it can&rsquo;t provide any PHP code completion.</p>
+
+<p>If you add the following code snippet to the beginning of your function (or file, if applicable), it will tell your IDE the type of the $wpdb variable without actually affecting the execution of your code.</p>
+
+<p>```php
+if ( false ) {</p>
+
+<pre><code>$wpdb = new wpdb();
+</code></pre>
+
+<p>}
+```</p>
+
+<p>As you can see, the code inside the if statement will never execute, but every IDE I&rsquo;ve ever used isn&rsquo;t smart enough to figure that out, so they assume the type of the $wpdb variable is now wpdb.</p>
+
+<p>When you add the snippet, you get PHP code completion suggestions that look something like this:</p>
+
+<p><img src="/images/post-images/netbeans-globals-code-completion.png" alt="" /></p>
+
+<p>The nice thing about doing this is that if you forget to remove the code snippet, it won&rsquo;t break anything. You&rsquo;ll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It&rsquo;s probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later.</p>
+
+<p><strong>Update</strong>: You can also do this with PHPDoc.</p>
+
+<p><code>php
+/**
+ * @var $wpdb wpdb
+ */
+global $wpdb;
+</code></p>
+
+<p>This also gives your IDE a hint about what type $wpdb has, and doesn&rsquo;t polute your code with a bunch of non-executing statements.</p>
+]]></content>
+  </entry>
+  
+</feed>
