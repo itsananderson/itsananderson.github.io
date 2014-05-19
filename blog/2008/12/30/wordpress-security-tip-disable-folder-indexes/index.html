@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Category: Apache - Will Anderson</title>
+	<title>WordPress Security Tip Disable Folder Indexes - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Category: Apache">
+	<meta name="description" content="I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice security &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -76,81 +76,57 @@
 	
 		
 	
-	<div id="content" class="inner">
-	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">WordPress Security Tip Disable Folder Indexes</h2>
+	<div class="entry-content"><p>I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice security tip. Place empty index.php files in all directories that don&rsquo;t already have an index file. Directories like the /wp-content/plugins folder could be dangerous in the hands of hackers if one of the plugins you use has a security flaw. By obscuring the folder&rsquo;s contents you make it just a little harder for hackers to cause you problems.</p>
+
+<p>I went about creating these empty index files on my site, but soon discovered that there are hosts of folders that could use them (think about the date structure in /wp-content/uploads ). Then I remembered another tool. <code>.htaccess</code>. Add this line of code to your <code>.htaccess</code> file to keep file in <em>any</em> directory from being listed (this works on any site who&rsquo;s server supports <code>.htaccess</code> by the way, not just WordPress blogs).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>IndexIgnore *</span></code></pre></td></tr></table></div></figure>
 
 
-	
-	
-	<section class="archives"><h1 class="year">2011</h1>
-
-<article>
-	<h2 class="title"><a href="/blog/2011/02/24/creating-xampp-alias-directories/">Creating XAMPP Alias Directories</a></h2>
-	<div class="meta">
-		<div class="date">Feb 24</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/xampp/'>XAMPP</a>
-
-
+<p>Really simple, I know, but I thought I&rsquo;d share it all the same.</p>
 </div>
-	    
-	</div>
-</article>
-	
-
-	
 
 
-	
-	
-		</section>
-	
-	<section class="archives"><h1 class="year">2009</h1>
-
-<article>
-	<h2 class="title"><a href="/blog/2009/01/14/wamp-alias-directories/">Wamp Alias Directories</a></h2>
-	<div class="meta">
-		<div class="date">Jan 14</div>
-		<div class="tags">
+<div class="meta">
+	<div class="date">
 
 
-	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/wamp/'>Wamp</a>
 
 
-</div>
-	    
-	</div>
-</article>
-	
-
-	
 
 
-	
-	
-		</section>
-	
-	<section class="archives"><h1 class="year">2008</h1>
 
-<article>
-	<h2 class="title"><a href="/blog/2008/12/30/wordpress-security-tip-disable-folder-indexes/">WordPress Security Tip Disable Folder Indexes</a></h2>
-	<div class="meta">
-		<div class="date">Dec 30</div>
-		<div class="tags">
+
+  
+
+
+<time datetime="2008-12-30T21:49:40-08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2008</time></div>
+	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>
-	    
-	</div>
+	
+</div>
 </article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
 	
-	</section>
-	
+</div>
+
 
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2014

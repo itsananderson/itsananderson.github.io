@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PHP | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-18T22:48:15-07:00</updated>
+  <updated>2014-05-18T22:53:23-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -138,10 +138,10 @@ if ( $user == $realuser &amp;&amp; $pass == $realpass ) {
 // checks the username and password in GET request
 $realuser = &lsquo;me&rsquo;;
 $realpass = &lsquo;secret&rsquo;;
-foreach ( $<em>GET as $key =&gt; $value ) { ${&lsquo;get</em>&rsquo;; . $key} = $value; }
+foreach ( $<em>GET as $key => $value ) { ${&lsquo;get</em>&rsquo;; . $key} = $value; }
 if ( isset( $get_user ) &amp;&amp; isset( $get_pass )</p>
 
-<pre><code>&amp;&amp; $get_user == $realuser &amp;amp;&amp;amp; $get_pass == $realpass ) {
+<pre><code>&amp;&amp; $get_user == $realuser &amp;&amp; $get_pass == $realpass ) {
 </code></pre>
 
 <p> echo &lsquo;login correct&rsquo;;

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Apache | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/apache/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-18T22:48:15-07:00</updated>
+  <updated>2014-05-18T22:53:23-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -160,6 +160,23 @@ Wamp alias directories are a great way to improve project organization.</p>
 ```</p>
 
 <p>Be sure to back up these files before you edit them, since breaking them could potentially break other Wamp functionality.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[WordPress Security Tip Disable Folder Indexes]]></title>
+    <link href="http://willi.am/blog/2008/12/30/wordpress-security-tip-disable-folder-indexes/"/>
+    <updated>2008-12-30T21:49:40-08:00</updated>
+    <id>http://willi.am/blog/2008/12/30/wordpress-security-tip-disable-folder-indexes</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice security tip. Place empty index.php files in all directories that don&rsquo;t already have an index file. Directories like the /wp-content/plugins folder could be dangerous in the hands of hackers if one of the plugins you use has a security flaw. By obscuring the folder&rsquo;s contents you make it just a little harder for hackers to cause you problems.</p>
+
+<p>I went about creating these empty index files on my site, but soon discovered that there are hosts of folders that could use them (think about the date structure in /wp-content/uploads ). Then I remembered another tool. <code>.htaccess</code>. Add this line of code to your <code>.htaccess</code> file to keep file in <em>any</em> directory from being listed (this works on any site who&rsquo;s server supports <code>.htaccess</code> by the way, not just WordPress blogs).</p>
+
+<p><code>
+IndexIgnore *
+</code></p>
+
+<p>Really simple, I know, but I thought I&rsquo;d share it all the same.</p>
 ]]></content>
   </entry>
   
