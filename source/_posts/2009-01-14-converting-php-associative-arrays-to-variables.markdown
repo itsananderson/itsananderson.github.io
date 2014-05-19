@@ -79,9 +79,9 @@ Here is a way to keep things a little safer by prefixing all the `$_GET[]` value
 // checks the username and password in GET request
 $realuser = 'me';
 $realpass = 'secret';
-foreach ( $_GET as $key =&gt; $value ) { ${'get_'; . $key} = $value; }
-if ( isset( $get_user ) &amp;&amp; isset( $get_pass )
-    && $get_user == $realuser &amp;&amp; $get_pass == $realpass ) {
+foreach ( $_GET as $key => $value ) { ${'get_'; . $key} = $value; }
+if ( isset( $get_user ) && isset( $get_pass )
+    && $get_user == $realuser && $get_pass == $realpass ) {
  echo 'login correct';
 } else {
  echo 'login incorrect';
