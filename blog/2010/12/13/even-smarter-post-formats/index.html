@@ -1,0 +1,202 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Even Smarter Post Formats - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="Dougal Campbell published an article the other day suggesting that the way many themes are handling the new Post Formats feature is wrong. While I &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Even Smarter Post Formats</h2>
+	<div class="entry-content"><p><a href="http://dougal.gunters.org/">Dougal Campbell</a> published <a href="http://dougal.gunters.org/blog/2010/12/10/smarter-post-formats">an article</a> the other day suggesting that the way many themes are handling the new Post Formats feature is wrong. While I completely agree that Post Formats shouldn&rsquo;t be handled with giant if/else blocks, I&rsquo;m not sure the proposed solution is the best option either. Here&rsquo;s why.</p>
+
+<p>What Dougal suggests is that theme developers instead dynamically include another template file to handle the post format. I&rsquo;ve seen a similar idea suggested in a <a href="http://core.trac.wordpress.org/ticket/15385">Trac ticket</a>, and the issue I saw (but neglected to comment on) there is the same one I see here. Including PHP files is a relatively expensive operation.</p>
+
+<p>Now, admittedly, including files isn&rsquo;t the worst thing you can do, and WordPress already includes dozens of files for every page request. Still, that doesn&rsquo;t mean you shouldn&rsquo;t try to get as much performance out of your theme as possible. On an average page load on an average website, using the <code>get_template_part()</code> method for Post Formats will cause 10 additional includes, but what happens if the blog admin decides they want to display 50 posts per page? The solution doesn&rsquo;t scale very well.</p>
+
+<p>The alternate solution I propose is to dynamically call functions via <a href="http://www.php.net/manual/en/function.call-user-func.php">call_user_func</a>. When the name of a function is passed to <code>call_user_func</code>, that function is invoked. Incidentally, that&rsquo;s actually how WordPress does function callbacks for its actions and filters.</p>
+
+<p>Here&rsquo;s how the code might look.</p>
+
+<p>First, in your functions.php file, define functions for the Post Formats you wish to support. You could also place them in a separate file (like formats.php for example) and include that from your functions.php. That way you can keep your logic separated from your display, while only adding one additional include instead of ten.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">format_aside</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Code to display an aside post</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">format_gallery</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Code to display a gallery post</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">format_standard</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Code to display a standard post</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, in your template, use the post format to determine which function to call. To make your theme more robust, make sure the post format is supported before you try to call the function. If it isn&rsquo;t, call your backup &ldquo;default&rdquo; format function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">while</span> <span class="p">(</span> <span class="nx">the_loop</span><span class="p">()</span> <span class="p">)</span><span class="o">:</span>
+</span><span class='line'>    <span class="nv">$format</span> <span class="o">=</span> <span class="nx">get_post_format</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nb">function_exists</span><span class="p">(</span> <span class="s1">&#39;format_&#39;</span> <span class="o">.</span> <span class="nv">$format</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nb">call_user_func</span><span class="p">(</span> <span class="s1">&#39;format_&#39;</span> <span class="o">.</span> <span class="nv">$format</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nb">call_user_func</span><span class="p">(</span> <span class="s1">&#39;format_standard&#39;</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="k">endwhile</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-13T20:54:19-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
