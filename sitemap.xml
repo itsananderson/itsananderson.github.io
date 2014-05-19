@@ -5,6 +5,10 @@
         <lastmod>2014-05-18T14:03:55-07:00</lastmod>
     </url>
     <url>
+        <loc>http://willi.am/blog/2009/03/17/limit-your-wordpress-rss-feed-to-one-category/</loc>
+        <lastmod>2014-05-18T22:25:04-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/blog/2009/05/04/the-obscure-wordpress-get-option-parameter/</loc>
         <lastmod>2014-05-18T22:21:26-07:00</lastmod>
     </url>
@@ -134,11 +138,11 @@
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2014-05-18T22:21:26-07:00</lastmod>
+        <lastmod>2014-05-18T22:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2014-05-18T22:21:26-07:00</lastmod>
+        <lastmod>2014-05-18T22:25:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/plugins/code-snippets/</loc>
