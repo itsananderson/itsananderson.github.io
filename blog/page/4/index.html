@@ -237,6 +237,164 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2009/01/14/converting-php-associative-arrays-to-variables/">
+		
+			Converting PHP Associative Arrays to Variables</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>EDIT: <a href="http://nickohrn.com/">Nick Ohrn</a> pointed out that <a href="http://us.php.net/extract" title="PHP Manual Entry for extract">extract</a> does this automatically. The following post is still a valid look at how this could be implemented if the functionality didn&rsquo;t already exist, but it is better to use extract because it is likely more efficient.</strong></p>
+
+<p>Associative arrays are one of my favorite PHP features. They&rsquo;re simple to use and easy to understand. Sometimes though, being able to reference the values of associative arrays with variables can be more convenient. Today I&rsquo;m going to share a simple way to convert a associative arrays to variables.</p>
+
+<p>OK, if you&rsquo;re not sure what we&rsquo;re trying to accomplish here, take a look at the following example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$list</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;var1&#39;</span> <span class="o">=&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span> <span class="s1">&#39;var2&#39;</span> <span class="o">=&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="s1">&#39;value2&#39;</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>To reference the elements in the array, you&rsquo;ll have to use the array key like this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">echo</span> <span class="nv">$list</span><span class="p">[</span><span class="s1">&#39;var1&#39;</span><span class="p">];</span> <span class="c1">//prints &#39;value1&#39;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$list</span><span class="p">[</span><span class="s1">&#39;var2&#39;</span><span class="p">];</span> <span class="c1">//prints &#39;value2&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What we&rsquo;d like to do instead is reference the values using variable names like this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">echo</span> <span class="nv">$var1</span><span class="p">;</span> <span class="c1">//print &#39;value1&#39;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$var2</span><span class="p">;</span> <span class="c1">//print &#39;value2&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is possible through what the PHP Manual calls &lsquo;variable variables&rsquo;. The idea is that the value of one variable is used as the name of another variable. Here&rsquo;s an example.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$hello</span> <span class="o">=</span> <span class="s1">&#39;world&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$$hello</span> <span class="o">=</span> <span class="s1">&#39;howdy&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$world</span><span class="p">;</span> <span class="c1">//prints &#39;howdy&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here, the value of <code>$hello</code> is analyzed and used as the name of the variable to which <code>'howdy'</code> is assigned.</p>
+
+<p>Now it&rsquo;s not a big step to expand this to an associative array. Consider the following code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$list</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;var1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span> <span class="s1">&#39;var2&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value2&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span> <span class="nv">$list</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span> <span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$var1</span><span class="p">;</span> <span class="c1">//prints &#39;value1&#39;</span>
+</span><span class='line'><span class="k">echo</span> <span class="nv">$var2</span><span class="p">;</span> <span class="c1">//prints &#39;value2&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So we&rsquo;ve accomplished what we set out to do. I must caution you, though, about a couple of things which might trip you up.</p>
+
+<p>First, make sure the keys are valid variable names. If you don&rsquo;t you&rsquo;ll run into problems when you execute the script.</p>
+
+<p>Second, be <em>very</em> careful when using this with user input. For example, the following code is insecure.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// login.php</span>
+</span><span class='line'><span class="c1">// checks the username and password in the GET request</span>
+</span><span class='line'><span class="nv">$realuser</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$realpass</span> <span class="o">=</span> <span class="s1">&#39;secret&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span> <span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span> <span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="nv">$user</span> <span class="o">==</span> <span class="nv">$realuser</span> <span class="o">&amp;&amp;</span> <span class="nv">$pass</span> <span class="o">==</span> <span class="nv">$realpass</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login correct&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login incorrect&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are several problems here. First, we don&rsquo;t <em>know</em> that $user and $pass have been initialized. We should check this before using them. Second (and more importantly) a cleverly generated request could let a user log in without a correct username/password. For example: <code>login.php?user=me&amp;pass=wrong&amp;realpass=wrong</code></p>
+
+<p>When the script runs through the list of variables, it will assign a new value of <code>wrong</code> to $realpass. Because <code>$realpass</code> and <code>$pass</code> have the same value (as do <code>$user</code> and <code>$realuser</code>), the page will allow them to log in.</p>
+
+<p>Here is a way to keep things a little safer by prefixing all the <code>$_GET[]</code> values.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// login.php</span>
+</span><span class='line'><span class="c1">// checks the username and password in GET request</span>
+</span><span class='line'><span class="nv">$realuser</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$realpass</span> <span class="o">=</span> <span class="s1">&#39;secret&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="k">foreach</span> <span class="p">(</span> <span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span> <span class="err">$</span><span class="p">{</span><span class="s1">&#39;get_&#39;</span><span class="p">;</span> <span class="o">.</span> <span class="nv">$key</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span> <span class="p">}</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="nb">isset</span><span class="p">(</span> <span class="nv">$get_user</span> <span class="p">)</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nb">isset</span><span class="p">(</span> <span class="nv">$get_pass</span> <span class="p">)</span>
+</span><span class='line'>    <span class="o">&amp;&amp;</span> <span class="nv">$get_user</span> <span class="o">==</span> <span class="nv">$realuser</span> <span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span><span class="o">&amp;</span><span class="nx">amp</span><span class="p">;</span> <span class="nv">$get_pass</span> <span class="o">==</span> <span class="nv">$realpass</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login correct&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login incorrect&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now the <code>$_GET[]</code> values are prefixed with <code>get_</code> so they can&rsquo;t interfere with other variables in the script. Additionally <code>isset</code> is used to ensure that the values of the variables has actually been set.</p>
+
+<p>To use something like this, you&rsquo;d still need to check for invalid variable names, but I won&rsquo;t go into that for this example.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-01-14T21:39:35-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/php/'>PHP</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2009/01/14/wamp-alias-directories/">
 		
 			Wamp Alias Directories</a>
