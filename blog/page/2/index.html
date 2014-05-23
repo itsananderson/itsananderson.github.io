@@ -7,7 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I &hellip;">
+	<meta name="description" content="Node doesn&rsquo;t have a well documented way of checking whether a module is available.
+This is usually fine. You just include a package.json in &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,6 +78,82 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/03/29/testing-whether-an-npm-module-is-installed/">
+		
+			Testing Whether an NPM Module Is Installed</a>
+	</h2>
+	<div class="entry-content">
+		<p>Node doesn&rsquo;t have a well documented way of checking whether a module is available.
+This is usually fine. You just include a package.json in your project, and expect people to run <code>npm install</code>.
+This is how most popular Node frameworks work.</p>
+
+<p>But what if you have a devDependency entry that you want to include only if it is installed?
+I searched for an answer and didn&rsquo;t find anything conclusive, so I&rsquo;m documenting what I <em>did</em> find in case I forget later.</p>
+
+<p>Buried in NPM&rsquo;s package.json documentation is <a href="https://www.npmjs.org/doc/json.html#optionalDependencies">an example</a>
+for handling a package that may or may not be installed. In short, you use a try/catch. Here&rsquo;s an example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">program</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">try</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">program</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;commander&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">er</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Any code to run if this module doesn&#39;t exist</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">program</span><span class="p">.</span><span class="nx">version</span><span class="p">(</span><span class="s1">&#39;0.0.1&#39;</span><span class="p">)</span> <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s1">&#39;-n, --name[name]&#39;</span><span class="p">,</span> <span class="s1">&#39;Your name&#39;</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-29T10:12:23-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1018,55 +1095,6 @@ Ideally, the inherited get_instance() method would return an instance of the act
 
 
 <time datetime="2011-04-26T13:16:52-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/04/16/wordcamp-seattle-slides-2011/">
-		
-			WordCamp Seattle Slides 2011</a>
-	</h2>
-	<div class="entry-content">
-		<p>Here are my WordCamp Seattle slides, along with my code samples.</p>
-
-<p>The slides are available as a PDF <a href="http://www.itsananderson.com/wcsea.pdf" title="">here</a>.</p>
-
-<p>The WP_Ajax class is available as a zip file <a href="http://www.itsananderson.com/wp-content/uploads/wp-ajax.zip" title="">here</a>.</p>
-
-<p>The Simple Post Ratings plugin is available (also as a zip file) <a href="http://www.itsananderson.com/wp-content/uploads/simple-post-ratings.zip">here</a>.</p>
-
-<p>Here&rsquo;s a link to my WordCamp Seattle video on <a href="http://wordpress.tv/2011/05/06/will-anderson-using-ajax-in-plugins-and-themes/">WordPress.tv</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-16T13:28:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 

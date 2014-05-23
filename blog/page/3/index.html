@@ -7,9 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you&rsquo;ve read my post on adding aliases to WampServer,
-you may be curious about how to add aliases to XAMPP.
-While WampServer has a nice (if &hellip;">
+	<meta name="description" content="Here are my WordCamp Seattle slides, along with my code samples. The slides are available as a PDF here. The WP_Ajax class is available as a zip &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +77,55 @@ While WampServer has a nice (if &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/04/16/wordcamp-seattle-slides-2011/">
+		
+			WordCamp Seattle Slides 2011</a>
+	</h2>
+	<div class="entry-content">
+		<p>Here are my WordCamp Seattle slides, along with my code samples.</p>
+
+<p>The slides are available as a PDF <a href="http://www.itsananderson.com/wcsea.pdf" title="">here</a>.</p>
+
+<p>The WP_Ajax class is available as a zip file <a href="http://www.itsananderson.com/wp-content/uploads/wp-ajax.zip" title="">here</a>.</p>
+
+<p>The Simple Post Ratings plugin is available (also as a zip file) <a href="http://www.itsananderson.com/wp-content/uploads/simple-post-ratings.zip">here</a>.</p>
+
+<p>Here&rsquo;s a link to my WordCamp Seattle video on <a href="http://wordpress.tv/2011/05/06/will-anderson-using-ajax-in-plugins-and-themes/">WordPress.tv</a>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-16T13:28:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -978,73 +1025,6 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
 
 
 <time datetime="2009-05-21T22:14:53-07:00" pubdate data-updated="true">May 21<span>st</span>, 2009</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/05/04/the-obscure-wordpress-get-option-parameter/">
-		
-			The Obscure WordPress Get_option Parameter</a>
-	</h2>
-	<div class="entry-content">
-		<p>Any WordPress Plugin developer worth their salt knows about the <code>get_option</code> function, which allows options to be retrieved from the database. What I recently discovered is that this function accepts a second parameter, indicating a default value to be returned if the option doesn&rsquo;t exist in the database.</p>
-
-<p>Here&rsquo;s a simple example of the &ldquo;old&rdquo; and &ldquo;new&rdquo; ways of retrieving options from the database:</p>
-
-<p>old:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span> <span class="s1">&#39;Option Name&#39;</span> <span class="p">);</span>
-</span><span class='line'><span class="k">if</span><span class="p">(</span> <span class="k">false</span> <span class="o">===</span> <span class="nv">$option</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="s1">&#39;My real option value.&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>new:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">&#39;option_name&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, this simplifies option retrieval and makes your code just a little easier to read.</p>
-
-<p><strong>EDIT:</strong> Thanks <a href="http://nickohrn.com/">Nick Ohrn</a> for pointing out a bug in the first code snippet. I&rsquo;ve updated it so nobody is confused.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-04T22:18:54-07:00" pubdate data-updated="true">May 4<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
