@@ -1,0 +1,196 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Node Modules - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="I&rsquo;ve written a number of few Node.js modules for performing basic tasks.
+Most are CLI modules that are intended to be installed with the -g &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="page">
+    
+    <h1 class="title">Node Modules</h1>
+    
+    <div class="entry-content"><p>I&rsquo;ve written a number of few Node.js modules for performing basic tasks.
+Most are CLI modules that are intended to be installed with the <code>-g</code> flag.</p>
+
+<h2>web-server-cli</h2>
+
+<p>I frequently find myself wanting to statically serve a folder on my machine for debugging purposes.
+Having to configure Apache/nginx/IIS to serve the folder is usually more effor than I want to mess with.
+web-server-cli solves this by spinning up a static Express server in the current folder.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ web-server
+</span><span class='line'>Static server started at http://localhost:8000/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are configuration options for the root directory and the port.
+They&rsquo;re documented on the <a href="https://www.npmjs.org/package/web-server-cli">web-server-cli package page</a>.</p>
+
+<h2>nodeignore</h2>
+
+<p>I spin up a lot of new git repositories in my day-to-day work, so I frequently need to configure .gitignore files.
+GitHub has <a href="https://github.com/github/gitignore">a great .gitignore repo</a> with configurations for various languages and frameworks.
+Unfortunately, it can still be a hassle to navigate to the repo, find the language I want, and copy the contents into a local .gitignore file.
+That&rsquo;s where nodeignore comes in.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ nodeignore
+</span><span class='line'>Downloading gitignore to .gitignore
+</span><span class='line'>Finished downloading .gitignore</span></code></pre></td></tr></table></div></figure>
+
+
+<p>By default, nodeignore downloads <a href="https://github.com/github/gitignore/blob/master/Node.gitignore">the Node.js .gitignore file</a> (thus the name).
+You can download any .gitignore definition in the <a href="https://github.com/github/gitignore">github/gitignore</a> repo with the <code>&#8209;l</code> parameter.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>nodeignore -l VisualStudio</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are also configuration options for appending/replacing existing .gitignore files.
+Full instructions for configuration options are listed on the <a href="https://www.npmjs.org/package/nodeignore">nodeignore package page</a>.</p>
+
+<p>Unfortunately there&rsquo;s no support yet for downloading the &ldquo;global&rdquo; gitignore files, but it&rsquo;s a planned feature.</p>
+
+<h2>Placeholder Images</h2>
+
+<p>There are a number of services that provide an API for generating placeholder images with specific dimensions.
+These are great for hotlinking into website designs, but if you need to download a bunch of different resolutions, the process becomes more tedious.
+That&rsquo;s why I created npm packages for downloading placeholder images from the CLI.</p>
+
+<p>For starters, there&rsquo;s a package that contains the generic logic for downloading images from a placeholder website: <a href="https://www.npmjs.org/package/placebase">placebase</a>.</p>
+
+<p>There are a number of websites that provide placeholder images.
+The following packages harness &ldquo;placebase&rdquo; to download images from their respective websites.</p>
+
+<ul>
+<li><a href="https://www.npmjs.org/package/placekitten">placekitten</a></li>
+<li><a href="https://www.npmjs.org/package/placebear">placebear</a></li>
+<li><a href="https://www.npmjs.org/package/placeholdit">placeholdit</a></li>
+<li><a href="https://www.npmjs.org/package/placecage">placecage</a></li>
+<li><a href="https://www.npmjs.org/package/fillmurray">fillmurray</a></li>
+</ul>
+
+
+<p>Each module has basically the same configuration settings.
+Eventually I&rsquo;ll also add flags for downloading grayscale images etc.</p>
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
