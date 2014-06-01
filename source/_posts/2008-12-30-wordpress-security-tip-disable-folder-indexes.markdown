@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "WordPress Security Tip Disable Folder Indexes"
+title: "WordPress Security Tip: Disable Folder Indexes"
 date: 2008-12-30 22:49:40 -0700
 comments: true
 categories: Apache WordPress
