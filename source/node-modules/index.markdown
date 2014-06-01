@@ -14,7 +14,7 @@ web-server-cli
 --------------
 
 I frequently find myself wanting to statically serve a folder on my machine for debugging purposes.
-Having to configure Apache/nginx/IIS to serve the folder is usually more effor than I want to mess with.
+Having to configure Apache/nginx/IIS to serve the folder is usually more effort than I want to go through.
 web-server-cli solves this by spinning up a static Express server in the current folder.
 
 ```
