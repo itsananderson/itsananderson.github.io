@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>WordPress Security Tip Disable Folder Indexes - Will Anderson</title>
+	<title>WordPress Security Tip: Disable Folder Indexes - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
@@ -79,7 +79,7 @@
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h2 class="title">WordPress Security Tip Disable Folder Indexes</h2>
+	<h2 class="title">WordPress Security Tip: Disable Folder Indexes</h2>
 	<div class="entry-content"><p>I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice security tip. Place empty index.php files in all directories that don&rsquo;t already have an index file. Directories like the /wp-content/plugins folder could be dangerous in the hands of hackers if one of the plugins you use has a security flaw. By obscuring the folder&rsquo;s contents you make it just a little harder for hackers to cause you problems.</p>
 
 <p>I went about creating these empty index files on my site, but soon discovered that there are hosts of folders that could use them (think about the date structure in /wp-content/uploads ). Then I remembered another tool. <code>.htaccess</code>. Add this line of code to your <code>.htaccess</code> file to keep file in <em>any</em> directory from being listed (this works on any site who&rsquo;s server supports <code>.htaccess</code> by the way, not just WordPress blogs).</p>

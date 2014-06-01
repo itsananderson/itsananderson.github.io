@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Apache | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/apache/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-05-31T23:57:08-07:00</updated>
+  <updated>2014-06-01T14:34:30-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -164,7 +164,7 @@ Wamp alias directories are a great way to improve project organization.</p>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[WordPress Security Tip Disable Folder Indexes]]></title>
+    <title type="html"><![CDATA[WordPress Security Tip: Disable Folder Indexes]]></title>
     <link href="http://willi.am/blog/2008/12/30/wordpress-security-tip-disable-folder-indexes/"/>
     <updated>2008-12-30T21:49:40-08:00</updated>
     <id>http://willi.am/blog/2008/12/30/wordpress-security-tip-disable-folder-indexes</id>
