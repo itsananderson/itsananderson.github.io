@@ -1,12 +1,12 @@
 ---
 layout: post
-title: ".NET vNext Sounds Awesome"
+title: "ASP.NET vNext Sounds Awesome"
 date: 2014-05-12 19:32:26 -0700
 comments: true
-categories: .NET
+categories: ASP.NET
 ---
 
-Microsoft made some anouncements about the [next generation of .NET today](http://blogs.msdn.com/b/dotnet/archive/2014/05/12/the-next-generation-of-net-asp-net-vnext.aspx).
+Microsoft made some anouncements about the [next generation of ASP.NET today](http://blogs.msdn.com/b/dotnet/archive/2014/05/12/the-next-generation-of-net-asp-net-vnext.aspx).
 
 David Fowler published a post about [the reasoning behind some of the changes](http://davidfowl.com/asp-net-vnext/).
 Scott Hanselman published a post with more details about [the features that are coming our way](http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx).
