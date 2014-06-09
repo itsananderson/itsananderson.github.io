@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Clojure | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/clojure/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-06-09T01:32:16-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Clojure]]></title>
+    <link href="http://willi.am/blog/2014/06/09/learning-clojure/"/>
+    <updated>2014-06-09T01:12:14-07:00</updated>
+    <id>http://willi.am/blog/2014/06/09/learning-clojure</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve decided I&rsquo;m too familiar with the languages I use every day.
+Well, I say that as if this is a recent realization.
+I decided this about a year ago, and decided Clojure was the next language I should learn.</p>
+
+<p>I did some initial research on the language, and found <a href="http://joyofclojure.com/">a Clojure book</a> by an author I&rsquo;d read before.
+It had a second edition coming out soon, so I decided to pre-order that.</p>
+
+<p>A year later, the book is finally on the way :)</p>
+
+<p>It&rsquo;s good timing, though.
+The last year has been a whirlwind.
+I joined a new team at work, worked on 5-6 projects (literally lost count), and bought a house.
+You know, the usual.</p>
+
+<p>Things are finally settling down again a little, so what better time to take on another hobby?</p>
+]]></content>
+  </entry>
+  
+</feed>

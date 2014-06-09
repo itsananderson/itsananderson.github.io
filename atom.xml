@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-01T14:37:24-07:00</updated>
+  <updated>2014-06-09T01:32:16-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Learning Clojure]]></title>
+    <link href="http://willi.am/blog/2014/06/09/learning-clojure/"/>
+    <updated>2014-06-09T01:12:14-07:00</updated>
+    <id>http://willi.am/blog/2014/06/09/learning-clojure</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve decided I&rsquo;m too familiar with the languages I use every day.
+Well, I say that as if this is a recent realization.
+I decided this about a year ago, and decided Clojure was the next language I should learn.</p>
+
+<p>I did some initial research on the language, and found <a href="http://joyofclojure.com/">a Clojure book</a> by an author I&rsquo;d read before.
+It had a second edition coming out soon, so I decided to pre-order that.</p>
+
+<p>A year later, the book is finally on the way :)</p>
+
+<p>It&rsquo;s good timing, though.
+The last year has been a whirlwind.
+I joined a new team at work, worked on 5-6 projects (literally lost count), and bought a house.
+You know, the usual.</p>
+
+<p>Things are finally settling down again a little, so what better time to take on another hobby?</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Ending a Stream Without Consuming Its Data]]></title>
@@ -1175,96 +1198,6 @@ Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
 Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Get Called Class Name in PHP]]></title>
-    <link href="http://willi.am/blog/2011/09/05/get-called-class-name-in-php/"/>
-    <updated>2011-09-05T13:09:43-07:00</updated>
-    <id>http://willi.am/blog/2011/09/05/get-called-class-name-in-php</id>
-    <content type="html"><![CDATA[<p>I posted a few months ago about <a href="http://www.itsananderson.com/2011/04/using-static-methods-in-wordpress-plugins/">using static methods in WordPress plugins</a>.
-I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
-One part, however, was a source of some pain: Inheritance.
-This can be solved by utilizing PHP&rsquo;s <code>get_called_class()</code> function to get called class names in from your static functions.</p>
-
-<p>To make a long story short, getting the actual class name of the current object in an instance method is easy, just call <code>get_class( $this )</code>.
-The problem is, $this doesn&rsquo;t exist in a static method, and just calling get_class() returns the current class (basically the same as <strong>CLASS</strong>), which isn&rsquo;t helpful if you actually want the name of a child class.</p>
-
-<h2>Why You Might Want to Get Called Class Names</h2>
-
-<p>Consider a base class which has a <code>get_instance()</code> function, for creating an instance of the class, or returning an existing instance if it has already been instantiated.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nb">is_null</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Singleton</span><span class="p">();</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>How to Get Called Class Names and Improve Extensibility</h2>
-
-<p>This is great, but the problem arises when we try to extend that singleton class.
-Ideally, the inherited get_instance() method would return an instance of the actual class, but with the above implementation, it would always return an instance of the Singleton class. Here&rsquo;s an alternative, which uses the get_called_class() function to get called class names.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instances</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nv">$class</span> <span class="o">=</span> <span class="nb">get_called_class</span><span class="p">();</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="k">empty</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nv">$class</span><span class="p">();</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Child</span> <span class="k">extends</span> <span class="nx">Singleton</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Child class stuff</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh?</p>
 ]]></content>
   </entry>
   
