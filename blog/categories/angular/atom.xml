@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-09T01:32:16-07:00</updated>
+  <updated>2014-06-10T17:43:05-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -36,6 +36,46 @@ $routeProvider</p>
 <p>```</p>
 
 <p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Creating an Angular Markdown Preview]]></title>
+    <link href="http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/"/>
+    <updated>2013-10-09T17:56:26-07:00</updated>
+    <id>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
+
+<p>Because I like to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for things like my dev journal, I have been wanting to implement my own Markdown preview tool that I could customize to work just the way I want. When I first started learning Angular, I decided to see how easy it would be to write an Angular Markdown preview tool using Angular. Turns out it&rsquo;s super simple.</p>
+
+<p>If you&rsquo;d rather skip straight to the demo, you can <a href="http://itsananderson.azurewebsites.net/markdown">view the finished markdown preview</a>.</p>
+
+<p>I won&rsquo;t go into great detail about the purpose of Angular, since it&rsquo;s readily available elsewhere. In this project, I just wanted a simple way to bind to a textbox so that I could update an HTML Markdown preview. Angular&rsquo;s declarative binding makes it an excellent choice for this.</p>
+
+<h3>Rendering an Angular Markdown Preview</h3>
+
+<p>Since I didn&rsquo;t want to write my own markdown converter, I decided to look for an existing one. I quickly settled on this <a href="https://npmjs.org/package/markdown">markdown npm package</a>. I installed the package, then moved the converter code into my &lsquo;lib/js&rsquo; folder so that it would be accessible from my web app.</p>
+
+<p>To make the front-end as simple as possible, I decided to <a href="http://docs.angularjs.org/guide/dev_guide.templates.filters.creating_filters">create an Angular filter</a> to provide the conversion from Markdown to HTML.</p>
+
+<p>The code is pretty simple. The markdown npm package adds a &ldquo;markdown&rdquo; object to the &ldquo;window&rdquo; global, so it&rsquo;s easy to access the converter.</p>
+
+<p>```javascript
+var app = angular.module(&lsquo;app&rsquo;, [])</p>
+
+<pre><code>.filter('markdown', function() {
+    return function(text) {
+        if (typeof text == "undefined") {
+            return "";
+        }
+        return markdown.toHTML(String(text));
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p><strong>Update</strong> 4/25/14: In newer versions of Angular you&rsquo;ll need to include <code>angular-sanitize.js</code> on the page, and bind with the <code>ng-bind-html</code> attribute. Props to <a href="https://twitter.com/michaeldick">Dick</a> and <a href="http://konpa.fr">Julien</a> for pointing this out.</p>
 ]]></content>
   </entry>
   
