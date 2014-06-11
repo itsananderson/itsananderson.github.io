@@ -3,7 +3,7 @@ layout: post
 title: "Creating an Angular Markdown Preview"
 date: 2013-10-09 17:56:26 -0700
 comments: true
-categories: Angular, JavaScript, Markdown
+categories: Angular JavaScript Markdown
 ---
 
 I've been exploring [Angular](http://angularjs.org/ "Angular Project Homepage") over the last few months, and I really like the way it works.
