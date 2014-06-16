@@ -7,8 +7,9 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I posted a few months ago about using static methods in WordPress plugins.
-I&rsquo;ve used that method myself for the last few months, and I&rsquo; &hellip;">
+	<meta name="description" content="Custom search engines in Chrome are a pretty cool feature.
+For example, Jimmy Theis has a great blog post
+about using them to look up someone&rsquo; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,6 +81,161 @@ I&rsquo;ve used that method myself for the last few months, and I&rsquo; &hellip
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/11/29/creating-a-custom-chrome-search-engine/">
+		
+			Creating a Custom Chrome Search Engine</a>
+	</h2>
+	<div class="entry-content">
+		<p>Custom search engines in Chrome are a pretty cool feature.
+For example, <a href="http://jetheis.com/blog/2011/11/28/accelerating-rose-hulman-schedule-lookup-with-google-chrome/">Jimmy Theis has a great blog post</a>
+about using them to look up someone&rsquo;s Rose-Hulman class schedule. The one shortcoming I&rsquo;ve found is that you can&rsquo;t do any processing of the actual search term.
+In other words, you have to blindly jump to the search engine URL without evaluating the actual query.</p>
+
+<p>In the case of the Rose-Hulman lookup page, there are actually two parameters that it would be nice to query on.
+The first is the username of the person you&rsquo;re looking up, and the second is which quarter (Fall, Winter, Spring, Summer) to show.
+With Chrome&rsquo;s custom search engines, you can&rsquo;t specify multiple parameters, so you have to hardcode the quarter parameter (which is hardly convenient).
+To resolve this problem, I wrote a simple PHP script that takes in the search a search query (like <code>anderswc 1</code> or <code>jetheis 201130</code>) and translates it to the correct schedule lookup page query (my fall schedule, or Jimmy&rsquo;s spring schedule last year).
+Here&rsquo;s the script:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">get_academic_year</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">function</span> <span class="nf">get_quarter</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$month</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;n&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  <span class="nv">$day</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;j&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="mi">6</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">7</span> <span class="o">==</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">40</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="p">(</span> <span class="mi">8</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="o">||</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">20</span> <span class="o">&gt;=</span> <span class="nv">$day</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">20</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="mi">30</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$search</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$parts</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nv">$search</span> <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">count</span><span class="p">(</span> <span class="nv">$parts</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nx">get_quarter</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;0&#39;</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://prodweb.rose-hulman.edu/regweb-cgi/reg-sched.pl?termcode=&#39;</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;&amp;view=tgrid&amp;id1=&#39;</span> <span class="o">.</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;&amp;bt1=ID%2Username&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">header</span><span class="p">(</span> <span class="s1">&#39;Location: &#39;</span> <span class="o">.</span> <span class="nv">$url</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now you can create a custom search engine to point to this script (I&rsquo;ve got a copy running at <a href="http://itsananderson.com/schedule.php">http://itsananderson.com/schedule.php</a>), and specify &ldquo;?search=%s&rdquo;.
+For example, this is the custom search engine definition I have:</p>
+
+<p><code>http://itsananderson.com/schedule.php?search=%s</code></p>
+
+<p>Search syntax is pretty simple.</p>
+
+<ul>
+<li>&ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.</li>
+<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year.<br/>
+Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
+<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year.<br/>
+Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-29T11:50:03-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/chrome/'>Chrome</a>, <a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman,</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1008,77 +1164,6 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
 
 
 	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/03/14/netbeans-ftp-file-permissions-fix/">
-		
-			Netbeans FTP File Permissions Fix</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve been trying out Netbeans&#8217; &ldquo;PHP Application from Remote Server&rdquo; feature this weekend. The idea is that when you save a file, it uploads that file to a remote server where it can be run.</p>
-
-<p>The problem I ran into is that when Netbeans uploads that file and overwrites the old version, the permissions on the file change. I did some searching and it sounds like Netbeans doesn&rsquo;t set permissions on the file, which means it just takes the server default. This doesn&rsquo;t make much sense (should keep permissions of previous file) and for me it meant that the permissions were set so low that I couldn&rsquo;t run the PHP scripts I was uploading.</p>
-
-<p>It&rsquo;s simple enough to change the permissions on those files.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>chmod -R 777 /path/to/files
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>But you have to run this command <em>every</em> time you make a change. This is a royal pain when you&rsquo;re making a lot of small changes (like when you&rsquo;re trying to track down a bug for example).</p>
-
-<p>One solution might be to try hooking into the ftp server daemon to run that command every time something is committed, but that sounded like too much work. I came up with a better solution.</p>
-
-<p>Instead, I decided to just run that command in a loop. The following scripts runs infinitely (until execution is stopped) and waits 1 second, then runs the permission command.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">while</span> <span class="o">(</span><span class="nb">true</span><span class="o">)</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">    </span>sleep 1
-</span><span class='line'>    chmod -R 777 /path/to/files
-</span><span class='line'><span class="k">done</span>;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you want to be able to do anything else in the command line while this is running, it&rsquo;s probably a good idea to run it in a screen.</p>
-
-<p>Also, you can end the execution of this script with CTRL+C. Otherwise it will continue executing forever.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-14T22:04:51-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2010</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/netbeans/'>Netbeans</a>
 
 
 </div>

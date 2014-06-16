@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-10T17:43:05-07:00</updated>
+  <updated>2014-06-16T10:04:48-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,117 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Resolving JavaScript Objects Containing Promises]]></title>
+    <link href="http://willi.am/blog/2014/06/15/resolving-javascript-objects-containing-promises/"/>
+    <updated>2014-06-15T15:12:43-07:00</updated>
+    <id>http://willi.am/blog/2014/06/15/resolving-javascript-objects-containing-promises</id>
+    <content type="html"><![CDATA[<p>Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
+Unlike callbacks, you can wait for multiple promises to complete before proceeding.
+For example, in the <a href="https://github.com/kriskowal/q">Q</a> framework, you can use the <code>Q.all()</code> function to wait for multiple promises to complete.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">makePromise</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">promises</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+</span><span class='line'><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">promises</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, this works well for an array, but as promise dependencies increase, it may be useful to reference these values more descriptively than an array index.
+Usually, you&rsquo;d want to wrap dependencies in an object like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;db&#39;</span><span class="o">:</span> <span class="nx">connectToDb</span><span class="p">(),</span>
+</span><span class='line'>  <span class="s1">&#39;api&#39;</span><span class="o">:</span> <span class="nx">getApi</span><span class="p">(),</span>
+</span><span class='line'>  <span class="s1">&#39;third&#39;</span><span class="o">:</span> <span class="nx">someOtherDependency</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, Q doesn&rsquo;t have a way to await the promises inside this object.
+If you just pass it to <code>Q.all()</code> it will finish before the promises are resolved, because the &ldquo;dependencies&rdquo; variable is an object, not a promise.
+However, there is a pretty simple workaround using Lo-Dash (or Underscore):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">)).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">zipObject</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">),</span> <span class="nx">results</span><span class="p">);</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">deps</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">deps</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// {</span>
+</span><span class='line'>  <span class="c1">//   &quot;db&quot;: [db connection],</span>
+</span><span class='line'>  <span class="c1">//   &quot;api&quot; [api object],</span>
+</span><span class='line'>  <span class="c1">//   &quot;third&quot;: [third dependency]</span>
+</span><span class='line'>  <span class="c1">// }</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Basically we&rsquo;re unzipping the keys and values from the &ldquo;dependencies&rdquo; object, then rezipping them with the <code>_.zipObject()</code> function when the promises are resolved.</p>
+
+<p>Note that you can safely mix promises and non-promises.
+For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;db&#39;</span><span class="o">:</span> <span class="nx">connectToDb</span><span class="p">(),</span>
+</span><span class='line'>  <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;version&#39;</span><span class="o">:</span> <span class="mi">3</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also note that this only works on a &ldquo;flat&rdquo; object.
+Any nested objects won&rsquo;t be resolved.
+It wouldn&rsquo;t be terribly difficult to write a utility function for recursively traversing an object and awaiting its promises, but I&rsquo;ll leave that as an exercise for the reader.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Learning Clojure]]></title>
@@ -1075,129 +1186,6 @@ Well, I finally took the time to do that, and so we have the <a href="http://wil
 I plan on uploading my other plugins to GitHub at some point
 (in fact, I uploaded <a href="http://willi.am/plugins/short-comment-filter/">Short Comment Filter</a> a few days ago),
 but Minimum Password Strength is the first one that&rsquo;s there from the start.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Creating a Custom Chrome Search Engine]]></title>
-    <link href="http://willi.am/blog/2011/11/29/creating-a-custom-chrome-search-engine/"/>
-    <updated>2011-11-29T11:50:03-08:00</updated>
-    <id>http://willi.am/blog/2011/11/29/creating-a-custom-chrome-search-engine</id>
-    <content type="html"><![CDATA[<p>Custom search engines in Chrome are a pretty cool feature.
-For example, <a href="http://jetheis.com/blog/2011/11/28/accelerating-rose-hulman-schedule-lookup-with-google-chrome/">Jimmy Theis has a great blog post</a>
-about using them to look up someone&rsquo;s Rose-Hulman class schedule. The one shortcoming I&rsquo;ve found is that you can&rsquo;t do any processing of the actual search term.
-In other words, you have to blindly jump to the search engine URL without evaluating the actual query.</p>
-
-<p>In the case of the Rose-Hulman lookup page, there are actually two parameters that it would be nice to query on.
-The first is the username of the person you&rsquo;re looking up, and the second is which quarter (Fall, Winter, Spring, Summer) to show.
-With Chrome&rsquo;s custom search engines, you can&rsquo;t specify multiple parameters, so you have to hardcode the quarter parameter (which is hardly convenient).
-To resolve this problem, I wrote a simple PHP script that takes in the search a search query (like <code>anderswc 1</code> or <code>jetheis 201130</code>) and translates it to the correct schedule lookup page query (my fall schedule, or Jimmy&rsquo;s spring schedule last year).
-Here&rsquo;s the script:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function</span> <span class="nf">get_academic_year</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function</span> <span class="nf">get_quarter</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$month</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;n&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>  <span class="nv">$day</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;j&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="mi">6</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">7</span> <span class="o">==</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">40</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="p">(</span> <span class="mi">8</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="o">||</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">20</span> <span class="o">&gt;=</span> <span class="nv">$day</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">20</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">30</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$search</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$parts</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nv">$search</span> <span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">count</span><span class="p">(</span> <span class="nv">$parts</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nx">get_quarter</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;0&#39;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://prodweb.rose-hulman.edu/regweb-cgi/reg-sched.pl?termcode=&#39;</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;&amp;view=tgrid&amp;id1=&#39;</span> <span class="o">.</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;&amp;bt1=ID%2Username&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">header</span><span class="p">(</span> <span class="s1">&#39;Location: &#39;</span> <span class="o">.</span> <span class="nv">$url</span> <span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can create a custom search engine to point to this script (I&rsquo;ve got a copy running at <a href="http://itsananderson.com/schedule.php">http://itsananderson.com/schedule.php</a>), and specify &ldquo;?search=%s&rdquo;.
-For example, this is the custom search engine definition I have:</p>
-
-<p><code>http://itsananderson.com/schedule.php?search=%s</code></p>
-
-<p>Search syntax is pretty simple.</p>
-
-<ul>
-<li>&ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.</li>
-<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year.<br/>
-Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
-<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year.<br/>
-Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
-</ul>
-
 ]]></content>
   </entry>
   

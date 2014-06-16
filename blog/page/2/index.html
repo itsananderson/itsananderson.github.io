@@ -7,7 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you&rsquo;re a Vim user like me, you&rsquo;ve likely found yourself staring at a view like this and wondered: &ldquo;How&rsquo;d I get here, and &hellip;">
+	<meta name="description" content="This is a cautionary tale Yesterday I wasted a day of dev time.
+Worse than that, I was pairing with two of my co-workers most of the day, so in the &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +80,122 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/">
+		
+			A Lesson in Debugging: Verify Your Tools</a>
+	</h2>
+	<div class="entry-content">
+		<p>This is a cautionary tale</p>
+
+<p>Yesterday I wasted a day of dev time.
+Worse than that, I was pairing with <a href="http://www.davidruttka.com/">two</a> of my <a href="http://msarchet.com/">co-workers</a> most of the day, so in the end we wasted about 2.5 days of dev time.</p>
+
+<p>We spent the day debugging an &ldquo;off by one (and sometimes two)&rdquo; error.</p>
+
+<p>David, one of my coworkers, <a href="http://www.davidruttka.com/blog/2014/04/09/principles-of-debugging-a-postmortem/">also blogged this experience</a>.
+It&rsquo;s an entertaining read.
+Check it out.</p>
+
+<h2>The Problem</h2>
+
+<p>The bug seemed simple.
+They always do.
+When you requested something by Id from our API, it returned with almost valid data.
+Except that the Id property in the JSON (a long) was frequently incremented or decremented by 1 or 2.</p>
+
+<p>We originally saw the issue in an Angular app.
+We were suspicious about potential JavaScript numeric issues, so of course we opened up Fiddler to get at the &ldquo;real&rdquo; data</p>
+
+<h2>The Fiddler Inspection</h2>
+
+<p>When we inspected the requests in Fiddler and looked at the JSON viewer, same &ldquo;off by [1-2]&rdquo; issue.
+In our minds, this confirmed that Angular and JavaScript weren&rsquo;t the issue.</p>
+
+<p>After going through the &ldquo;disable stuff until it works&rdquo; process with our API, we were still seeing the same problem.
+The only thing that fixed the issue was having Fiddler request XML instead of JSON. &ldquo;Ahh&rdquo;, we thought, &ldquo;The issue must be with our JSON serializer&rdquo;</p>
+
+<h2>Checking the Serializer</h2>
+
+<p>We spent a few minutes in LINQPad performing serializations with Json.NET, duplicating the problematic object as closely as possible.
+The object serialized without issue, which confirmed in our minds that Json.NET does not, in fact, mangle long values during serialization</p>
+
+<h2>The Reduction</h2>
+
+<p>We decided to build a reduction by creating an empty WebApi project and adding components until we reproduced the issue.
+We added a dummy controller that returns an object identical to the one with the serialization issues.
+We opened the new URL in the browser, and the serialization issues weren&rsquo;t there.
+We should have checked the reduction in Fiddler, but we didn&rsquo;t.</p>
+
+<h2>Patterns Emerge</h2>
+
+<p>Early on in our debugging session, I noticed that even Ids either remained unchanged or incremented/decremented by two.
+Odd Ids, on the other hand, always either incremented or decremented by one.</p>
+
+<p>I initially identified a simplified version of that pattern where even Ids don&rsquo;t change, so when counter-examples emerged, I abandoned the search for a pattern.</p>
+
+<p>As the afternoon wore on, we decided to generate a consecutive sequence of Ids to see if we could identify a pattern.
+What we discovered is that for large Ids, the numbers began &ldquo;snapping&rdquo; to multiples of four.
+Small Ids (like, say, 207) didn&rsquo;t change.</p>
+
+<h2>The Final Puzzle Piece</h2>
+
+<p>While David spun a series of object serializations through LINQPad, I began combining keywords in Bing to see if I could find anyone else with the same issue.</p>
+
+<p>Around the time David realized that LINQPad was spitting out serialized Ids with correct values, I discovered <a href="http://stackoverflow.com/questions/6571339/how-to-correctly-serialize-c-sharp-long-number-using-controllers-json-method-in">this StackOverflow post on &ldquo;correctly&rdquo; serializing longs</a>.
+As the answer explains, JavaScript doesn&rsquo;t have longs.
+All numbers are 64 bit floats.
+We&rsquo;d considered this, but had dismissed it because Fiddler was showing the same issue.</p>
+
+<p>Then it hit me.
+Fiddler is written in JScript, which means it has the same 64 bit float limitations.</p>
+
+<p>By implicitly trusting Fiddler&rsquo;s JSON viewer, we assumed the problem was incorrect data coming from our server.
+When we finally looked at the raw data in Fiddler, we saw that the correct Ids were coming across the wire.
+Fiddler&rsquo;s JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively &ldquo;snapped&rdquo; all Ids to multiples of 4.</p>
+
+<p>The problem wasn&rsquo;t with our API directly.
+The problem was the way JavaScript and JScript handle large numbers.</p>
+
+<h2>Lesson Learned</h2>
+
+<p>When debugging an issue like this, look at the raw data.
+Not some data viewer over the data.
+The <em>raw</em> data</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-08T08:10:41-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/debugging/'>Debugging</a>, <a class='category' href='/blog/categories/fiddler/'>Fiddler</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -799,161 +916,6 @@ but Minimum Password Strength is the first one that&rsquo;s there from the start
 
 
 	<a class='category' href='/blog/categories/password/'>Password</a>, <a class='category' href='/blog/categories/security/'>Security</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/11/29/creating-a-custom-chrome-search-engine/">
-		
-			Creating a Custom Chrome Search Engine</a>
-	</h2>
-	<div class="entry-content">
-		<p>Custom search engines in Chrome are a pretty cool feature.
-For example, <a href="http://jetheis.com/blog/2011/11/28/accelerating-rose-hulman-schedule-lookup-with-google-chrome/">Jimmy Theis has a great blog post</a>
-about using them to look up someone&rsquo;s Rose-Hulman class schedule. The one shortcoming I&rsquo;ve found is that you can&rsquo;t do any processing of the actual search term.
-In other words, you have to blindly jump to the search engine URL without evaluating the actual query.</p>
-
-<p>In the case of the Rose-Hulman lookup page, there are actually two parameters that it would be nice to query on.
-The first is the username of the person you&rsquo;re looking up, and the second is which quarter (Fall, Winter, Spring, Summer) to show.
-With Chrome&rsquo;s custom search engines, you can&rsquo;t specify multiple parameters, so you have to hardcode the quarter parameter (which is hardly convenient).
-To resolve this problem, I wrote a simple PHP script that takes in the search a search query (like <code>anderswc 1</code> or <code>jetheis 201130</code>) and translates it to the correct schedule lookup page query (my fall schedule, or Jimmy&rsquo;s spring schedule last year).
-Here&rsquo;s the script:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function</span> <span class="nf">get_academic_year</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span><span class="s1">&#39;n&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;Y&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function</span> <span class="nf">get_quarter</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$month</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;n&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>  <span class="nv">$day</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nb">date</span><span class="p">(</span> <span class="s1">&#39;j&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="mi">6</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">7</span> <span class="o">==</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">40</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="p">(</span> <span class="mi">8</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="o">||</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">==</span> <span class="nv">$month</span> <span class="o">&amp;&amp;</span> <span class="mi">20</span> <span class="o">&gt;=</span> <span class="nv">$day</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">10</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="mi">11</span> <span class="o">&lt;=</span> <span class="nv">$month</span> <span class="o">||</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="nv">$month</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">20</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="mi">30</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$search</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;search&#39;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$parts</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nv">$search</span> <span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">==</span> <span class="nb">count</span><span class="p">(</span> <span class="nv">$parts</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nx">get_quarter</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;0&#39;</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">elseif</span> <span class="p">(</span> <span class="nb">strlen</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$term</span> <span class="o">=</span> <span class="nx">get_academic_year</span><span class="p">()</span> <span class="o">.</span> <span class="nv">$term</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="nv">$term</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span> <span class="nv">$term</span> <span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="nv">$url</span> <span class="o">=</span> <span class="s1">&#39;https://prodweb.rose-hulman.edu/regweb-cgi/reg-sched.pl?termcode=&#39;</span> <span class="o">.</span> <span class="nv">$term</span> <span class="o">.</span> <span class="s1">&#39;&amp;view=tgrid&amp;id1=&#39;</span> <span class="o">.</span> <span class="nv">$parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">.</span> <span class="s1">&#39;&amp;bt1=ID%2Username&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">header</span><span class="p">(</span> <span class="s1">&#39;Location: &#39;</span> <span class="o">.</span> <span class="nv">$url</span> <span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now you can create a custom search engine to point to this script (I&rsquo;ve got a copy running at <a href="http://itsananderson.com/schedule.php">http://itsananderson.com/schedule.php</a>), and specify &ldquo;?search=%s&rdquo;.
-For example, this is the custom search engine definition I have:</p>
-
-<p><code>http://itsananderson.com/schedule.php?search=%s</code></p>
-
-<p>Search syntax is pretty simple.</p>
-
-<ul>
-<li>&ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.</li>
-<li>&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year.<br/>
-Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40</li>
-<li>&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year.<br/>
-Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012</li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-11-29T11:50:03-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/chrome/'>Chrome</a>, <a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman,</a>
 
 
 </div>
