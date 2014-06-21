@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vim | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-16T10:04:48-07:00</updated>
+  <updated>2014-06-20T23:35:31-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,29 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Editing Vim Macros]]></title>
+    <link href="http://willi.am/blog/2014/06/20/editing-vim-macros/"/>
+    <updated>2014-06-20T22:37:17-07:00</updated>
+    <id>http://willi.am/blog/2014/06/20/editing-vim-macros</id>
+    <content type="html"><![CDATA[<p>Vim macros are great.
+If you&rsquo;re not familiar with them, there&rsquo;s a great <a href="http://vim.wikia.com/wiki/Macros">Vim tips article</a>.</p>
+
+<p>Something cool I&rsquo;ve discovered is that you can edit macros.
+This is helpful if you accidentally mess up a macro recording, or decide you need to tweak it in some way.</p>
+
+<p>If you recorded a macro to register <code>a</code>, you can paste its contents into the current document with <code>"ap</code>.
+From there, you can edit the macro and then yank it back into the <code>a</code> register with <code>"ay</code></p>
+
+<p>This makes it easy to paste your macros into your vimrc for future use.</p>
+
+<p><code>vim
+" delete first word of line
+let @d='0dw'
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Vim Command Line and Search History]]></title>

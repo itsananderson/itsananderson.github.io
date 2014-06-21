@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve been trying out Netbeans&#8217; &ldquo;PHP Application from Remote Server&rdquo; feature this weekend. The idea is that when you save a &hellip;">
+	<meta name="description" content="As you may have seen, I launched a new blog about a week and a half ago to track how much sleep I&rsquo;m getting. I think tracking my sleeping &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +79,143 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/03/29/customizing-the-p2-wordpress-theme/">
+		
+			Customizing the P2 WordPress Theme</a>
+	</h2>
+	<div class="entry-content">
+		<p>As you may have seen, I launched a new blog about a week and a half ago to track how much sleep I&rsquo;m getting. I think tracking my sleeping patterns has helped me get more rest, but that&rsquo;s not really what this post is about.</p>
+
+<p>I thought it might be interesting to talk about some of the customizations I made to the <a href="http://wordpress.org/extend/themes/p2">P2 WordPress theme</a> that I&rsquo;m using.</p>
+
+<p>True to the WordPress paradigm, I didn&rsquo;t actually change anything in the P2 theme, but rather wrote a plugin to modify its behavior with filters and actions.</p>
+
+<p>The most visible change I made was the addition of a &ldquo;Sleep Counter&rdquo; widget that displays the number of hours and minutes I&rsquo;ve slept since March 18th. This actually relies on the the other parts of the plugin, though, so I&rsquo;ll leave the discussion of this widget until later.</p>
+
+<p>The main purpose of this customization is to keep track of the hours I&rsquo;ve slept programmatically. I could have done this with post meta values, but that would defeat the purpose of P2 because I&rsquo;d have to go into the back end to create posts. Instead, I decided to simply put the information in the post and parse it using the <code>wp_insert_post</code> action.</p>
+
+<p>This hook is called whenever a post is saved, right after it has been written to the database. The function is passed the ID of the post that has been created/edited. What I do is get the post content, parse it to find the number of hours/minutes recorded, and save those values to two post metas (or update the post metas if I&rsquo;m editing the post). The function is as follows.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">get_sleep_times</span><span class="p">(</span><span class="nv">$id</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nv">$post</span> <span class="o">=</span> <span class="nx">get_post</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$content</span> <span class="o">=</span> <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">post_content</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$matches</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span class='line'>  <span class="c1">// pretty lazy regex matching here, but it works</span>
+</span><span class='line'>  <span class="nv">$matched</span> <span class="o">=</span> <span class="nb">preg_match</span><span class="p">(</span><span class="s1">&#39;/hours[^0123456789]*([0-9]*).*minutes[^0123456789]*([0-9]*)/i&#39;</span><span class="p">,</span> <span class="nv">$content</span><span class="p">,</span> <span class="nv">$matches</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nv">$matched</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">// don&#39;t do anything if no sleep counts were posted.</span>
+</span><span class='line'>      <span class="k">return</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$hours</span> <span class="o">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>  <span class="nv">$minutes</span> <span class="o">=</span> <span class="nv">$matches</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span><span class='line'>  <span class="nx">update_post_meta</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="s1">&#39;_sleep_hours&#39;</span><span class="p">,</span> <span class="nv">$hours</span><span class="p">);</span>
+</span><span class='line'>  <span class="nx">update_post_meta</span><span class="p">(</span><span class="nv">$id</span><span class="p">,</span> <span class="s1">&#39;_sleep_minutes&#39;</span><span class="p">,</span> <span class="nv">$minutes</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This code isn&rsquo;t perfect, but since I wrote it after about 24 hours without sleep and it is only intended to be used  by myself, I&rsquo;ll give myself a break.</p>
+
+<p>The next step was to create the widget to display my total sleep count. I hadn&rsquo;t created any widgets since the new widget API was released in WordPress 2.8, but a great <a href="http://justintadlock.com/archives/2009/05/26/the-complete-guide-to-creating-widgets-in-wordpress-28">article by Justin Tadlock</a> set me on the right track. I added some customization options for how the sleep count is displayed, but the more interesting part is the function that actually displays the widget. It gets the options for the widget, then calls a <code>print_sleep_count</code> function that I defined.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">print_sleep_count</span><span class="p">(</span><span class="nv">$format</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">global</span> <span class="nv">$wpdb</span><span class="p">;</span>
+</span><span class='line'>  <span class="nv">$ajax</span> <span class="o">=</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$format</span><span class="p">);</span>
+</span><span class='line'>  <span class="nv">$format</span> <span class="o">=</span> <span class="nv">$format</span> <span class="o">?</span> <span class="nv">$format</span> <span class="o">:</span> <span class="nx">SleepCounterWidget</span><span class="o">::</span><span class="nv">$default_format</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nv">$query</span> <span class="o">=</span> <span class="s2">&quot;SELECT COALESCE(SUM(meta_value), 0) as totalsum FROM </span><span class="si">{</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">postmeta</span><span class="si">}</span><span class="s2"> &quot;</span> <span class="o">.</span>
+</span><span class='line'>          <span class="s2">&quot;INNER JOIN </span><span class="si">{</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">posts</span><span class="si">}</span><span class="s2"> ON </span><span class="si">{</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">postmeta</span><span class="si">}</span><span class="s2">.post_id = </span><span class="si">{</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">posts</span><span class="si">}</span><span class="s2">.ID &quot;</span> <span class="o">.</span>
+</span><span class='line'>          <span class="s2">&quot;WHERE </span><span class="si">{</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">posts</span><span class="si">}</span><span class="s2">.post_status &lt;&gt; &#39;trash&#39; AND </span><span class="si">{</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">postmeta</span><span class="si">}</span><span class="s2">.meta_key = &#39;%s&#39;&quot;</span><span class="p">;</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nv">$hours</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">get_var</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="nv">$query</span><span class="p">,</span> <span class="s1">&#39;_sleep_hours&#39;</span><span class="p">)));</span>
+</span><span class='line'>  <span class="nv">$minutes</span> <span class="o">=</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$wpdb</span><span class="o">-&gt;</span><span class="na">get_var</span><span class="p">(</span><span class="nb">sprintf</span><span class="p">(</span><span class="nv">$query</span><span class="p">,</span> <span class="s1">&#39;_sleep_minutes&#39;</span><span class="p">)));</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="nb">printf</span><span class="p">(</span><span class="nv">$format</span><span class="p">,</span> <span class="nv">$hours</span> <span class="o">+</span> <span class="nb">intval</span><span class="p">(</span><span class="nv">$minutes</span> <span class="o">/</span> <span class="mi">60</span><span class="p">),</span> <span class="nv">$minutes</span> <span class="o">%</span> <span class="mi">60</span><span class="p">);</span>
+</span><span class='line'>  
+</span><span class='line'>  <span class="c1">// exit if this is requested via AJAX</span>
+</span><span class='line'>  <span class="c1">// if we don&#39;t, WordPress will add &#39;0&#39; to the output</span>
+</span><span class='line'>  <span class="o">!</span><span class="nv">$ajax</span> <span class="k">or</span> <span class="k">die</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice some funky stuff with the <code>$ajax</code> variable. I&rsquo;ll explain that later. Just ignore it for now.</p>
+
+<p>The main magic here is the the SQL query. I decided to use a SQL query instead of the post meta API because I wanted get an aggregate of the post metas, and doing the aggregation from within SQL is much more efficient. I built a customizable query so I could use it to get both the number of hours slept and the number of minutes slept. I use sprintf to insert the meta key I&rsquo;m looking for when I send the query to <code>$wpdb</code>. The reason I decided against the $wpdb->prepare() function is efficiency. The result would have been the same, but that function does some argument escaping that isn&rsquo;t necessary because I know exactly what variables I&rsquo;m passing in.</p>
+
+<p>Once I get the total number of hours and minutes I&rsquo;ve slept, I convert it to actual hours and minutes. This takes care of the situation where the sum of minutes is greater than 60 (one hour).</p>
+
+<p>The final enhancement I made was some front end AJAX that updates the widget value whenever I create a new post. It&rsquo;s pretty basic, and just utilizes the <a href="http://codex.wordpress.org/AJAX_in_Plugins">Admin AJAX API</a> available within WordPress. The way I decided to do it was to utilize my existing <code>print_sleep_count</code> function. I simply hooked to an AJAX request event. That&rsquo;s where the <code>$ajax</code> variable I mentioned earlier comes in. If the format argument isn&rsquo;t passed to <code>print_sleep_count</code>, I assume it is being called via AJAX and exit at the end of the function.</p>
+
+<p>You&rsquo;ll also notice that I&rsquo;ve got a widget on my main website that displays the same sleep count. It is mostly identical to the one on my Sleep blog, but the database tables are hard coded (because here <code>$wpdb-&gt;tablename</code> uses the wrong prefix). I also decided to have the sleep count link to my Sleep blog.</p>
+
+<p>And that&rsquo;s pretty much it. There are some enhancements I could probably make. For one thing, I could store the sleep count as one option in the options table to save myself from having to calculate an aggregate value every time, but with the number of visits I get each day, it&rsquo;s not enough of an issue to worry about.</p>
+
+<p>If you&rsquo;d like to see what the rest of the plugin looks like, you can <a href="http://itsananderson.com/download/sleep-counter.1.0.zip">download it</a> and check it out.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-29T22:00:35-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -903,129 +1040,12 @@ Wamp alias directories are a great way to improve project organization.</p>
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2008/12/23/wordpress-breadcrumb-navigation/">
-		
-			WordPress Breadcrumb Navigation</a>
-	</h2>
-	<div class="entry-content">
-		<p><a href="http://en.wikipedia.org/wiki/Breadcrumb_(navigation)">Bread Crumbs</a> are something that&rsquo;s been around for quite some time.
-I first remember seeing them in <a title="ANGEL Learning" href="http://angellearning.com/">ANGEL</a> when my dad was working for the company in 2005. Similar things can be found in File Browsers, and browser history is really a kind of bread crumb.</p>
-
-<p>In my work for IRPA one of the concerns we&rsquo;ve had is making it easy to navigate the site. Because WordPress has limited CMS functionality out of the box, navigation is sometimes difficult on sites with many nested pages. One of the solutions I looked at was Breadcrumbs because they can give users a quick look at their location in the site structure. Over the break (which I&rsquo;m still enjoying) I&rsquo;ve been able to finish implementing breadcrumbs on the IRPA Site.</p>
-
-<p>I almost think something like this should be in core, but again, WordPress isn&rsquo;t a CMS, so maybe it wouldn&rsquo;t be useful for most people.</p>
-
-<p>One of the things that took me the longest was figuring out how to handle different site settings. A site who&rsquo;s home page displays latest posts needs a slightly different navigation list than a site which has a static home page. Even sites with static pages can have different structures depending on what page is the &ldquo;home&rdquo; page. Anyway, Here&rsquo;s the code if you want to add it to your template. Simply paste the code into your <code>functions.php</code> file and add a call to <code>get_breadcrumbs()</code> where you want the breadcrumb list in your template. It outputs the breadcrumbs as list items. You&rsquo;ll need to put the <code>ul</code> around them yourself in the template.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">get_breadcrumbs</span><span class="p">(){</span>
-</span><span class='line'>  <span class="k">global</span> <span class="nv">$post</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nv">$separator</span> <span class="o">=</span> <span class="s1">&#39;  &amp;gt; &#39;</span><span class="p">;</span> <span class="c1">// what to place between the pages</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nx">is_page</span><span class="p">()</span> <span class="p">){</span>
-</span><span class='line'>      <span class="c1">// bread crumb structure only logical on pages</span>
-</span><span class='line'>      <span class="nv">$trail</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="nv">$post</span><span class="p">);</span> <span class="c1">// initially $trail only contains the current page</span>
-</span><span class='line'>      <span class="nv">$parent</span> <span class="o">=</span> <span class="nv">$post</span><span class="p">;</span> <span class="c1">// initially set to current post</span>
-</span><span class='line'>      <span class="nv">$show_on_front</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span> <span class="s1">&#39;show_on_front&#39;</span><span class="p">);</span> <span class="c1">// does the front page display the latest posts or a static page</span>
-</span><span class='line'>      <span class="nv">$page_on_front</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span> <span class="s1">&#39;page_on_front&#39;</span> <span class="p">);</span> <span class="c1">// if it shows a page, what page</span>
-</span><span class='line'>      <span class="c1">// while the current page isn&#39;t the home page and it has a parent</span>
-</span><span class='line'>      <span class="k">while</span> <span class="p">(</span> <span class="nv">$parent</span><span class="o">-&gt;</span><span class="na">post_parent</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="nv">$parent</span><span class="o">-&gt;</span><span class="na">ID</span> <span class="o">==</span> <span class="nv">$page_on_front</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;page&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="nv">$show_on_front</span> <span class="p">){</span>
-</span><span class='line'>          <span class="nv">$parent</span> <span class="o">=</span> <span class="nx">get_post</span><span class="p">(</span> <span class="nv">$parent</span><span class="o">-&gt;</span><span class="na">post_parent</span> <span class="p">);</span> <span class="c1">// get the current page&#39;s parent</span>
-</span><span class='line'>          <span class="nb">array_unshift</span><span class="p">(</span> <span class="nv">$trail</span><span class="p">,</span> <span class="nv">$parent</span> <span class="p">);</span> <span class="c1">// add the parent object to beginning of array</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="k">if</span> <span class="p">(</span> <span class="s1">&#39;posts&#39;</span> <span class="o">==</span> <span class="nv">$show_on_front</span> <span class="p">)</span> <span class="c1">// if the front page shows latest posts, simply display a home link</span>
-</span><span class='line'>          <span class="k">echo</span> <span class="s2">&quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-0&#39;&gt;&lt;a href=&#39;&quot;</span> <span class="o">.</span> <span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;&#39;&gt;Home&lt;/a&gt;&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span> <span class="c1">// home page link</span>
-</span><span class='line'>      <span class="k">else</span><span class="p">{</span> <span class="c1">// if the front page displays a static page, display a link to it</span>
-</span><span class='line'>          <span class="nv">$home_page</span> <span class="o">=</span> <span class="nx">get_post</span><span class="p">(</span> <span class="nv">$page_on_front</span> <span class="p">);</span> <span class="c1">// get the front page object</span>
-</span><span class='line'>          <span class="k">echo</span> <span class="s2">&quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-</span><span class="si">{</span><span class="nv">$home_page</span><span class="o">-&gt;</span><span class="na">ID</span><span class="si">}</span><span class="s2">&#39;&gt;&lt;a href=&#39;&quot;</span> <span class="o">.</span> <span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;&#39;&gt;</span><span class="si">$home_page-&gt;post_title</span><span class="s2">&lt;/a&gt;&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span> <span class="c1">// home page link</span>
-</span><span class='line'>          <span class="k">if</span><span class="p">(</span><span class="nv">$trail</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-&gt;</span><span class="na">ID</span> <span class="o">==</span> <span class="nv">$page_on_front</span><span class="p">)</span> <span class="c1">// if the home page is an ancestor of this page</span>
-</span><span class='line'>              <span class="nb">array_shift</span><span class="p">(</span> <span class="nv">$trail</span> <span class="p">);</span> <span class="c1">// remove the home page from the $trail because we&#39;ve already printed it</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>      <span class="k">foreach</span> <span class="p">(</span> <span class="nv">$trail</span> <span class="k">as</span> <span class="nv">$page</span><span class="p">){</span>
-</span><span class='line'>          <span class="c1">// print the link to the current page in the foreach</span>
-</span><span class='line'>          <span class="k">echo</span> <span class="s2">&quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-</span><span class="si">{</span><span class="nv">$page</span><span class="o">-&gt;</span><span class="na">ID</span><span class="si">}</span><span class="s2">&#39; &gt;</span><span class="si">$separator</span><span class="s2">&lt;a href=&#39;&quot;</span> <span class="o">.</span> <span class="nx">get_page_link</span><span class="p">(</span> <span class="nv">$page</span><span class="o">-&gt;</span><span class="na">ID</span> <span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;&#39;&gt;</span><span class="si">{</span><span class="nv">$page</span><span class="o">-&gt;</span><span class="na">post_title</span><span class="si">}</span><span class="s2">&lt;/a&gt;&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-</span><span class='line'>      <span class="c1">// if what we&#39;re looking at isn&#39;t a page, simply display a home link</span>
-</span><span class='line'>      <span class="k">echo</span> <span class="s2">&quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-0&#39;&gt;&lt;a href=&#39;&quot;</span> <span class="o">.</span> <span class="nx">get_bloginfo</span><span class="p">(</span><span class="s1">&#39;home&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="s2">&quot;&#39;&gt;Home&lt;/a&gt;&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">;</span> <span class="c1">// home page link</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you have any corrections or suggestions for this (rather long) bit of code, please add your comment bellow. I love feedback!</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2008-12-23T21:54:39-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/3/" class="prev">Prev</a>
     
+    
+        <a href="/blog/page/5/" class="next">Next</a>
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
