@@ -15,7 +15,7 @@ This is helpful if you accidentally mess up a macro recording, or decide you nee
 If you recorded a macro to register `a`, you can paste its contents into the current document with `"ap`.
 From there, you can edit the macro and then yank it back into the `a` register with `"ay`
 
-This makes it easy to paste your macros into your vimrc for future use.
+This also makes it easy to paste your macros into your vimrc for future use.
 
 ```vim
 " delete first word of line
