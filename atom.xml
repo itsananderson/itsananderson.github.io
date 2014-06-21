@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-20T23:35:31-07:00</updated>
+  <updated>2014-06-20T23:37:10-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -27,7 +27,7 @@ This is helpful if you accidentally mess up a macro recording, or decide you nee
 <p>If you recorded a macro to register <code>a</code>, you can paste its contents into the current document with <code>"ap</code>.
 From there, you can edit the macro and then yank it back into the <code>a</code> register with <code>"ay</code></p>
 
-<p>This makes it easy to paste your macros into your vimrc for future use.</p>
+<p>This also makes it easy to paste your macros into your vimrc for future use.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
