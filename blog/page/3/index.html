@@ -7,10 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="A couple of years ago I released a plugin called
-&ldquo;Minimum Password Length&rdquo;.
-It&rsquo;s been pretty popular, mostly thanks to some
-link &hellip;">
+	<meta name="description" content="A couple of months ago, I had the opportunity to attend an API Hackday event in Bloomington.
+At the event, I created some cool WordPress tools using &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -82,6 +80,67 @@ link &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/12/15/new-plugin-wp-sendgrid/">
+		
+			New Plugin WP SendGrid</a>
+	</h2>
+	<div class="entry-content">
+		<p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
+At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time
+(because Twilio&rsquo;s API is so easy to use!), so I wrote another plugin called <a href="http://www.itsananderson.com/plugins/wp-sendgrid/">WP SendGrid</a> using the SendGrid API.</p>
+
+<p>This plugin extends WordPress&#8217; <code>wp_mail()</code> function to use SendGrid&rsquo;s API for all emails.
+This was useful to me because I&rsquo;ve never been able to figure out how to get PHP to send emails in Windows.
+In the past, when I&rsquo;ve worked on projects that send emails, I always had to upload it to a Linux server to test the email functionality.
+If anything didn&rsquo;t work, I had to edit locally, then upload again to test it.
+After a few iterations, that gets really old.
+With WP SendGrid, I can send emails from my local machine, so debugging issues is <strong>much</strong> easier.</p>
+
+<p>Fast-forward a few months.
+This week I decided to spend a little more time polishing the plugin.
+I&rsquo;d only spent about 45 minutes on it at the HackDay, which shows how simple it is to use SendGrid&rsquo;s API.
+What I put together was enough to meet my needs, but I was using hardcoded values, and wasn&rsquo;t considering every edge-case.
+After a few more hours of work, I had a complete plugin with a nice configuration UI.</p>
+
+<p>If you develop for WordPress on Windows, or you have trouble sending email from PHP on another platform, you&rsquo;ll want to check this plugin out.
+<a href="http://www.itsananderson.com/plugins/wp-sendgrid/">Visit the plugin page</a>.</p>
+
+<p>If you run into any issues, let me know by submitting a ticket on the <a href="https://github.com/codeawhile/wp-sendgrid">GitHub</a> project.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-15T08:49:43-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/sendgrid/'>SendGrid</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -983,103 +1042,6 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
 
 
 	<a class='category' href='/blog/categories/php/'>PHP</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/12/13/even-smarter-post-formats/">
-		
-			Even Smarter Post Formats</a>
-	</h2>
-	<div class="entry-content">
-		<p><a href="http://dougal.gunters.org/">Dougal Campbell</a> published <a href="http://dougal.gunters.org/blog/2010/12/10/smarter-post-formats">an article</a> the other day suggesting that the way many themes are handling the new Post Formats feature is wrong. While I completely agree that Post Formats shouldn&rsquo;t be handled with giant if/else blocks, I&rsquo;m not sure the proposed solution is the best option either. Here&rsquo;s why.</p>
-
-<p>What Dougal suggests is that theme developers instead dynamically include another template file to handle the post format. I&rsquo;ve seen a similar idea suggested in a <a href="http://core.trac.wordpress.org/ticket/15385">Trac ticket</a>, and the issue I saw (but neglected to comment on) there is the same one I see here. Including PHP files is a relatively expensive operation.</p>
-
-<p>Now, admittedly, including files isn&rsquo;t the worst thing you can do, and WordPress already includes dozens of files for every page request. Still, that doesn&rsquo;t mean you shouldn&rsquo;t try to get as much performance out of your theme as possible. On an average page load on an average website, using the <code>get_template_part()</code> method for Post Formats will cause 10 additional includes, but what happens if the blog admin decides they want to display 50 posts per page? The solution doesn&rsquo;t scale very well.</p>
-
-<p>The alternate solution I propose is to dynamically call functions via <a href="http://www.php.net/manual/en/function.call-user-func.php">call_user_func</a>. When the name of a function is passed to <code>call_user_func</code>, that function is invoked. Incidentally, that&rsquo;s actually how WordPress does function callbacks for its actions and filters.</p>
-
-<p>Here&rsquo;s how the code might look.</p>
-
-<p>First, in your functions.php file, define functions for the Post Formats you wish to support. You could also place them in a separate file (like formats.php for example) and include that from your functions.php. That way you can keep your logic separated from your display, while only adding one additional include instead of ten.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">format_aside</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Code to display an aside post</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function</span> <span class="nf">format_gallery</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Code to display a gallery post</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">function</span> <span class="nf">format_standard</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Code to display a standard post</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next, in your template, use the post format to determine which function to call. To make your theme more robust, make sure the post format is supported before you try to call the function. If it isn&rsquo;t, call your backup &ldquo;default&rdquo; format function.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">while</span> <span class="p">(</span> <span class="nx">the_loop</span><span class="p">()</span> <span class="p">)</span><span class="o">:</span>
-</span><span class='line'>    <span class="nv">$format</span> <span class="o">=</span> <span class="nx">get_post_format</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nb">function_exists</span><span class="p">(</span> <span class="s1">&#39;format_&#39;</span> <span class="o">.</span> <span class="nv">$format</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">call_user_func</span><span class="p">(</span> <span class="s1">&#39;format_&#39;</span> <span class="o">.</span> <span class="nv">$format</span> <span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">call_user_func</span><span class="p">(</span> <span class="s1">&#39;format_standard&#39;</span> <span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="k">endwhile</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-12-13T20:54:19-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2010</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>
