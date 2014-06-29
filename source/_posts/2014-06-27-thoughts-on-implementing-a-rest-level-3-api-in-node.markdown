@@ -97,9 +97,13 @@ If you want to do something with the promise result, you still can with promises
 app.get('/user/:id', function(req, res) {
     return Q.nfinvoke(db, "getUser", req.params.id)
         .then(function(user) {
-            var err = new Error('User not found');
-            err.status = 404;
-            throw err;
+            if (!user) {
+                var err = new Error('User not found');
+                err.status = 404;
+                throw err;
+            } else {
+                return user;
+            }
         });
 });
 ```
