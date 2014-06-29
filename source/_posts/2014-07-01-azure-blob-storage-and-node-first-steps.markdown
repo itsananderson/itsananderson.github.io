@@ -10,7 +10,7 @@ categories: Azure Node
 
 1. [Introduction](/blog/2014/06/30/azure-blob-storage-and-node/)
 1. **First Steps**
-1. Creating Blobs
+1. [Creating Blobs](/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/)
 1. Downloading Blobs
 1. Listing Blobs
 1. Blob Metadata
@@ -127,4 +127,4 @@ If it already exists, the library will tell you, but it won't give you an error.
 ### Conclusion
 
 We've looked at how to get set up with Azure blob storage.
-In the next post, we'll look at how you create blobs.
+In the next post, we'll talk about [creating blobs](/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/).
