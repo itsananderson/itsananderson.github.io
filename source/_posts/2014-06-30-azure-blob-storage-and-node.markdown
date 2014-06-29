@@ -9,7 +9,7 @@ categories: Node Azure
 **This is the introduction to a series on working with Azure Blob Storage in Node.**
 
 1. **Introduction**
-1. First Steps
+1. [First Steps](/blog/2014/07/01/azure-blob-storage-and-node-first-steps/)
 1. Creating Blobs
 1. Downloading Blobs
 1. Listing Blobs
@@ -44,4 +44,4 @@ This (literal) back-of-an-envolope drawing illustrates the layout.
 
 {% img /images/post-images/placebacon-architecture.jpg %}
 
-With the architecture design out of the way, next time I'll cover the steps for getting started with Azure Blob Storage.
+With the architecture design out of the way, next time I'll cover the [steps for getting started with Azure Blob Storage](/blog/2014/07/01/azure-blob-storage-and-node-first-steps/).
