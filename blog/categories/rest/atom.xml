@@ -4,7 +4,7 @@
   <title><![CDATA[Category: REST | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/rest/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-29T04:04:30-07:00</updated>
+  <updated>2014-06-29T13:23:27-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -119,9 +119,13 @@ app.get(&lsquo;/user/:id&rsquo;, function(req, res) {</p>
 
 <pre><code>return Q.nfinvoke(db, "getUser", req.params.id)
     .then(function(user) {
-        var err = new Error('User not found');
-        err.status = 404;
-        throw err;
+        if (!user) {
+            var err = new Error('User not found');
+            err.status = 404;
+            throw err;
+        } else {
+            return user;
+        }
     });
 </code></pre>
 
