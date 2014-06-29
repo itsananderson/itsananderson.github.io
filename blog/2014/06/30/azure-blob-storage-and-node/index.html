@@ -1,0 +1,195 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Azure Blob Storage and Node - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="This is the introduction to a series on working with Azure Blob Storage in Node. Introduction
+First Steps
+Creating Blobs
+Downloading Blobs
+Listing &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Azure Blob Storage and Node</h2>
+	<div class="entry-content"><p><strong>This is the introduction to a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><strong>Introduction</strong></li>
+<li>First Steps</li>
+<li>Creating Blobs</li>
+<li>Downloading Blobs</li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<p>Over the weekend I put together a service called <a href="http://placebacon.net">placebacon</a> that serves placeholder bacon images.
+It&rsquo;s certainly not the first placeholder image service, but it&rsquo;s the first one that makes your designs look delicious :)</p>
+
+<p><img src="http://placebacon.net/800/100?image=9"></p>
+
+<p>I decided to build the service on Azure so that it can easily be scaled if anyone actually starts using it.
+Caching generated images with Azure Blob Storage made the most sense.</p>
+
+<p>The Azure team has released an npm package called <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a>, which I used to interact with the Azure Blobs.
+The documentation for the azure-storage package is fairly good, but I still mostly found myself digging into the source code to figure things out.
+I&rsquo;m writing this blog series to make it easier for other Node developers to work with the Node bindings for Azure Blob Storage.</p>
+
+<h2>Placebacon&rsquo;s Service Architecture</h2>
+
+<p>To set a framework for the upcoming discussions about Blob Storage, I&rsquo;m providing a high-level overview of placebacon&rsquo;s architecture.</p>
+
+<p>First, I need a way to resize images in Node.
+After spending several frustrating hours trying to find an image manipulation module that works in Windows, I decided that a Linux VM would be the easiest way to resize images in Node.
+Since I&rsquo;m using the Azure infrastructure, setting up a Linux VM is straightforward, but I also want to take advantage of the simple scaling ability of Azure Websites.</p>
+
+<p>To accomplish this, I decided to have a lightweight Ubuntu VM for resizing images.
+Then I put together an Azure website (in Node, of course) that requests resized images from the service running on Ubuntu, and caches the results in Blob Storage.</p>
+
+<p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
+
+<p><img src="/images/post-images/placebacon-architecture.jpg"></p>
+
+<p>With the architecture design out of the way, next time I&rsquo;ll cover the steps for getting started with Azure Blob Storage.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-30T14:09:17-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2014
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

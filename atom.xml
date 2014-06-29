@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-27T19:43:35-07:00</updated>
+  <updated>2014-06-29T04:04:30-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node]]></title>
+    <link href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/"/>
+    <updated>2014-06-30T14:09:17-07:00</updated>
+    <id>http://willi.am/blog/2014/06/30/azure-blob-storage-and-node</id>
+    <content type="html"><![CDATA[<p><strong>This is the introduction to a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><strong>Introduction</strong></li>
+<li>First Steps</li>
+<li>Creating Blobs</li>
+<li>Downloading Blobs</li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<p>Over the weekend I put together a service called <a href="http://placebacon.net">placebacon</a> that serves placeholder bacon images.
+It&rsquo;s certainly not the first placeholder image service, but it&rsquo;s the first one that makes your designs look delicious :)</p>
+
+<p><img src="http://placebacon.net/800/100?image=9"></p>
+
+<p>I decided to build the service on Azure so that it can easily be scaled if anyone actually starts using it.
+Caching generated images with Azure Blob Storage made the most sense.</p>
+
+<p>The Azure team has released an npm package called <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a>, which I used to interact with the Azure Blobs.
+The documentation for the azure-storage package is fairly good, but I still mostly found myself digging into the source code to figure things out.
+I&rsquo;m writing this blog series to make it easier for other Node developers to work with the Node bindings for Azure Blob Storage.</p>
+
+<h2>Placebacon&rsquo;s Service Architecture</h2>
+
+<p>To set a framework for the upcoming discussions about Blob Storage, I&rsquo;m providing a high-level overview of placebacon&rsquo;s architecture.</p>
+
+<p>First, I need a way to resize images in Node.
+After spending several frustrating hours trying to find an image manipulation module that works in Windows, I decided that a Linux VM would be the easiest way to resize images in Node.
+Since I&rsquo;m using the Azure infrastructure, setting up a Linux VM is straightforward, but I also want to take advantage of the simple scaling ability of Azure Websites.</p>
+
+<p>To accomplish this, I decided to have a lightweight Ubuntu VM for resizing images.
+Then I put together an Azure website (in Node, of course) that requests resized images from the service running on Ubuntu, and caches the results in Blob Storage.</p>
+
+<p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
+
+<p><img src="http://willi.am/images/post-images/placebacon-architecture.jpg"></p>
+
+<p>With the architecture design out of the way, next time I&rsquo;ll cover the steps for getting started with Azure Blob Storage.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Thoughts On Implementing a REST Level 3 API in Node]]></title>
@@ -1215,111 +1264,6 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
 
 
 <p><strong>Update</strong> 4/25/14: In newer versions of Angular you&rsquo;ll need to include <code>angular-sanitize.js</code> on the page, and bind with the <code>ng-bind-html</code> attribute. Props to <a href="https://twitter.com/michaeldick">Dick</a> and <a href="http://konpa.fr">Julien</a> for pointing this out.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Configuring GitHub on Windows]]></title>
-    <link href="http://willi.am/blog/2011/12/15/configuring-github-on-windows/"/>
-    <updated>2011-12-15T22:21:44-08:00</updated>
-    <id>http://willi.am/blog/2011/12/15/configuring-github-on-windows</id>
-    <content type="html"><![CDATA[<p>If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you.</p>
-
-<h2>Getting Started</h2>
-
-<p>First you need to grab a copy of <a href="http://code.google.com/p/msysgit/">Git for Windows</a>.
-Once you&rsquo;ve downloaded the latest version, launch it and go through the license and location screens.
-Once you get to the &ldquo;Select Components&rdquo; screen, make sure both Context menu entries are selected.
-If you want, select the TrueType font option.
-That one shouldn&rsquo;t really matter.</p>
-
-<p><img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="http://willi.am/images/post-images/select-components.png" width="539" height="428" /></p>
-
-<p>Jump ahead a few more frames and you&rsquo;ll get to the SSH executable option.
-Choose &ldquo;OpenSSH&rdquo;, unless you have a compelling reason to use Plink.</p>
-
-<p><img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="http://willi.am/images/post-images/openssh.png" width="546" height="432" /></p>
-
-<p>Run through the rest of the frames, accepting the defaults.
-You now have Git installed on your machine, but we&rsquo;re not quite done yet.
-GitHub uses public/private key encryption.
-This means you don&rsquo;t commit with a username and password, like most SVN setups.
-Instead, you tell GitHub your public key, then use your private key to authenticate.</p>
-
-<h2>Generating a Public Key</h2>
-
-<p>GitHub has a detailed article on setting up your SSH keys on Mac/Windows/Linux.
-I recommend <a href="https://help.github.com/articles/generating-ssh-keys">checking it out</a>.</p>
-
-<h2>Clone a Repository From GitHub</h2>
-
-<p>You&rsquo;re just about there.
-Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
-Make sure SSH is selected.</p>
-
-<p><img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="http://willi.am/images/post-images/github-url.png" width="664" height="33" /></p>
-
-<p>Open up Git Bash.
-You should be able to find it in your start menu.
-&ldquo;cd&rdquo; to the directory where you plan on checking out your code.
-For example, if you want your code to be located in C:\programming\project then you want to &ldquo;cd&rdquo; to C:\programming.</p>
-
-<p>Type out &ldquo;git clone &rdquo;, but don&rsquo;t hit enter yet.
-Go to the top left corner of the Git Bash window and click.
-In the menu that pops up, select Edit &ndash;> Paste to paste the URL of your repository, but still don&rsquo;t hit enter.
-Finally, type the name you want to call the project folder.
-In our example, you&rsquo;d want something like this:</p>
-
-<p><code>git clone git@github.com:itsananderson/wp-sendgrid.git project</code></p>
-
-<p>Now you can hit enter :)</p>
-
-<p>If you entered a passphrase for your private key, it will ask you for it.
-If all goes well, your repository should be downloaded.</p>
-
-<h2>Some Sample Commands</h2>
-
-<p>This isn&rsquo;t really a tutorial on Git commands, but here are a few to get you started:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># See what files have changed:</span>
-</span><span class='line'>git status
-</span><span class='line'>
-</span><span class='line'><span class="c"># Add a file (new or modified, it doesn&#39;t matter. You need to add it to commit it)</span>
-</span><span class='line'>git add file.php
-</span><span class='line'>
-</span><span class='line'><span class="c"># Add several files:</span>
-</span><span class='line'>git add *.php
-</span><span class='line'>
-</span><span class='line'><span class="c"># Commit your changes locally (just stores a local snapshot of your changes):  </span>
-</span><span class='line'>git commit -m <span class="s2">&quot;Your commit message here&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># Push your changes up to GitHub:</span>
-</span><span class='line'>git push -u origin master
-</span><span class='line'>
-</span><span class='line'><span class="c"># Pull down updates from GitHub:</span>
-</span><span class='line'>git pull
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>That&rsquo;s about it.
-There&rsquo;s more to Git (which I&rsquo;m still learning about), but this should hopefully be enough to help you get started.</p>
 ]]></content>
   </entry>
   

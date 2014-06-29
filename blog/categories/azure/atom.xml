@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-27T19:43:35-07:00</updated>
+  <updated>2014-06-29T04:04:30-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node]]></title>
+    <link href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/"/>
+    <updated>2014-06-30T14:09:17-07:00</updated>
+    <id>http://willi.am/blog/2014/06/30/azure-blob-storage-and-node</id>
+    <content type="html"><![CDATA[<p><strong>This is the introduction to a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><strong>Introduction</strong></li>
+<li>First Steps</li>
+<li>Creating Blobs</li>
+<li>Downloading Blobs</li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<p>Over the weekend I put together a service called <a href="http://placebacon.net">placebacon</a> that serves placeholder bacon images.
+It&rsquo;s certainly not the first placeholder image service, but it&rsquo;s the first one that makes your designs look delicious :)</p>
+
+<p><img class="<a" src="href="http://placebacon.net/800/100?image=9">http://placebacon.net/800/100?image=9</a>"></p>
+
+<p>I decided to build the service on Azure so that it can easily be scaled if anyone actually starts using it.
+Caching generated images with Azure Blob Storage made the most sense.</p>
+
+<p>The Azure team has released an npm package called <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a>, which I used to interact with the Azure Blobs.
+The documentation for the azure-storage package is fairly good, but I still mostly found myself digging into the source code to figure things out.
+I&rsquo;m writing this blog series to make it easier for other Node developers to work with the Node bindings for Azure Blob Storage.</p>
+
+<h2>Placebacon&rsquo;s Service Architecture</h2>
+
+<p>To set a framework for the upcoming discussions about Blob Storage, I&rsquo;m providing a high-level overview of placebacon&rsquo;s architecture.</p>
+
+<p>First, I need a way to resize images in Node.
+After spending several frustrating hours trying to find an image manipulation module that works in Windows, I decided that a Linux VM would be the easiest way to resize images in Node.
+Since I&rsquo;m using the Azure infrastructure, setting up a Linux VM is straightforward, but I also want to take advantage of the simple scaling ability of Azure Websites.</p>
+
+<p>To accomplish this, I decided to have a lightweight Ubuntu VM for resizing images.
+Then I put together an Azure website (in Node, of course) that requests resized images from the service running on Ubuntu, and caches the results in Blob Storage.</p>
+
+<p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
+
+<p><img src="/images/post-images/placebacon-architecture.jpg"></p>
+
+<p>With the architecture design out of the way, next time I&rsquo;ll cover the steps for getting started with Azure Blob Storage.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Running Express 4 Sites On Azure]]></title>
