@@ -13,7 +13,7 @@ categories: Azure Node
 1. [Creating Blobs](/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/)
 1. **Downloading Blobs**
 1. [Listing Blobs](/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/)
-1. Blob Metadata
+1. [Blob Metadata](/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/)
 1. All Together
 
 Downloading From Blob Storage

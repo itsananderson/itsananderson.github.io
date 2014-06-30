@@ -13,7 +13,7 @@ categories: Azure Node
 1. [Creating Blobs](/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/)
 1. [Downloading Blobs](/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/)
 1. **Listing Blobs**
-1. Blob Metadata
+1. [Blob Metadata](/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/)
 1. All Together
 
 Listing Containers and Blobs in Storage
@@ -179,4 +179,4 @@ blobService.listBlobsSegmentedWithPrefix(
 ### Conclusion
 
 In this post we covered listing blobs and containers in your storage account.
-In the next post, we'll cover blob metadata.
+In the next post, we'll cover [blob metadata](/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/).
