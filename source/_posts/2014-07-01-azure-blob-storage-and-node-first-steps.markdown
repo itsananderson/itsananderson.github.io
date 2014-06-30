@@ -11,7 +11,7 @@ categories: Azure Node
 1. [Introduction](/blog/2014/06/30/azure-blob-storage-and-node/)
 1. **First Steps**
 1. [Creating Blobs](/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/)
-1. Downloading Blobs
+1. [Downloading Blobs](/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/)
 1. Listing Blobs
 1. Blob Metadata
 1. All Together

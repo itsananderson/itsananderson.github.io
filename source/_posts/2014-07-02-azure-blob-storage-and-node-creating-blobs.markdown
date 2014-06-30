@@ -12,7 +12,7 @@ categories: Azure Node
 1. [Introduction](/blog/2014/06/30/azure-blob-storage-and-node/)
 1. [First Steps](/blog/2014/07/01/azure-blob-storage-and-node-first-steps/)
 1. **Creating Blobs**
-1. Downloading Blobs
+1. [Downloading Blobs](/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/)
 1. Listing Blobs
 1. Blob Metadata
 1. All Together
@@ -207,4 +207,4 @@ The easiest way to see the different options is to look in `lib\services\blob\bl
 ### Conclusion
 
 In this post we've covered the many ways to create Azure blobs in Node.
-Next time we'll talk about downloading blobs.
+Next time we'll talk about [downloading blobs](/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/).
