@@ -12,7 +12,7 @@ categories: Azure Node
 1. [First Steps](/blog/2014/07/01/azure-blob-storage-and-node-first-steps/)
 1. [Creating Blobs](/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/)
 1. **Downloading Blobs**
-1. Listing Blobs
+1. [Listing Blobs](/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/)
 1. Blob Metadata
 1. All Together
 
@@ -24,7 +24,7 @@ This time we'll turn things around and talk about downloading Azure blobs.
 
 ### Account Connection Boilerplate
 
-As stated in the previous post, to upload to blob storage, you first need to create a client instance.
+As stated in the previous post, to work with blob storage, you first need to create a client instance.
 To avoid duplicating code over and over, we'll do that once here, and assume it in the other code samples.
 
 ```javascript
@@ -169,4 +169,4 @@ app.get('/download/:file', function(req, res) {
 ### Conclusion
 
 In this post we covered how to check whether a blob exists, and how to download the blob.
-In the next post, we'll cover how to list containers and blobs.
+In the next post, we'll cover [how to list containers and blobs](/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/).
