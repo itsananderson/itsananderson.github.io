@@ -109,7 +109,7 @@ Blob &hellip;">
 
 <h2>Getting Started With Azure Blob Storage and Node</h2>
 
-<p>The Azure team has made it really simple start using Blob Storage in Node.
+<p>The Azure team has made it really simple to start using Blob Storage in Node.
 The first thing you&rsquo;ll want to do is install the <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a> module into your project.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -131,7 +131,7 @@ Under &ldquo;Location/Affinity Group&rdquo;, choose a location.
 Ideally, you should choose the same location as your web site or web service.
 If in doubt, choose the location nearest to you.</p>
 
-<p>During dev time, you probably won&rsquo;t want to be accessing production data.
+<p>During dev time, you probably won&rsquo;t want to work against production data.
 To avoid this, you can create a second storage account using the steps above.</p>
 
 <h3>Configure Access Keys</h3>
@@ -140,12 +140,12 @@ To avoid this, you can create a second storage account using the steps above.</p
 These instructions assume you&rsquo;ve already <a href="http://azure.microsoft.com/en-us/documentation/articles/cloud-services-nodejs-develop-deploy-express-app/">created an Azure Website</a>.</p>
 
 <p>There are two ways to configure the azure-storage module&rsquo;s access info.
-One way is by constructing an Azure client with the account name and an access key.
+One way is by constructing an Azure client object with a hardcoded account name and an access key.
 The problem with this approach is that it requires checking your access key in with your code, which you shouldn&rsquo;t do.</p>
 
 <p>The other appraoch is to use environment variables to store your account info.
 The azure-storage module will pick up specific environment variables and use those to connect to your storage account.
-Those environment variables are <code>AZURE_STORAGE_ACCOUNT</code> and <code>AZURE_STORAGE_ACCESS_KEY</code>, and <code>AZURE_STORAGE_CONNECTION_STRING</code>.
+Those environment variables are <code>AZURE_STORAGE_ACCOUNT</code> and <code>AZURE_STORAGE_ACCESS_KEY</code>, or <code>AZURE_STORAGE_CONNECTION_STRING</code>.
 In our example, we&rsquo;ll use the first two.</p>
 
 <p>First, in the Azure portal, navigate to your storage account.
