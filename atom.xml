@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-06-29T13:23:27-07:00</updated>
+  <updated>2014-07-01T01:08:20-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,158 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: First Steps]]></title>
+    <link href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/"/>
+    <updated>2014-07-01T06:00:03-07:00</updated>
+    <id>http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><strong>First Steps</strong></li>
+<li>Creating Blobs</li>
+<li>Downloading Blobs</li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Getting Started With Azure Blob Storage and Node</h2>
+
+<p>The Azure team has made it really simple start using Blob Storage in Node.
+The first thing you&rsquo;ll want to do is install the <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a> module into your project.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Make sure you have a package.json so npm can save your azure-storage dependency </span>
+</span><span class='line'>npm install --save azure-storage
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Create Storage Account</h3>
+
+<p>Unless you already have one, you&rsquo;ll need to create an Azure storage account.
+They&rsquo;re pretty simple to create.
+From the <a href="https://manage.windowsazure.com/">Azure portal</a>, click &ldquo;New&rdquo; in the bottom-left.
+Select &ldquo;Data Services&rdquo;, then &ldquo;Storage&rdquo;, then &ldquo;Quick Create&rdquo;.</p>
+
+<p>Enter a unique name for your account.
+Under &ldquo;Location/Affinity Group&rdquo;, choose a location.
+Ideally, you should choose the same location as your web site or web service.
+If in doubt, choose the location nearest to you.</p>
+
+<p>During dev time, you probably won&rsquo;t want to be accessing production data.
+To avoid this, you can create a second storage account using the steps above.</p>
+
+<h3>Configure Access Keys</h3>
+
+<p>In order for your Node app to connect to your storage account, you&rsquo;ll need to configure it with its access information.
+These instructions assume you&rsquo;ve already <a href="http://azure.microsoft.com/en-us/documentation/articles/cloud-services-nodejs-develop-deploy-express-app/">created an Azure Website</a>.</p>
+
+<p>There are two ways to configure the azure-storage module&rsquo;s access info.
+One way is by constructing an Azure client with the account name and an access key.
+The problem with this approach is that it requires checking your access key in with your code, which you shouldn&rsquo;t do.</p>
+
+<p>The other appraoch is to use environment variables to store your account info.
+The azure-storage module will pick up specific environment variables and use those to connect to your storage account.
+Those environment variables are <code>AZURE_STORAGE_ACCOUNT</code> and <code>AZURE_STORAGE_ACCESS_KEY</code>, and <code>AZURE_STORAGE_CONNECTION_STRING</code>.
+In our example, we&rsquo;ll use the first two.</p>
+
+<p>First, in the Azure portal, navigate to your storage account.
+At the bottom of the screen, click &ldquo;Manage Access Keys&rdquo;.</p>
+
+<p><img src="http://willi.am/images/post-images/azure-account-access-keys.png"></p>
+
+<p>Copy the primary access key, then navigate to your website&rsquo;s &ldquo;Configure&rdquo; tab.
+Under &ldquo;app settings&rdquo;, add two new settings:
+<code>AZURE_STORAGE_ACCOUNT</code> with your storage account name, and <code>AZURE_STORAGE_ACCESS_KEY</code> with the access key you just copied.</p>
+
+<p><img src="http://willi.am/images/post-images/website-access-key-configuration.png"></p>
+
+<p>For local dev, you&rsquo;ll also need to set up credentials for your dev storage account (or production if you didn&rsquo;t create a dev account).
+On Linux and Mac, you can set environment variables in your <code>.bash_profile</code>.
+Instructions for that are outside the scope of this post.</p>
+
+<p>On Linux and Mac you can also set environment variables specifically for an app run.
+This also works on Windows if you&rsquo;re using something like Git Bash.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">AZURE_STORAGE_ACCOUNT</span><span class="o">=</span>mystorage <span class="nv">AZURE_STORAGE_ACCESS_KEY</span><span class="o">=</span>123-my-access-key node app.js
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>On windows, the easiest option is to configure environment variables in your machine settings.
+These instructions are for Windows 8.
+You&rsquo;ll have to look for instructions for older versions of Windows, but the idea is pretty much the same.</p>
+
+<ol>
+<li>Open the start screen.</li>
+<li>Type &ldquo;environment&rdquo;.</li>
+<li>Click &ldquo;Edit environment variables for your account&rdquo; should come up.</li>
+<li>Click the &ldquo;New&hellip;&rdquo; button.</li>
+<li>Enter &ldquo;AZURE_STORAGE_ACCOUNT&rdquo; for the &ldquo;Variable name&rdquo; and your storage account name for the &ldquo;Variable value&rdquo;</li>
+</ol>
+
+
+<p><img src="http://willi.am/images/post-images/storage-account-environment-variable.png"></p>
+
+<p>Repeat steps 1 through 5 again for the &ldquo;AZURE_STORAGE_ACCESS_KEY&rdquo; variable, then click &ldquo;OK&rdquo; to close the &ldquo;Environment Variables&rdquo; screen.
+If your console is open, restart it.</p>
+
+<h3>Write Some Code</h3>
+
+<p>Now that we&rsquo;ve gotten the configuration taken care of, we can write some code.</p>
+
+<p>We&rsquo;ll dive into the code more in the next post, but for now, here&rsquo;s something to get you started.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createContainerIfNotExists</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t create container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s created&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s already exists&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you run the above code after configuring your account credentials, it should output &ldquo;Container your-container-name created&rdquo;.
+If you run it again, it should output &ldquo;Container your-container-name already exists&rdquo;.</p>
+
+<p>Azure only creates the container if it doesn&rsquo;t exist.
+If it already exists, the library will tell you, but it won&rsquo;t give you an error.</p>
+
+<h3>Conclusion</h3>
+
+<p>We&rsquo;ve looked at how to get set up with Azure blob storage.
+In the next post, we&rsquo;ll look at how you create blobs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node]]></title>
@@ -22,7 +174,7 @@
 
 <ol>
 <li><strong>Introduction</strong></li>
-<li>First Steps</li>
+<li><a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li>Creating Blobs</li>
 <li>Downloading Blobs</li>
 <li>Listing Blobs</li>
@@ -58,7 +210,7 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 
 <p><img src="http://willi.am/images/post-images/placebacon-architecture.jpg"></p>
 
-<p>With the architecture design out of the way, next time I&rsquo;ll cover the steps for getting started with Azure Blob Storage.</p>
+<p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
 ]]></content>
   </entry>
   
@@ -1224,54 +1376,6 @@ The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p
 
 
 <p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Creating an Angular Markdown Preview]]></title>
-    <link href="http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/"/>
-    <updated>2013-10-09T17:56:26-07:00</updated>
-    <id>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
-
-<p>Because I like to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for things like my dev journal, I have been wanting to implement my own Markdown preview tool that I could customize to work just the way I want. When I first started learning Angular, I decided to see how easy it would be to write an Angular Markdown preview tool using Angular. Turns out it&rsquo;s super simple.</p>
-
-<p>If you&rsquo;d rather skip straight to the demo, you can <a href="http://itsananderson.azurewebsites.net/markdown">view the finished markdown preview</a>.</p>
-
-<p>I won&rsquo;t go into great detail about the purpose of Angular, since it&rsquo;s readily available elsewhere. In this project, I just wanted a simple way to bind to a textbox so that I could update an HTML Markdown preview. Angular&rsquo;s declarative binding makes it an excellent choice for this.</p>
-
-<h3>Rendering an Angular Markdown Preview</h3>
-
-<p>Since I didn&rsquo;t want to write my own markdown converter, I decided to look for an existing one. I quickly settled on this <a href="https://npmjs.org/package/markdown">markdown npm package</a>. I installed the package, then moved the converter code into my &lsquo;lib/js&rsquo; folder so that it would be accessible from my web app.</p>
-
-<p>To make the front-end as simple as possible, I decided to <a href="http://docs.angularjs.org/guide/dev_guide.templates.filters.creating_filters">create an Angular filter</a> to provide the conversion from Markdown to HTML.</p>
-
-<p>The code is pretty simple. The markdown npm package adds a &ldquo;markdown&rdquo; object to the &ldquo;window&rdquo; global, so it&rsquo;s easy to access the converter.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="p">[])</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="s1">&#39;markdown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>              <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-</span><span class='line'>          <span class="p">}</span>
-</span><span class='line'>          <span class="k">return</span> <span class="nx">markdown</span><span class="p">.</span><span class="nx">toHTML</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>  <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Update</strong> 4/25/14: In newer versions of Angular you&rsquo;ll need to include <code>angular-sanitize.js</code> on the page, and bind with the <code>ng-bind-html</code> attribute. Props to <a href="https://twitter.com/michaeldick">Dick</a> and <a href="http://konpa.fr">Julien</a> for pointing this out.</p>
 ]]></content>
   </entry>
   
