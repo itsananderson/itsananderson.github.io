@@ -19,7 +19,7 @@ categories: Azure Node
 Getting Started With Azure Blob Storage and Node
 ---
 
-The Azure team has made it really simple start using Blob Storage in Node.
+The Azure team has made it really simple to start using Blob Storage in Node.
 The first thing you'll want to do is install the [azure-storage](https://www.npmjs.org/package/azure-storage) module into your project.
 
 ```bash
@@ -39,7 +39,7 @@ Under "Location/Affinity Group", choose a location.
 Ideally, you should choose the same location as your web site or web service.
 If in doubt, choose the location nearest to you.
 
-During dev time, you probably won't want to be accessing production data.
+During dev time, you probably won't want to work against production data.
 To avoid this, you can create a second storage account using the steps above.
 
 ### Configure Access Keys
@@ -48,12 +48,12 @@ In order for your Node app to connect to your storage account, you'll need to co
 These instructions assume you've already [created an Azure Website](http://azure.microsoft.com/en-us/documentation/articles/cloud-services-nodejs-develop-deploy-express-app/).
 
 There are two ways to configure the azure-storage module's access info.
-One way is by constructing an Azure client with the account name and an access key.
+One way is by constructing an Azure client object with a hardcoded account name and an access key.
 The problem with this approach is that it requires checking your access key in with your code, which you shouldn't do.
 
 The other appraoch is to use environment variables to store your account info.
 The azure-storage module will pick up specific environment variables and use those to connect to your storage account.
-Those environment variables are `AZURE_STORAGE_ACCOUNT` and `AZURE_STORAGE_ACCESS_KEY`, and `AZURE_STORAGE_CONNECTION_STRING`.
+Those environment variables are `AZURE_STORAGE_ACCOUNT` and `AZURE_STORAGE_ACCESS_KEY`, or `AZURE_STORAGE_CONNECTION_STRING`.
 In our example, we'll use the first two.
 
 First, in the Azure portal, navigate to your storage account.
