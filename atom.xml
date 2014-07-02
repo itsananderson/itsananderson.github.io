@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-02T00:36:58-07:00</updated>
+  <updated>2014-07-02T00:48:44-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -169,7 +169,9 @@ The one caveat here is that you need to know the length of the stream you&rsquo;
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">myStream</span> <span class="o">=</span> <span class="nx">getSomeStream</span><span class="p">();</span> <span class="c1">// For simplicity, assume getSomeStream() returns a readable stream</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// For simplicity, assume getSomeStream() returns a readable stream</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myStream</span> <span class="o">=</span> <span class="nx">getSomeStream</span><span class="p">();</span>
 </span><span class='line'><span class="kd">var</span> <span class="nx">myStreamLength</span> <span class="o">=</span> <span class="nx">getSomeStreamLength</span><span class="p">();</span>
 </span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createBlockBlobFromStream</span><span class="p">(</span>
 </span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
