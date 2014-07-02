@@ -114,14 +114,14 @@ app.get('/:width/:height?', function(req, res) {
         if (200 !== imageResponse.statusCode) {
             debug('Unexpected response: %d - %s',
                   imageResponse.statusCode, imageResponse.statusMessage);
-            res.send(503, imageResponse.statusMessage);
+            res.send(502, imageResponse.statusMessage);
             return;
         } else {
             imageResponse.pipe(res);
         }
     }).on('error', function(err) {
         console.error('Error fetching from %s: %j', imageUrl, err);
-        res.send(503, util.format("Error downloading %s: %s", imageUrl, e.message));
+        res.send(502, util.format("Error downloading %s: %s", imageUrl, e.message));
     });
 });
 ```
