@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-01T10:15:42-07:00</updated>
+  <updated>2014-07-02T00:36:58-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,238 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: Creating Blobs]]></title>
+    <link href="http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/"/>
+    <updated>2014-07-02T13:27:10-07:00</updated>
+    <id>http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><strong>Creating Blobs</strong></li>
+<li>Downloading Blobs</li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Uploading to Azure Blob Storage</h2>
+
+<p>In the <a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">previous post</a>, we talked about how to set up and connect to an Azure Storage account, and how to create a blob container.
+Today we&rsquo;ll discuss how to upload blobs.</p>
+
+<h3>Account Connection Boilerplate</h3>
+
+<p>To upload to blob storage, you first need to create a client instance.
+To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var containerName = &lsquo;your-container-name&rsquo;;
+blobService.createContainerIfNotExists(containerName, function(err, result, response) {</p>
+
+<pre><code>if (err) {
+    console.log("Couldn't create container %s", containerName);
+    console.error(err);
+} else {
+    if (result) {
+        console.log('Container %s created', containerName);
+    } else {
+        console.log('Container %s already exists', containerName);
+    }
+
+    // Your code goes here
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Now for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
+
+<h3>Uploading a String</h3>
+
+<p>Uploading a string is easy with the <code>createBlockBlobFromText</code> method.</p>
+
+<p>```javascript
+blobService.createBlockBlobFromText(</p>
+
+<pre><code>containerName,
+'my-awesome-text-blob',
+'Hello, World!',
+function(error, result, response){
+    if(error){
+        console.log("Couldn't upload string");
+        console.error(error);
+    } else {
+        console.log('String uploaded successfully');
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>The above code creates a blob called &ldquo;my-awesome-text-blob&rdquo; inside our container with the content &ldquo;Hello, World!&rdquo;.</p>
+
+<h3>Uploading a File</h3>
+
+<p>Uploading a file is just as simple as uploading a string. Use the <code>createBlockBlobFromFile</code> method.</p>
+
+<p>```javascript
+var fileName = &lsquo;hello-world.txt&rsquo;;
+blobService.createBlockBlobFromFile(</p>
+
+<pre><code>containerName,
+'my-awesome-file-blob',
+fileName,
+function(error, result, response){
+    if(error){
+        console.log("Couldn't upload file %s", fileName);
+        console.error(error);
+    } else {
+        console.log('File %s uploaded successfully', fileName);
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>The above code creates a blob called &ldquo;my-awesome-file-blob&rdquo; inside our container with the contents of &ldquo;hello-world.txt&rdquo;.</p>
+
+<h3>Uploading a Stream</h3>
+
+<p>Again, uploading streams is easy with azure-storage.
+Just use the <code>createBlockBlobFromStream</code> method.
+The one caveat here is that you need to know the length of the stream you&rsquo;re uploading.</p>
+
+<p>```javascript
+var myStream = getSomeStream(); // For simplicity, assume getSomeStream() returns a readable stream
+var myStreamLength = getSomeStreamLength();
+blobService.createBlockBlobFromStream(</p>
+
+<pre><code>containerName,
+'my-awesome-stream-blob',
+myStream,
+myStreamLength,
+function(error, result, response){
+    if(error){
+        console.log("Couldn't upload stream");
+        console.error(error);
+    } else {
+        console.log('Stream uploaded successfully');
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>Uploading an HTTP Response</h3>
+
+<p>You can also download a file and upload it to blob storage.
+This is useful for things like caching API responses.</p>
+
+<p>For this, we&rsquo;ll use <code>createWriteStreamToBlockBlob</code> to get a writable stream that saves to a blob.</p>
+
+<p>```javascript
+var http = require(&lsquo;http&rsquo;);</p>
+
+<p>var fileName = &lsquo;index.html&rsquo;;
+var domain = &lsquo;example.com&rsquo;;
+var requestOptions = {</p>
+
+<pre><code>host: domain,
+port: 80,
+path: '/' + fileName
+</code></pre>
+
+<p>};</p>
+
+<p>http.get(requestOptions, function (httpResponse) {</p>
+
+<pre><code>if (200 !== httpResponse.statusCode) {
+    console.log('Unexpected status code: %d', httpResponse.statusCode);
+} else {
+    var writeStream = blobService.createWriteStreamToBlockBlob(
+        containerName,
+        fileName,
+        { contentType: 'text/html' },
+        function(error, result, response){
+            if(error){
+                console.log("Couldn't upload file %s from %s", fileName, domain);
+                console.error(error);
+            } else {
+                console.log('File %s from %s uploaded', fileName, domain);
+            }
+        });
+    httpResponse.pipe(writeStream);
+}
+</code></pre>
+
+<p>}).on(&lsquo;error&rsquo;, function(e) {</p>
+
+<pre><code>console.log("Got error: " + e.message);
+</code></pre>
+
+<p>});
+```</p>
+
+<p>This example is a bit more complex, but the main idea is to create a write stream for the blob we want to create.
+Then we fetch <a href="http://example.com/index.html">http://example.com/index.html</a> and <code>.pipe</code> the response to the blob&rsquo;s write stream;</p>
+
+<p>If you&rsquo;re doing this in a web server, you&rsquo;ll probably also want to pipe the http.get response to the client.</p>
+
+<p>```javascript
+app.get(&lsquo;/somepath&rsquo;, function(req, res) {</p>
+
+<pre><code>http.get(requestOptions, function (httpResponse) {
+    if (200 !== httpResponse.statusCode) {
+        res.send(502, 'Unexpected status code: ' + httpResponse.statusCode);
+    } else {
+
+        // ...
+        // Blob stream setup code from above
+        // ...
+
+        // Pipe server response to both the blob and the client who made this request
+        httpResponse.pipe(writeStream);
+        httpResponse.pipe(res);
+    }
+}).on('error', function(e) {
+    res.send(502, "Got error: " + e.message);
+});
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Setting a Content Type</h3>
+
+<p>You may have noticed that the previoius example passed an extra option to <code>createWriteStreamToBlockBlob</code>.
+There are a number of properties you can set on a blob, but the most useful is the contentType property.
+This determines the Content-Type header that will be set if the blob is accessed or streamed directly from blob storage.</p>
+
+<p>By default the content type is set to &lsquo;application/octet-stream&rsquo;.
+If you create a blob with this type and try to access it with your browser, it will simply be downloaded rather than displayed as the desired type (text, html, image).</p>
+
+<p>To set a custom content type, pass something like <code>{ contentType: 'image/jpeg' }</code> before your callback function.
+Note that <code>createBlockBlobFromFile</code> will infer the content type from the file extension.
+Also,<code>createBlockBlobFromText</code> automatically sets the content type to <code>text/plain;charset="utf-9"</code> when it&rsquo;s given a string.</p>
+
+<p>There are a number of other properties that can be set on a blob, including contentEncoding, contentLanguage, and metadata (which will be covered in a later post).</p>
+
+<p>The easiest way to see the different options is to look in <code>lib\services\blob\blobservice.js</code> inside the azure-storage package.</p>
+
+<h3>Conclusion</h3>
+
+<p>In this post we&rsquo;ve covered the many ways to create Azure blobs in Node.
+Next time we&rsquo;ll talk about downloading blobs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: First Steps]]></title>
@@ -23,7 +255,7 @@
 <ol>
 <li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
 <li><strong>First Steps</strong></li>
-<li>Creating Blobs</li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li>Downloading Blobs</li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
@@ -148,7 +380,7 @@ If it already exists, the library will tell you, but it won&rsquo;t give you an 
 <h3>Conclusion</h3>
 
 <p>We&rsquo;ve looked at how to get set up with Azure blob storage.
-In the next post, we&rsquo;ll look at how you create blobs.</p>
+In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">creating blobs</a>.</p>
 ]]></content>
   </entry>
   
@@ -162,7 +394,7 @@ In the next post, we&rsquo;ll look at how you create blobs.</p>
 <ol>
 <li><strong>Introduction</strong></li>
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li>Creating Blobs</li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li>Downloading Blobs</li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>

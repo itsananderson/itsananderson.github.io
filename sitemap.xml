@@ -180,11 +180,15 @@
     </url>
     <url>
         <loc>http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/</loc>
-        <lastmod>2014-07-01T01:07:41-07:00</lastmod>
+        <lastmod>2014-07-02T00:36:00-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/</loc>
-        <lastmod>2014-07-01T10:15:00-07:00</lastmod>
+        <lastmod>2014-07-02T00:36:00-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/</loc>
+        <lastmod>2014-07-02T00:36:00-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/404.html</loc>
@@ -192,11 +196,11 @@
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2014-07-01T10:15:00-07:00</lastmod>
+        <lastmod>2014-07-02T00:36:00-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2014-07-01T10:15:00-07:00</lastmod>
+        <lastmod>2014-07-02T00:36:00-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/node-modules/</loc>
