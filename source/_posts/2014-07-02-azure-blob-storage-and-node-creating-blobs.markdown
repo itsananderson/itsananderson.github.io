@@ -100,7 +100,8 @@ Just use the `createBlockBlobFromStream` method.
 The one caveat here is that you need to know the length of the stream you're uploading.
 
 ```javascript
-var myStream = getSomeStream(); // For simplicity, assume getSomeStream() returns a readable stream
+// For simplicity, assume getSomeStream() returns a readable stream
+var myStream = getSomeStream();
 var myStreamLength = getSomeStreamLength();
 blobService.createBlockBlobFromStream(
     containerName,
