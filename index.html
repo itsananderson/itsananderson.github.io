@@ -313,8 +313,10 @@ You can do this with the <code>getBlobProperties</code> method.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>You can also integrate this with a web server to enable downloads from blob storage.
-This is powerfull when combined with <code>getBlobProperties</code> method is helpful for this.</p>
+<p>You can also integrate with a web server to enable downloads from blob storage.
+This is powerfull when combined with the <code>getBlobProperties</code> method.</p>
+
+<p>In the following example, we use the <code>createReadStream</code> method so we can easily pipe the stream to the server response object.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>

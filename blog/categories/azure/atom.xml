@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-03T10:21:55-07:00</updated>
+  <updated>2014-07-03T10:31:13-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -171,8 +171,10 @@ function(err, blob) {
 
 <p>```</p>
 
-<p>You can also integrate this with a web server to enable downloads from blob storage.
-This is powerfull when combined with <code>getBlobProperties</code> method is helpful for this.</p>
+<p>You can also integrate with a web server to enable downloads from blob storage.
+This is powerfull when combined with the <code>getBlobProperties</code> method.</p>
+
+<p>In the following example, we use the <code>createReadStream</code> method so we can easily pipe the stream to the server response object.</p>
 
 <p>```javascript
 app.get(&lsquo;/download/:file&rsquo;, function(req, res) {</p>
