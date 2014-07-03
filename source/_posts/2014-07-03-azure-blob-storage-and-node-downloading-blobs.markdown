@@ -142,8 +142,10 @@ blobService.getBlobToStream(
     });
 ```
 
-You can also integrate this with a web server to enable downloads from blob storage.
-This is powerfull when combined with `getBlobProperties` method is helpful for this.
+You can also integrate with a web server to enable downloads from blob storage.
+This is powerfull when combined with the `getBlobProperties` method.
+
+In the following example, we use the `createReadStream` method so we can easily pipe the stream to the server response object.
 
 ```javascript
 app.get('/download/:file', function(req, res) {
