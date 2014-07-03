@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-02T00:48:44-07:00</updated>
+  <updated>2014-07-03T10:21:55-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,196 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
+    <link href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/"/>
+    <updated>2014-07-03T16:23:46-07:00</updated>
+    <id>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><strong>Downloading Blobs</strong></li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Downloading From Blob Storage</h2>
+
+<p><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Last time</a> we talked about creating Azure blobs.
+This time we&rsquo;ll turn things around and talk about downloading Azure blobs.</p>
+
+<h3>Account Connection Boilerplate</h3>
+
+<p>As stated in the previous post, to upload to blob storage, you first need to create a client instance.
+To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var containerName = &lsquo;your-container-name&rsquo;;
+blobService.createContainerIfNotExists(</p>
+
+<pre><code>containerName,
+function(err, result, response) {
+    if (err) {
+        console.log("Couldn't create container %s", containerName);
+        console.error(err);
+    } else {
+        if (result) {
+            console.log('Container %s created', containerName);
+        } else {
+            console.log('Container %s already exists', containerName);
+        }
+
+        // Your code goes here
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>Again, for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
+
+<h3>Checking if a Blob Exists</h3>
+
+<p>In some cases, you don&rsquo;t need a blob&rsquo;s contents, you just need to know if it exists.
+You can do this with the <code>getBlobProperties</code> method.</p>
+
+<p>```javascript
+var blobName = &lsquo;my-nonexistent-blob&rsquo;
+blobService.getBlobProperties(</p>
+
+<pre><code>containerName,
+blobName,
+function(err, properties, status) {
+    if (status.isSuccessful) {
+        // Blob exists
+    } else {
+        // Blob doesn't exist
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>Downloading a Blob As Text</h3>
+
+<p>To download a blob as a text string, use the <code>getBlobToText</code> method.</p>
+
+<p>```javascript
+var blobName = &lsquo;my-awesome-text-blob&rsquo;;
+blobService.getBlobToText(</p>
+
+<pre><code>containerName,
+blobName,
+function(err, blobContent, blob) {
+    if (err) {
+        console.error("Couldn't download blob %s", blobName);
+        console.error(err);
+    } else {
+        console.log("Sucessfully downloaded blob %s", blobName);
+        console.log(blobContent);
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>Downloading a Blob to a File</h3>
+
+<p>To download a blob to a file, use the <code>getBlobToFile</code> method.</p>
+
+<p>```javascript
+var fs = require(&lsquo;fs&rsquo;);
+var fileName = &lsquo;hello-world.txt&rsquo;;
+var blobName = &lsquo;my-awesome-file-blob&rsquo;;
+blobService.getBlobToFile(</p>
+
+<pre><code>containerName,
+blobName,
+fileName,
+function(err, blob) {
+    if (err) {
+        console.error("Couldn't download blob %s", blobName);
+        console.error(err);
+    } else {
+        console.log("Sucessfully downloaded blob %s to %s", blobName, fileName);
+        fs.readFile(fileName, function(err, fileContents) {
+            if (err) {
+                console.error("Couldn't read file %s", fileName);
+                console.error(err);
+            } else {
+                console.log(fileContents);
+            }
+        });
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>Downloading a Blob to a Stream</h3>
+
+<p>To download a blob to a stream, use the <code>getBlobToStream</code> method.</p>
+
+<p>```javascript
+// For simplicity, assume getSomeStream returns a writable stream
+var myStream = getSomeStream();
+var blobName = &lsquo;my-awesome-stream-blob&rsquo;;
+blobService.getBlobToStream(</p>
+
+<pre><code>containerName,
+blobName,
+myStream,
+function(err, blob) {
+    if (err) {
+        console.error("Couldn't download blob %s", blobName);
+        console.error(err);
+    } else {
+        console.log("Sucessfully downloaded blob %s", blobName);
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>You can also integrate this with a web server to enable downloads from blob storage.
+This is powerfull when combined with <code>getBlobProperties</code> method is helpful for this.</p>
+
+<p>```javascript
+app.get(&lsquo;/download/:file&rsquo;, function(req, res) {</p>
+
+<pre><code>var fileName = req.params.file;
+blobService.getBlobProperties(
+    containerName,
+    fileName,
+    function(err, properties, status) {
+        if (err) {
+            res.send(502, "Error fetching file: %s", err.message);
+        } else if (!status.isSuccessful) {
+            res.send(404, "The file %s does not exist", fileName);
+        } else {
+            res.header('Content-Type', properties.contentType);
+            blobService.createReadStream(containerName, fileName).pipe(res);
+        }
+    });
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Conclusion</h3>
+
+<p>In this post we covered how to check whether a blob exists, and how to download the blob.
+In the next post, we&rsquo;ll cover how to list containers and blobs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Creating Blobs]]></title>
@@ -24,7 +214,7 @@
 <li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><strong>Creating Blobs</strong></li>
-<li>Downloading Blobs</li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
 <li>All Together</li>
@@ -242,7 +432,7 @@ Also,<code>createBlockBlobFromText</code> automatically sets the content type to
 <h3>Conclusion</h3>
 
 <p>In this post we&rsquo;ve covered the many ways to create Azure blobs in Node.
-Next time we&rsquo;ll talk about downloading blobs.</p>
+Next time we&rsquo;ll talk about <a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">downloading blobs</a>.</p>
 ]]></content>
   </entry>
   
@@ -257,7 +447,7 @@ Next time we&rsquo;ll talk about downloading blobs.</p>
 <li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
 <li><strong>First Steps</strong></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li>Downloading Blobs</li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
 <li>All Together</li>
@@ -396,7 +586,7 @@ In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-st
 <li><strong>Introduction</strong></li>
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li>Downloading Blobs</li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
 <li>All Together</li>

@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-02T00:48:44-07:00</updated>
+  <updated>2014-07-03T10:21:55-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,275 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
+    <link href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/"/>
+    <updated>2014-07-03T16:23:46-07:00</updated>
+    <id>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><strong>Downloading Blobs</strong></li>
+<li>Listing Blobs</li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Downloading From Blob Storage</h2>
+
+<p><a href="http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Last time</a> we talked about creating Azure blobs.
+This time we&rsquo;ll turn things around and talk about downloading Azure blobs.</p>
+
+<h3>Account Connection Boilerplate</h3>
+
+<p>As stated in the previous post, to upload to blob storage, you first need to create a client instance.
+To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createContainerIfNotExists</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t create container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s created&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s already exists&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// Your code goes here</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
+
+<h3>Checking if a Blob Exists</h3>
+
+<p>In some cases, you don&rsquo;t need a blob&rsquo;s contents, you just need to know if it exists.
+You can do this with the <code>getBlobProperties</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-nonexistent-blob&#39;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobProperties</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">properties</span><span class="p">,</span> <span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// Blob exists</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// Blob doesn&#39;t exist</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Downloading a Blob As Text</h3>
+
+<p>To download a blob as a text string, use the <code>getBlobToText</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-text-blob&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobToText</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blobContent</span><span class="p">,</span> <span class="nx">blob</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t download blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Sucessfully downloaded blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">blobContent</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Downloading a Blob to a File</h3>
+
+<p>To download a blob to a file, use the <code>getBlobToFile</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="s1">&#39;hello-world.txt&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-file-blob&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobToFile</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">fileName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blob</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t download blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Sucessfully downloaded blob %s to %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">fileName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileContents</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t read file %s&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
+</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileContents</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Downloading a Blob to a Stream</h3>
+
+<p>To download a blob to a stream, use the <code>getBlobToStream</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// For simplicity, assume getSomeStream returns a writable stream</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myStream</span> <span class="o">=</span> <span class="nx">getSomeStream</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-stream-blob&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobToStream</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">myStream</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blob</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t download blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Sucessfully downloaded blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also integrate this with a web server to enable downloads from blob storage.
+This is powerfull when combined with <code>getBlobProperties</code> method is helpful for this.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/download/:file&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">file</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobProperties</span><span class="p">(</span>
+</span><span class='line'>        <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">fileName</span><span class="p">,</span>
+</span><span class='line'>        <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">properties</span><span class="p">,</span> <span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">502</span><span class="p">,</span> <span class="s2">&quot;Error fetching file: %s&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">status</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;The file %s does not exist&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="nx">properties</span><span class="p">.</span><span class="nx">contentType</span><span class="p">);</span>
+</span><span class='line'>                <span class="nx">blobService</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Conclusion</h3>
+
+<p>In this post we covered how to check whether a blob exists, and how to download the blob.
+In the next post, we&rsquo;ll cover how to list containers and blobs.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Creating Blobs]]></title>
@@ -24,7 +293,7 @@
 <li><a href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
 <li><a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><strong>Creating Blobs</strong></li>
-<li>Downloading Blobs</li>
+<li><a href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
 <li>All Together</li>
@@ -329,7 +598,7 @@ Also,<code>createBlockBlobFromText</code> automatically sets the content type to
 <h3>Conclusion</h3>
 
 <p>In this post we&rsquo;ve covered the many ways to create Azure blobs in Node.
-Next time we&rsquo;ll talk about downloading blobs.</p>
+Next time we&rsquo;ll talk about <a href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">downloading blobs</a>.</p>
 ]]></content>
   </entry>
   
@@ -344,7 +613,7 @@ Next time we&rsquo;ll talk about downloading blobs.</p>
 <li><a href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
 <li><strong>First Steps</strong></li>
 <li><a href="http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li>Downloading Blobs</li>
+<li><a href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
 <li>All Together</li>
@@ -496,7 +765,7 @@ In the next post, we&rsquo;ll talk about <a href="http://willi.am/blog/2014/07/0
 <li><strong>Introduction</strong></li>
 <li><a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><a href="http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li>Downloading Blobs</li>
+<li><a href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li>Listing Blobs</li>
 <li>Blob Metadata</li>
 <li>All Together</li>
@@ -1564,108 +1833,6 @@ for handling a package that may or may not be installed. In short, you use a try
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Pass Dynamic Flags to NuGet With PowerShell Splatting]]></title>
-    <link href="http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/"/>
-    <updated>2014-02-07T09:24:32-08:00</updated>
-    <id>http://willi.am/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting</id>
-    <content type="html"><![CDATA[<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
-</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
-</span><span class='line'><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
-</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="err">@</span><span class="p">{</span><span class="n">Properties</span><span class="p">=</span><span class="s2">&quot;Configuration=$configuration&quot;</span><span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Build</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Symbols</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
-</span><span class='line'>    <span class="n">popd</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
-HashSet of arguments, and throw an error like the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>nuget : Unknown option: &#39;-Build:True&#39;
-</span><span class='line'>At line:1 char:38
-</span><span class='line'>+ nuget pack $project $nugetArgs
-</span><span class='line'>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-</span><span class='line'>    + CategoryInfo          : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException
-</span><span class='line'>    + FullyQualifiedErrorId : NativeCommandError
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Digging into the <a href="http://nuget.codeplex.com/SourceControl/latest#src/CommandLine/CommandLineParser.cs">source code</a>,
-I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
-(If I&rsquo;m wrong, leave a comment!)</p>
-
-<p>Fortunately, there&rsquo;s a <em>fairly</em> reasonable workaround: Pass an array of arguments rather than a HashSet:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
-</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
-</span><span class='line'><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
-</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="s2">&quot;-Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;Configuration=$configuration&quot;</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Build&quot;</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Symbols&quot;</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
-</span><span class='line'>    <span class="n">popd</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
-This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective.</p>
 ]]></content>
   </entry>
   
