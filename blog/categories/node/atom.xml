@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-03T10:31:13-07:00</updated>
+  <updated>2014-07-07T01:11:47-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,214 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: Listing Blobs]]></title>
+    <link href="http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/"/>
+    <updated>2014-07-07T17:33:03-07:00</updated>
+    <id>http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
+<li><strong>Listing Blobs</strong></li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Listing Containers and Blobs in Storage</h2>
+
+<p><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Last time</a> we talked about downloading blobs from storage.
+This time we&rsquo;ll cover listing your existing containers and blobs.</p>
+
+<h3>Listing Containers in an Account</h3>
+
+<p>Listing the containers in a storage account is easy with the <code>listContainerSegmented</code> method.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+blobService.listContainersSegmented(null, function(err, result) {</p>
+
+<pre><code>if (err) {
+    console.log("Couldn't list containers");
+    console.error(err);
+} else {
+    console.log('Successfully listed containers');
+    console.log(result.entries);
+    console.log(result.continuationToken);
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>If you have enough containers, not all of them will be returned in one call.
+If <code>result.continuationToken</code> is not null, there are more entries.
+You can get the next segment of entries by calling listContainersSegmented again with <code>result.continuationToken</code> as the first result.</p>
+
+<p>If you want to aggregate all containers, you can use the following code.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();</p>
+
+<p>var containers = [];
+function aggregateContainers(err, result, cb) {</p>
+
+<pre><code>if (err) {
+    cb(er);
+} else {
+    containers = containers.concat(result.entries);
+    if (result.continuationToken !== null) {
+        blobService
+            .listContainersSegmented(result.continuationToken, aggregateContainers);
+    } else {
+        cb(null, containers);
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>blobService.listContainersSegmented(null, function(err, result) {</p>
+
+<pre><code>aggregateContainers(err, result, function(err, containers) {
+    if (err) {
+        console.log("Couldn't list containers");
+        console.error(err);
+    } else {
+        console.log(containers);
+    }
+});
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Listing Blobs in a Container</h3>
+
+<p>You can list blobs in a container with the <code>listBlobsSegmented</code> method.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var containerName = &lsquo;your-container-name&rsquo;;
+blobService.listBlobsSegmented(containerName, null, function(err, result) {</p>
+
+<pre><code>if (err) {
+    console.log("Couldn't list blobs for container %s", containerName);
+    console.error(err);
+} else {
+    console.log('Successfully listed blobs for container %s', containerName);
+    console.log(result.entries);
+    console.log(result.continuationToken);
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>As with containers, you can use the continuationToken to aggregate results.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var containerName = &lsquo;your-container-name&rsquo;;</p>
+
+<p>var blobs = [];
+function aggregateBlobs(err, result, cb) {</p>
+
+<pre><code>if (err) {
+    cb(er);
+} else {
+    blobs = blobs.concat(result.entries);
+    if (result.continuationToken !== null) {
+        blobService.listBlobsSegmented(
+            containerName,
+            result.continuationToken,
+            aggregateBlobs);
+    } else {
+        cb(null, blobs);
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>blobService.listBlobsSegmented(containerName, null, function(err, result) {</p>
+
+<pre><code>aggregateBlobs(err, result, function(err, blobs) {
+    if (err) {
+        console.log("Couldn't list blobs");
+        console.error(err);
+    } else {
+        console.log(blobs);
+    }
+});
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Listing Blobs and Containers by Prefix</h3>
+
+<p>If you want to &ldquo;query&rdquo; blobs and containers by a prefix, you can do so with the <code>listContainersSegmentedWithPrefix</code> and <code>listBlobsSegmentedWithPrefix</code> methods.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var prefix = &lsquo;images-&rsquo;;
+blobService.listContainersSegmentedWithPrefix(</p>
+
+<pre><code>prefix,
+null,
+function(err, result) {
+    if (err) {
+        console.log("Couldn't list containers");
+        console.error(err);
+    } else {
+        console.log("Found containers with prefix %s", prefix);
+        console.log(result.entries);
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var containerName = &lsquo;your-container-name&rsquo;;
+var prefix = &lsquo;image-&rsquo;;
+blobService.listBlobsSegmentedWithPrefix(</p>
+
+<pre><code>containerName,
+prefix,
+null,
+function(err, result) {
+    if (err) {
+        console.log("Couldn't list blobs");
+        console.error(err);
+    } else {
+        console.log("Found blobs with prefix %s", prefix);
+        console.log(result.entries);
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>Conclusion</h3>
+
+<p>In this post we covered listing blobs and containers in your storage account.
+In the next post, we&rsquo;ll cover blob metadata.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
@@ -25,7 +233,7 @@
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><strong>Downloading Blobs</strong></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -38,7 +246,7 @@ This time we&rsquo;ll turn things around and talk about downloading Azure blobs.
 
 <h3>Account Connection Boilerplate</h3>
 
-<p>As stated in the previous post, to upload to blob storage, you first need to create a client instance.
+<p>As stated in the previous post, to work with blob storage, you first need to create a client instance.
 To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
 
 <p>```javascript
@@ -201,7 +409,7 @@ blobService.getBlobProperties(
 <h3>Conclusion</h3>
 
 <p>In this post we covered how to check whether a blob exists, and how to download the blob.
-In the next post, we&rsquo;ll cover how to list containers and blobs.</p>
+In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">how to list containers and blobs</a>.</p>
 ]]></content>
   </entry>
   
@@ -217,7 +425,7 @@ In the next post, we&rsquo;ll cover how to list containers and blobs.</p>
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><strong>Creating Blobs</strong></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -450,7 +658,7 @@ Next time we&rsquo;ll talk about <a href="/blog/2014/07/03/azure-blob-storage-an
 <li><strong>First Steps</strong></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -589,7 +797,7 @@ In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-st
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -623,146 +831,6 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 <p><img src="/images/post-images/placebacon-architecture.jpg"></p>
 
 <p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Thoughts On Implementing a REST Level 3 API in Node]]></title>
-    <link href="http://willi.am/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node/"/>
-    <updated>2014-06-27T20:25:43-07:00</updated>
-    <id>http://willi.am/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node</id>
-    <content type="html"><![CDATA[<p><strong>Warning: stream of consciousness ahead</strong></p>
-
-<p>I&rsquo;ve been thinking about the the pieces that would be needed to implement a REST Level 3 API in Node.
-I won&rsquo;t go into the details of REST Level 3 in this post, but the one of the most important concepts is that clients to the API don&rsquo;t manually build URIs for their API calls, but instead receive them as hypermedia metadata from other calls to your API.</p>
-
-<p>Node has some great frameworks for building web servers.
-I frequently use <a href="http://expressjs.com/">Express</a>, which is built on top of the <a href="http://www.senchalabs.org/connect/">Connect</a> middleware package.
-Unfortunately, Express doesn&rsquo;t make it easy to add hypermedia links to API responses in a DRY way.</p>
-
-<p>Another option is <a href="http://mcavage.me/node-restify/">node-restify</a>.
-This is a popular choice for building REST APIs in Node, but again, it falls down when it comes to Hypermedia.
-Here at least you can link to different API endpoints without hardcoding URLs, but there&rsquo;s still no unified way to automatically add hypermedia links to responses.</p>
-
-<p>I&rsquo;ve tried other frameworks as well.
-<a href="http://hapijs.com/">Hapi</a> comes closest, but still doesn&rsquo;t quite solve my problems with hypermedia.</p>
-
-<p>Perhaps I&rsquo;m spoiled by the relatively elegant solutions that can be accomplished in strictly typed languages.
-In C#, for example, you can keep a registry of hypermedia providers associated with different types.
-When a response of a specific type is returned by a controller, the assocated hypermedia provider is invoked, and it returns a dictionary of URIs for that type.
-The controller doesn&rsquo;t even have to be aware of the hypermedia provider.</p>
-
-<p>In JavaScript, it&rsquo;s a little harder to associate types with providers, since most responses are just anonymous objects.
-I do have some alternative ideas, though.
-The first that comes to mind is to associate with URLs.
-Most importantly, being able to say &ldquo;this route, and any route below it uses the same provider&rdquo;.
-For example, consider the following routes.</p>
-
-<p><code>
-GET  /users
-POST /users
-GET  /users/1
-GET  /users/1/edit
-GET  /users/1/delete
-</code></p>
-
-<p>All of those URLs could probably use an identical (or almost identical) link provider.
-Something like the following would be useful:</p>
-
-<p>```javascript
-app.hypermedia(&lsquo;/users*&rsquo;, function(route, user) {</p>
-
-<pre><code>if ( user ) {
-    return {
-        "self": "/users/" + user.id,
-        "edit": "/users/" + user.id + "/edit",
-        "delete": "/users/" + user.id + "/delete",
-    };
-} else {
-    return {
-        "find-all": "/users",
-        "create": "/users",
-    };
-}
-</code></pre>
-
-<p>});
-```</p>
-
-<p>I&rsquo;m not really tied to that syntax, nor is this an awesome example.
-The main idea is, I want to abstract hypermedia so controllers don&rsquo;t have to worry about it.</p>
-
-<p>The other part of this is that controllers need to send their response back through a middleware, rather than directly to the client.
-In my mind, this means the best solution is to return the object.
-Since Node is async, simply returning the object probably isn&rsquo;t an option in most cases.
-This means the next best choice would be to return a promise from the controller.
-The middleware then waits for the promise to resolve, and then handles the result.
-Finally, the controller should still be able to send a response directly to the client through the res.send() function.
-In that case, no hypermedia links would be provided.</p>
-
-<p>If the controller needs to make an async call, but that call doesn&rsquo;t automatically provide a promise, a nice simplification would be to provide a function on the response object that does the same thing.
-For example:</p>
-
-<p>```javascript
-app.get(&lsquo;/user/:id&rsquo;, function(req, res) {</p>
-
-<pre><code>db.getUser(req.params.id, function(err, user) {
-    res.respond(user); // res.respond could invoke hypermedia providers before response 
-});
-</code></pre>
-
-<p>});
-```</p>
-
-<p>Of course you can usually use Q&rsquo;s &ldquo;denodify&rdquo; utilities, but the point here is a little flexibility. Here&rsquo;s how a Q promise might be returned. The framework would &ldquo;then&rdquo; the promise and essentially forward the result to <code>req.respond()</code>.</p>
-
-<p>```javascript
-app.get(&lsquo;/user/:id&rsquo;, function(req, res) {</p>
-
-<pre><code>return Q.nfinvoke(db, "getUser", req.params.id);
-</code></pre>
-
-<p>});
-```</p>
-
-<p>If you want to do something with the promise result, you still can with promises.</p>
-
-<p>```javascript
-app.get(&lsquo;/user/:id&rsquo;, function(req, res) {</p>
-
-<pre><code>return Q.nfinvoke(db, "getUser", req.params.id)
-    .then(function(user) {
-        if (!user) {
-            var err = new Error('User not found');
-            err.status = 404;
-            throw err;
-        } else {
-            return user;
-        }
-    });
-</code></pre>
-
-<p>});
-```</p>
-
-<p>The other great thing to note here is that we don&rsquo;t have to call <code>next(err)</code> to pass this exception to our error handler. We can throw it, and let the framework <code>.catch()</code> the exception from the promise we return.</p>
-
-<p>The basic idea for an implementation of this is that the routing framework calls your endpoint handler, and expects it to do one of three things:</p>
-
-<ol>
-<li>Return a promise, or value (buffer, stream, string, javascript object)</li>
-<li>Call <code>next()</code> to pass controll to the next handler</li>
-<li>Call <code>res.send()</code>, <code>res.write()</code>, or <code>res.end()</code> like you would in Express</li>
-</ol>
-
-
-<p>In the first case, the framework can allow hypermedia providers, and theoretically anything, to modify the response &ldquo;on the way out the door&rdquo;.
-This would be my main objective in implementing something like this.</p>
-
-<p>I may take a stab at a prototype, but I realize that at this point, any Node web framework probably needs a name that starts with &ldquo;Yet Another&rdquo;.
-Mostly, I&rsquo;m curious how well it would work for &ldquo;real&rdquo; api development.</p>
-
-<p>Thoughts? Does something like this already exist? Hit me up on <a href="https://twitter.com/itsananderson/">my Twitter account</a>.</p>
 ]]></content>
   </entry>
   

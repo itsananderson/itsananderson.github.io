@@ -7,8 +7,9 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Something cool that Scott Hanselman talked about in his blog post on vNext
-was the ability to save a C# file in Visual Studio and view the change in &hellip;">
+	<meta name="description" content="If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this: 1
+2
+$ git commit -m &quot &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,6 +81,118 @@ was the ability to save a C# file in Visual Studio and view the change in &helli
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/05/22/escaping-exclamation-marks-in-bash/">
+		
+			Escaping Exclamation Marks in Bash</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;It works!&quot;</span>
+</span><span class='line'>-bash: !<span class="err">&quot;</span>: event not found
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When Bash encounters an exclamation mark under certain conditions, it tries to expand the expression to the last matching command in your history.
+For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;Hello, World&quot;</span>
+</span><span class='line'>Hello, World
+</span><span class='line'><span class="nv">$ </span>ls
+</span><span class='line'>bin  foo.sh
+</span><span class='line'><span class="nv">$ </span>!e
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Hello, World&quot;</span>
+</span><span class='line'>Hello, World
+</span><span class='line'><span class="nv">$ </span>!l
+</span><span class='line'>ls
+</span><span class='line'>bin  foo.sh
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice that the second command <code>!e</code> was expanded to the previous <code>echo "Hello, World"</code> statement, and <code>!l</code> is expanded to the previous <code>ls</code> statement.
+This is cool, but can also be annoying if that&rsquo;s not what you want.
+Fortunately there&rsquo;s a workaround.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># If you don&#39;t need variable substitution, use single quotes</span>
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s1">&#39;It works!&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># If you need variable substitution, keep exclamation outside the quotes</span>
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks $name&quot;</span><span class="se">\!</span>
+</span><span class='line'><span class="c"># Or escape with single quotes</span>
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks $name&quot;</span><span class="s1">&#39;!&#39;</span>
+</span><span class='line'><span class="c"># Also works in the middle of the line</span>
+</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks&quot;</span><span class="se">\!</span><span class="s2">&quot; $name&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As far as I can tell, these solutions work in both Linux, and Git Bash in Windows.</p>
+
+<p>You can also work around this by leaving of the <code>-m</code> and editing your commit message in vim like a real developer
+<img src="/images/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" /></p>
+
+<p>A couple pages I found helpful when figuring this out:</p>
+
+<ul>
+<li><a href="http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark">http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark</a></li>
+<li><a href="http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html">http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html</a></li>
+</ul>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-22T18:25:22-07:00" pubdate data-updated="true">May 22<span>nd</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/bash/'>Bash</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -891,82 +1004,6 @@ Hopefully after reading this post, you&rsquo;ll feel the same way!</p>
 
 
 	<a class='category' href='/blog/categories/blogging/'>Blogging</a>, <a class='category' href='/blog/categories/octopress/'>Octopress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/03/29/testing-whether-an-npm-module-is-installed/">
-		
-			Testing Whether an NPM Module Is Installed</a>
-	</h2>
-	<div class="entry-content">
-		<p>Node doesn&rsquo;t have a well documented way of checking whether a module is available.
-This is usually fine. You just include a package.json in your project, and expect people to run <code>npm install</code>.
-This is how most popular Node frameworks work.</p>
-
-<p>But what if you have a devDependency entry that you want to include only if it is installed?
-I searched for an answer and didn&rsquo;t find anything conclusive, so I&rsquo;m documenting what I <em>did</em> find in case I forget later.</p>
-
-<p>Buried in NPM&rsquo;s package.json documentation is <a href="https://www.npmjs.org/doc/json.html#optionalDependencies">an example</a>
-for handling a package that may or may not be installed. In short, you use a try/catch. Here&rsquo;s an example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">program</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">program</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;commander&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">er</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Any code to run if this module doesn&#39;t exist</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">program</span><span class="p">.</span><span class="nx">version</span><span class="p">(</span><span class="s1">&#39;0.0.1&#39;</span><span class="p">)</span> <span class="p">.</span><span class="nx">option</span><span class="p">(</span><span class="s1">&#39;-n, --name[name]&#39;</span><span class="p">,</span> <span class="s1">&#39;Your name&#39;</span><span class="p">)</span>
-</span><span class='line'>         <span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-29T10:12:23-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node/'>Node</a>
 
 
 </div>

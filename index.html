@@ -89,6 +89,340 @@ Blob &hellip;">
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">
+		
+			Azure Blob Storage and Node: Listing Blobs</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
+<li><strong>Listing Blobs</strong></li>
+<li>Blob Metadata</li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Listing Containers and Blobs in Storage</h2>
+
+<p><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Last time</a> we talked about downloading blobs from storage.
+This time we&rsquo;ll cover listing your existing containers and blobs.</p>
+
+<h3>Listing Containers in an Account</h3>
+
+<p>Listing the containers in a storage account is easy with the <code>listContainerSegmented</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listContainersSegmented</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list containers&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Successfully listed containers&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you have enough containers, not all of them will be returned in one call.
+If <code>result.continuationToken</code> is not null, there are more entries.
+You can get the next segment of entries by calling listContainersSegmented again with <code>result.continuationToken</code> as the first result.</p>
+
+<p>If you want to aggregate all containers, you can use the following code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containers</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">aggregateContainers</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">er</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">containers</span> <span class="o">=</span> <span class="nx">containers</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">blobService</span>
+</span><span class='line'>                <span class="p">.</span><span class="nx">listContainersSegmented</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">,</span> <span class="nx">aggregateContainers</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">containers</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listContainersSegmented</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">aggregateContainers</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">containers</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list containers&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">containers</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Listing Blobs in a Container</h3>
+
+<p>You can list blobs in a container with the <code>listBlobsSegmented</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmented</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list blobs for container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Successfully listed blobs for container %s&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As with containers, you can use the continuationToken to aggregate results.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobs</span> <span class="o">=</span> <span class="p">[];</span>
+</span><span class='line'><span class="kd">function</span> <span class="nx">aggregateBlobs</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">er</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">blobs</span> <span class="o">=</span> <span class="nx">blobs</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmented</span><span class="p">(</span>
+</span><span class='line'>                <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>                <span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">,</span>
+</span><span class='line'>                <span class="nx">aggregateBlobs</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">blobs</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmented</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">aggregateBlobs</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blobs</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list blobs&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">blobs</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Listing Blobs and Containers by Prefix</h3>
+
+<p>If you want to &ldquo;query&rdquo; blobs and containers by a prefix, you can do so with the <code>listContainersSegmentedWithPrefix</code> and <code>listBlobsSegmentedWithPrefix</code> methods.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;images-&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listContainersSegmentedWithPrefix</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">prefix</span><span class="p">,</span>
+</span><span class='line'>    <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list containers&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Found containers with prefix %s&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;image-&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmentedWithPrefix</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">prefix</span><span class="p">,</span>
+</span><span class='line'>    <span class="kc">null</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list blobs&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Found blobs with prefix %s&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Conclusion</h3>
+
+<p>In this post we covered listing blobs and containers in your storage account.
+In the next post, we&rsquo;ll cover blob metadata.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-07T17:33:03-07:00" pubdate data-updated="true">Jul 7<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">
 		
 			Azure Blob Storage and Node: Downloading Blobs</a>
@@ -101,7 +435,7 @@ Blob &hellip;">
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><strong>Downloading Blobs</strong></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -114,7 +448,7 @@ This time we&rsquo;ll turn things around and talk about downloading Azure blobs.
 
 <h3>Account Connection Boilerplate</h3>
 
-<p>As stated in the previous post, to upload to blob storage, you first need to create a client instance.
+<p>As stated in the previous post, to work with blob storage, you first need to create a client instance.
 To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -356,7 +690,7 @@ This is powerfull when combined with the <code>getBlobProperties</code> method.<
 <h3>Conclusion</h3>
 
 <p>In this post we covered how to check whether a blob exists, and how to download the blob.
-In the next post, we&rsquo;ll cover how to list containers and blobs.</p>
+In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">how to list containers and blobs</a>.</p>
 
 		
 		
@@ -404,7 +738,7 @@ In the next post, we&rsquo;ll cover how to list containers and blobs.</p>
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><strong>Creating Blobs</strong></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -756,7 +1090,7 @@ Next time we&rsquo;ll talk about <a href="/blog/2014/07/03/azure-blob-storage-an
 <li><strong>First Steps</strong></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -940,7 +1274,7 @@ In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-st
 <li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li>Listing Blobs</li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li>Blob Metadata</li>
 <li>All Together</li>
 </ol>
@@ -1538,118 +1872,6 @@ this is the way to finish a stream if you don&rsquo;t care about consuming its d
 
 
 	<a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/05/22/escaping-exclamation-marks-in-bash/">
-		
-			Escaping Exclamation Marks in Bash</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;It works!&quot;</span>
-</span><span class='line'>-bash: !<span class="err">&quot;</span>: event not found
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When Bash encounters an exclamation mark under certain conditions, it tries to expand the expression to the last matching command in your history.
-For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;Hello, World&quot;</span>
-</span><span class='line'>Hello, World
-</span><span class='line'><span class="nv">$ </span>ls
-</span><span class='line'>bin  foo.sh
-</span><span class='line'><span class="nv">$ </span>!e
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Hello, World&quot;</span>
-</span><span class='line'>Hello, World
-</span><span class='line'><span class="nv">$ </span>!l
-</span><span class='line'>ls
-</span><span class='line'>bin  foo.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice that the second command <code>!e</code> was expanded to the previous <code>echo "Hello, World"</code> statement, and <code>!l</code> is expanded to the previous <code>ls</code> statement.
-This is cool, but can also be annoying if that&rsquo;s not what you want.
-Fortunately there&rsquo;s a workaround.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># If you don&#39;t need variable substitution, use single quotes</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s1">&#39;It works!&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># If you need variable substitution, keep exclamation outside the quotes</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks $name&quot;</span><span class="se">\!</span>
-</span><span class='line'><span class="c"># Or escape with single quotes</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks $name&quot;</span><span class="s1">&#39;!&#39;</span>
-</span><span class='line'><span class="c"># Also works in the middle of the line</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks&quot;</span><span class="se">\!</span><span class="s2">&quot; $name&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As far as I can tell, these solutions work in both Linux, and Git Bash in Windows.</p>
-
-<p>You can also work around this by leaving of the <code>-m</code> and editing your commit message in vim like a real developer
-<img src="/images/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" /></p>
-
-<p>A couple pages I found helpful when figuring this out:</p>
-
-<ul>
-<li><a href="http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark">http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark</a></li>
-<li><a href="http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html">http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html</a></li>
-</ul>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-22T18:25:22-07:00" pubdate data-updated="true">May 22<span>nd</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/bash/'>Bash</a>
 
 
 </div>
