@@ -19,7 +19,7 @@ Without commit history, the only way to get back the previous version is to rely
 This causes problems when you have a mix of changes that you want to keep and changes that you want to undo.
 Frequent, small commits can make it easier to jump pack to specific points.
 
-{% img center /images/post-images/commit-for-ants.jpg %}
+{% img center //itsananderson.blob.core.windows.net/post-images/commit-for-ants.jpg %}
 
 Creating Good Commits
 ---------------------
@@ -100,7 +100,7 @@ Just run `git reset HEAD <file>`.
 Using these techniques, you can create concise, cohesive, good looking commits.
 Your future self will thank you.
 
-{% img center /images/post-images/good-looking-commits.jpg %}
+{% img center //itsananderson.blob.core.windows.net/post-images/good-looking-commits.jpg %}
 
 Learning to Do Other Stuff Good Too
 -----------------------------------

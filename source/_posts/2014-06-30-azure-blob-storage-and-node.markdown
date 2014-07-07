@@ -42,6 +42,6 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 
 This (literal) back-of-an-envolope drawing illustrates the layout.
 
-{% img /images/post-images/placebacon-architecture.jpg %}
+{% img //itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg %}
 
 With the architecture design out of the way, next time I'll cover the [steps for getting started with Azure Blob Storage](/blog/2014/07/01/azure-blob-storage-and-node-first-steps/).

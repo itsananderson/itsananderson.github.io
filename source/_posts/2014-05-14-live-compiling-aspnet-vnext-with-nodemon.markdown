@@ -26,6 +26,6 @@ Replace "web" with "run" or whatever startup command is configured for your proj
 
 Note that if you're running in Git Bash on Windows (which I currently can't get working) or on a Linux/OSX machine, the --exec command will probably be either `K web` or `K.sh web`.
 
-![Live re-compiling with nodemon](/images/post-images/nodemon-k.png)
+![Live re-compiling with nodemon](//itsananderson.blob.core.windows.net/post-images/nodemon-k.png)
 
 This functionality is [on the way for ASP.NET vNext](https://github.com/aspnet/Home/issues/22#issuecomment-43148021), but for now this is a handy workaround.

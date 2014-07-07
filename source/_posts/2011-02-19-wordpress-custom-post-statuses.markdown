@@ -10,7 +10,7 @@ WordPress displays post states on post list tables to indicate that a post has a
 
 The following screenshot illustrates some of the default post states.
 
-![Before adding WordPress Custom Post Statuses](/images/post-images/wordpress-post-status-samples.png)
+![Before adding WordPress Custom Post Statuses](//itsananderson.blob.core.windows.net/post-images/wordpress-post-status-samples.png)
 
 Adding a new WordPress Custom Post Status
 ---------
@@ -42,7 +42,7 @@ Result of Adding a WordPress Custom Post Status
 
 Assuming you have code elsewhere that is adding the custom field to posts, you'll see something like this.
 
-![After Adding WordPress Custom Post Statuses](/images/post-images/custom-state-sample.png)
+![After Adding WordPress Custom Post Statuses](//itsananderson.blob.core.windows.net/post-images/custom-state-sample.png)
 
 If you added code to add a custom field called `_some_custom_field` to certain posts, those posts would show up with the 'Custom State' status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field.
 

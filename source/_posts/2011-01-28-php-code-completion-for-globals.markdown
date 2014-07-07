@@ -8,7 +8,7 @@ categories: PHP
 
 Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type "wp_" inside a WordPress project.
 
-![](/images/post-images/netbeans-code-completion.png)
+![](//itsananderson.blob.core.windows.net/post-images/netbeans-code-completion.png)
 
 The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects.
 
@@ -29,7 +29,7 @@ As you can see, the code inside the if statement will never execute, but every I
 
 When you add the snippet, you get PHP code completion suggestions that look something like this:
 
-![](/images/post-images/netbeans-globals-code-completion.png)
+![](//itsananderson.blob.core.windows.net/post-images/netbeans-globals-code-completion.png)
 
 The nice thing about doing this is that if you forget to remove the code snippet, it won't break anything. You'll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It's probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later.
 

@@ -10,7 +10,7 @@ If you're a Vim user like me, you've likely found yourself staring at a view lik
 
 #### "How'd I get here, and how do I get away"
 
-{% img /images/post-images/vim-command-line-history.png %}
+{% img //itsananderson.blob.core.windows.net/post-images/vim-command-line-history.png %}
 
 Don't dispair. You've discovered Vim's command line history. This is the list of commands you've run. They're stored in `~/.viminfo` or `~/_viminfo`, depending on your system configuration
 

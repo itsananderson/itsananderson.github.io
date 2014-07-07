@@ -27,4 +27,4 @@ There's a ton of stuff to be excited about here, but my favorite part is these t
 
 Mind. Blown.
 
-![Mind Blown](/images/post-images/mind-blown.gif)
+![Mind Blown](//itsananderson.blob.core.windows.net/post-images/mind-blown.gif)

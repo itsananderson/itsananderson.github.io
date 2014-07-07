@@ -48,7 +48,7 @@ $ git commit -m "Thanks"\!" $name"
 As far as I can tell, these solutions work in both Linux, and Git Bash in Windows.
 
 You can also work around this by leaving of the `-m` and editing your commit message in vim like a real developer
-<img src="/images/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" />
+<img src="//itsananderson.blob.core.windows.net/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" />
 
 A couple pages I found helpful when figuring this out:
 

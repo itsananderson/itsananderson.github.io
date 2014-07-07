@@ -59,14 +59,14 @@ In our example, we'll use the first two.
 First, in the Azure portal, navigate to your storage account.
 At the bottom of the screen, click "Manage Access Keys".
 
-{%img /images/post-images/azure-account-access-keys.png %}
+{%img //itsananderson.blob.core.windows.net/post-images/azure-account-access-keys.png %}
 
 Copy the primary access key, then navigate to your website's "Configure" tab.
 Under "app settings", add two new settings:
 `AZURE_STORAGE_ACCOUNT` with your storage account name, and `AZURE_STORAGE_ACCESS_KEY` with the access key you just copied.
 
 
-{%img /images/post-images/website-access-key-configuration.png %}
+{%img //itsananderson.blob.core.windows.net/post-images/website-access-key-configuration.png %}
 
 For local dev, you'll also need to set up credentials for your dev storage account (or production if you didn't create a dev account).
 On Linux and Mac, you can set environment variables in your `.bash_profile`.
@@ -89,7 +89,7 @@ You'll have to look for instructions for older versions of Windows, but the idea
 1. Click the "New..." button.
 1. Enter "AZURE_STORAGE_ACCOUNT" for the "Variable name" and your storage account name for the "Variable value"
 
-{% img /images/post-images/storage-account-environment-variable.png %}
+{% img //itsananderson.blob.core.windows.net/post-images/storage-account-environment-variable.png %}
 
 Repeat steps 1 through 5 again for the "AZURE_STORAGE_ACCESS_KEY" variable, then click "OK" to close the "Environment Variables" screen.
 If your console is open, restart it.

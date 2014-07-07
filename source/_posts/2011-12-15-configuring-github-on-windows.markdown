@@ -17,12 +17,12 @@ Once you get to the "Select Components" screen, make sure both Context menu entr
 If you want, select the TrueType font option.
 That one shouldn't really matter.
 
-<img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="/images/post-images/select-components.png" width="539" height="428" />
+<img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="//itsananderson.blob.core.windows.net/post-images/select-components.png" width="539" height="428" />
 
 Jump ahead a few more frames and you'll get to the SSH executable option.
 Choose "OpenSSH", unless you have a compelling reason to use Plink.
 
-<img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="/images/post-images/openssh.png" width="546" height="432" />
+<img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="//itsananderson.blob.core.windows.net/post-images/openssh.png" width="546" height="432" />
 
 Run through the rest of the frames, accepting the defaults.
 You now have Git installed on your machine, but we're not quite done yet.
@@ -43,7 +43,7 @@ You're just about there.
 Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
 Make sure SSH is selected.
 
-<img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="/images/post-images/github-url.png" width="664" height="33" />
+<img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="//itsananderson.blob.core.windows.net/post-images/github-url.png" width="664" height="33" />
 
 Open up Git Bash.
 You should be able to find it in your start menu.
