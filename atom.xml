@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T01:11:47-07:00</updated>
+  <updated>2014-07-07T16:15:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -968,13 +968,13 @@ In our example, we&rsquo;ll use the first two.</p>
 <p>First, in the Azure portal, navigate to your storage account.
 At the bottom of the screen, click &ldquo;Manage Access Keys&rdquo;.</p>
 
-<p><img src="http://willi.am/images/post-images/azure-account-access-keys.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/azure-account-access-keys.png"></p>
 
 <p>Copy the primary access key, then navigate to your website&rsquo;s &ldquo;Configure&rdquo; tab.
 Under &ldquo;app settings&rdquo;, add two new settings:
 <code>AZURE_STORAGE_ACCOUNT</code> with your storage account name, and <code>AZURE_STORAGE_ACCESS_KEY</code> with the access key you just copied.</p>
 
-<p><img src="http://willi.am/images/post-images/website-access-key-configuration.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/website-access-key-configuration.png"></p>
 
 <p>For local dev, you&rsquo;ll also need to set up credentials for your dev storage account (or production if you didn&rsquo;t create a dev account).
 On Linux and Mac, you can set environment variables in your <code>.bash_profile</code>.
@@ -1001,7 +1001,7 @@ You&rsquo;ll have to look for instructions for older versions of Windows, but th
 </ol>
 
 
-<p><img src="http://willi.am/images/post-images/storage-account-environment-variable.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/storage-account-environment-variable.png"></p>
 
 <p>Repeat steps 1 through 5 again for the &ldquo;AZURE_STORAGE_ACCESS_KEY&rdquo; variable, then click &ldquo;OK&rdquo; to close the &ldquo;Environment Variables&rdquo; screen.
 If your console is open, restart it.</p>
@@ -1101,7 +1101,7 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 
 <p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
 
-<p><img src="http://willi.am/images/post-images/placebacon-architecture.jpg"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg"></p>
 
 <p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
 ]]></content>
@@ -1555,7 +1555,7 @@ Fortunately there&rsquo;s a workaround.</p>
 <p>As far as I can tell, these solutions work in both Linux, and Git Bash in Windows.</p>
 
 <p>You can also work around this by leaving of the <code>-m</code> and editing your commit message in vim like a real developer
-<img src="http://willi.am/images/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" /></p>
+<img src="//itsananderson.blob.core.windows.net/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" /></p>
 
 <p>A couple pages I found helpful when figuring this out:</p>
 
@@ -1592,7 +1592,7 @@ Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is 
 
 <p>Note that if you&rsquo;re running in Git Bash on Windows (which I currently can&rsquo;t get working) or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code> or <code>K.sh web</code>.</p>
 
-<p><img src="http://willi.am/images/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
 
 <p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
 ]]></content>
@@ -1624,7 +1624,7 @@ When a new fixed NuGet-distributed version shows up, update the version and dele
 
 <p>Mind. Blown.</p>
 
-<p><img src="http://willi.am/images/post-images/mind-blown.gif" alt="Mind Blown" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/mind-blown.gif" alt="Mind Blown" /></p>
 ]]></content>
   </entry>
   
@@ -1808,7 +1808,7 @@ Without commit history, the only way to get back the previous version is to rely
 This causes problems when you have a mix of changes that you want to keep and changes that you want to undo.
 Frequent, small commits can make it easier to jump pack to specific points.</p>
 
-<p><img class="center" src="http://willi.am/images/post-images/commit-for-ants.jpg"></p>
+<p><img class="center" src="//itsananderson.blob.core.windows.net/post-images/commit-for-ants.jpg"></p>
 
 <h2>Creating Good Commits</h2>
 
@@ -1889,7 +1889,7 @@ Just run <code>git reset HEAD &lt;file&gt;</code>.</p>
 <p>Using these techniques, you can create concise, cohesive, good looking commits.
 Your future self will thank you.</p>
 
-<p><img class="center" src="http://willi.am/images/post-images/good-looking-commits.jpg"></p>
+<p><img class="center" src="//itsananderson.blob.core.windows.net/post-images/good-looking-commits.jpg"></p>
 
 <h2>Learning to Do Other Stuff Good Too</h2>
 
@@ -2045,7 +2045,7 @@ The <em>raw</em> data</p>
 
 <h4>&ldquo;How&rsquo;d I get here, and how do I get away&rdquo;</h4>
 
-<p><img src="http://willi.am/images/post-images/vim-command-line-history.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/vim-command-line-history.png"></p>
 
 <p>Don&rsquo;t dispair. You&rsquo;ve discovered Vim&rsquo;s command line history. This is the list of commands you&rsquo;ve run. They&rsquo;re stored in <code>~/.viminfo</code> or <code>~/_viminfo</code>, depending on your system configuration</p>
 

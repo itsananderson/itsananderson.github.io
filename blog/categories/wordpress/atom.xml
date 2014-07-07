@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WordPress | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/wordpress/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T01:11:47-07:00</updated>
+  <updated>2014-07-07T16:15:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -178,7 +178,7 @@ Add_Brackets::start();
 
 <p>The following screenshot illustrates some of the default post states.</p>
 
-<p><img src="/images/post-images/wordpress-post-status-samples.png" alt="Before adding WordPress Custom Post Statuses" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/wordpress-post-status-samples.png" alt="Before adding WordPress Custom Post Statuses" /></p>
 
 <h2>Adding a new WordPress Custom Post Status</h2>
 
@@ -217,7 +217,7 @@ new My_Custom_Post_State();
 
 <p>Assuming you have code elsewhere that is adding the custom field to posts, you&rsquo;ll see something like this.</p>
 
-<p><img src="/images/post-images/custom-state-sample.png" alt="After Adding WordPress Custom Post Statuses" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/custom-state-sample.png" alt="After Adding WordPress Custom Post Statuses" /></p>
 
 <p>If you added code to add a custom field called <code>_some_custom_field</code> to certain posts, those posts would show up with the &lsquo;Custom State&rsquo; status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field.</p>
 

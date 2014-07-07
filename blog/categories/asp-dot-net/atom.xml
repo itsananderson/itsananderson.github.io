@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ASP.NET | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/asp-dot-net/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T01:11:47-07:00</updated>
+  <updated>2014-07-07T16:15:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -38,7 +38,7 @@ Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is 
 
 <p>Note that if you&rsquo;re running in Git Bash on Windows (which I currently can&rsquo;t get working) or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code> or <code>K.sh web</code>.</p>
 
-<p><img src="/images/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
 
 <p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
 ]]></content>
@@ -70,7 +70,7 @@ When a new fixed NuGet-distributed version shows up, update the version and dele
 
 <p>Mind. Blown.</p>
 
-<p><img src="/images/post-images/mind-blown.gif" alt="Mind Blown" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/mind-blown.gif" alt="Mind Blown" /></p>
 ]]></content>
   </entry>
   

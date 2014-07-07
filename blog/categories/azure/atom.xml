@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T01:11:47-07:00</updated>
+  <updated>2014-07-07T16:15:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -708,13 +708,13 @@ In our example, we&rsquo;ll use the first two.</p>
 <p>First, in the Azure portal, navigate to your storage account.
 At the bottom of the screen, click &ldquo;Manage Access Keys&rdquo;.</p>
 
-<p><img src="/images/post-images/azure-account-access-keys.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/azure-account-access-keys.png"></p>
 
 <p>Copy the primary access key, then navigate to your website&rsquo;s &ldquo;Configure&rdquo; tab.
 Under &ldquo;app settings&rdquo;, add two new settings:
 <code>AZURE_STORAGE_ACCOUNT</code> with your storage account name, and <code>AZURE_STORAGE_ACCESS_KEY</code> with the access key you just copied.</p>
 
-<p><img src="/images/post-images/website-access-key-configuration.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/website-access-key-configuration.png"></p>
 
 <p>For local dev, you&rsquo;ll also need to set up credentials for your dev storage account (or production if you didn&rsquo;t create a dev account).
 On Linux and Mac, you can set environment variables in your <code>.bash_profile</code>.
@@ -740,7 +740,7 @@ You&rsquo;ll have to look for instructions for older versions of Windows, but th
 </ol>
 
 
-<p><img src="/images/post-images/storage-account-environment-variable.png"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/storage-account-environment-variable.png"></p>
 
 <p>Repeat steps 1 through 5 again for the &ldquo;AZURE_STORAGE_ACCESS_KEY&rdquo; variable, then click &ldquo;OK&rdquo; to close the &ldquo;Environment Variables&rdquo; screen.
 If your console is open, restart it.</p>
@@ -828,7 +828,7 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 
 <p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
 
-<p><img src="/images/post-images/placebacon-architecture.jpg"></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg"></p>
 
 <p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
 ]]></content>

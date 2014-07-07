@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T01:11:47-07:00</updated>
+  <updated>2014-07-07T16:15:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -127,7 +127,7 @@ Without commit history, the only way to get back the previous version is to rely
 This causes problems when you have a mix of changes that you want to keep and changes that you want to undo.
 Frequent, small commits can make it easier to jump pack to specific points.</p>
 
-<p><img class="center" src="/images/post-images/commit-for-ants.jpg"></p>
+<p><img class="center" src="//itsananderson.blob.core.windows.net/post-images/commit-for-ants.jpg"></p>
 
 <h2>Creating Good Commits</h2>
 
@@ -208,7 +208,7 @@ Just run <code>git reset HEAD &lt;file&gt;</code>.</p>
 <p>Using these techniques, you can create concise, cohesive, good looking commits.
 Your future self will thank you.</p>
 
-<p><img class="center" src="/images/post-images/good-looking-commits.jpg"></p>
+<p><img class="center" src="//itsananderson.blob.core.windows.net/post-images/good-looking-commits.jpg"></p>
 
 <h2>Learning to Do Other Stuff Good Too</h2>
 

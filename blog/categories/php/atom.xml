@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PHP | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T01:11:47-07:00</updated>
+  <updated>2014-07-07T16:15:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -20,7 +20,7 @@
     <id>http://willi.am/blog/2011/01/28/php-code-completion-for-globals</id>
     <content type="html"><![CDATA[<p>Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project.</p>
 
-<p><img src="/images/post-images/netbeans-code-completion.png" alt="" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/netbeans-code-completion.png" alt="" /></p>
 
 <p>The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects.</p>
 
@@ -43,7 +43,7 @@ if ( false ) {</p>
 
 <p>When you add the snippet, you get PHP code completion suggestions that look something like this:</p>
 
-<p><img src="/images/post-images/netbeans-globals-code-completion.png" alt="" /></p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/netbeans-globals-code-completion.png" alt="" /></p>
 
 <p>The nice thing about doing this is that if you forget to remove the code snippet, it won&rsquo;t break anything. You&rsquo;ll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It&rsquo;s probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later.</p>
 
