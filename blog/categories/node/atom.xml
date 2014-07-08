@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-07T16:15:21-07:00</updated>
+  <updated>2014-07-08T09:28:58-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,244 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: Blob Metadata]]></title>
+    <link href="http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/"/>
+    <updated>2014-07-08T20:47:12-07:00</updated>
+    <id>http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
+<li><strong>Blob Metadata</strong></li>
+<li>All Together</li>
+</ol>
+
+
+<h2>Working With Azure Blob Metadata</h2>
+
+<p>In the <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">previous post</a>, we talked about how to list blobs and containers in your account.
+Today we&rsquo;ll discuss how to work with blob properties and metadata.</p>
+
+<h3>Account Connection Boilerplate</h3>
+
+<p>To work with blob storage, you first need to create a client instance.
+To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
+
+<p>```javascript
+var storage = require(&lsquo;azure-storage&rsquo;);
+var blobService = storage.createBlobService();
+var containerName = &lsquo;your-container-name&rsquo;;
+blobService.createContainerIfNotExists(containerName, function(err, result, response) {</p>
+
+<pre><code>if (err) {
+    console.log("Couldn't create container %s", containerName);
+    console.error(err);
+} else {
+    if (result) {
+        console.log('Container %s created', containerName);
+    } else {
+        console.log('Container %s already exists', containerName);
+    }
+
+    // Your code goes here
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Now for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
+
+<h3>Fetching Blob Properties</h3>
+
+<p>You can fetch the properties for a blob with the <code>getBlobProperties</code> method.</p>
+
+<p>```javascript
+var blobName = &lsquo;my-awesome-blob&rsquo;;
+blobService.getBlobProperties(containerName, blobName, function(err, result, response) {</p>
+
+<pre><code>if (err) {
+    console.error("Couldn't fetch properties for blob %s", blobName);
+    console.error(err);
+} else if (!response.isSuccessful) {
+    console.error("Blob %s wasn't found container %s", blobName, containerName);
+} else {
+    console.log("Successfully fetched properties for blob %s", blobName);
+    console.log(result);
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<p>The blob properties object includes the blob&rsquo;s metadata.
+If you only need the metadata, you can request just that with the next snippet.</p>
+
+<h3>Fetching Blob Metadata</h3>
+
+<p>You can fetch the properties for a blob with the <code>getBlobProperties</code> method.</p>
+
+<p>```javascript
+var blobName = &lsquo;my-awesome-blob&rsquo;;
+blobService.getBlobMetadata(containerName, blobName, function(err, result, response) {</p>
+
+<pre><code>if (err) {
+    console.error("Couldn't fetch metadata for blob %s", blobName);
+    console.error(err);
+} else if (!response.isSuccessful) {
+    console.error("Blob %s wasn't found container %s", blobName, containerName);
+} else {
+    console.log("Successfully fetched metadata for blob %s", blobName);
+    console.log(result.metadata);
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Updating Blob Properties and Metadata</h3>
+
+<p>A blob&rsquo;s properties and metadata can be updated with the <code>setBlobProperties</code> and <code>setBlobMetadata</code> methods.</p>
+
+<p>```javascript
+// Error checking removed for simplicity
+var blobName = &lsquo;my-awesome-blob&rsquo;;
+blobService.getBlobProperties(</p>
+
+<pre><code>containerName,
+blobName,
+function(err, result, response) {
+    var properties = result;
+    properties.contentType = 'image/jpeg';
+    blobService.setBlobProperties(
+        containerName,
+        blobName,
+        properties,
+        function(err, result, response) {
+            console.log('Successfully updated properties for blob %s', blobName);
+        });
+});
+</code></pre>
+
+<p>```</p>
+
+<p>```javascript
+// Error checking removed for simplicity
+var blobName = &lsquo;my-awesome-blob&rsquo;;
+blobService.getBlobMetadata(</p>
+
+<pre><code>containerName,
+blobName,
+function(err, result, response) {
+    var metadata = result.metadata;
+    metadata.hitcount = parseInt(metadata.hitcount || 0) + 1;
+    blobService.setBlobMetadata(
+        containerName,
+        blobName,
+        metadata,
+        function(err, result, response) {
+            console.log('Successfully updated metadata for blob %s', blobName);
+        });
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>Avoiding Race Conditions</h3>
+
+<p>In the previous examples, there&rsquo;s a potential race condition.
+If the blob is updated between the time you fetch the properties/metadata and the time when you update them, the changes will override each other.</p>
+
+<p>You can avoid this problem by using &ldquo;leases&rdquo;.</p>
+
+<p>The idea of a blob lease is that it lets you temporarily &ldquo;lock&rdquo; a blob for modifications.
+Once a lease is acquired for a blob, any modifications must include that lease&rsquo;s Id.</p>
+
+<p>By default, leases don&rsquo;t have a set duration.
+This means they won&rsquo;t expire automatically, and will need to be manually released.</p>
+
+<p>The other alternative is to set a specific lease duration.
+This is a good failsafe.
+If your script throws an error and never releases the lease, it will still eventually expire.</p>
+
+<p>Valid lease durations are between 15 and 60 seconds.
+If you need a longer lease, you can renew the lease before it expires.</p>
+
+<p>```javascript
+// Recursively attempts to acquire a lease
+function acquireLease(containerName, blobName, cb) {</p>
+
+<pre><code>blobService.acquireLease(
+    containerName,
+    blobName,
+    { leaseDuration: 15 },
+    function(err, result) {
+        if (err) {
+            if (err.code === 'LeaseAlreadyPresent') {
+                setTimeout(function() {
+                    acquireLease(containerName, blobName, cb);
+                }, 100);
+            } else {
+                cb(err);
+            }
+        } else {
+            cb(null, result.id);
+        }
+    });
+</code></pre>
+
+<p>}</p>
+
+<p>var blobName = &lsquo;my-awesome-blob&rsquo;;
+acquireLease(containerName, blobName, function(err, leaseId) {</p>
+
+<pre><code>if (err) {
+    console.error("Couldn't acquire lease on blob %s", blobName);
+    console.error(err);
+} else {
+    blobService.getBlobMetadata(
+        containerName,
+        blobName,
+        { leaseId: leaseId },
+        function(err, blob, response) {
+            if (err) {
+                console.error("Couldn't get metadata for blob %s", blobName);
+                console.error(err);
+            } else {
+                var metadata = blob.metadata;
+                metadata.hitcount = parseInt(metadata.hitcount || 0) + 1;
+                blobService.setBlobMetadata(
+                    containerName,
+                    blobName,
+                    metadata,
+                    function(err, blob, response) {
+                        console.log("Blob %s metadata updated", blobName);
+                        blobService.releaseLease(
+                            containerName,
+                            blobName,
+                            leaseId,
+                            function() {});
+                    });
+            }
+        });
+}
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Conclusion</h3>
+
+<p>In this post we covered interacting with blob properties and metadata.
+In the final post in this series, we&rsquo;ll talk about putting everything together to create an blob-backed web service.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Listing Blobs]]></title>
@@ -26,7 +264,7 @@
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li><strong>Listing Blobs</strong></li>
-<li>Blob Metadata</li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
 <li>All Together</li>
 </ol>
 
@@ -217,7 +455,7 @@ function(err, result) {
 <h3>Conclusion</h3>
 
 <p>In this post we covered listing blobs and containers in your storage account.
-In the next post, we&rsquo;ll cover blob metadata.</p>
+In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">blob metadata</a>.</p>
 ]]></content>
   </entry>
   
@@ -234,7 +472,7 @@ In the next post, we&rsquo;ll cover blob metadata.</p>
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><strong>Downloading Blobs</strong></li>
 <li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li>Blob Metadata</li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
 <li>All Together</li>
 </ol>
 
@@ -426,7 +664,7 @@ In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage
 <li><strong>Creating Blobs</strong></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li>Blob Metadata</li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
 <li>All Together</li>
 </ol>
 
@@ -659,7 +897,7 @@ Next time we&rsquo;ll talk about <a href="/blog/2014/07/03/azure-blob-storage-an
 <li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li>Blob Metadata</li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
 <li>All Together</li>
 </ol>
 
@@ -782,55 +1020,6 @@ If it already exists, the library will tell you, but it won&rsquo;t give you an 
 
 <p>We&rsquo;ve looked at how to get set up with Azure blob storage.
 In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">creating blobs</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Azure Blob Storage and Node]]></title>
-    <link href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/"/>
-    <updated>2014-06-30T14:09:17-07:00</updated>
-    <id>http://willi.am/blog/2014/06/30/azure-blob-storage-and-node</id>
-    <content type="html"><![CDATA[<p><strong>This is the introduction to a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><strong>Introduction</strong></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li>Blob Metadata</li>
-<li>All Together</li>
-</ol>
-
-
-<p>Over the weekend I put together a service called <a href="http://placebacon.net">placebacon</a> that serves placeholder bacon images.
-It&rsquo;s certainly not the first placeholder image service, but it&rsquo;s the first one that makes your designs look delicious :)</p>
-
-<p><img class="<a" src="href="http://placebacon.net/800/100?image=9">http://placebacon.net/800/100?image=9</a>"></p>
-
-<p>I decided to build the service on Azure so that it can easily be scaled if anyone actually starts using it.
-Caching generated images with Azure Blob Storage made the most sense.</p>
-
-<p>The Azure team has released an npm package called <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a>, which I used to interact with the Azure Blobs.
-The documentation for the azure-storage package is fairly good, but I still mostly found myself digging into the source code to figure things out.
-I&rsquo;m writing this blog series to make it easier for other Node developers to work with the Node bindings for Azure Blob Storage.</p>
-
-<h2>Placebacon&rsquo;s Service Architecture</h2>
-
-<p>To set a framework for the upcoming discussions about Blob Storage, I&rsquo;m providing a high-level overview of placebacon&rsquo;s architecture.</p>
-
-<p>First, I need a way to resize images in Node.
-After spending several frustrating hours trying to find an image manipulation module that works in Windows, I decided that a Linux VM would be the easiest way to resize images in Node.
-Since I&rsquo;m using the Azure infrastructure, setting up a Linux VM is straightforward, but I also want to take advantage of the simple scaling ability of Azure Websites.</p>
-
-<p>To accomplish this, I decided to have a lightweight Ubuntu VM for resizing images.
-Then I put together an Azure website (in Node, of course) that requests resized images from the service running on Ubuntu, and caches the results in Blob Storage.</p>
-
-<p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg"></p>
-
-<p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
 ]]></content>
   </entry>
   
