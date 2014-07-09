@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-08T09:28:58-07:00</updated>
+  <updated>2014-07-09T02:56:08-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,326 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Azure Blob Storage and Node: All Together]]></title>
+    <link href="http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/"/>
+    <updated>2014-07-09T21:16:08-07:00</updated>
+    <id>http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together</id>
+    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
+<li><strong>All Together</strong></li>
+</ol>
+
+
+<h1>Building a Complete Service Over Azure Blob Storage</h1>
+
+<p>In the last post, we covered <a href="blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">working with blob metadata</a>.
+In this final post, we&rsquo;ll talk about putting all the previous pieces together to create a service that is backed by blob storage.</p>
+
+<p>As a concrete example, we&rsquo;ll implement the image serving portion of <a href="http://placebacon.net/">placebacon</a>.
+To keep things simple, we won&rsquo;t go into the Jade views, just the part that actually serves images.</p>
+
+<h3>Creating an Node Server</h3>
+
+<p>We&rsquo;ll use Express to serve the images.
+We could work with any number of HTTP frameworks in Node, but Express is pretty simple to understand, so that&rsquo;s what we&rsquo;ll use.</p>
+
+<p>First, create a package.json file so we can save our npm dependencies.</p>
+
+<p>```bash
+npm init</p>
+
+<h1>Follow the prompts</h1>
+
+<h1>If in doubt, keep the defaults</h1>
+
+<h1>For &ldquo;entry point&rdquo;, enter &ldquo;server.js&rdquo;</h1>
+
+<p>```</p>
+
+<p>Next install some dependencies.</p>
+
+<p><code>bash
+npm install --save express azure-storage debug
+</code></p>
+
+<p>The &ldquo;express&rdquo; and &ldquo;azure-storage&rdquo; packages should be pretty self-explanatory.
+The &ldquo;debug&rdquo; prints debug output, and can be a selectively turned on and off.
+We&rsquo;ll talk about how to use &ldquo;debug&rdquo; in a bit.</p>
+
+<p>When we initialized the package.json, we set server.js as the entry point.
+Let&rsquo;s create that.
+(Skip ahead if you&rsquo;re familiar with Express)</p>
+
+<p>```javascript
+var debug = require(&lsquo;debug&rsquo;)(&lsquo;placebacon:server&rsquo;),</p>
+
+<pre><code>storage = require('azure-storage'),
+http = require('http'),
+util = require('util'),
+express = require('express'),
+app = express();
+</code></pre>
+
+<p>app.set(&lsquo;port&rsquo;, process.env.PORT || 3000);</p>
+
+<p>// TODO: add server routes</p>
+
+<p>var server = app.listen(app.get(&lsquo;port&rsquo;), function() {</p>
+
+<pre><code>debug('Placebacon server listening on port %d', server.address().port);
+</code></pre>
+
+<p>});
+```</p>
+
+<p>We&rsquo;re requiring the &ldquo;debug&rdquo; package, then calling the function it exports with &lsquo;placebacon:server&rsquo;.
+This tells &ldquo;debug&rdquo; to only print log output if the DEBUG environment variable matches &lsquo;placebacon:server&rsquo;.
+For example:</p>
+
+<p>```bash
+node server.js</p>
+
+<h1>[no output]</h1>
+
+<p>DEBUG=placebacon:server node server.js</p>
+
+<h1>=> Placebacon server listening on port 3000</h1>
+
+<p>DEBUG=placebacon:* node server.js</p>
+
+<h1>=> Placebacon server listening on port 3000</h1>
+
+<p>```</p>
+
+<p>As you can see from the above examples, &ldquo;debug&rdquo; makes it easy to turn debugging statements on and off without modifying your code.</p>
+
+<h3>Defining the Route</h3>
+
+<p>Next let&rsquo;s add a route.
+In the javascript snippet above, replace the &ldquo;TODO&rdquo; line with the following code.</p>
+
+<p>```javascript
+// Matches /100/200 &ndash;> 100x200 image
+// Matches /100     &ndash;> 100x100 image
+app.get(&lsquo;/:width/:height?&rsquo;, function(req, res, next) {</p>
+
+<pre><code>var width = parseInt(req.params.width);
+var height = req.params.height ? parseInt(req.params.height) : width; 
+
+// If width or height isn't a number, go to next route
+if (isNaN(width) || isNaN(height)) {
+    next();
+    return;
+}
+
+var selectedImage = 0; // TODO: choose a random image
+var urlTemplate = 'http://placebacon.net/%d/%d?image=%d';
+var imageUrl = util.format(urlTemplate, width, height, selectedImage);
+
+
+debug('Fetching from %s', imageUrl);
+http.get(imageUrl, function(imageResponse) {
+    if (200 !== imageResponse.statusCode) {
+        debug('Unexpected response: %d - %s',
+              imageResponse.statusCode, imageResponse.statusMessage);
+        res.send(502, imageResponse.statusMessage);
+        return;
+    } else {
+        imageResponse.pipe(res);
+    }
+}).on('error', function(err) {
+    console.error('Error fetching from %s: %j', imageUrl, err);
+    res.send(502, util.format("Error downloading %s: %s",
+        imageUrl,
+        e.message));
+});
+</code></pre>
+
+<p>});
+```</p>
+
+<p>At this point we have a fairly functional non-caching proxy.
+Let&rsquo;s briefly go over the code.</p>
+
+<p>First, the route is defined as <code>/:width/:height?</code>.
+This tells Express that we want to match routes with one or two parts (the question mark makes the second part optional).
+Those two parts will be mapped to <code>req.params.width</code> and <code>req.params.height</code>.
+If the second part is left off, <code>req.params.height</code> will be undefined.</p>
+
+<p>Inside our route handler, we first parse the width and height as integers.
+If the height is missing, it defaults to the value of &ldquo;width&rdquo;.
+This allows users to use /100 as a shortcut for /100/100.</p>
+
+<p>Next we check that width and height are actually integers.
+If they aren&rsquo;t, we call &ldquo;next()&rdquo;, to pass control onto the next route handler.
+In this case, there isn&rsquo;t another handler, so Express will send a 404.</p>
+
+<p>Next we select an image.
+In this sample, it&rsquo;s hardcoded to zero, but normally we&rsquo;ll want to select a random image based on width and height.
+We&rsquo;ll add that later.</p>
+
+<p>Based on the image selection and resolution, we construct a URL to our backend.
+In the sample it points at placebacon.com to make it easy to run the sample, but normally you&rsquo;d point this at whatever service you&rsquo;re using to resize your images.
+You&rsquo;ll also probably want to put the &ldquo;urlTemplate&rdquo; value in a config, but for the sake of code sample simplicity, it&rsquo;s hardcoded</p>
+
+<p>Finally, we make an http request to the image url and pipe the response to our client.
+The rest of the code is just error handling.</p>
+
+<h3>Using Blob Storage</h3>
+
+<p>In the code samples above, we don&rsquo;t actually use blob storage.
+Since blob storage is what this series is all about, let&rsquo;s integrate it as a caching layer.</p>
+
+<p>Resizing and cropping images can be an expensive operation.
+On placebacon, it can take a several seconds.
+Obviously that&rsquo;s not acceptible for every request, so generated images need to be cached to speed up responses.</p>
+
+<p>First, make sure you&rsquo;ve set up your site to connect to to blob storage.
+The &ldquo;<a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a>&rdquo; post in this series has instructions on how to do that.</p>
+
+<p>Next, let&rsquo;s make sure the blob container exists.</p>
+
+<p>At the top of &ldquo;server.js&rdquo;, right below the requires, add the container creation boilerplate we saw in the previous posts.</p>
+
+<p>```javascript
+var blobService = storage.createBlobService();
+var containerName = &lsquo;placeholder-images&rsquo;;
+blobService.createContainerIfNotExists(containerName,</p>
+
+<pre><code>function(err, result, response) {
+    if (err) {
+        console.log("Couldn't create container %s", containerName);
+        console.error(err);
+    } else {
+        if (result) {
+            console.log('Container %s created', containerName);
+        } else {
+            console.log('Container %s already exists', containerName);
+        }
+    }
+});
+</code></pre>
+
+<p>```</p>
+
+<p>Now in the route handler, we can interact with the blob storage container.</p>
+
+<p>```
+// Matches /100/200 &ndash;> 100x200 image
+// Matches /100     &ndash;> 100x100 image
+app.get(&lsquo;/:width/:height?&rsquo;, function(req, res, next) {</p>
+
+<pre><code>var width = parseInt(req.params.width);
+var height = req.params.height ? parseInt(req.params.height) : width; 
+
+// If width or height isn't a number, go to next route
+if (isNaN(width) || isNaN(height)) {
+    next();
+    return;
+}
+
+var selectedImage = 0; // TODO: choose a random image
+
+var blobName = util.format("%d-%d-%s", width, height, selectedImage);
+blobService.getBlobProperties(
+    containerName,
+    blobName,
+    function(err, properties, status) {
+        if (status.isSuccessful) {
+            res.header('Content-Type', 'image/jpeg');
+            blobService.createReadStream(containerName, blobName).pipe(res);
+        } else {
+            // Blob doesn't exist
+            // Fetch it from the service
+            var urlTemplate = 'http://placebacon.net/%d/%d?image=%d';
+            var imageUrl = util.format(
+                urlTemplate,
+                width,
+                height,
+                selectedImage);
+
+            debug('Fetching from %s', imageUrl);
+            http.get(imageUrl, function(imageResponse) {
+                if (200 !== imageResponse.statusCode) {
+                    debug(
+                        'Unexpected response: %d - %s',
+                        imageResponse.statusCode,
+                        imageResponse.statusMessage);
+                    res.send(502, imageResponse.statusMessage);
+                    return;
+                } else {
+
+                    // Create a write  stream
+                    var blob = blobService.createWriteStreamToBlockBlob(
+                        containerName,
+                        blobName,
+                        { contentType: 'image/jpeg' },
+                        function(error, result, response){
+                            if(error){
+                                console.log("Couldn't upload %s", blobName);
+                                console.error(error);
+                            } else {
+                                console.log('Blob %s uploaded', blobName);
+                            }
+                        });
+
+                    imageResponse.pipe(blob);
+
+                    res.header('Content-Type', 'image/jpeg');
+                    imageResponse.pipe(res);
+                }
+            }).on('error', function(err) {
+                console.error('Error fetching from %s: %j', imageUrl, err);
+                res.send(502, util.format("Error downloading %s: %s",
+                    imageUrl,
+                    e.message));
+            });
+        }
+    });
+</code></pre>
+
+<p>});
+```</p>
+
+<h3>Final Polish</h3>
+
+<p>One last improvement we can make is to image selection.
+In the above example, we hardcoded to the &ldquo;0th&rdquo; image, but we really want to select a pseudo-random image.
+The only problem is, we want a specific resolution to always result in the same image, so using Math.random() isn&rsquo;t sufficient.</p>
+
+<p>Using crypto to hash the width/height is a pretty straightforward solution.
+There are probably better ways of getting an evenly distributed selection of images, but this works pretty well.</p>
+
+<p>```
+var crypto = require(&lsquo;crypto&rsquo;);
+var imageCount = 10;</p>
+
+<p>function selectImage(width, height) {</p>
+
+<pre><code>var md5 = crypto.createHash('md5');
+md5.update(width + '-' + height);
+// Digest and take the first handful of characters
+var hash = md5.digest('hex').substring(0, 8);
+return parseInt(hash, 16) % imageCount;
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>Sample Code</h3>
+
+<p>If you want to try the code in this post, you can check out the <a href="https://github.com/itsananderson/azure-blob-storage-node-sample">GitHub project page</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Blob Metadata]]></title>
@@ -27,7 +347,7 @@
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li><strong>Blob Metadata</strong></li>
-<li>All Together</li>
+<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
 </ol>
 
 
@@ -265,7 +585,7 @@ In the final post in this series, we&rsquo;ll talk about putting everything toge
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li><strong>Listing Blobs</strong></li>
 <li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li>All Together</li>
+<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
 </ol>
 
 
@@ -473,7 +793,7 @@ In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage
 <li><strong>Downloading Blobs</strong></li>
 <li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li>All Together</li>
+<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
 </ol>
 
 
@@ -665,7 +985,7 @@ In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage
 <li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
 <li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
 <li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li>All Together</li>
+<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
 </ol>
 
 
@@ -881,145 +1201,6 @@ Also,<code>createBlockBlobFromText</code> automatically sets the content type to
 
 <p>In this post we&rsquo;ve covered the many ways to create Azure blobs in Node.
 Next time we&rsquo;ll talk about <a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">downloading blobs</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Azure Blob Storage and Node: First Steps]]></title>
-    <link href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/"/>
-    <updated>2014-07-01T06:00:03-07:00</updated>
-    <id>http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps</id>
-    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><strong>First Steps</strong></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li>All Together</li>
-</ol>
-
-
-<h2>Getting Started With Azure Blob Storage and Node</h2>
-
-<p>The Azure team has made it really simple to start using Blob Storage in Node.
-The first thing you&rsquo;ll want to do is install the <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a> module into your project.</p>
-
-<p>```bash</p>
-
-<h1>Make sure you have a package.json so npm can save your azure-storage dependency</h1>
-
-<p>npm install &mdash;save azure-storage
-```</p>
-
-<h3>Create Storage Account</h3>
-
-<p>Unless you already have one, you&rsquo;ll need to create an Azure storage account.
-They&rsquo;re pretty simple to create.
-From the <a href="https://manage.windowsazure.com/">Azure portal</a>, click &ldquo;New&rdquo; in the bottom-left.
-Select &ldquo;Data Services&rdquo;, then &ldquo;Storage&rdquo;, then &ldquo;Quick Create&rdquo;.</p>
-
-<p>Enter a unique name for your account.
-Under &ldquo;Location/Affinity Group&rdquo;, choose a location.
-Ideally, you should choose the same location as your web site or web service.
-If in doubt, choose the location nearest to you.</p>
-
-<p>During dev time, you probably won&rsquo;t want to work against production data.
-To avoid this, you can create a second storage account using the steps above.</p>
-
-<h3>Configure Access Keys</h3>
-
-<p>In order for your Node app to connect to your storage account, you&rsquo;ll need to configure it with its access information.
-These instructions assume you&rsquo;ve already <a href="http://azure.microsoft.com/en-us/documentation/articles/cloud-services-nodejs-develop-deploy-express-app/">created an Azure Website</a>.</p>
-
-<p>There are two ways to configure the azure-storage module&rsquo;s access info.
-One way is by constructing an Azure client object with a hardcoded account name and an access key.
-The problem with this approach is that it requires checking your access key in with your code, which you shouldn&rsquo;t do.</p>
-
-<p>The other appraoch is to use environment variables to store your account info.
-The azure-storage module will pick up specific environment variables and use those to connect to your storage account.
-Those environment variables are <code>AZURE_STORAGE_ACCOUNT</code> and <code>AZURE_STORAGE_ACCESS_KEY</code>, or <code>AZURE_STORAGE_CONNECTION_STRING</code>.
-In our example, we&rsquo;ll use the first two.</p>
-
-<p>First, in the Azure portal, navigate to your storage account.
-At the bottom of the screen, click &ldquo;Manage Access Keys&rdquo;.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/azure-account-access-keys.png"></p>
-
-<p>Copy the primary access key, then navigate to your website&rsquo;s &ldquo;Configure&rdquo; tab.
-Under &ldquo;app settings&rdquo;, add two new settings:
-<code>AZURE_STORAGE_ACCOUNT</code> with your storage account name, and <code>AZURE_STORAGE_ACCESS_KEY</code> with the access key you just copied.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/website-access-key-configuration.png"></p>
-
-<p>For local dev, you&rsquo;ll also need to set up credentials for your dev storage account (or production if you didn&rsquo;t create a dev account).
-On Linux and Mac, you can set environment variables in your <code>.bash_profile</code>.
-Instructions for that are outside the scope of this post.</p>
-
-<p>On Linux and Mac you can also set environment variables specifically for an app run.
-This also works on Windows if you&rsquo;re using something like Git Bash.</p>
-
-<p><code>bash
-AZURE_STORAGE_ACCOUNT=mystorage AZURE_STORAGE_ACCESS_KEY=123-my-access-key node app.js
-</code></p>
-
-<p>On windows, the easiest option is to configure environment variables in your machine settings.
-These instructions are for Windows 8.
-You&rsquo;ll have to look for instructions for older versions of Windows, but the idea is pretty much the same.</p>
-
-<ol>
-<li>Open the start screen.</li>
-<li>Type &ldquo;environment&rdquo;.</li>
-<li>Click &ldquo;Edit environment variables for your account&rdquo; should come up.</li>
-<li>Click the &ldquo;New&hellip;&rdquo; button.</li>
-<li>Enter &ldquo;AZURE_STORAGE_ACCOUNT&rdquo; for the &ldquo;Variable name&rdquo; and your storage account name for the &ldquo;Variable value&rdquo;</li>
-</ol>
-
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/storage-account-environment-variable.png"></p>
-
-<p>Repeat steps 1 through 5 again for the &ldquo;AZURE_STORAGE_ACCESS_KEY&rdquo; variable, then click &ldquo;OK&rdquo; to close the &ldquo;Environment Variables&rdquo; screen.
-If your console is open, restart it.</p>
-
-<h3>Write Some Code</h3>
-
-<p>Now that we&rsquo;ve gotten the configuration taken care of, we can write some code.</p>
-
-<p>We&rsquo;ll dive into the code more in the next post, but for now, here&rsquo;s something to get you started.</p>
-
-<p>```javascript
-var storage = require(&lsquo;azure-storage&rsquo;);
-var blobService = storage.createBlobService();
-var containerName = &lsquo;your-container-name&rsquo;;
-blobService.createContainerIfNotExists(containerName, function(err, result, response) {</p>
-
-<pre><code>if (err) {
-    console.log("Couldn't create container %s", containerName);
-    console.error(err);
-} else {
-    if (result) {
-        console.log('Container %s created', containerName);
-    } else {
-        console.log('Container %s already exists', containerName);
-    }
-}
-</code></pre>
-
-<p>});
-```</p>
-
-<p>If you run the above code after configuring your account credentials, it should output &ldquo;Container your-container-name created&rdquo;.
-If you run it again, it should output &ldquo;Container your-container-name already exists&rdquo;.</p>
-
-<p>Azure only creates the container if it doesn&rsquo;t exist.
-If it already exists, the library will tell you, but it won&rsquo;t give you an error.</p>
-
-<h3>Conclusion</h3>
-
-<p>We&rsquo;ve looked at how to get set up with Azure blob storage.
-In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">creating blobs</a>.</p>
 ]]></content>
   </entry>
   
