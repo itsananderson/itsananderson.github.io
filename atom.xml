@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-09T02:56:08-07:00</updated>
+  <updated>2014-07-16T16:38:32-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,162 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Storing Data as Newline Delimited JSON Entries]]></title>
+    <link href="http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries/"/>
+    <updated>2014-07-16T13:48:29-07:00</updated>
+    <id>http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries</id>
+    <content type="html"><![CDATA[<p>You can store data as newline delimited JSON entries.
+Since JSON encodes newline characters, you can use newlines to separate entries.</p>
+
+<p>For more details, read on.</p>
+
+<h2>Exporting Large Data</h2>
+
+<p>In a recent project, I needed to export data, and then import it into another system.
+I decided to go with JSON as the export format, because it was structured data.
+The problem was, the data could be extremely large, so loading it all into memory and generating a single JSON object wasn&rsquo;t an option.</p>
+
+<p>As a first solution to the problem, I considered &ldquo;fake&rdquo; streaming to the file with the following pseudocode:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
+</span><span class='line'>write "["
+</span><span class='line'>foreach entry:
+</span><span class='line'>  if not first entry:
+</span><span class='line'>      write ","
+</span><span class='line'>  write JSON serialized entry
+</span><span class='line'>write "]"
+</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This got the job done, but what about when I import the data?
+Since I wrote the data as one giant JSON array, I&rsquo;d have to load the entire thing to deserialize.
+(In Node, I could use a streaming JSON parser, but this project was in PHP).</p>
+
+<p>This means there&rsquo;s a limit to the amount of data I can import.
+Even on a host where I can control PHP&rsquo;s memory limit, there&rsquo;s still a limitation to how much data can reasonably be loaded into memory.</p>
+
+<h2>Exporting Newline Delimited Data</h2>
+
+<p>I finally realized that I was missing something important.
+JSON serializes newlines as &ldquo;\n&rdquo;, which means actual newlines can be safely used to delimit each JSON entry.
+(Assuming you don&rsquo;t &ldquo;pretty print&rdquo; your JSON).</p>
+
+<p>The new export method is as follows:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
+</span><span class='line'>foreach entry:
+</span><span class='line'>  if not first entry:
+</span><span class='line'>      write newline
+</span><span class='line'>  write JSON serialized entry
+</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Already simpler. Yay.</p>
+
+<h2>Importing Newline Delimited Data</h2>
+
+<p>Now that we&rsquo;ve exported the data, it&rsquo;s time to import it.
+In PHP, this is still a challenge, because there&rsquo;s no elegant solution for streams.
+The closest you can get is the <a href="http://php.net/manual/en/function.stream-get-line.php"><code>stream_get_line</code></a> function.
+The problem with this function is that you have to specify a max length of characters to read.
+If the line is longer than those characters, you have to detect that, and keep searching until you get to the newline.
+There&rsquo;s a <a href="http://php.net/manual/en/function.stream-get-line.php#109339">comment on the manual that outlines the solution</a>.</p>
+
+<p>In pseudocode:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
+</span><span class='line'>while get line from file:
+</span><span class='line'>  import entry
+</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, fairly simple (ignoring caveats with &ldquo;get line from file&rdquo;).
+The great thing about this solution is that we only have to load at most one entry at a time into memory.</p>
+
+<h2>Bonus: Inspecting JSON Data From CLI</h2>
+
+<p>If you want to inspect the data that you&rsquo;ve exported, you can use the handy &ldquo;<a href="http://npmjs.org/package/json">json</a>&rdquo; tool (requires Node).
+Not only does it pretty print, but it allows you to pull out specific data, and supports newline delimited JSON entries with the <code>-g</code> flag.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json
+</span><span class='line'>{"name":"alice"}
+</span><span class='line'>{"name":"bob"}
+</span><span class='line'>{"name":"eve"}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -g
+</span><span class='line'>[
+</span><span class='line'>  {
+</span><span class='line'>    "name": "alice"
+</span><span class='line'>  },
+</span><span class='line'>  {
+</span><span class='line'>    "name": "bob"
+</span><span class='line'>  },
+</span><span class='line'>  {
+</span><span class='line'>    "name": "eve"
+</span><span class='line'>  }
+</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -ga name
+</span><span class='line'>alice
+</span><span class='line'>bob
+</span><span class='line'>eve</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -ga nameLength name -e 'this.nameLength = this.name.length'
+</span><span class='line'>5 alice
+</span><span class='line'>3 bob
+</span><span class='line'>3 eve</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://trentm.com/json/">Full Documentation</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: All Together]]></title>
@@ -2751,90 +2907,6 @@ This allows you to pretend that you never make any mistakes :)</p>
 <p>Making throughful, atomic, thoroughly commented commits takes some practice, but it&rsquo;s totally worth it.</p>
 
 <p>In the next couple weeks, I plan to write some follow-up posts that cover other techniques for managing your commit history.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[A Lesson in Debugging: Verify Your Tools]]></title>
-    <link href="http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/"/>
-    <updated>2014-04-08T08:10:41-07:00</updated>
-    <id>http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools</id>
-    <content type="html"><![CDATA[<p>This is a cautionary tale</p>
-
-<p>Yesterday I wasted a day of dev time.
-Worse than that, I was pairing with <a href="http://www.davidruttka.com/">two</a> of my <a href="http://msarchet.com/">co-workers</a> most of the day, so in the end we wasted about 2.5 days of dev time.</p>
-
-<p>We spent the day debugging an &ldquo;off by one (and sometimes two)&rdquo; error.</p>
-
-<p>David, one of my coworkers, <a href="http://www.davidruttka.com/blog/2014/04/09/principles-of-debugging-a-postmortem/">also blogged this experience</a>.
-It&rsquo;s an entertaining read.
-Check it out.</p>
-
-<h2>The Problem</h2>
-
-<p>The bug seemed simple.
-They always do.
-When you requested something by Id from our API, it returned with almost valid data.
-Except that the Id property in the JSON (a long) was frequently incremented or decremented by 1 or 2.</p>
-
-<p>We originally saw the issue in an Angular app.
-We were suspicious about potential JavaScript numeric issues, so of course we opened up Fiddler to get at the &ldquo;real&rdquo; data</p>
-
-<h2>The Fiddler Inspection</h2>
-
-<p>When we inspected the requests in Fiddler and looked at the JSON viewer, same &ldquo;off by [1-2]&rdquo; issue.
-In our minds, this confirmed that Angular and JavaScript weren&rsquo;t the issue.</p>
-
-<p>After going through the &ldquo;disable stuff until it works&rdquo; process with our API, we were still seeing the same problem.
-The only thing that fixed the issue was having Fiddler request XML instead of JSON. &ldquo;Ahh&rdquo;, we thought, &ldquo;The issue must be with our JSON serializer&rdquo;</p>
-
-<h2>Checking the Serializer</h2>
-
-<p>We spent a few minutes in LINQPad performing serializations with Json.NET, duplicating the problematic object as closely as possible.
-The object serialized without issue, which confirmed in our minds that Json.NET does not, in fact, mangle long values during serialization</p>
-
-<h2>The Reduction</h2>
-
-<p>We decided to build a reduction by creating an empty WebApi project and adding components until we reproduced the issue.
-We added a dummy controller that returns an object identical to the one with the serialization issues.
-We opened the new URL in the browser, and the serialization issues weren&rsquo;t there.
-We should have checked the reduction in Fiddler, but we didn&rsquo;t.</p>
-
-<h2>Patterns Emerge</h2>
-
-<p>Early on in our debugging session, I noticed that even Ids either remained unchanged or incremented/decremented by two.
-Odd Ids, on the other hand, always either incremented or decremented by one.</p>
-
-<p>I initially identified a simplified version of that pattern where even Ids don&rsquo;t change, so when counter-examples emerged, I abandoned the search for a pattern.</p>
-
-<p>As the afternoon wore on, we decided to generate a consecutive sequence of Ids to see if we could identify a pattern.
-What we discovered is that for large Ids, the numbers began &ldquo;snapping&rdquo; to multiples of four.
-Small Ids (like, say, 207) didn&rsquo;t change.</p>
-
-<h2>The Final Puzzle Piece</h2>
-
-<p>While David spun a series of object serializations through LINQPad, I began combining keywords in Bing to see if I could find anyone else with the same issue.</p>
-
-<p>Around the time David realized that LINQPad was spitting out serialized Ids with correct values, I discovered <a href="http://stackoverflow.com/questions/6571339/how-to-correctly-serialize-c-sharp-long-number-using-controllers-json-method-in">this StackOverflow post on &ldquo;correctly&rdquo; serializing longs</a>.
-As the answer explains, JavaScript doesn&rsquo;t have longs.
-All numbers are 64 bit floats.
-We&rsquo;d considered this, but had dismissed it because Fiddler was showing the same issue.</p>
-
-<p>Then it hit me.
-Fiddler is written in JScript, which means it has the same 64 bit float limitations.</p>
-
-<p>By implicitly trusting Fiddler&rsquo;s JSON viewer, we assumed the problem was incorrect data coming from our server.
-When we finally looked at the raw data in Fiddler, we saw that the correct Ids were coming across the wire.
-Fiddler&rsquo;s JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively &ldquo;snapped&rdquo; all Ids to multiples of 4.</p>
-
-<p>The problem wasn&rsquo;t with our API directly.
-The problem was the way JavaScript and JScript handle large numbers.</p>
-
-<h2>Lesson Learned</h2>
-
-<p>When debugging an issue like this, look at the raw data.
-Not some data viewer over the data.
-The <em>raw</em> data</p>
 ]]></content>
   </entry>
   

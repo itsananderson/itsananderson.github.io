@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: JSON | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/json/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-07-16T16:38:32-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Storing Data as Newline Delimited JSON Entries]]></title>
+    <link href="http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries/"/>
+    <updated>2014-07-16T13:48:29-07:00</updated>
+    <id>http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries</id>
+    <content type="html"><![CDATA[<p>You can store data as newline delimited JSON entries.
+Since JSON encodes newline characters, you can use newlines to separate entries.</p>
+
+<p>For more details, read on.</p>
+
+<h2>Exporting Large Data</h2>
+
+<p>In a recent project, I needed to export data, and then import it into another system.
+I decided to go with JSON as the export format, because it was structured data.
+The problem was, the data could be extremely large, so loading it all into memory and generating a single JSON object wasn&rsquo;t an option.</p>
+
+<p>As a first solution to the problem, I considered &ldquo;fake&rdquo; streaming to the file with the following pseudocode:</p>
+
+<p>```
+open the file
+write &ldquo;[&rdquo;
+foreach entry:</p>
+
+<pre><code>if not first entry:
+    write ","
+write JSON serialized entry
+</code></pre>
+
+<p>write &ldquo;]&rdquo;
+close the file
+```</p>
+
+<p>This got the job done, but what about when I import the data?
+Since I wrote the data as one giant JSON array, I&rsquo;d have to load the entire thing to deserialize.
+(In Node, I could use a streaming JSON parser, but this project was in PHP).</p>
+
+<p>This means there&rsquo;s a limit to the amount of data I can import.
+Even on a host where I can control PHP&rsquo;s memory limit, there&rsquo;s still a limitation to how much data can reasonably be loaded into memory.</p>
+
+<h2>Exporting Newline Delimited Data</h2>
+
+<p>I finally realized that I was missing something important.
+JSON serializes newlines as &ldquo;\n&rdquo;, which means actual newlines can be safely used to delimit each JSON entry.
+(Assuming you don&rsquo;t &ldquo;pretty print&rdquo; your JSON).</p>
+
+<p>The new export method is as follows:</p>
+
+<p>```
+open the file
+foreach entry:</p>
+
+<pre><code>if not first entry:
+    write newline
+write JSON serialized entry
+</code></pre>
+
+<p>close the file
+```</p>
+
+<p>Already simpler. Yay.</p>
+
+<h2>Importing Newline Delimited Data</h2>
+
+<p>Now that we&rsquo;ve exported the data, it&rsquo;s time to import it.
+In PHP, this is still a challenge, because there&rsquo;s no elegant solution for streams.
+The closest you can get is the <a href="http://php.net/manual/en/function.stream-get-line.php"><code>stream_get_line</code></a> function.
+The problem with this function is that you have to specify a max length of characters to read.
+If the line is longer than those characters, you have to detect that, and keep searching until you get to the newline.
+There&rsquo;s a <a href="http://php.net/manual/en/function.stream-get-line.php#109339">comment on the manual that outlines the solution</a>.</p>
+
+<p>In pseudocode:</p>
+
+<p>```
+open the file
+while get line from file:</p>
+
+<pre><code>import entry
+</code></pre>
+
+<p>close the file
+```
+Again, fairly simple (ignoring caveats with &ldquo;get line from file&rdquo;).
+The great thing about this solution is that we only have to load at most one entry at a time into memory.</p>
+
+<h2>Bonus: Inspecting JSON Data From CLI</h2>
+
+<p>If you want to inspect the data that you&rsquo;ve exported, you can use the handy &ldquo;<a href="http://npmjs.org/package/json">json</a>&rdquo; tool (requires Node).
+Not only does it pretty print, but it allows you to pull out specific data, and supports newline delimited JSON entries with the <code>-g</code> flag.</p>
+
+<p><code>
+$ cat test.json
+{"name":"alice"}
+{"name":"bob"}
+{"name":"eve"}
+</code>
+```
+$ cat test.json | json -g
+[
+  {</p>
+
+<pre><code>"name": "alice"
+</code></pre>
+
+<p>  },
+  {</p>
+
+<pre><code>"name": "bob"
+</code></pre>
+
+<p>  },
+  {</p>
+
+<pre><code>"name": "eve"
+</code></pre>
+
+<p>  }
+]
+<code>
+</code>
+$ cat test.json | json -ga name
+alice
+bob
+eve
+<code>
+</code>
+$ cat test.json | json -ga nameLength name -e &lsquo;this.nameLength = this.name.length&rsquo;
+5 alice
+3 bob
+3 eve
+```</p>
+
+<p><a href="http://trentm.com/json/">Full Documentation</a></p>
+]]></content>
+  </entry>
+  
+</feed>
