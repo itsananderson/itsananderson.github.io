@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Testing | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/testing/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-07-28T15:10:32-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Test Your API With Supertest]]></title>
+    <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
+    <updated>2014-07-28T14:18:23-07:00</updated>
+    <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
+    <content type="html"><![CDATA[<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
+Despite being new to me, the package has been around for about 2 years.</p>
+
+<h2>Setup</h2>
+
+<p>You can configure supertest in a couple ways.
+If you&rsquo;re testing an external site, you can configure supertest with the site&rsquo;s base url:</p>
+
+<p><code>javascript
+var request = require('supertest')('http://example.com/');
+</code></p>
+
+<p>If you&rsquo;re testing an Express app, you can pass the app to supertest, and let it worry about setup/teardown of your site.</p>
+
+<p><code>javascript
+var myApp = require('../app.js');
+var request = require('supertest')(myApp);
+</code></p>
+
+<p>The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
+This allows you to just write your tests, without worrying about starting apps, comflicting ports, etc.</p>
+
+<h2>Writing a Test</h2>
+
+<p>Once you&rsquo;ve imported supertest, it&rsquo;s quite simple to use.
+In my examples, I&rsquo;ll be using the test framework provided by <a href="https://npmjs.org/package/mocha">Mocha</a>.</p>
+
+<p>```javascript
+describe(&lsquo;my api&rsquo;, function() {</p>
+
+<pre><code>it('returns hello world', function(done) {
+    request.
+        .get('/')
+        .expect('Hello, World!', done);
+});
+</code></pre>
+
+<p>});
+```</p>
+
+<p>This is about as simple as the tests get.
+We call the root of the site, and expect the response body to equal &ldquo;Hello, World!&rdquo;.</p>
+
+<p>Since the request is async, we take in a &ldquo;done&rdquo; parameter (which Mocha passes to us).
+We call that at the end of the test when we&rsquo;ve actually had a chance to verify the server response.</p>
+
+<p>You can easily test a JSON response with supertest:</p>
+
+<p>```javascript
+request.</p>
+
+<pre><code>.get('/json')
+.expect({message: "Hello, World!"}, done);
+</code></pre>
+
+<p>```</p>
+
+<p>Headers are also simple to verify.</p>
+
+<p>```javascript
+request.</p>
+
+<pre><code>.get('/json')
+.expect('Content-Type', 'application/json', done);
+</code></pre>
+
+<p>```</p>
+
+<p>Status codes are even easier.</p>
+
+<p>```javascript
+request</p>
+
+<pre><code>.get('/error')
+.expect(500, 'Oops. Something went wrong', done);
+</code></pre>
+
+<p>```</p>
+
+<p>You can do non-GET requests.</p>
+
+<p>```javascript
+var user = {name: &lsquo;Bob&rsquo;};
+request</p>
+
+<pre><code>.post('/create-user')
+.send(user)
+.expect({success:true}, done);
+</code></pre>
+
+<p>```</p>
+
+<p>You can set headers for the request.</p>
+
+<p>```javascript
+request</p>
+
+<pre><code>.get('/foo')
+.set('Accept', 'text/plain')
+.expect('Content-Type', 'text/plain', done);
+</code></pre>
+
+<p>```
+You can match regular expressions against headers and bodies.</p>
+
+<p>```javascript
+request</p>
+
+<pre><code>.get('/redirect')
+.expect('Location': /\/destination/)
+.expect(301, done);
+</code></pre>
+
+<p>```</p>
+
+<p>If you need to do multiple requests in series, you can chain the &ldquo;expect&rdquo; callbacks:</p>
+
+<p>```javascript
+// Kick things off
+purgeUsers();</p>
+
+<p>function purgeUsers() {</p>
+
+<pre><code>request
+    .get('/users/purge')
+    .expect({success:true}, checkNoUsers);
+</code></pre>
+
+<p>}</p>
+
+<p>function checkNoUsers(err) {</p>
+
+<pre><code>if (err) done(err);
+request
+    .get('/users')
+    .expect([], addUser);
+</code></pre>
+
+<p>}</p>
+
+<p>function addUser() {</p>
+
+<pre><code>if (err) done(err);
+request
+    .post('/users')
+    .send({name: 'Bob'})
+    .expect({success:true}, checkUsers);
+</code></pre>
+
+<p>}</p>
+
+<p>function checkUsers(err) {</p>
+
+<pre><code>if (err) done(err);
+request
+    .get('/users')
+    .expect([{name: 'Bob'}], done);
+</code></pre>
+
+<p>}
+```</p>
+
+<p>Finally, if you need to do some custom processing on a result, use the <code>.end()</code> function.</p>
+
+<p>```javascript
+var assert = require(&lsquo;assert&rsquo;);
+request</p>
+
+<pre><code>.get('/foo')
+.end(function(err, result) {
+    assert.equal(result.body.foo, 'Bar');
+    done();
+});
+</code></pre>
+
+<p>```</p>
+
+<p>That&rsquo;s about it.
+There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
+]]></content>
+  </entry>
+  
+</feed>
