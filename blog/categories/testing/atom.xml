@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-28T15:10:32-07:00</updated>
+  <updated>2014-07-28T15:13:16-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -69,7 +69,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 <p>```javascript
 request.</p>
 
-<pre><code>.get('/json')
+<pre><code>.get('/')
 .expect({message: "Hello, World!"}, done);
 </code></pre>
 
@@ -80,7 +80,7 @@ request.</p>
 <p>```javascript
 request.</p>
 
-<pre><code>.get('/json')
+<pre><code>.get('/foo')
 .expect('Content-Type', 'application/json', done);
 </code></pre>
 
@@ -91,7 +91,7 @@ request.</p>
 <p>```javascript
 request</p>
 
-<pre><code>.get('/error')
+<pre><code>.get('/some-error-route')
 .expect(500, 'Oops. Something went wrong', done);
 </code></pre>
 
@@ -195,8 +195,7 @@ request</p>
 
 <p>```</p>
 
-<p>That&rsquo;s about it.
-There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
+<p>There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
 ]]></content>
   </entry>
   

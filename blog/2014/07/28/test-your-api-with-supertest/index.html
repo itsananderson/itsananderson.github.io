@@ -140,7 +140,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span><span class="p">.</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/json&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">},</span> <span class="nx">done</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -151,7 +151,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span><span class="p">.</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/json&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -162,7 +162,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/error&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/some-error-route&#39;</span><span class="p">)</span>
 </span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Oops. Something went wrong&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -292,8 +292,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>That&rsquo;s about it.
-There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
+<p>There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
 </div>
 
 
