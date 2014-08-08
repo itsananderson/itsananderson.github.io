@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-28T15:13:16-07:00</updated>
+  <updated>2014-08-08T09:30:33-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -38,7 +38,7 @@ var request = require('supertest')(myApp);
 </code></p>
 
 <p>The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
-This allows you to just write your tests, without worrying about starting apps, comflicting ports, etc.</p>
+This allows you to just write your tests, without worrying about starting apps, conflicting ports, etc.</p>
 
 <h2>Writing a Test</h2>
 

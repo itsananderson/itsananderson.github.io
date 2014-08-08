@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-07-28T15:13:16-07:00</updated>
+  <updated>2014-08-08T09:30:33-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -41,7 +41,7 @@ If you&rsquo;re testing an external site, you can configure supertest with the s
 
 
 <p>The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
-This allows you to just write your tests, without worrying about starting apps, comflicting ports, etc.</p>
+This allows you to just write your tests, without worrying about starting apps, conflicting ports, etc.</p>
 
 <h2>Writing a Test</h2>
 
@@ -2768,7 +2768,7 @@ This package monitors a directory for file chanages and respawns a child process
 <p>This tells Nodemon to watch for changes to <em>.cs and </em>.json files and to restart &ldquo;K.cmd web&rdquo; when changes are detected.
 Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is configured for your project.</p>
 
-<p>Note that if you&rsquo;re running in Git Bash on Windows (which I currently can&rsquo;t get working) or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code> or <code>K.sh web</code>.</p>
+<p>Note that if you&rsquo;re running in Git Bash on Windows or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code>, <code>K.cmd web</code>, or <code>K.sh web</code>.</p>
 
 <p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
 
