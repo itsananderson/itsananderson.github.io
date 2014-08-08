@@ -24,7 +24,7 @@ Now that nodemon is installed, you can use it to live-rerun your app.
 This tells Nodemon to watch for changes to *.cs and *.json files and to restart "K.cmd web" when changes are detected.
 Replace "web" with "run" or whatever startup command is configured for your project.
 
-Note that if you're running in Git Bash on Windows (which I currently can't get working) or on a Linux/OSX machine, the --exec command will probably be either `K web` or `K.sh web`.
+Note that if you're running in Git Bash on Windows or on a Linux/OSX machine, the --exec command will probably be either `K web`, `K.cmd web`, or `K.sh web`.
 
 ![Live re-compiling with nodemon](//itsananderson.blob.core.windows.net/post-images/nodemon-k.png)
 
