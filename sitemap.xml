@@ -219,16 +219,20 @@
         <lastmod>2014-08-13T01:12:31-07:00</lastmod>
     </url>
     <url>
+        <loc>http://willi.am/blog/2014/08/16/gulp-automation-path-abstraction/</loc>
+        <lastmod>2014-08-16T01:30:28-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/404.html</loc>
         <lastmod>2014-04-02T23:47:51-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2014-08-13T01:12:31-07:00</lastmod>
+        <lastmod>2014-08-16T01:30:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2014-08-13T01:12:31-07:00</lastmod>
+        <lastmod>2014-08-16T01:30:28-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/node-modules/</loc>

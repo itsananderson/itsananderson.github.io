@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Gulp | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/gulp/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-08-16T01:32:43-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Gulp Automation: Path Abstraction]]></title>
+    <link href="http://willi.am/blog/2014/08/16/gulp-automation-path-abstraction/"/>
+    <updated>2014-08-16T00:57:44-07:00</updated>
+    <id>http://willi.am/blog/2014/08/16/gulp-automation-path-abstraction</id>
+    <content type="html"><![CDATA[<p>If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths <em>a lot</em>.
+Paths for sources, paths for destinations.
+Paths to watch for changes.
+You get the picture.</p>
+
+<p>Without some organization, things can quickly get out of hand.</p>
+
+<h2>Store Paths In Variables</h2>
+
+<p>As tempting as it might be to shove an extra path into a task definition, resist the urge.
+Instead, define your paths as variables.
+This allows you to share and compose path groups without repetition.</p>
+
+<p>As an example, consider a common use case.
+You want to lint your JavaScript for your application code and tests, but you only want to minify your application code and run tests against your test code.
+You could approach it like this:</p>
+
+<p>```javascript
+gulp.task(&lsquo;lint&rsquo;, function() {</p>
+
+<pre><code>gulp.src(['app/*.js', 'test/*.js'])
+    .pipe(lint());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;minify&rsquo;, function() {</p>
+
+<pre><code>gulp.src(['app/*.js'])
+    .pipe(lint());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;test&rsquo;, function() {</p>
+
+<pre><code>gulp.src(['test/*.js'])
+    .pipe(lint());
+</code></pre>
+
+<p>});
+```</p>
+
+<p>This isn&rsquo;t bad, but things can quickly get out of hand.
+At this point already, if you moved your application code to a folder called &lsquo;src&rsquo;, you&rsquo;d have to update your gulpfile in two places.
+Three if you&rsquo;d added a &lsquo;watch&rsquo; task.</p>
+
+<p>When you abstract your paths, you can reuse them throughout your gulpfile.</p>
+
+<p>```javascript
+var appPaths = [&lsquo;app/<em>.js&rsquo;];
+var testPaths = [&lsquo;test/</em>.js&rsquo;];</p>
+
+<p>gulp.task(&lsquo;lint&rsquo;, function() {</p>
+
+<pre><code>gulp.src(appPaths.concat(testPaths))
+    .pipe(lint());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;minify&rsquo;, function() {</p>
+
+<pre><code>gulp.src(appPaths)
+    .pipe(minify());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;test&rsquo;, function() {</p>
+
+<pre><code>gulp.src(testPaths)
+    .pipe(test());
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Again, this is a simple example, but hopefully it illustrates the point.</p>
+
+<h2>Breaking Into <code>require</code>able Pieces</h2>
+
+<p>Once your paths are in variables, you can abstract them further by putting them their own file.</p>
+
+<p>To illustrate, suppose you have Karma tests.
+Karma uses its own configuration file, but gulp-karma overrides some if them, which can make it hard to avoid duplicating configurations.
+Consider the following config:</p>
+
+<p>```javascript
+// karma.conf.js
+module.exports = function (config) {</p>
+
+<pre><code>config.set({
+    files: [
+        'vendor/angular.js',
+        'app/*.js',
+        'test/*.js'
+    ],
+    reporters: ['spec'],
+    autoWatch: true,
+    frameworks: ['jasmine'],
+    browsers: ['PhantomJS'],
+    plugins: [
+        'karma-jasmine',
+        'karma-spec-reporter',
+        'karma-phantomjs-launcher'
+    ],
+});
+</code></pre>
+
+<p>};
+```</p>
+
+<p>Not too bad, but again, we&rsquo;re duplicating logic.
+Back in the gulpfile, we&rsquo;ll have a task like this:</p>
+
+<p>```javascript
+var vendorPaths = [&lsquo;vendor/angular.js&rsquo;];</p>
+
+<p>gulp.task(&lsquo;karma&rsquo;, function() {</p>
+
+<pre><code>gulp.src(vendorPaths.concat(appPaths).concat(testPaths))
+    .pipe(karma({ configFile: 'karma.conf.js' }));
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Suddenly, there&rsquo;s path duplication between the Karma config file and the gulpfile.
+To fix this, simply define your paths in another file that&rsquo;s included by both.</p>
+
+<p>```javascript
+var app = [&lsquo;app/<em>.js&rsquo;];
+var test = [&lsquo;test/</em>.js&rsquo;];
+var vendor = [&lsquo;vendor/angular.js&rsquo;];
+module.exports = {</p>
+
+<pre><code>app: app,
+test: test,
+vendor: vendor,
+karma: vendor.concat(app).concat(test)
+</code></pre>
+
+<p>};
+```</p>
+
+<p>Then your gulpfile should look like this:</p>
+
+<p>```javascript
+var paths = require(&lsquo;./paths&rsquo;);</p>
+
+<p>gulp.task(&lsquo;lint&rsquo;, function() {</p>
+
+<pre><code>gulp.src(paths.app.concat(paths.test))
+    .pipe(lint());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;minify&rsquo;, function() {</p>
+
+<pre><code>gulp.src(paths.app)
+    .pipe(minify());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;test&rsquo;, function() {</p>
+
+<pre><code>gulp.src(paths.test)
+    .pipe(test());
+</code></pre>
+
+<p>});</p>
+
+<p>gulp.task(&lsquo;karma&rsquo;, function() {</p>
+
+<pre><code>gulp.src(paths.karma)
+    .pipe(karma({ configFile: 'karma.conf.js' }));
+</code></pre>
+
+<p>});
+```</p>
+
+<p>And your karma.conf.js can look like this:</p>
+
+<p>```javascript
+// karma.conf.js
+var paths = require(&lsquo;./paths&rsquo;);</p>
+
+<p>module.exports = function (config) {</p>
+
+<pre><code>config.set({
+    files: paths.karma,
+    reporters: ['spec'],
+    autoWatch: true,
+    frameworks: ['jasmine'],
+    browsers: ['PhantomJS'],
+    plugins: [
+        'karma-jasmine',
+        'karma-spec-reporter',
+        'karma-phantomjs-launcher'
+    ],
+});
+</code></pre>
+
+<p>};
+```</p>
+
+<p>There you have it.
+Nice and DRY.</p>
+
+<p>Here&rsquo;s a <a href="https://gist.github.com/itsananderson/61bad88e4470679a4f13">Gist of the completed example</a>.</p>
+]]></content>
+  </entry>
+  
+</feed>

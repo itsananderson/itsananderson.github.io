@@ -7,8 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Let&rsquo;s talk about force pushing in Git.
-We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely. TL;DR Do &hellip;">
+	<meta name="description" content="If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths a lot.
+Paths for sources, paths for &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,6 +80,320 @@ We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/08/16/gulp-automation-path-abstraction/">
+		
+			Gulp Automation: Path Abstraction</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths <em>a lot</em>.
+Paths for sources, paths for destinations.
+Paths to watch for changes.
+You get the picture.</p>
+
+<p>Without some organization, things can quickly get out of hand.</p>
+
+<h2>Store Paths In Variables</h2>
+
+<p>As tempting as it might be to shove an extra path into a task definition, resist the urge.
+Instead, define your paths as variables.
+This allows you to share and compose path groups without repetition.</p>
+
+<p>As an example, consider a common use case.
+You want to lint your JavaScript for your application code and tests, but you only want to minify your application code and run tests against your test code.
+You could approach it like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">,</span> <span class="s1">&#39;test/*.js&#39;</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;minify&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;test/*.js&#39;</span><span class="p">])</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This isn&rsquo;t bad, but things can quickly get out of hand.
+At this point already, if you moved your application code to a folder called &lsquo;src&rsquo;, you&rsquo;d have to update your gulpfile in two places.
+Three if you&rsquo;d added a &lsquo;watch&rsquo; task.</p>
+
+<p>When you abstract your paths, you can reuse them throughout your gulpfile.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">appPaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">testPaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test/*.js&#39;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">appPaths</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">testPaths</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;minify&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">appPaths</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minify</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">testPaths</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">test</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, this is a simple example, but hopefully it illustrates the point.</p>
+
+<h2>Breaking Into <code>require</code>able Pieces</h2>
+
+<p>Once your paths are in variables, you can abstract them further by putting them their own file.</p>
+
+<p>To illustrate, suppose you have Karma tests.
+Karma uses its own configuration file, but gulp-karma overrides some if them, which can make it hard to avoid duplicating configurations.
+Consider the following config:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// karma.conf.js</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+</span><span class='line'>        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s1">&#39;vendor/angular.js&#39;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s1">&#39;app/*.js&#39;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s1">&#39;test/*.js&#39;</span>
+</span><span class='line'>        <span class="p">],</span>
+</span><span class='line'>        <span class="nx">reporters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">autoWatch</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jasmine&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;PhantomJS&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s1">&#39;karma-jasmine&#39;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s1">&#39;karma-spec-reporter&#39;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s1">&#39;karma-phantomjs-launcher&#39;</span>
+</span><span class='line'>        <span class="p">],</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Not too bad, but again, we&rsquo;re duplicating logic.
+Back in the gulpfile, we&rsquo;ll have a task like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">vendorPaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vendor/angular.js&#39;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;karma&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">vendorPaths</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">appPaths</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">testPaths</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">karma</span><span class="p">({</span> <span class="nx">configFile</span><span class="o">:</span> <span class="s1">&#39;karma.conf.js&#39;</span> <span class="p">}));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Suddenly, there&rsquo;s path duplication between the Karma config file and the gulpfile.
+To fix this, simply define your paths in another file that&rsquo;s included by both.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test/*.js&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">vendor</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vendor/angular.js&#39;</span><span class="p">];</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">app</span><span class="o">:</span> <span class="nx">app</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">test</span><span class="o">:</span> <span class="nx">test</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">vendor</span><span class="o">:</span> <span class="nx">vendor</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">karma</span><span class="o">:</span> <span class="nx">vendor</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">app</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">test</span><span class="p">)</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then your gulpfile should look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./paths&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">test</span><span class="p">))</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;minify&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">app</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minify</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">test</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">test</span><span class="p">());</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;karma&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">karma</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">karma</span><span class="p">({</span> <span class="nx">configFile</span><span class="o">:</span> <span class="s1">&#39;karma.conf.js&#39;</span> <span class="p">}));</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And your karma.conf.js can look like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// karma.conf.js</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./paths&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
+</span><span class='line'>        <span class="nx">files</span><span class="o">:</span> <span class="nx">paths</span><span class="p">.</span><span class="nx">karma</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">reporters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">autoWatch</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jasmine&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;PhantomJS&#39;</span><span class="p">],</span>
+</span><span class='line'>        <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>            <span class="s1">&#39;karma-jasmine&#39;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s1">&#39;karma-spec-reporter&#39;</span><span class="p">,</span>
+</span><span class='line'>            <span class="s1">&#39;karma-phantomjs-launcher&#39;</span>
+</span><span class='line'>        <span class="p">],</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There you have it.
+Nice and DRY.</p>
+
+<p>Here&rsquo;s a <a href="https://gist.github.com/itsananderson/61bad88e4470679a4f13">Gist of the completed example</a>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-16T00:57:44-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/gulp/'>Gulp</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -2755,87 +3069,6 @@ In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-st
 
 
 <time datetime="2014-07-01T06:00:03-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/06/30/azure-blob-storage-and-node/">
-		
-			Azure Blob Storage and Node</a>
-	</h2>
-	<div class="entry-content">
-		<p><strong>This is the introduction to a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><strong>Introduction</strong></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
-</ol>
-
-
-<p>Over the weekend I put together a service called <a href="http://placebacon.net">placebacon</a> that serves placeholder bacon images.
-It&rsquo;s certainly not the first placeholder image service, but it&rsquo;s the first one that makes your designs look delicious :)</p>
-
-<p><img src="http://placebacon.net/800/100?image=9"></p>
-
-<p>I decided to build the service on Azure so that it can easily be scaled if anyone actually starts using it.
-Caching generated images with Azure Blob Storage made the most sense.</p>
-
-<p>The Azure team has released an npm package called <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a>, which I used to interact with the Azure Blobs.
-The documentation for the azure-storage package is fairly good, but I still mostly found myself digging into the source code to figure things out.
-I&rsquo;m writing this blog series to make it easier for other Node developers to work with the Node bindings for Azure Blob Storage.</p>
-
-<h2>Placebacon&rsquo;s Service Architecture</h2>
-
-<p>To set a framework for the upcoming discussions about Blob Storage, I&rsquo;m providing a high-level overview of placebacon&rsquo;s architecture.</p>
-
-<p>First, I need a way to resize images in Node.
-After spending several frustrating hours trying to find an image manipulation module that works in Windows, I decided that a Linux VM would be the easiest way to resize images in Node.
-Since I&rsquo;m using the Azure infrastructure, setting up a Linux VM is straightforward, but I also want to take advantage of the simple scaling ability of Azure Websites.</p>
-
-<p>To accomplish this, I decided to have a lightweight Ubuntu VM for resizing images.
-Then I put together an Azure website (in Node, of course) that requests resized images from the service running on Ubuntu, and caches the results in Blob Storage.</p>
-
-<p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg"></p>
-
-<p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-30T14:09:17-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
