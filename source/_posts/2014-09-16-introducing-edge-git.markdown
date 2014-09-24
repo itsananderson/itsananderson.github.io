@@ -22,5 +22,3 @@ Since I had a seemingly perfect use case, I decided to dive in.
 
 About a week later, I have a very basic initial release of [edge-git.](https://www.npmjs.org/package/edge-git)
 About all you can do at this point is init, clone, and query branches/commits, but I'm steadily adding more bindings to the existing LibGit2Sharp functionality.
-
-If you want to see some code, check out this very simple [edge-git example](https://github.com/itsananderson/edge-git-example) project.
