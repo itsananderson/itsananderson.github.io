@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-09-24T02:18:34-07:00</updated>
+  <updated>2014-09-24T02:26:21-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -42,7 +42,7 @@ Doing this for a few dozen blog posts can quickly balloon your repo.</p>
 When I switched over, I had few enough images that I just decided to manually update the posts that referenced them.
 If you have enough images, it may not be reasonable to manually update the posts that reference them. In that case, you can either try to automate it with a glorified perl script, or just leave the old posts alone and just upload new images to blob storage.</p>
 
-<p>If you&rsquo;re using Azure for your images, you&rsquo;ll want to grab a copy of Azure Storage Explorer. It&rsquo;s a handy little Windows application that gives you a CRUD view into your storage account. My <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">series on Azure Blob Storage and Node</a> covers setting up your storage account and getting your access keys, so I won&rsquo;t go over that again. Just grab one of your access keys and paste it into the &ldquo;Storage account key&rdquo; field in Storage Explorer&rsquo;s &ldquo;Add Storage Account&rdquo; popup.</p>
+<p>If you&rsquo;re using Azure for your images, you&rsquo;ll want to grab a copy of <a href="http://azurestorageexplorer.codeplex.com/">Azure Storage Explorer</a>. It&rsquo;s a handy little Windows application that gives you a CRUD view into your storage account. My <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">series on Azure Blob Storage and Node</a> covers setting up your storage account and getting your access keys, so I won&rsquo;t go over that again. Just grab one of your access keys and paste it into the &ldquo;Storage account key&rdquo; field in Storage Explorer&rsquo;s &ldquo;Add Storage Account&rdquo; popup.</p>
 
 <p><img src="http://itsananderson.blob.core.windows.net/post-images/setup-storage-explorer.png" alt="" /></p>
 
