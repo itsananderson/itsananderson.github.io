@@ -3,11 +3,12 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Category: Git - Will Anderson</title>
+	<title>Introducing Edge-Git - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Category: Git">
+	<meta name="description" content="I&rsquo;ve recently been frustrated by the lack of functional Node bindings for libgit2.
+The most prominent projects are node-gitteh and nodegit. &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,107 +79,67 @@
 	
 		
 	
-	<div id="content" class="inner">
-	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Introducing Edge-Git</h2>
+	<div class="entry-content"><p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
+The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
+Unfortunately both repositories are severely lacking in features and documentation.
+I couldn&rsquo;t even install node-gitteh on Windows, and I spent an unsuccessful evening trying to get nodegit to do something as simple as fetching changes.</p>
+
+<p>Eventually I came to the conclusion that no libgit2 bindings for Node are functional enough for my use.</p>
+
+<p>I&rsquo;d used <a href="https://github.com/libgit2/libgit2sharp">LibGit2Sharp</a> for a .NET project in the past.
+It&rsquo;s an amazingly high-quality project.
+While the documentation is sparse, the copious unit tests make it easy to figure out how to accomplish different tasks.</p>
+
+<p>I&rsquo;d read about <a href="http://tjanczuk.github.io/edge/">Edge.js</a>, which lets you interop between .NET and Node, but hadn&rsquo;t actually done anything with it.
+Since I had a seemingly perfect use case, I decided to dive in.</p>
+
+<p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
+About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
+</div>
 
 
-	
-	
-	<section class="archives"><h1 class="year">2014</h1>
+<div class="meta">
+	<div class="date">
 
-<article>
-	<h2 class="title"><a href="/blog/2014/09/16/introducing-edge-git/">Introducing Edge-Git</a></h2>
-	<div class="meta">
-		<div class="date">Sep 16</div>
-		<div class="tags">
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-16T22:50:30-07:00" pubdate data-updated="true">Sep 16<span>th</span>, 2014</time></div>
+	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/git/'>Git</a>, <a class='category' href='/blog/categories/node/'>Node</a>
 
 
 </div>
-	    
-	</div>
-</article>
 	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/08/12/the-dark-side-of-the-force-push/">The Dark Side of the Force Push</a></h2>
-	<div class="meta">
-		<div class="date">Aug 12</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
 </div>
-	    
-	</div>
 </article>
-	
 
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/05/12/git-concepts-branches-forks-and-pull-requests/">Git Concepts: Branches, Forks, and Pull Requests</a></h2>
-	<div class="meta">
-		<div class="date">May 12</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
 </div>
-	    
-	</div>
-</article>
-	
 
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/05/08/inspecting-git-traffic-in-fiddler/">Inspecting Git Traffic in Fiddler</a></h2>
-	<div class="meta">
-		<div class="date">May  8</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/fiddler/'>Fiddler</a>, <a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	    
-	</div>
-</article>
-	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/05/06/git-for-devs-who-cant-commit-good/">Git for Devs Who Can't Commit Good</a></h2>
-	<div class="meta">
-		<div class="date">May  6</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	    
-	</div>
-</article>
-	
-	</section>
-	
 
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2014

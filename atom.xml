@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-08-16T01:32:43-07:00</updated>
+  <updated>2014-09-24T02:18:34-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,75 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Use Blob Storage For Your Static Site Images]]></title>
+    <link href="http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images/"/>
+    <updated>2014-09-24T01:37:53-07:00</updated>
+    <id>http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images</id>
+    <content type="html"><![CDATA[<p>The purpose of this post is to show how easy it is to use cloud storage for your static blog&rsquo;s binary resources.
+I&rsquo;ll be showing specific examples for Azure Blob Storage and GitHub Pages, but the same principles should apply to AWS, as well as any other static blogging service.</p>
+
+<h2>Avoid Large Binaries in Git</h2>
+
+<p>When ever you check a file (or a change to an existing file) into Git, it stores a snapshot of the entire file.
+This behavior has many nice benefits, but it means that large files can quickly bloat the size of a Git repository.</p>
+
+<p>Culprits can include images, videos, and executables, to name a few.
+Since we&rsquo;re specifically talking about static blogging, we&rsquo;ll focus on images.</p>
+
+<p>Suppose you add an image to your post.
+If the image takes up 200KB, you&rsquo;re automatically increasing your repository size by around 200KB (ignoring extra Git metadata).
+Every time you modify that image, you&rsquo;re adding yet another 200KB.
+Doing this for a few dozen blog posts can quickly balloon your repo.</p>
+
+<p>Now imaging doing this with a GIF instead. Yikes.</p>
+
+<h2>Move Your Images To Blob Storage</h2>
+
+<p>I&rsquo;m not going to cover redirecting existing images to blob storage.
+When I switched over, I had few enough images that I just decided to manually update the posts that referenced them.
+If you have enough images, it may not be reasonable to manually update the posts that reference them. In that case, you can either try to automate it with a glorified perl script, or just leave the old posts alone and just upload new images to blob storage.</p>
+
+<p>If you&rsquo;re using Azure for your images, you&rsquo;ll want to grab a copy of Azure Storage Explorer. It&rsquo;s a handy little Windows application that gives you a CRUD view into your storage account. My <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">series on Azure Blob Storage and Node</a> covers setting up your storage account and getting your access keys, so I won&rsquo;t go over that again. Just grab one of your access keys and paste it into the &ldquo;Storage account key&rdquo; field in Storage Explorer&rsquo;s &ldquo;Add Storage Account&rdquo; popup.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/setup-storage-explorer.png" alt="" /></p>
+
+<p>As a last configuration step, open Tools &rarr; Options and go to the &ldquo;Content Types&rdquo; tab, then click &ldquo;Save Changes&rdquo;. Storage Explorer can automatically set content types based on file extensions, but for some reason it&rsquo;s not enabled by default. Opening and saving the options seems to be enough to activate it.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/configure-storage-explorer.png" alt="" /></p>
+
+<p>Now that you&rsquo;ve configured Storage Explorer, you can upload your images. First, create a container. Make sure you set permissions to &ldquo;Public Container&rdquo; or &ldquo;Public Blob&rdquo; so the images can be seen by unauthenticated users.</p>
+
+<p>Now, inside the container, click &ldquo;Upload&rdquo;. You can select multiple images. Once they&rsquo;ve uploaded, double check that their content types are correct. The default is application/octet-stream, which most browsers will try to download, rather than display as an image. The public URL for a given image is pretty easy to get from the storage account, container, and blob name, but if you&rsquo;re not sure, just double click the blob, and it&rsquo;ll show you the public URL.</p>
+
+<p>That&rsquo;s about it. Happy blogging.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Edge-Git]]></title>
+    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
+    <updated>2014-09-16T22:50:30-07:00</updated>
+    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
+The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
+Unfortunately both repositories are severely lacking in features and documentation.
+I couldn&rsquo;t even install node-gitteh on Windows, and I spent an unsuccessful evening trying to get nodegit to do something as simple as fetching changes.</p>
+
+<p>Eventually I came to the conclusion that no libgit2 bindings for Node are functional enough for my use.</p>
+
+<p>I&rsquo;d used <a href="https://github.com/libgit2/libgit2sharp">LibGit2Sharp</a> for a .NET project in the past.
+It&rsquo;s an amazingly high-quality project.
+While the documentation is sparse, the copious unit tests make it easy to figure out how to accomplish different tasks.</p>
+
+<p>I&rsquo;d read about <a href="http://tjanczuk.github.io/edge/">Edge.js</a>, which lets you interop between .NET and Node, but hadn&rsquo;t actually done anything with it.
+Since I had a seemingly perfect use case, I decided to dive in.</p>
+
+<p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
+About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Gulp Automation: Path Abstraction]]></title>
@@ -3229,103 +3298,6 @@ Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is 
 <p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
 
 <p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ASP.NET vNext Sounds Awesome]]></title>
-    <link href="http://willi.am/blog/2014/05/12/net-vnext-sounds-awesome/"/>
-    <updated>2014-05-12T19:32:26-07:00</updated>
-    <id>http://willi.am/blog/2014/05/12/net-vnext-sounds-awesome</id>
-    <content type="html"><![CDATA[<p>Microsoft made some anouncements about the <a href="http://blogs.msdn.com/b/dotnet/archive/2014/05/12/the-next-generation-of-net-asp-net-vnext.aspx">next generation of ASP.NET today</a>.</p>
-
-<p>David Fowler published a post about <a href="http://davidfowl.com/asp-net-vnext/">the reasoning behind some of the changes</a>.
-Scott Hanselman published a post with more details about <a href="http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx">the features that are coming our way</a>.
-There&rsquo;s a ton of stuff to be excited about here, but my favorite part is these two paragraphs from Scott&rsquo;s post (emphasis his).</p>
-
-<blockquote><p>The project system is also changing &ndash; we&rsquo;re integrating packages.config, NuGet specifications (nuspec),
-and project files (csprojs) into a unified view of your project dependencies expressed in a project.json file.</p>
-
-<p>NuGet packages and class libraries are treated the same.
-You get full intellisense in the project.json file and NuGet packages come down automatically and transparently.
-Even better, let&rsquo;s say NuGet package Foo.Bar has a bug but you&rsquo;ve only got the NuGet package.
-You can make a folder called Foo.Bar in our local project and put the source via &ldquo;git clone&rdquo; in that folder.
-This is great for open source projects.
-<strong>That local version overrides the NuGet, allowing you to easily patch bugs locally in libraries while you wait for a new release.</strong>
-When a new fixed NuGet-distributed version shows up, update the version and delete the local source.</p>
-
-<p><a href="http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx">Introducing ASP.NET vNext &ndash; Scott Hanselman</a></p></blockquote>
-
-<p>Mind. Blown.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/mind-blown.gif" alt="Mind Blown" /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Git Concepts: Branches, Forks, and Pull Requests]]></title>
-    <link href="http://willi.am/blog/2014/05/12/git-concepts-branches-forks-and-pull-requests/"/>
-    <updated>2014-05-12T10:57:58-07:00</updated>
-    <id>http://willi.am/blog/2014/05/12/git-concepts-branches-forks-and-pull-requests</id>
-    <content type="html"><![CDATA[<p>My team recently started migrating our source control from TFVC to Git (yay!).
-There&rsquo;s been some confusion about a few Git and DVCS related terms.
-If you&rsquo;re also confused, don&rsquo;t worry. You&rsquo;re not the only one.</p>
-
-<iframe class="youtube-player" type="text/html" width="640" height="385" src="https://www.youtube.com/embed/k2vJNNAQZlg" allowfullscreen frameborder="0">
-</iframe>
-
-
-<p>Let&rsquo;s talk about some basic Git concepts.</p>
-
-<h2>Branches</h2>
-
-<p>Branches are a core concept in Git.
-Unlike centralized version control, branches in Git don&rsquo;t show up as folders in the file system.
-Instead, your project folder only contains the contents of one branch, which you &ldquo;checkout&rdquo; into your working directory.</p>
-
-<p>Internally, branches are basically a pointer to a commit, designed to move forward when new commits are created.</p>
-
-<p>See <a href="http://www.git-scm.com/book/en/Git-Branching-Basic-Branching-and-Merging">this page on git branches</a> for more details.</p>
-
-<h2>Forks</h2>
-
-<p>Forking is a concept that exists outside Git.
-In the old days, forking an open source project meant splitting off from the original project, either to continue development or move in a different direction.</p>
-
-<p>These days a fork is simply a feature of several open source code hosting websites.
-If I want to introduce a change to an open source project, I obviously can&rsquo;t just edit the repository directly.
-Instead, what I have to do is fork the repository, which creates a copy of that repository that belongs to me.
-I can then modify that fork and, if desired, propose those changes back to the original repository.</p>
-
-<p>GitHub has a pretty good <a href="https://help.github.com/articles/fork-a-repo">article on forking repositories</a>.
-It also talks about creating pull requests.</p>
-
-<h2>Pull Requests</h2>
-
-<p>One of the most easily misunderstood concepts in Git is the pull request.
-Part of the reason for the confusion is that in most current pull request workflows, nobody ever &ldquo;pulls&rdquo; changes.
-&ldquo;Merge request&rdquo; would be a more accurate term.</p>
-
-<p>When you create a pull request on an open source project, you&rsquo;re usually asking that changes from a branch in your repository be merged with a branch on another repository.
-In most cases, your repository is a fork of the other repository, and you&rsquo;re requesting to merge your changes into their master branch.</p>
-
-<p>Pull requests can also be used as a code review workflow within a single repository.
-I&rsquo;ve done this for some of my own open source projects.
-It&rsquo;s really useful for teams who work together on a project.</p>
-
-<p>If you&rsquo;re not already doing your feature work in a branch, you should learn to <a href="http://willi.am/blog/2014/05/06/git-for-devs-who-cant-commit-good/">commit good</a>.
-Once you&rsquo;re doing your work in a branch, pull requests are the next logical step.
-As soon as you&rsquo;re at a point where you&rsquo;re not embarassed by your code, create a pull request.
-You can continue pushing new changes to your branch for reviewers to see.
-By starting the feedback loop as early as possible, your peers can help catch issues that you&rsquo;d otherwise have to spend a long time undoing.</p>
-
-<p>The other thing pull requests for team projects enables is multiple collaborators.
-Most other code review tools only belong to one person.
-This is a hassle if two people have collaborated on a feature.
-With pull requests, many collaborators can push to a single branch, and all changes can be reviewed as a single unit.</p>
-
-<p>Once again, GitHub has a good <a href="https://help.github.com/articles/using-pull-requests">article on pull requests</a>.
-This one is very specific to GitHub&rsquo;s pull request workflow.</p>
 ]]></content>
   </entry>
   

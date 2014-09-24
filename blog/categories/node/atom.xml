@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-08-16T01:32:43-07:00</updated>
+  <updated>2014-09-24T02:18:34-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Introducing Edge-Git]]></title>
+    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
+    <updated>2014-09-16T22:50:30-07:00</updated>
+    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
+The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
+Unfortunately both repositories are severely lacking in features and documentation.
+I couldn&rsquo;t even install node-gitteh on Windows, and I spent an unsuccessful evening trying to get nodegit to do something as simple as fetching changes.</p>
+
+<p>Eventually I came to the conclusion that no libgit2 bindings for Node are functional enough for my use.</p>
+
+<p>I&rsquo;d used <a href="https://github.com/libgit2/libgit2sharp">LibGit2Sharp</a> for a .NET project in the past.
+It&rsquo;s an amazingly high-quality project.
+While the documentation is sparse, the copious unit tests make it easy to figure out how to accomplish different tasks.</p>
+
+<p>I&rsquo;d read about <a href="http://tjanczuk.github.io/edge/">Edge.js</a>, which lets you interop between .NET and Node, but hadn&rsquo;t actually done anything with it.
+Since I had a seemingly perfect use case, I decided to dive in.</p>
+
+<p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
+About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Test Your API With Supertest]]></title>
@@ -962,198 +986,6 @@ function(err, result) {
 
 <p>In this post we covered listing blobs and containers in your storage account.
 In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">blob metadata</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
-    <link href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/"/>
-    <updated>2014-07-03T16:23:46-07:00</updated>
-    <id>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs</id>
-    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><strong>Downloading Blobs</strong></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
-</ol>
-
-
-<h2>Downloading From Blob Storage</h2>
-
-<p><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Last time</a> we talked about creating Azure blobs.
-This time we&rsquo;ll turn things around and talk about downloading Azure blobs.</p>
-
-<h3>Account Connection Boilerplate</h3>
-
-<p>As stated in the previous post, to work with blob storage, you first need to create a client instance.
-To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
-
-<p>```javascript
-var storage = require(&lsquo;azure-storage&rsquo;);
-var blobService = storage.createBlobService();
-var containerName = &lsquo;your-container-name&rsquo;;
-blobService.createContainerIfNotExists(</p>
-
-<pre><code>containerName,
-function(err, result, response) {
-    if (err) {
-        console.log("Couldn't create container %s", containerName);
-        console.error(err);
-    } else {
-        if (result) {
-            console.log('Container %s created', containerName);
-        } else {
-            console.log('Container %s already exists', containerName);
-        }
-
-        // Your code goes here
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<p>Again, for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
-
-<h3>Checking if a Blob Exists</h3>
-
-<p>In some cases, you don&rsquo;t need a blob&rsquo;s contents, you just need to know if it exists.
-You can do this with the <code>getBlobProperties</code> method.</p>
-
-<p>```javascript
-var blobName = &lsquo;my-nonexistent-blob&rsquo;
-blobService.getBlobProperties(</p>
-
-<pre><code>containerName,
-blobName,
-function(err, properties, status) {
-    if (status.isSuccessful) {
-        // Blob exists
-    } else {
-        // Blob doesn't exist
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<h3>Downloading a Blob As Text</h3>
-
-<p>To download a blob as a text string, use the <code>getBlobToText</code> method.</p>
-
-<p>```javascript
-var blobName = &lsquo;my-awesome-text-blob&rsquo;;
-blobService.getBlobToText(</p>
-
-<pre><code>containerName,
-blobName,
-function(err, blobContent, blob) {
-    if (err) {
-        console.error("Couldn't download blob %s", blobName);
-        console.error(err);
-    } else {
-        console.log("Sucessfully downloaded blob %s", blobName);
-        console.log(blobContent);
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<h3>Downloading a Blob to a File</h3>
-
-<p>To download a blob to a file, use the <code>getBlobToFile</code> method.</p>
-
-<p>```javascript
-var fs = require(&lsquo;fs&rsquo;);
-var fileName = &lsquo;hello-world.txt&rsquo;;
-var blobName = &lsquo;my-awesome-file-blob&rsquo;;
-blobService.getBlobToFile(</p>
-
-<pre><code>containerName,
-blobName,
-fileName,
-function(err, blob) {
-    if (err) {
-        console.error("Couldn't download blob %s", blobName);
-        console.error(err);
-    } else {
-        console.log("Sucessfully downloaded blob %s to %s", blobName, fileName);
-        fs.readFile(fileName, function(err, fileContents) {
-            if (err) {
-                console.error("Couldn't read file %s", fileName);
-                console.error(err);
-            } else {
-                console.log(fileContents);
-            }
-        });
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<h3>Downloading a Blob to a Stream</h3>
-
-<p>To download a blob to a stream, use the <code>getBlobToStream</code> method.</p>
-
-<p>```javascript
-// For simplicity, assume getSomeStream returns a writable stream
-var myStream = getSomeStream();
-var blobName = &lsquo;my-awesome-stream-blob&rsquo;;
-blobService.getBlobToStream(</p>
-
-<pre><code>containerName,
-blobName,
-myStream,
-function(err, blob) {
-    if (err) {
-        console.error("Couldn't download blob %s", blobName);
-        console.error(err);
-    } else {
-        console.log("Sucessfully downloaded blob %s", blobName);
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<p>You can also integrate with a web server to enable downloads from blob storage.
-This is powerfull when combined with the <code>getBlobProperties</code> method.</p>
-
-<p>In the following example, we use the <code>createReadStream</code> method so we can easily pipe the stream to the server response object.</p>
-
-<p>```javascript
-app.get(&lsquo;/download/:file&rsquo;, function(req, res) {</p>
-
-<pre><code>var fileName = req.params.file;
-blobService.getBlobProperties(
-    containerName,
-    fileName,
-    function(err, properties, status) {
-        if (err) {
-            res.send(502, "Error fetching file: %s", err.message);
-        } else if (!status.isSuccessful) {
-            res.send(404, "The file %s does not exist", fileName);
-        } else {
-            res.header('Content-Type', properties.contentType);
-            blobService.createReadStream(containerName, fileName).pipe(res);
-        }
-    });
-</code></pre>
-
-<p>});
-```</p>
-
-<h3>Conclusion</h3>
-
-<p>In this post we covered how to check whether a blob exists, and how to download the blob.
-In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">how to list containers and blobs</a>.</p>
 ]]></content>
   </entry>
   

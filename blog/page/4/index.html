@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully &hellip;">
+	<meta name="description" content="I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +79,148 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/">
+		
+			Using &#8220;Controller as&#8221; Syntax in Angular Routes</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
+the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
+The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$routeProvider</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;Views/Home/Index.html&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;HomeCtrl&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">controllerAs</span><span class="o">:</span> <span class="s1">&#39;vm&#39;</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">otherwise</span><span class="p">({</span> <span class="nx">redirectTo</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-03T09:33:58-08:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2013/10/09/creating-an-angular-markdown-preview/">
+		
+			Creating an Angular Markdown Preview</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
+
+<p>Because I like to use <a href="http://en.wikipedia.org/wiki/Markdown">Markdown</a> for things like my dev journal, I have been wanting to implement my own Markdown preview tool that I could customize to work just the way I want. When I first started learning Angular, I decided to see how easy it would be to write an Angular Markdown preview tool using Angular. Turns out it&rsquo;s super simple.</p>
+
+<p>If you&rsquo;d rather skip straight to the demo, you can <a href="http://itsananderson.azurewebsites.net/markdown">view the finished markdown preview</a>.</p>
+
+<p>I won&rsquo;t go into great detail about the purpose of Angular, since it&rsquo;s readily available elsewhere. In this project, I just wanted a simple way to bind to a textbox so that I could update an HTML Markdown preview. Angular&rsquo;s declarative binding makes it an excellent choice for this.</p>
+
+<h3>Rendering an Angular Markdown Preview</h3>
+
+<p>Since I didn&rsquo;t want to write my own markdown converter, I decided to look for an existing one. I quickly settled on this <a href="https://npmjs.org/package/markdown">markdown npm package</a>. I installed the package, then moved the converter code into my &lsquo;lib/js&rsquo; folder so that it would be accessible from my web app.</p>
+
+<p>To make the front-end as simple as possible, I decided to <a href="http://docs.angularjs.org/guide/dev_guide.templates.filters.creating_filters">create an Angular filter</a> to provide the conversion from Markdown to HTML.</p>
+
+<p>The code is pretty simple. The markdown npm package adds a &ldquo;markdown&rdquo; object to the &ldquo;window&rdquo; global, so it&rsquo;s easy to access the converter.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;app&#39;</span><span class="p">,</span> <span class="p">[])</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="s1">&#39;markdown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">text</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>              <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+</span><span class='line'>          <span class="p">}</span>
+</span><span class='line'>          <span class="k">return</span> <span class="nx">markdown</span><span class="p">.</span><span class="nx">toHTML</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>  <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Update</strong> 4/25/14: In newer versions of Angular you&rsquo;ll need to include <code>angular-sanitize.js</code> on the page, and bind with the <code>ng-bind-html</code> attribute. Props to <a href="https://twitter.com/michaeldick">Dick</a> and <a href="http://konpa.fr">Julien</a> for pointing this out.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-09T17:56:26-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/markdown/'>Markdown</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -938,163 +1080,6 @@ You can repeat this process with other aliases to add more XAMPP alias directori
 
 
 	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/xampp/'>XAMPP</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/02/19/wordpress-custom-post-statuses/">
-		
-			WordPress Custom Post Statuses</a>
-	</h2>
-	<div class="entry-content">
-		<p>WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of states and a WordPress custom post status. If you want to make certain posts stand out, or need a custom way to categorize your posts, this is simple way to do it.</p>
-
-<p>The following screenshot illustrates some of the default post states.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/wordpress-post-status-samples.png" alt="Before adding WordPress Custom Post Statuses" /></p>
-
-<h2>Adding a new WordPress Custom Post Status</h2>
-
-<p>Adding your own states is actually pretty easy. The following code snippet should get you going in the right direction.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">My_Custom_Post_State</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">function</span> <span class="nf">My_Custom_Post_State</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">__construct</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;display_post_states&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;custom_post_state&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">function</span> <span class="nf">custom_post_state</span><span class="p">(</span> <span class="nv">$states</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">global</span> <span class="nv">$post</span><span class="p">;</span>
-</span><span class='line'>    <span class="nv">$show_custom_state</span> <span class="o">=</span> <span class="k">null</span> <span class="o">!==</span> <span class="nx">get_post_meta</span><span class="p">(</span> <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">,</span> <span class="s1">&#39;_some_costom_field&#39;</span> <span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nv">$show_custom_state</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$states</span><span class="p">[]</span> <span class="o">=</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">&#39;Custom State&#39;</span> <span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nv">$states</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">new</span> <span class="nx">My_Custom_Post_State</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Result of Adding a WordPress Custom Post Status</h2>
-
-<p>Assuming you have code elsewhere that is adding the custom field to posts, you&rsquo;ll see something like this.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/custom-state-sample.png" alt="After Adding WordPress Custom Post Statuses" /></p>
-
-<p>If you added code to add a custom field called <code>_some_custom_field</code> to certain posts, those posts would show up with the &lsquo;Custom State&rsquo; status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field.</p>
-
-<p>That&rsquo;s pretty much it. Obviously there are more useful examples, but this should be enough to get you started.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-19T12:59:07-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/02/07/time-honored-destiny/">
-		
-			Time Honored Destiny</a>
-	</h2>
-	<div class="entry-content">
-		<p>Part of my Science Fiction course requires me to write a flash fiction. It turned out well enough that I&rsquo;m not embarrassed to let people read it, so here it is.</p>
-
-<blockquote>
-
-<p style="text-align: center; font-weight: bold;">Time Honored Destiny</p>
-
-It had been four months since the event. Four months of hell. If Thomas hadn&#8217;t started his project years before the outbreak, he would have given up weeks ago. The world had been shocked by how quickly the sickness spread. Thomas didn&#8217;t have time to be shocked. He just kept working. Before the sickness everyone had told him time travel wasn&#8217;t possible. They tried to convince him that he was wasting his time. He wondered how their opinion might change if they knew that his work might be the salvation of the human race.
-
-&#8220;It&#8217;s finally ready.&#8221; Thomas glanced at John, the only other person immune to the sickness. He was glad to have a companion to listen to his ramblings but wished it was someone who could respond. John was completely paralyzed. His body was so horribly disfigured it was almost unrecognizable as human. Thomas had found him a week after the first outbreak while looking for supplies at a nearby hospital. At first he&#8217;d thought the disfigurement was some strange manifestation of the sickness, but the hospital records said he&#8217;d been in a bus accident. He had never been identified by the hospital, so Thomas christened him John Doe. At the time he&#8217;d laughed at the generic name and promised to come up with something better, but with all of his creativity being poured into his work he never had the time.
-
-The machine only had room for Thomas, but if he was successful he would change history for both of them. John had been crippled before the outbreak, but by changing the past, Thomas could at least ensure he&#8217;d receive the medical attention he needed.
-
-Trembling with excitement, Thomas calibrated the machine to place him across the street from the CDC headquarters in Atlanta. He gave himself a month before the initial outbreak. Surely that would be enough time to prevent the world&#8217;s doom. All they had to do was find patient zero. By seizing one improperly sanitized needle from a washed up heroin junkie they could prevent the end of humanity.
-
-&#8220;Wish me luck.&#8221; He murmured. The countdown commenced. 3&#8230;2&#8230;1&#8230;
-
-After a few instants he immerged, dizzy and disoriented. He spotted the entrance to the CDC and stepped into the street. In his excitement he didn&#8217;t even see the bus as it raced toward him.
-</blockquote>
-
-
-<p>That&rsquo;s it. Whatcha think?</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-07T19:51:46-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman</a>, <a class='category' href='/blog/categories/writing/'>Writing</a>
 
 
 </div>
