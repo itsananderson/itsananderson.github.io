@@ -32,7 +32,7 @@ I'm not going to cover redirecting existing images to blob storage.
 When I switched over, I had few enough images that I just decided to manually update the posts that referenced them.
 If you have enough images, it may not be reasonable to manually update the posts that reference them. In that case, you can either try to automate it with a glorified perl script, or just leave the old posts alone and just upload new images to blob storage.
 
-If you're using Azure for your images, you'll want to grab a copy of Azure Storage Explorer. It's a handy little Windows application that gives you a CRUD view into your storage account. My [series on Azure Blob Storage and Node](http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/) covers setting up your storage account and getting your access keys, so I won't go over that again. Just grab one of your access keys and paste it into the "Storage account key" field in Storage Explorer's "Add Storage Account" popup.
+If you're using Azure for your images, you'll want to grab a copy of [Azure Storage Explorer](http://azurestorageexplorer.codeplex.com/). It's a handy little Windows application that gives you a CRUD view into your storage account. My [series on Azure Blob Storage and Node](http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/) covers setting up your storage account and getting your access keys, so I won't go over that again. Just grab one of your access keys and paste it into the "Storage account key" field in Storage Explorer's "Add Storage Account" popup.
 
 ![](http://itsananderson.blob.core.windows.net/post-images/setup-storage-explorer.png)
 
