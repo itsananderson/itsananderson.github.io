@@ -38,7 +38,6 @@ If you're using Azure for your images, you'll want to grab a copy of [Azure Stor
 
 As a last configuration step, open Tools &rarr; Options and go to the "Content Types" tab, then click "Save Changes". Storage Explorer can automatically set content types based on file extensions, but for some reason it's not enabled by default. Opening and saving the options seems to be enough to activate it.
 
-
 ![](http://itsananderson.blob.core.windows.net/post-images/configure-storage-explorer.png)
 
 Now that you've configured Storage Explorer, you can upload your images. First, create a container. Make sure you set permissions to "Public Container" or "Public Blob" so the images can be seen by unauthenticated users.
