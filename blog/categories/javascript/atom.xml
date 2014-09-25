@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-09-25T00:49:45-07:00</updated>
+  <updated>2014-09-25T11:42:17-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -148,6 +148,8 @@ it(“has a bar”, function() {
 ```</p>
 
 <p>This was a pretty useful discovery for me. Hopefully it is for you as well.</p>
+
+<p><strong>Update</strong>: <a href="http://davidruttka.com">David Ruttka</a> has pointed out that you can also use <code>xdescribe</code> and <code>xit</code> to <em>disable</em> individual suites and tests.</p>
 ]]></content>
   </entry>
   
