@@ -112,3 +112,5 @@ describe(“my feature b”, function() {
 ```
 
 This was a pretty useful discovery for me. Hopefully it is for you as well.
+
+**Update**: [David Ruttka](http://davidruttka.com) has pointed out that you can also use `xdescribe` and `xit` to *disable* individual suites and tests.
