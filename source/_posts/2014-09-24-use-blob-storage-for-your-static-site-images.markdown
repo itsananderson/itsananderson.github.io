@@ -3,7 +3,7 @@ layout: post
 title: "Use Blob Storage For Your Static Site Images"
 date: 2014-09-24 01:37:53 -0700
 comments: true
-categories: Octopress, Azure
+categories: Octopress Azure
 ---
 
 The purpose of this post is to show how easy it is to use cloud storage for your static blog's binary resources.
