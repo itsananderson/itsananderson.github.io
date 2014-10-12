@@ -7,8 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="My team uses Karma (and thus Jasmine) to test our AngularJS applications.
-Sometimes when a single test is failing, it&rsquo;s a pain to re-run every &hellip;">
+	<meta name="description" content="I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s require() API, or simply fail to fully utilize it well.
+Let&rsquo;s talk about &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,6 +80,152 @@ Sometimes when a single test is failing, it&rsquo;s a pain to re-run every &hell
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/10/12/understanding-nodes-require-function/">
+		
+			Understanding Node&#8217;s Require Function</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s <code>require()</code> API, or simply fail to fully utilize it well.
+Let&rsquo;s talk about some examples.</p>
+
+<h2>Skipping the File Extension</h2>
+
+<p>When you <code>require()</code> a file in Node, it checks a few possibilities:</p>
+
+<ul>
+<li>The exact file name</li>
+<li>The file name with <code>.js</code> appended</li>
+<li>The file name with <code>.json</code> appended</li>
+</ul>
+
+
+<p><em>Note: In case you weren&rsquo;t aware, Node has built-in support for <code>require</code>ing JSON files.
+No need to manually read the file and call <code>JSON.parse</code>.</em></p>
+
+<p>This means instead of doing <code>require('./foo.js')</code> you can do <code>require('./foo')</code>, and Node will figure it out.
+I personally feel that it looks cleaner to leave off the file extension, but that&rsquo;s a matter of preference.
+There is, however, at least one case I&rsquo;m aware of where leaving off the file extension improves the flexibility of your code.</p>
+
+<p>Let&rsquo;s say you have a config for your app, stored in <code>config.json</code>.
+Throughout your app you <code>require('./config.json')</code> to load the config.
+Now what if you decide the config needs to execute dynamic code (to look up environment variables, for example)?
+If you&rsquo;ve hardcoded the <code>.json</code> in your code, you&rsquo;ll have to find everywhere you&rsquo;ve used it and change the extension.</p>
+
+<p>There are two ways to avoid this. The first is to just start with a <code>.js</code> file, even if it&rsquo;s a static config.
+The second is to just <code>require('./config')</code> in your code, so that you can change the file extension without needing to update your code base.</p>
+
+<h2>Modules Are Singletons</h2>
+
+<p>When you load a module/file in Node, you&rsquo;ll always get the same instance.
+Consider the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// a.js</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">Random</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Intuitively, it seems like main.js would print 4 different random numbers, but it actually prints the same random number 4 times.
+This is because Node will only load a file once.
+If you <code>require</code> the same file multiple times (even from different parts of your code), you&rsquo;ll get the same instance.</p>
+
+<p>I&rsquo;ve seen code passing around objects between modules when they could just require the file again and get the same result.
+Obviously there are good reasons, like dependency injection, for passing objects around, but sometimes it adds useless complexity.
+In cases where you&rsquo;re only passing required objects around &ldquo;to get the same instance&rdquo;, just require the module where it&rsquo;s needed.</p>
+
+<p>Now the question you should be asking is &ldquo;what if I <em>do</em> want different instances?&rdquo;.
+The answer is to export a function, which can then be invoked to get a new instance.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// b.js</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">rand</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./b&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Don&rsquo;t Load a Module&rsquo;s Submodule</h2>
+
+<p>This example is obscure. I&rsquo;ve only seen it once, but it was a pain.</p>
+
+<p>You can <em>technically</em> do something like this: <code>require('some-module/node_modules/some-submodule')</code> to load a dependency of a module you depend on, but you shouldn&rsquo;t.</p>
+
+<p>The problem with this approach is that you&rsquo;re inferring a contract with the module&rsquo;s code that isn&rsquo;t present.
+The author of that module could easily switch out &ldquo;some-submodule&rdquo; for something else, without considering that a breaking change.
+Depending on how you&rsquo;re pinning your versions, you may find yourself with an updated module and broken code.</p>
+
+<p>Instead, stop being lazy and install &ldquo;some-submodule&rdquo; as a direct dependency.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-12T09:24:25-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -2257,340 +2403,6 @@ In the final post in this series, we&rsquo;ll talk about putting everything toge
 
 
 <time datetime="2014-07-08T20:47:12-07:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">
-		
-			Azure Blob Storage and Node: Listing Blobs</a>
-	</h2>
-	<div class="entry-content">
-		<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><strong>Listing Blobs</strong></li>
-<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
-</ol>
-
-
-<h2>Listing Containers and Blobs in Storage</h2>
-
-<p><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Last time</a> we talked about downloading blobs from storage.
-This time we&rsquo;ll cover listing your existing containers and blobs.</p>
-
-<h3>Listing Containers in an Account</h3>
-
-<p>Listing the containers in a storage account is easy with the <code>listContainerSegmented</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listContainersSegmented</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list containers&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Successfully listed containers&#39;</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you have enough containers, not all of them will be returned in one call.
-If <code>result.continuationToken</code> is not null, there are more entries.
-You can get the next segment of entries by calling listContainersSegmented again with <code>result.continuationToken</code> as the first result.</p>
-
-<p>If you want to aggregate all containers, you can use the following code.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">containers</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">aggregateContainers</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">er</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">containers</span> <span class="o">=</span> <span class="nx">containers</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">blobService</span>
-</span><span class='line'>                <span class="p">.</span><span class="nx">listContainersSegmented</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">,</span> <span class="nx">aggregateContainers</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">containers</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listContainersSegmented</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">aggregateContainers</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">containers</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list containers&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">containers</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Listing Blobs in a Container</h3>
-
-<p>You can list blobs in a container with the <code>listBlobsSegmented</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmented</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list blobs for container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Successfully listed blobs for container %s&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As with containers, you can use the continuationToken to aggregate results.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobs</span> <span class="o">=</span> <span class="p">[];</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">aggregateBlobs</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">cb</span><span class="p">(</span><span class="nx">er</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">blobs</span> <span class="o">=</span> <span class="nx">blobs</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmented</span><span class="p">(</span>
-</span><span class='line'>                <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>                <span class="nx">result</span><span class="p">.</span><span class="nx">continuationToken</span><span class="p">,</span>
-</span><span class='line'>                <span class="nx">aggregateBlobs</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">blobs</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmented</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">aggregateBlobs</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blobs</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list blobs&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">blobs</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Listing Blobs and Containers by Prefix</h3>
-
-<p>If you want to &ldquo;query&rdquo; blobs and containers by a prefix, you can do so with the <code>listContainersSegmentedWithPrefix</code> and <code>listBlobsSegmentedWithPrefix</code> methods.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;images-&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listContainersSegmentedWithPrefix</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">prefix</span><span class="p">,</span>
-</span><span class='line'>    <span class="kc">null</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list containers&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Found containers with prefix %s&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;image-&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">listBlobsSegmentedWithPrefix</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">prefix</span><span class="p">,</span>
-</span><span class='line'>    <span class="kc">null</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t list blobs&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Found blobs with prefix %s&quot;</span><span class="p">,</span> <span class="nx">prefix</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">entries</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Conclusion</h3>
-
-<p>In this post we covered listing blobs and containers in your storage account.
-In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">blob metadata</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-07T17:33:03-07:00" pubdate data-updated="true">Jul 7<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-09-25T11:42:17-07:00</updated>
+  <updated>2014-10-12T10:19:14-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Understanding Node's require Function]]></title>
+    <link href="http://willi.am/blog/2014/10/12/understanding-nodes-require-function/"/>
+    <updated>2014-10-12T09:24:25-07:00</updated>
+    <id>http://willi.am/blog/2014/10/12/understanding-nodes-require-function</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s <code>require()</code> API, or simply fail to fully utilize it well.
+Let&rsquo;s talk about some examples.</p>
+
+<h2>Skipping the File Extension</h2>
+
+<p>When you <code>require()</code> a file in Node, it checks a few possibilities:</p>
+
+<ul>
+<li>The exact file name</li>
+<li>The file name with <code>.js</code> appended</li>
+<li>The file name with <code>.json</code> appended</li>
+</ul>
+
+
+<p><em>Note: In case you weren&rsquo;t aware, Node has built-in support for <code>require</code>ing JSON files.
+No need to manually read the file and call <code>JSON.parse</code>.</em></p>
+
+<p>This means instead of doing <code>require('./foo.js')</code> you can do <code>require('./foo')</code>, and Node will figure it out.
+I personally feel that it looks cleaner to leave off the file extension, but that&rsquo;s a matter of preference.
+There is, however, at least one case I&rsquo;m aware of where leaving off the file extension improves the flexibility of your code.</p>
+
+<p>Let&rsquo;s say you have a config for your app, stored in <code>config.json</code>.
+Throughout your app you <code>require('./config.json')</code> to load the config.
+Now what if you decide the config needs to execute dynamic code (to look up environment variables, for example)?
+If you&rsquo;ve hardcoded the <code>.json</code> in your code, you&rsquo;ll have to find everywhere you&rsquo;ve used it and change the extension.</p>
+
+<p>There are two ways to avoid this. The first is to just start with a <code>.js</code> file, even if it&rsquo;s a static config.
+The second is to just <code>require('./config')</code> in your code, so that you can change the file extension without needing to update your code base.</p>
+
+<h2>Modules Are Singletons</h2>
+
+<p>When you load a module/file in Node, you&rsquo;ll always get the same instance.
+Consider the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// a.js</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">Random</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Intuitively, it seems like main.js would print 4 different random numbers, but it actually prints the same random number 4 times.
+This is because Node will only load a file once.
+If you <code>require</code> the same file multiple times (even from different parts of your code), you&rsquo;ll get the same instance.</p>
+
+<p>I&rsquo;ve seen code passing around objects between modules when they could just require the file again and get the same result.
+Obviously there are good reasons, like dependency injection, for passing objects around, but sometimes it adds useless complexity.
+In cases where you&rsquo;re only passing required objects around &ldquo;to get the same instance&rdquo;, just require the module where it&rsquo;s needed.</p>
+
+<p>Now the question you should be asking is &ldquo;what if I <em>do</em> want different instances?&rdquo;.
+The answer is to export a function, which can then be invoked to get a new instance.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// b.js</span>
+</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+</span><span class='line'><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">rand</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./b&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Don&rsquo;t Load a Module&rsquo;s Submodule</h2>
+
+<p>This example is obscure. I&rsquo;ve only seen it once, but it was a pain.</p>
+
+<p>You can <em>technically</em> do something like this: <code>require('some-module/node_modules/some-submodule')</code> to load a dependency of a module you depend on, but you shouldn&rsquo;t.</p>
+
+<p>The problem with this approach is that you&rsquo;re inferring a contract with the module&rsquo;s code that isn&rsquo;t present.
+The author of that module could easily switch out &ldquo;some-submodule&rdquo; for something else, without considering that a breaking change.
+Depending on how you&rsquo;re pinning your versions, you may find yourself with an updated module and broken code.</p>
+
+<p>Instead, stop being lazy and install &ldquo;some-submodule&rdquo; as a direct dependency.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Only Run One Suite or Spec in Jasmine]]></title>
@@ -3383,86 +3497,6 @@ In order to get Node to exit without something clunky like process.exit(), you j
 This switches the response stream to &ldquo;flowing&rdquo; mode.
 According to the <a href="http://nodejs.org/api/stream.html#stream_readable_resume">streams documentation</a>,
 this is the way to finish a stream if you don&rsquo;t care about consuming its data.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Escaping Exclamation Marks in Bash]]></title>
-    <link href="http://willi.am/blog/2014/05/22/escaping-exclamation-marks-in-bash/"/>
-    <updated>2014-05-22T18:25:22-07:00</updated>
-    <id>http://willi.am/blog/2014/05/22/escaping-exclamation-marks-in-bash</id>
-    <content type="html"><![CDATA[<p>If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;It works!&quot;</span>
-</span><span class='line'>-bash: !<span class="err">&quot;</span>: event not found
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>When Bash encounters an exclamation mark under certain conditions, it tries to expand the expression to the last matching command in your history.
-For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">&quot;Hello, World&quot;</span>
-</span><span class='line'>Hello, World
-</span><span class='line'><span class="nv">$ </span>ls
-</span><span class='line'>bin  foo.sh
-</span><span class='line'><span class="nv">$ </span>!e
-</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Hello, World&quot;</span>
-</span><span class='line'>Hello, World
-</span><span class='line'><span class="nv">$ </span>!l
-</span><span class='line'>ls
-</span><span class='line'>bin  foo.sh
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice that the second command <code>!e</code> was expanded to the previous <code>echo "Hello, World"</code> statement, and <code>!l</code> is expanded to the previous <code>ls</code> statement.
-This is cool, but can also be annoying if that&rsquo;s not what you want.
-Fortunately there&rsquo;s a workaround.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># If you don&#39;t need variable substitution, use single quotes</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s1">&#39;It works!&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c"># If you need variable substitution, keep exclamation outside the quotes</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks $name&quot;</span><span class="se">\!</span>
-</span><span class='line'><span class="c"># Or escape with single quotes</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks $name&quot;</span><span class="s1">&#39;!&#39;</span>
-</span><span class='line'><span class="c"># Also works in the middle of the line</span>
-</span><span class='line'><span class="nv">$ </span>git commit -m <span class="s2">&quot;Thanks&quot;</span><span class="se">\!</span><span class="s2">&quot; $name&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As far as I can tell, these solutions work in both Linux, and Git Bash in Windows.</p>
-
-<p>You can also work around this by leaving of the <code>-m</code> and editing your commit message in vim like a real developer
-<img src="//itsananderson.blob.core.windows.net/post-images/trollface.png" width="30" height="30" style="vertical-align: middle" /></p>
-
-<p>A couple pages I found helpful when figuring this out:</p>
-
-<ul>
-<li><a href="http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark">http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark</a></li>
-<li><a href="http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html">http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
