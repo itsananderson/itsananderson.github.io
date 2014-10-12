@@ -6,7 +6,7 @@ comments: true
 categories: Node
 ---
 
-I've seen a few patterns lately that misunderstand Node's `require()` API, or simply fail to fully utilize it well.
+I've seen a few patterns lately that misunderstand Node's `require()` function, or simply fail to fully utilize it well.
 Let's talk about some examples.
 
 Skipping the File Extension
