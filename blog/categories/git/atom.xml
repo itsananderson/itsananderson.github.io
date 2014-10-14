@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-10-14T13:54:02-07:00</updated>
+  <updated>2014-10-14T14:14:43-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Unpacking a Git Database]]></title>
+    <link href="http://willi.am/blog/2014/10/14/unpacking-a-git-database/"/>
+    <updated>2014-10-14T13:57:15-07:00</updated>
+    <id>http://willi.am/blog/2014/10/14/unpacking-a-git-database</id>
+    <content type="html"><![CDATA[<p>While writing the <a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">previous post</a>, I discovered a cool Git command which I thought I&rsquo;d share.</p>
+
+<p>When you clone a Git repository, most Git hosts will send you a packed version of the database.
+This is much more efficient than sending the raw Git objects, because duplicate content can be compressed.</p>
+
+<p>However, if you want to inspect the object database with a file browser, it&rsquo;s hard to do so, because the content stays packed in a single file.
+Unpacking is pretty simple.</p>
+
+<p>If you unpack the <code>.pack</code> file while it&rsquo;s in the <code>.git/object/pack</code> folder, Git won&rsquo;t do anything, because it concludes that it already has all the objects contained in that <code>.pack</code>.
+However, if you move the <code>.pack</code> file somewhere else, you can unpack it into your repository&rsquo;s database.</p>
+
+<p><code>
+mv .git/object/pack/pack-*.pack .
+cat pack-*.pack | git unpack-objects
+rm pack-*.pack
+</code></p>
+
+<p>And there you have it.
+Your packed objects are unpacked into <code>.git/objects/</code> folder.</p>
+
+<p>This isn&rsquo;t something I recommend doing as a general practice, since it can take up significantly more space, but it&rsquo;s a useful thing to be able to do if you want to manually inspect your Git database.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[For the Last Time: Git Stores Snapshots Not Diffs]]></title>
@@ -300,35 +329,6 @@ With pull requests, many collaborators can push to a single branch, and all chan
 
 <p>Once again, GitHub has a good <a href="https://help.github.com/articles/using-pull-requests">article on pull requests</a>.
 This one is very specific to GitHub&rsquo;s pull request workflow.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Inspecting Git Traffic in Fiddler]]></title>
-    <link href="http://willi.am/blog/2014/05/08/inspecting-git-traffic-in-fiddler/"/>
-    <updated>2014-05-08T07:32:26-07:00</updated>
-    <id>http://willi.am/blog/2014/05/08/inspecting-git-traffic-in-fiddler</id>
-    <content type="html"><![CDATA[<p>If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make Git send traffic through Fiddler.</p>
-
-<p><code>
-git config --global http.proxy 127.0.0.1:8888
-git config --global http.sslVerify false
-</code></p>
-
-<p>This tells Git to use Fiddler as the proxy, and to turn off SSL certificate verification (so it doesn&rsquo;t balk at Fiddler&rsquo;s cert).</p>
-
-<p>Make sure Fiddler&rsquo;s actually running, or Git won&rsquo;t be able to connect.</p>
-
-<p>If you just want to use Fiddler for a single repository, run the commands from within that repository without the <code>--global</code> flag. Obviously this work for the <code>git clone</code> command, so you&rsquo;ll have to use a global configuration if you want to inspect that.</p>
-
-<p>When you&rsquo;re done, make sure you undo your changes:</p>
-
-<p><code>
-git config --global --unset http.proxy
-git config --global --unset http.sslVerify
-</code></p>
-
-<p>Again, remove the <code>--global</code> flag if you&rsquo;re just inspecting traffic for a single repository.</p>
 ]]></content>
   </entry>
   

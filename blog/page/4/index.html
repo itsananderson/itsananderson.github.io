@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="After David wrote these nice blog posts at my request, I figured I should probably give Octopress the old college try. Mar 30th, 2014 Blogging, &hellip;">
+	<meta name="description" content="If you&rsquo;re a Vim user like me, you&rsquo;ve likely found yourself staring at a view like this and wondered: &ldquo;How&rsquo;d I get here, and &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +79,89 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/04/07/understanding-vim-command-line-and-search-history/">
+		
+			Understanding Vim Command Line and Search History</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;re a Vim user like me, you&rsquo;ve likely found yourself staring at a view like this and wondered:</p>
+
+<h4>&ldquo;How&rsquo;d I get here, and how do I get away&rdquo;</h4>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/vim-command-line-history.png"></p>
+
+<p>Don&rsquo;t dispair. You&rsquo;ve discovered Vim&rsquo;s command line history. This is the list of commands you&rsquo;ve run. They&rsquo;re stored in <code>~/.viminfo</code> or <code>~/_viminfo</code>, depending on your system configuration</p>
+
+<p>There are actually two modes you can get into:
+Command Line History, and Search History.
+We&rsquo;ll cover both</p>
+
+<p>If you didn&rsquo;t want to get into your command/search history, you can easily get back to normal mode by hitting <code>CTRL+C</code> twice</p>
+
+<h2>Command Line History</h2>
+
+<p>Command line history is activated by typing <code>q:</code>. I usually find myself in this mode after trying to type <code>:q</code> too quickly</p>
+
+<p>This is actually a pretty useful tool.
+You&rsquo;re basically opening a file that contains your command history, so you can treat it like you would a file you have opened in Vim.</p>
+
+<p>Start by navigating through the commands.</p>
+
+<ul>
+<li>You can use <code>j</code> and <code>k</code> to move down and up.</li>
+<li>You can search through the commands with <code>/&lt;searchtext&gt;</code></li>
+</ul>
+
+
+<p>Once you find the command you want to run, simply hit <code>ENTER</code> from &ldquo;Normal&rdquo; mode to run that command on the current file</p>
+
+<h2>Search History</h2>
+
+<p>Search history is activated by typing <code>q/</code>.</p>
+
+<p>This is also a useful tool, though not as useful as command line history, in my opinion</p>
+
+<p>Just like command line history, you can navigate through the history just like a regular file, and hit <code>ENTER</code> with the cursor over the desired search to perform that search on the current document</p>
+
+<h2>Now You&rsquo;re Better at Vim</h2>
+
+<p>When I figured out what these views meant, it took a scary &ldquo;how do I get out of this mode&rdquo; moment, and turned it into a &ldquo;this is useful&rdquo; moment.
+Hopefully after reading this post, you&rsquo;ll feel the same way!</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-07T22:48:12-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/vim/'>Vim</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -872,124 +955,6 @@ Quarters must be formatted with a trailing zero. Example: 201220 is Winter quart
 
 	<a class='category' href='/blog/categories/chrome/'>Chrome</a>, <a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman,</a>
 
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/09/05/get-called-class-name-in-php/">
-		
-			Get Called Class Name in PHP</a>
-	</h2>
-	<div class="entry-content">
-		<p>I posted a few months ago about <a href="http://www.itsananderson.com/2011/04/using-static-methods-in-wordpress-plugins/">using static methods in WordPress plugins</a>.
-I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
-One part, however, was a source of some pain: Inheritance.
-This can be solved by utilizing PHP&rsquo;s <code>get_called_class()</code> function to get called class names in from your static functions.</p>
-
-<p>To make a long story short, getting the actual class name of the current object in an instance method is easy, just call <code>get_class( $this )</code>.
-The problem is, $this doesn&rsquo;t exist in a static method, and just calling get_class() returns the current class (basically the same as <strong>CLASS</strong>), which isn&rsquo;t helpful if you actually want the name of a child class.</p>
-
-<h2>Why You Might Want to Get Called Class Names</h2>
-
-<p>Consider a base class which has a <code>get_instance()</code> function, for creating an instance of the class, or returning an existing instance if it has already been instantiated.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nb">is_null</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Singleton</span><span class="p">();</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>How to Get Called Class Names and Improve Extensibility</h2>
-
-<p>This is great, but the problem arises when we try to extend that singleton class.
-Ideally, the inherited get_instance() method would return an instance of the actual class, but with the above implementation, it would always return an instance of the Singleton class. Here&rsquo;s an alternative, which uses the get_called_class() function to get called class names.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instances</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nv">$class</span> <span class="o">=</span> <span class="nb">get_called_class</span><span class="p">();</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="k">empty</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nv">$class</span><span class="p">();</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Child</span> <span class="k">extends</span> <span class="nx">Singleton</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// Child class stuff</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh?</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-09-05T13:09:43-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2011</time></div>
-	<div class="tags">
 
 </div>
 	

@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Category: Git - Will Anderson</title>
+	<title>Unpacking a Git Database - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Category: Git">
+	<meta name="description" content="While writing the previous post, I discovered a cool Git command which I thought I&rsquo;d share. When you clone a Git repository, most Git hosts &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,145 +78,74 @@
 	
 		
 	
-	<div id="content" class="inner">
-	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Unpacking a Git Database</h2>
+	<div class="entry-content"><p>While writing the <a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">previous post</a>, I discovered a cool Git command which I thought I&rsquo;d share.</p>
+
+<p>When you clone a Git repository, most Git hosts will send you a packed version of the database.
+This is much more efficient than sending the raw Git objects, because duplicate content can be compressed.</p>
+
+<p>However, if you want to inspect the object database with a file browser, it&rsquo;s hard to do so, because the content stays packed in a single file.
+Unpacking is pretty simple.</p>
+
+<p>If you unpack the <code>.pack</code> file while it&rsquo;s in the <code>.git/object/pack</code> folder, Git won&rsquo;t do anything, because it concludes that it already has all the objects contained in that <code>.pack</code>.
+However, if you move the <code>.pack</code> file somewhere else, you can unpack it into your repository&rsquo;s database.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>mv .git/object/pack/pack-*.pack .
+</span><span class='line'>cat pack-*.pack | git unpack-objects
+</span><span class='line'>rm pack-*.pack</span></code></pre></td></tr></table></div></figure>
 
 
-	
-	
-	<section class="archives"><h1 class="year">2014</h1>
+<p>And there you have it.
+Your packed objects are unpacked into <code>.git/objects/</code> folder.</p>
 
-<article>
-	<h2 class="title"><a href="/blog/2014/10/14/unpacking-a-git-database/">Unpacking a Git Database</a></h2>
-	<div class="meta">
-		<div class="date">Oct 14</div>
-		<div class="tags">
+<p>This isn&rsquo;t something I recommend doing as a general practice, since it can take up significantly more space, but it&rsquo;s a useful thing to be able to do if you want to manually inspect your Git database.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-14T13:57:15-07:00" pubdate data-updated="true">Oct 14<span>th</span>, 2014</time></div>
+	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/git/'>Git</a>
 
 
 </div>
-	    
-	</div>
-</article>
 	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">For the Last Time: Git Stores Snapshots Not Diffs</a></h2>
-	<div class="meta">
-		<div class="date">Oct 14</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
 </div>
-	    
-	</div>
 </article>
-	
 
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/09/16/introducing-edge-git/">Introducing Edge-Git</a></h2>
-	<div class="meta">
-		<div class="date">Sep 16</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
 </div>
-	    
-	</div>
-</article>
-	
 
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/08/12/the-dark-side-of-the-force-push/">The Dark Side of the Force Push</a></h2>
-	<div class="meta">
-		<div class="date">Aug 12</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	    
-	</div>
-</article>
-	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/05/12/git-concepts-branches-forks-and-pull-requests/">Git Concepts: Branches, Forks, and Pull Requests</a></h2>
-	<div class="meta">
-		<div class="date">May 12</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	    
-	</div>
-</article>
-	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/05/08/inspecting-git-traffic-in-fiddler/">Inspecting Git Traffic in Fiddler</a></h2>
-	<div class="meta">
-		<div class="date">May  8</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/fiddler/'>Fiddler</a>, <a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	    
-	</div>
-</article>
-	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2014/05/06/git-for-devs-who-cant-commit-good/">Git for Devs Who Can't Commit Good</a></h2>
-	<div class="meta">
-		<div class="date">May  6</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	    
-	</div>
-</article>
-	
-	</section>
-	
 
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2014
