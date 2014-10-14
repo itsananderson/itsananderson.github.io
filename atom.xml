@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-10-12T10:21:08-07:00</updated>
+  <updated>2014-10-14T13:42:04-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,40 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[For the Last Time: Git Stores Snapshots Not Diffs]]></title>
+    <link href="http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/"/>
+    <updated>2014-10-14T10:15:11-07:00</updated>
+    <id>http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs</id>
+    <content type="html"><![CDATA[<p>I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
+<strong>Git stores a snapshot of the entire file, not a diff</strong></p>
+
+<p>This is an understandable point of confusion, because most output from Git is in the form of diffs.
+Additionally, many other SCMs store changes as diffs instead of snapshots.
+However, Git stores an entire snapshot of each modified file.</p>
+
+<p>If you want to see an explanation from someone much smarter than me, check out <a href="https://www.youtube.com/watch?v=rALm7BCCY-0#t=6m28s">this video</a>.</p>
+
+<h2>Illustrating Snapshots</h2>
+
+<p>The easiest way to show how Git stores snapshots is create a project and show the relative sizes of the .git object folder.</p>
+
+<p>I&rsquo;ve created a <a href="https://github.com/itsananderson/alice">sample project on GitHub</a> that contains two commits.
+The first commit introduces the text of Alice&rsquo;s Adventures in Wonderland.
+The second commit makes a small modification to the text.</p>
+
+<p>If you clone the repository and unpack the individual objects, you&rsquo;ll see something like the following when you inspect the .git directory with <a href="http://windirstat.info/">WinDirStat</a>.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/alice-windirstat.png" alt="" /></p>
+
+<p>As you can see, Git stores two blobs of (nearly) identical size, one for each version of the text.
+If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much smaller blob (plus other objects for the tree etc.)</p>
+
+<p>This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
+If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding Node's require Function]]></title>
@@ -3442,61 +3476,6 @@ I joined a new team at work, worked on 5-6 projects (literally lost count), and 
 You know, the usual.</p>
 
 <p>Things are finally settling down again a little, so what better time to take on another hobby?</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Ending a Stream Without Consuming Its Data]]></title>
-    <link href="http://willi.am/blog/2014/06/02/ending-a-stream-without-consuming-its-data/"/>
-    <updated>2014-06-02T10:28:46-07:00</updated>
-    <id>http://willi.am/blog/2014/06/02/ending-a-stream-without-consuming-its-data</id>
-    <content type="html"><![CDATA[<p>I ran into an issue recently while writing <a href="https://www.npmjs.org/package/placebase">a node module</a>.
-My process would sometimes complete its work, but wouldn&rsquo;t end.
-After a bit of debugging, I figured out what was happening.</p>
-
-<p>I had implemented a handler for the HTTP &ldquo;location&rdquo; header.
-If a response came back with that header, I would ignore that response and go fetch the new location instead.
-Unfortunately, whenever I did that, the process would finish fetching the new location, and then just hang there for about a minute bofore exiting.
-The reason this happened was because I wasn&rsquo;t properly handling the first response.</p>
-
-<p>Here&rsquo;s an oversimplified explanation of what happens.
-This is from my limited understanding of Node internals, so the details may be slighly off, but the overall idea is correct.</p>
-
-<p>When you use the &ldquo;http&rdquo; module to make a request in Node, the response it gives you is a stream.
-If you don&rsquo;t do anything to consume that stream&rsquo;s data, Node doesn&rsquo;t exit because there&rsquo;s still work to be done (consuming the stream).
-In order to get Node to exit without something clunky like process.exit(), you just need to switch the stream to &ldquo;flowing&rdquo; mode.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">responseHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">location</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">responseHandler</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">response</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">response</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nx">responseHandler</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Notice on line 6 how I&rsquo;ve called response.resume().
-This switches the response stream to &ldquo;flowing&rdquo; mode.
-According to the <a href="http://nodejs.org/api/stream.html#stream_readable_resume">streams documentation</a>,
-this is the way to finish a stream if you don&rsquo;t care about consuming its data.</p>
 ]]></content>
   </entry>
   

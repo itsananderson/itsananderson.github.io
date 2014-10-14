@@ -239,16 +239,22 @@
         <lastmod>2014-10-12T10:20:39-07:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/
+        </loc>
+        <lastmod>2014-10-14T13:40:01-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/404.html</loc>
         <lastmod>2014-04-02T23:47:51-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2014-10-12T10:20:39-07:00</lastmod>
+        <lastmod>2014-10-14T13:40:01-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2014-10-12T10:20:39-07:00</lastmod>
+        <lastmod>2014-10-14T13:40:01-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/node-modules/</loc>
