@@ -41,7 +41,7 @@ Consider the following:
 
 ```javascript
 // a.js
-module.exports = Math.Random()
+module.exports = Math.random()
 ```
 
 ```javascript
