@@ -19,3 +19,17 @@ Illustrating Snapshots
 ---
 
 The easiest way to show how Git stores snapshots is create a project and show the relative sizes of the .git object folder.
+
+I've created a [sample project on GitHub](https://github.com/itsananderson/alice) that contains two commits.
+The first commit introduces the text of Alice's Adventures in Wonderland.
+The second commit makes a small modification to the text.
+
+If you clone the repository and unpack the individual objects, you'll see something like the following when you inspect the .git directory with [WinDirStat](http://windirstat.info/).
+
+![](http://itsananderson.blob.core.windows.net/post-images/alice-windirstat.png)
+
+As you can see, Git stores two blobs of (nearly) identical size, one for each version of the text.
+If Git stored diffs, you'd expect to see one large blob, and a second much smaller blob (plus other objects for the tree etc.)
+
+This isn't exactly a scientific proof about Git's behavior, but hopefully it illustrates it enough to get the point across.
+If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation.
