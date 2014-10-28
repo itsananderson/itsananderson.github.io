@@ -52,6 +52,14 @@ end
 # Working with Jekyll #
 #######################
 
+desc "Pull updates from GitHub"
+task :update do
+  puts "## Updating `source` branch"
+  system "git pull --rebase origin source"
+  puts "## Updating `#{deploy_dir}` folder"
+  system "git -C #{deploy_dir} pull --rebase origin master"
+end
+
 desc "Generate jekyll site"
 task :generate do
   raise "### You haven't set anything up yet. First run `rake install` to set up an Octopress theme." unless File.directory?(source_dir)
