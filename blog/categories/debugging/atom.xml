@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Debugging | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/debugging/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-10-14T14:14:43-07:00</updated>
+  <updated>2014-10-29T23:14:12-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Ignoring JavaScript Libraries While Debugging]]></title>
+    <link href="http://willi.am/blog/2014/10/28/ignoring-javascript-libraries-while-debugging/"/>
+    <updated>2014-10-28T14:33:06-07:00</updated>
+    <id>http://willi.am/blog/2014/10/28/ignoring-javascript-libraries-while-debugging</id>
+    <content type="html"><![CDATA[<p>Debugging front-end JavaScript can sometimes be painful.
+When you rely on third-party libraries and frameworks, you find yourself stepping back and forth between the library&rsquo;s code and your own.
+Most of the time, it&rsquo;s safe to assume that these third-party libraries are working correctly, so ignoring them can make it easier to keep your own code in your head.</p>
+
+<p>Fortunately for us, Chrome, Firefox, and Internet Explorer each provide a way to ignore library code.</p>
+
+<h3>Chrome</h3>
+
+<p>In chrome, you can ignore a specific script by right clicking it in the &ldquo;Sources&rdquo; tab.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/chrome-blackbox-script.png" alt="" /></p>
+
+<p>You can view the currently ignored patterns in the devtools settings page.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/chrome-blackbox-patterns.png" alt="" /></p>
+
+<h3>Firefox</h3>
+
+<p>Firefox is similar to Chrome, but you select the script in the &ldquo;Debugger&rdquo; tab, and click the eye icon to &ldquo;Toggle Black Boxing&rdquo;.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/firefox-blackbox-script.png" alt="" /></p>
+
+<h3>Internet Explorer</h3>
+
+<p>Internet explorer uses a different term, but the concept is the same.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/internet-explorer-mark-as-library.png" alt="" /></p>
+
+<p>You can edit the exclusion list in:</p>
+
+<p><code>%APPDATA%\..\LocalLow\Microsoft\F12\header\MyCode.json</code></p>
+
+<p>or</p>
+
+<p><code>%APPDATA%\..\Local\Microsoft\F12\header\MyCode.json</code></p>
+
+<p>More info is available in the <a href="http://msdn.microsoft.com/en-us/library/ie/dn255007(v=vs.85).aspx#just_my_code">F12 tools documentation</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A Lesson in Debugging: Verify Your Tools]]></title>

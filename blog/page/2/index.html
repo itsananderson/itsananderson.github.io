@@ -7,12 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="This is part of a series on working with Azure Blob Storage in Node. Introduction
-First Steps
-Creating Blobs
-Downloading Blobs
-Listing Blobs
-Blob &hellip;">
+	<meta name="description" content="You can store data as newline delimited JSON entries.
+Since JSON encodes newline characters, you can use newlines to separate entries. For more &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -84,6 +80,194 @@ Blob &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/07/16/storing-data-as-newline-delimited-json-entries/">
+		
+			Storing Data as Newline Delimited JSON Entries</a>
+	</h2>
+	<div class="entry-content">
+		<p>You can store data as newline delimited JSON entries.
+Since JSON encodes newline characters, you can use newlines to separate entries.</p>
+
+<p>For more details, read on.</p>
+
+<h2>Exporting Large Data</h2>
+
+<p>In a recent project, I needed to export data, and then import it into another system.
+I decided to go with JSON as the export format, because it was structured data.
+The problem was, the data could be extremely large, so loading it all into memory and generating a single JSON object wasn&rsquo;t an option.</p>
+
+<p>As a first solution to the problem, I considered &ldquo;fake&rdquo; streaming to the file with the following pseudocode:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
+</span><span class='line'>write "["
+</span><span class='line'>foreach entry:
+</span><span class='line'>  if not first entry:
+</span><span class='line'>      write ","
+</span><span class='line'>  write JSON serialized entry
+</span><span class='line'>write "]"
+</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This got the job done, but what about when I import the data?
+Since I wrote the data as one giant JSON array, I&rsquo;d have to load the entire thing to deserialize.
+(In Node, I could use a streaming JSON parser, but this project was in PHP).</p>
+
+<p>This means there&rsquo;s a limit to the amount of data I can import.
+Even on a host where I can control PHP&rsquo;s memory limit, there&rsquo;s still a limitation to how much data can reasonably be loaded into memory.</p>
+
+<h2>Exporting Newline Delimited Data</h2>
+
+<p>I finally realized that I was missing something important.
+JSON serializes newlines as &ldquo;\n&rdquo;, which means actual newlines can be safely used to delimit each JSON entry.
+(Assuming you don&rsquo;t &ldquo;pretty print&rdquo; your JSON).</p>
+
+<p>The new export method is as follows:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
+</span><span class='line'>foreach entry:
+</span><span class='line'>  if not first entry:
+</span><span class='line'>      write newline
+</span><span class='line'>  write JSON serialized entry
+</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Already simpler. Yay.</p>
+
+<h2>Importing Newline Delimited Data</h2>
+
+<p>Now that we&rsquo;ve exported the data, it&rsquo;s time to import it.
+In PHP, this is still a challenge, because there&rsquo;s no elegant solution for streams.
+The closest you can get is the <a href="http://php.net/manual/en/function.stream-get-line.php"><code>stream_get_line</code></a> function.
+The problem with this function is that you have to specify a max length of characters to read.
+If the line is longer than those characters, you have to detect that, and keep searching until you get to the newline.
+There&rsquo;s a <a href="http://php.net/manual/en/function.stream-get-line.php#109339">comment on the manual that outlines the solution</a>.</p>
+
+<p>In pseudocode:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
+</span><span class='line'>while get line from file:
+</span><span class='line'>  import entry
+</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, fairly simple (ignoring caveats with &ldquo;get line from file&rdquo;).
+The great thing about this solution is that we only have to load at most one entry at a time into memory.</p>
+
+<h2>Bonus: Inspecting JSON Data From CLI</h2>
+
+<p>If you want to inspect the data that you&rsquo;ve exported, you can use the handy &ldquo;<a href="http://npmjs.org/package/json">json</a>&rdquo; tool (requires Node).
+Not only does it pretty print, but it allows you to pull out specific data, and supports newline delimited JSON entries with the <code>-g</code> flag.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json
+</span><span class='line'>{"name":"alice"}
+</span><span class='line'>{"name":"bob"}
+</span><span class='line'>{"name":"eve"}</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -g
+</span><span class='line'>[
+</span><span class='line'>  {
+</span><span class='line'>    "name": "alice"
+</span><span class='line'>  },
+</span><span class='line'>  {
+</span><span class='line'>    "name": "bob"
+</span><span class='line'>  },
+</span><span class='line'>  {
+</span><span class='line'>    "name": "eve"
+</span><span class='line'>  }
+</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -ga name
+</span><span class='line'>alice
+</span><span class='line'>bob
+</span><span class='line'>eve</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -ga nameLength name -e 'this.nameLength = this.name.length'
+</span><span class='line'>5 alice
+</span><span class='line'>3 bob
+</span><span class='line'>3 eve</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="http://trentm.com/json/">Full Documentation</a></p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-16T13:48:29-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/json/'>JSON</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -2453,149 +2637,6 @@ From there, you can edit the macro and then yank it back into the <code>a</code>
 
 
 	<a class='category' href='/blog/categories/vim/'>Vim</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/06/15/resolving-javascript-objects-containing-promises/">
-		
-			Resolving JavaScript Objects Containing Promises</a>
-	</h2>
-	<div class="entry-content">
-		<p>Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
-Unlike callbacks, you can wait for multiple promises to complete before proceeding.
-For example, in the <a href="https://github.com/kriskowal/q">Q</a> framework, you can use the <code>Q.all()</code> function to wait for multiple promises to complete.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">makePromise</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
-</span><span class='line'>  <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">promises</span> <span class="o">=</span> <span class="p">[</span>
-</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
-</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
-</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
-</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
-</span><span class='line'><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">promises</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, this works well for an array, but as promise dependencies increase, it may be useful to reference these values more descriptively than an array index.
-Usually, you&rsquo;d want to wrap dependencies in an object like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="s1">&#39;db&#39;</span><span class="o">:</span> <span class="nx">connectToDb</span><span class="p">(),</span>
-</span><span class='line'>  <span class="s1">&#39;api&#39;</span><span class="o">:</span> <span class="nx">getApi</span><span class="p">(),</span>
-</span><span class='line'>  <span class="s1">&#39;third&#39;</span><span class="o">:</span> <span class="nx">someOtherDependency</span><span class="p">()</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now, Q doesn&rsquo;t have a way to await the promises inside this object.
-If you just pass it to <code>Q.all()</code> it will finish before the promises are resolved, because the &ldquo;dependencies&rdquo; variable is an object, not a promise.
-However, there is a pretty simple workaround using Lo-Dash (or Underscore):</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">)).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">zipObject</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">),</span> <span class="nx">results</span><span class="p">);</span>
-</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">deps</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">deps</span><span class="p">);</span>
-</span><span class='line'>  <span class="c1">// {</span>
-</span><span class='line'>  <span class="c1">//   &quot;db&quot;: [db connection],</span>
-</span><span class='line'>  <span class="c1">//   &quot;api&quot; [api object],</span>
-</span><span class='line'>  <span class="c1">//   &quot;third&quot;: [third dependency]</span>
-</span><span class='line'>  <span class="c1">// }</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Basically we&rsquo;re unzipping the keys and values from the &ldquo;dependencies&rdquo; object, then rezipping them with the <code>_.zipObject()</code> function when the promises are resolved.</p>
-
-<p>Note that you can safely mix promises and non-promises.
-For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>  <span class="s1">&#39;db&#39;</span><span class="o">:</span> <span class="nx">connectToDb</span><span class="p">(),</span>
-</span><span class='line'>  <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s1">&#39;version&#39;</span><span class="o">:</span> <span class="mi">3</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Also note that this only works on a &ldquo;flat&rdquo; object.
-Any nested objects won&rsquo;t be resolved.
-It wouldn&rsquo;t be terribly difficult to write a utility function for recursively traversing an object and awaiting its promises, but I&rsquo;ll leave that as an exercise for the reader.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-15T15:12:43-07:00" pubdate data-updated="true">Jun 15<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/promises/'>Promises</a>
 
 
 </div>
