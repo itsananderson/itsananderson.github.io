@@ -7,8 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
-Unlike callbacks, you can wait for &hellip;">
+	<meta name="description" content="Vim macros are great.
+If you&rsquo;re not familiar with them, there&rsquo;s a great Vim tips article. Something cool I&rsquo;ve discovered is that &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,6 +80,63 @@ Unlike callbacks, you can wait for &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/06/20/editing-vim-macros/">
+		
+			Editing Vim Macros</a>
+	</h2>
+	<div class="entry-content">
+		<p>Vim macros are great.
+If you&rsquo;re not familiar with them, there&rsquo;s a great <a href="http://vim.wikia.com/wiki/Macros">Vim tips article</a>.</p>
+
+<p>Something cool I&rsquo;ve discovered is that you can edit macros.
+This is helpful if you accidentally mess up a macro recording, or decide you need to tweak it in some way.</p>
+
+<p>If you recorded a macro to register <code>a</code>, you can paste its contents into the current document with <code>"ap</code>.
+From there, you can edit the macro and then yank it back into the <code>a</code> register with <code>"ay</code></p>
+
+<p>This also makes it easy to paste your macros into your vimrc for future use.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="c">&quot; delete first word of line</span>
+</span><span class='line'><span class="k">let</span> @<span class="k">d</span><span class="p">=</span><span class="s1">&#39;0dw&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-20T22:37:17-07:00" pubdate data-updated="true">Jun 20<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/vim/'>Vim</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -854,200 +911,6 @@ However, Azure could look at a setting in package.json during the site setup pro
 
 
 	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/express/'>Express</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/05/06/git-for-devs-who-cant-commit-good/">
-		
-			Git for Devs Who Can&#8217;t Commit Good</a>
-	</h2>
-	<div class="entry-content">
-		<p>Two big Git mantras are &ldquo;Commit early, commit often&rdquo; and &ldquo;Branches are cheap&rdquo;.</p>
-
-<p>When I started using Git, I had these ideas in the back of my mind.
-Unfortunately, I only really thought of them after I&rsquo;d done a huge chunk of work without committing any code.
-I&rsquo;d type <code>git status</code> or <code>git diff</code> and scroll through my changes, but I&rsquo;d eventually admit defeat and commit everything.
-I&rsquo;d promise to commit more frequently &ldquo;next time&rdquo;, but it never seemed to happen.</p>
-
-<p>Frequent committing is something that you learn as a way to avoid pain.
-In a typical chunk of dev time, it&rsquo;s not uncommon to make a sweeping change, and then realize that the change was a bad decision.
-Without commit history, the only way to get back the previous version is to rely on your editor&rsquo;s undo function.
-This causes problems when you have a mix of changes that you want to keep and changes that you want to undo.
-Frequent, small commits can make it easier to jump pack to specific points.</p>
-
-<p><img class="center" src="//itsananderson.blob.core.windows.net/post-images/commit-for-ants.jpg"></p>
-
-<h2>Creating Good Commits</h2>
-
-<p>In addition to committing frequently, it&rsquo;s important to make good commits.
-There are several important features aspects in a good commit.</p>
-
-<h3>Good Commit Messages</h3>
-
-<p>Writing a good commit message takes more than avoiding &ldquo;did stuff&rdquo; messages.</p>
-
-<p>A good commit message is a love note to your future self, or anyone else who works on your code.
-A bad commit message is more of a suicide note.</p>
-
-<p>A technique I picked up from <a href="http://davidruttka.com/">David</a>, one of my coworkers, is to do commit messages along the lines of the following:</p>
-
-<pre><code>&lt;short summary of changes in imperative voice&gt;
-
-&lt;longer paragraph describing the change&gt;
-
-Fixes/Implements: #&lt;issue or feature number&gt;
-
-Before:
-&lt;description of problem you are fixing or feature you are implementing&gt;
-
-After:
-&lt;how it behaves now that your change is applied&gt;
-
-How I Tested It:
-&lt;description of any unit tests, functional tests, or manual tests you ran to test this change&gt;
-</code></pre>
-
-<p>This may seem verbose, but it really doesn&rsquo;t take long, and it gives you a huge advantage if you ever have to come back and figure out what this commit was all about.</p>
-
-<p>This doesn&rsquo;t apply to every change.
-If you&rsquo;re fixing a typo in a comment, or adding a missing semicolon to your JavaScript, you can probably get away with a one line commit message.</p>
-
-<p>A good rule of thumb is that a competent dev should be able to look at your commit message and (approximately) duplicate your work without looking at the code.</p>
-
-<p>Finally, your summary line should be written in imperative voice.
-&ldquo;Make changes&rdquo; not &ldquo;Made changes&rdquo; or &ldquo;Making changes&rdquo;.
-This guarantees that your messages will mesh with Git&rsquo;s auto-generated messages for things like <code>revert</code> and <code>merge</code>.
-It also makes it clear that you&rsquo;re talking about what this commit does, not what previous or future commits are doing.</p>
-
-<p>For more thoughts on commit messages, see <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">A Note About Git Commit Messages</a>.</p>
-
-<h3>The Right Files</h3>
-
-<p>It&rsquo;s tempting to use a <code>-a</code> flag to commit all pending changes, but in most cases you should put more thought into what files you include in a commit.</p>
-
-<p>Consider an example.
-Say you add a feature in file <code>a.js</code>, but in the process, you discover a typo in <code>b.js</code>.
-It&rsquo;s tempting to commit both changes as one, because the typo fix is so small, but consider what happens if you later need to revert your commit.
-Not only will you be reverting your feature, but you&rsquo;ll also be reverting the typo fix. This means you&rsquo;ll need to do a second commit to re-fix the typo change.
-If you instead do two distinct commits, you can safely undo the problematic feature without touching the typo fix.</p>
-
-<p>Of course, this doesn&rsquo;t mean you have to add each file individually.
-There are many handy shortcuts for adding exactly the files you intend.</p>
-
-<p><code>git add file1 file2 file3</code> &ndash; Adds multiple files in one command</p>
-
-<p><code>git add folder/</code> &ndash; Adds all changes under a folder</p>
-
-<p><code>git add .</code> &ndash; Stages all modified and new files in the current folder</p>
-
-<p><code>git add -A .</code> &ndash; Stages all modifed and new files as well as staging any deleted files in the current folder</p>
-
-<p><code>git add '*.txt'</code> &ndash; Recursively adds all files ending in .txt</p>
-
-<p><code>git add *.txt</code> &ndash; Adds all files <em>in the current folder</em> ending in .txt</p>
-
-<p>This approach doesn&rsquo;t just apply to different files.
-What if you add a feature and fix a typo in the same file?<br/>
-Fortunately, <code>git add -p</code> makes it easy to <a href="http://www.benhallbenhall.com/2013/01/git-add-p-patches-full-commits/">only stage parts of files</a>.</p>
-
-<p>If you &ldquo;add&rdquo; (or stage) a file that you don&rsquo;t want to commit, it&rsquo;s easy to remove.
-Just run <code>git reset HEAD &lt;file&gt;</code>.</p>
-
-<p>Using these techniques, you can create concise, cohesive, good looking commits.
-Your future self will thank you.</p>
-
-<p><img class="center" src="//itsananderson.blob.core.windows.net/post-images/good-looking-commits.jpg"></p>
-
-<h2>Learning to Do Other Stuff Good Too</h2>
-
-<p>There are a number of other techniques for creating a useful commit history.
-Here are some that I&rsquo;ve found especially useful.</p>
-
-<p><strong>NOTE</strong>: Only use these techniques if you haven&rsquo;t shared your changes.
-If you&rsquo;ve already pushed your changes, ammending your commit can cause problems for other collaborators on your project</p>
-
-<h3>Fixing a Commit</h3>
-
-<p>One of the great features of Git is the ability to rewrite history.
-The simplest way to do that is with the <code>git commit --amend</code> command.
-This will take your current staged changes and apply them to the previous commit, &ldquo;ammending&rdquo; it.
-You&rsquo;ll also get a chance to change the commit message.</p>
-
-<p>This is useful for in a number of cases:</p>
-
-<ul>
-<li>You make a commit and forgot to add a file</li>
-<li>You missed adding a part of a file</li>
-<li>You had a typo in one of your changes</li>
-<li>You had a typo, or missing information in your commit message</li>
-</ul>
-
-
-<h3>Squashing Commits</h3>
-
-<p>Sometimes you&rsquo;ll have silly commits like &ldquo;forgot a file&rdquo;, and you don&rsquo;t need them to be distinct.
-For the sake of your commit history, it can be good to flatten those commits.
-This allows you to pretend that you never make any mistakes :)</p>
-
-<p>Consider the following log</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>8fb97b5 Implement bla bla 
-</span><span class='line'>
-</span><span class='line'>bb0ee77 Address feedback
-</span><span class='line'>
-</span><span class='line'>bf582d6 Implement foo foo
-</span><span class='line'>
-</span><span class='line'>...</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If your changes from <code>Address feedback</code> are just cleanups to <code>Implement foo foo</code>, you probably don&rsquo;t need that extra commit sitting in your commit history.</p>
-
-<p>I could walk through the process of rebasing, but there&rsquo;s already a pretty thorough tutorial on <a href="http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html">squashing commits with rebase</a></p>
-
-<h2>In Conclusion</h2>
-
-<p>Making throughful, atomic, thoroughly commented commits takes some practice, but it&rsquo;s totally worth it.</p>
-
-<p>In the next couple weeks, I plan to write some follow-up posts that cover other techniques for managing your commit history.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-06T13:50:34-07:00" pubdate data-updated="true">May 6<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
 
 
 </div>

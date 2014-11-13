@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Visual Studio | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/visual-studio/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2014-11-13T15:00:19-08:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[A New Adventure in DevDiv]]></title>
+    <link href="http://willi.am/blog/2014/11/12/a-new-adventure-in-devdiv/"/>
+    <updated>2014-11-12T16:40:57-08:00</updated>
+    <id>http://willi.am/blog/2014/11/12/a-new-adventure-in-devdiv</id>
+    <content type="html"><![CDATA[<p>Starting Monday, I&rsquo;m joining a new team at Microsoft.
+Even though I&rsquo;m moving within the company, this will be a completely new experience, and I&rsquo;m pumped.</p>
+
+<h2>What I&rsquo;ve Been Doing</h2>
+
+<p>A year and a half ago, I joined a top-notch team working on <a href="http://blog.jongallant.com/2013/03/new-job-hiring-devs.html">a super secret Win8 app</a>.
+A week after I started, our project was cancelled.
+Oops :)</p>
+
+<p>Our team was part of the Bing Ads org structure, so after a few months of limbo, we took ownership of the management and authoring tools for display ads.
+Getting to work with this team of hand-picked developers has been an amazing experience.
+I&rsquo;ve learned a ton about Agile methodologies, TDD, DevOps, and more.</p>
+
+<p>I got to contribute to many projects in my time on the team, but here are the things I&rsquo;m most proud of:</p>
+
+<ul>
+<li>Building a RESTful API for storing, transforming, searching, and serving image and video assets</li>
+<li>Building a purely static Angular SPA, backed by Node.js microservices</li>
+<li>Converting most of the team&rsquo;s codebase to Git on Visual Studio Online, with CI through Octopus</li>
+<li>Becoming a team resource for Git and JavaScript domain knowledge</li>
+</ul>
+
+
+<h2>What&rsquo;s Next</h2>
+
+<p>I&rsquo;m joining the &ldquo;Client Platform Tools&rdquo; team inside DevDiv.
+They work on the TypeScript language and tooling, as well as the JavaScript tooling in Visual Studio, and the F12 tools in Internet Explorer.</p>
+
+<p>I&rsquo;ll be working on JavaScript profiling and diagnostics (think CPU/memory usage and network calls).
+This will be a new experience for me.
+I&rsquo;ve spent most of the last year and a half writing JavaScript for either the browser or Node, but now I&rsquo;ll be stepping a little deeper and working on the development tools themselves.
+I&rsquo;ll also be jumping into TypeScript, the language in which most of the tools are written.</p>
+
+<p>Thinking about everything I&rsquo;m going to be learning about and working on, I&rsquo;m excited, optimistic, and honestly a little scared.</p>
+
+<p><strong>But that&rsquo;s good</strong>.</p>
+
+<p>If changing teams didn&rsquo;t move me outside my comfort zone, it&rsquo;d be the wrong move.</p>
+
+<p>I&rsquo;ve found that there are two things that get me pumped about what I&rsquo;m working on.
+The first is that it&rsquo;s challenging.
+I love learning, and it turns out working on problems I don&rsquo;t quite know how to solve is a great way to learn.</p>
+
+<p>The second thing I love is doing work that makes a difference.
+I don&rsquo;t only mean that in an altruistic sense, but in a broader, &ldquo;makes someone&rsquo;s job/life easier&rdquo; kind of way.
+That&rsquo;s why a developer tools team was so appealing to me, and why I&rsquo;m so excited about what the next chapter will bring.</p>
+]]></content>
+  </entry>
+  
+</feed>
