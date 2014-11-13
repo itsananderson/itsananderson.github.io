@@ -38,7 +38,7 @@ They work on the TypeScript language and tooling, as well as the JavaScript tool
 I'll be working on JavaScript profiling and diagnostics (think CPU/memory usage and network calls).
 This will be a new experience for me.
 I've spent most of the last year and a half writing JavaScript for either the browser or Node, but now I'll be stepping a little deeper and working on the development tools themselves.
-I'll also be jumping into TypeScript, which is the language in which most of the tools are written.
+I'll also be jumping into TypeScript, the language in which most of the tools are written.
 
 Thinking about everything I'm going to be learning about and working on, I'm excited, optimistic, and honestly a little scared.
 
