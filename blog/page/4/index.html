@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Two big Git mantras are &ldquo;Commit early, commit often&rdquo; and &ldquo;Branches are cheap&rdquo;. When I started using Git, I had these ideas &hellip;">
+	<meta name="description" content="If you&rsquo;ve created an Express 4 app with the new scaffold utility recently, you may have noticed that it doesn&rsquo;t work in Azure. When you &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +79,102 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/05/07/running-express-4-sites-on-azure/">
+		
+			Running Express 4 Sites on Azure</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;ve created an Express 4 app with the new scaffold utility recently, you may have noticed that it doesn&rsquo;t work in Azure. When you try to load the site, it fails with the following error:</p>
+
+<blockquote><p>The page cannot be displayed because an internal server error has occurred.</p></blockquote>
+
+<h2>The Diagnosis</h2>
+
+<p>This is because of the new structure Express creates for its apps. Instead of app.js being the expected entry point, Express now specifies bin/www as the entry point for starting the server.</p>
+
+<p>I suspect the reason for this is so that the newly scaffolded app can be consumed as a module, allowing the consumer to worry about port binding etc. Unfortunately, this causes problems for Azure.</p>
+
+<p>When Azure starts a Node.js site, it looks for either a server.js or an app.js. As far as I can tell from my admittedly limited testing, it doesn&rsquo;t seem look at package.json for an alternate entry point. Because of this, when it includes app.js, nothing ever binds to the listening port, so the app immediately exits on startup.</p>
+
+<h2>The Workaround</h2>
+
+<p>Since Azure first looks for a server.js file when it starts a site, the easiest solution I&rsquo;ve found is to add a <code>server.js</code> file with the following contents.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./bin/www&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, when Azure starts your site, it will require server.js, which will require bin/www, which will require app.js. After that somewhat convoluted redirection chain, all will again be right in the world.</p>
+
+<p>The Azure documentation has an <a href="http://azure.microsoft.com/en-us/documentation/articles/cloud-services-nodejs-develop-deploy-express-app/">alternative workaround</a> (see steps 4 and 5 of &ldquo;Install Express&rdquo;), but I don&rsquo;t care for it.
+The problem with their solution is that it duplicates the code from bin/www into server.js, which means any updates you make to bin/www will also need to be applied to server.js.
+Long story short, code duplication sucks.</p>
+
+<h2>The Solution</h2>
+
+<p>There are a couple of things that would properly solve this problem instead of just working around it.</p>
+
+<h3>Express Scaffold Fix</h3>
+
+<p>There are probably a few ways Express could fix this, but the simplest I can think of would be to add a server.js that does the same thing as my workaround.
+If that&rsquo;s not desirable for all sites, they could add a &ldquo;Azure compatibility&rdquo; flag that explicitly adds the sever.js workaround.</p>
+
+<h3>Azure Fix</h3>
+
+<p>In my oppinion, Azure should have a way to specify the entry-point in package.json rather than hardcoding to app.js and server.js.</p>
+
+<p>The conventional <code>npm start</code> configuration is a logical place to begin, since it&rsquo;s a <a href="https://www.npmjs.org/doc/misc/npm-scripts.html">supported spec from npm</a>.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "scripts": {
+</span><span class='line'>        "start" : "&lt;path&gt;"
+</span><span class='line'>    }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Azure relies on iisnode, which probably can&rsquo;t consume package.json directly.
+However, Azure could look at a setting in package.json during the site setup process (when it does stuff like package restore), and configure web.config, just like it does now to switch between app.js and server.js.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-07T06:57:05-07:00" pubdate data-updated="true">May 7<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/express/'>Express</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1003,67 +1099,6 @@ There&rsquo;s more to Git (which I&rsquo;m still learning about), but this shoul
 </div>
 </article>
 
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/12/15/new-plugin-wp-sendgrid/">
-		
-			New Plugin WP SendGrid</a>
-	</h2>
-	<div class="entry-content">
-		<p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
-At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time
-(because Twilio&rsquo;s API is so easy to use!), so I wrote another plugin called <a href="http://www.itsananderson.com/plugins/wp-sendgrid/">WP SendGrid</a> using the SendGrid API.</p>
-
-<p>This plugin extends WordPress&#8217; <code>wp_mail()</code> function to use SendGrid&rsquo;s API for all emails.
-This was useful to me because I&rsquo;ve never been able to figure out how to get PHP to send emails in Windows.
-In the past, when I&rsquo;ve worked on projects that send emails, I always had to upload it to a Linux server to test the email functionality.
-If anything didn&rsquo;t work, I had to edit locally, then upload again to test it.
-After a few iterations, that gets really old.
-With WP SendGrid, I can send emails from my local machine, so debugging issues is <strong>much</strong> easier.</p>
-
-<p>Fast-forward a few months.
-This week I decided to spend a little more time polishing the plugin.
-I&rsquo;d only spent about 45 minutes on it at the HackDay, which shows how simple it is to use SendGrid&rsquo;s API.
-What I put together was enough to meet my needs, but I was using hardcoded values, and wasn&rsquo;t considering every edge-case.
-After a few more hours of work, I had a complete plugin with a nice configuration UI.</p>
-
-<p>If you develop for WordPress on Windows, or you have trouble sending email from PHP on another platform, you&rsquo;ll want to check this plugin out.
-<a href="http://www.itsananderson.com/plugins/wp-sendgrid/">Visit the plugin page</a>.</p>
-
-<p>If you run into any issues, let me know by submitting a ticket on the <a href="https://github.com/codeawhile/wp-sendgrid">GitHub</a> project.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-15T08:49:43-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/sendgrid/'>SendGrid</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
 <nav id="pagenavi">
     
         <a href="/blog/page/3/" class="prev">Prev</a>
@@ -1073,7 +1108,7 @@ After a few more hours of work, I had a complete plugin with a nice configuratio
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2014
+	<footer id="footer" class="inner">Copyright &copy; 2015
 
     Will Anderson
 

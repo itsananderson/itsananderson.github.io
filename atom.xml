@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2014-11-13T15:00:19-08:00</updated>
+  <updated>2015-02-05T01:30:05-08:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Netgear Nighthawk AC1900 (R7000) Review]]></title>
+    <link href="http://willi.am/blog/2015/02/04/netgear-nighthawk-ac1900-r7000-review/"/>
+    <updated>2015-02-04T22:13:14-08:00</updated>
+    <id>http://willi.am/blog/2015/02/04/netgear-nighthawk-ac1900-r7000-review</id>
+    <content type="html"><![CDATA[<p>I bought a new Wi-Fi router about a year ago, and I&rsquo;ve been so happy with it that I decided to write a review.</p>
+
+<h2>The Goods</h2>
+
+<p>Netgear has a truly impressive lineup of high-quality routers in their Nighthawk series.</p>
+
+<p>When I purchased the Nighthawk R7000, it was the only Nighthawk available, but now there are three options.</p>
+
+<h3>Nighthawk AC1900 (R7000)</h3>
+
+<p><a href="http://www.amazon.com/gp/product/B00F0DD0I6?ie=UTF8&amp;camp=213733&amp;creative=393185&amp;creativeASIN=B00F0DD0I6&amp;linkCode=shr&amp;tag=itsananderson-20&amp;linkId=BOLZOX4JTJAYBWR2"><img src="http://itsananderson.blob.core.windows.net/post-images/nighthawk-r7000.jpg" alt="" /></a></p>
+
+<p>This is the router I purchased.
+At $176, it is now the cheapest one in the series, but don&rsquo;t let that fool you.
+It&rsquo;s a beast.</p>
+
+<h3>Nighthawk X4 AC2350 (R7500)</h3>
+
+<p><a href="http://www.amazon.com/gp/product/B00MRVJY5C?ie=UTF8&amp;camp=213733&amp;creative=393177&amp;creativeASIN=B00MRVJY5C&amp;linkCode=shr&amp;tag=itsananderson-20&amp;linkId=VIPUHQZWDGEZTHRJ&amp;f_rd_m=ATVPDKIKX0DER&amp;pf_rd_s=center-2&amp;pf_rd_r=15AA64WNHBH3N7C3AG2S&amp;pf_rd_t=101&amp;pf_rd_p=2034761682&amp;pf_rd_i=9524228011"><img src="http://itsananderson.blob.core.windows.net/post-images/nighthawk-r7500.jpg" alt="" /></a></p>
+
+<p>This model has an additional antena, a faster processor, and boasts improved range and faster bandwidth. It costs about $100 more than the R7000. This router uses a more advanced radio than the R7000 that apparently has higher throughput and reliability. That being said, I haven&rsquo;t experienced any problems with the throughput or reliability of the R7000.</p>
+
+<h3>Nighthawk X6 AC3200 (R8000)</h3>
+
+<p><a href="http://www.amazon.com/gp/product/B00KWHMR6G?ie=UTF8&amp;camp=213733&amp;creative=393177&amp;creativeASIN=B00KWHMR6G&amp;linkCode=shr&amp;tag=itsananderson-20&amp;linkId=62Y4XCEYOOJRGP7I&amp;f_rd_m=ATVPDKIKX0DER&amp;pf_rd_s=center-2&amp;pf_rd_r=15AA64WNHBH3N7C3AG2S&amp;pf_rd_t=101&amp;pf_rd_p=2034761682&amp;pf_rd_i=9524228011"><img src="http://itsananderson.blob.core.windows.net/post-images/nighthawk-r8000.jpg" alt="" /></a></p>
+
+<p>This model has 6 antenas, which again boosts range and bandwidth.
+It also supports a third Wi-Fi band, and assigns slower and faster devices to different bands, boosting performance for fast devices.
+This model is only about $5 more than the R7500 ($105 more than the R7000), so if I were to upgrade, this is the model I would choose, because of it&rsquo;s significantly improved bandwidth.</p>
+
+<h2>Price</h2>
+
+<p>Here&rsquo;s a side-by-side comparison of the different models.</p>
+
+<table>
+    <tr><th>Model</th><th>Price</th></tr>
+    <tr><td>Nighthawk (R7000)</td><td>$176</td></tr>
+    <tr><td>&nbsp;Nighthawk X4 (R7500)</td><td>$279</td></tr>
+    <tr><td>&nbsp;Nighthawk X6 (R8000)</td><td>$283</td></tr>
+</table>
+
+
+<p>When I first considered this router, the price was what gave me the most pause.
+In the past, the most I&rsquo;d paid for a router was about $40, so this seemed like a significant price bump.
+In the end, the only reason I bought it was because a friend had bought one and was very happy with it.</p>
+
+<p>After using it for a year, I don&rsquo;t think I&rsquo;ll ever buy a &ldquo;cheap&rdquo; router again.
+In the case of Wi-Fi routers, it seems that &ldquo;you get what you pay for&rdquo; holds true.</p>
+
+<h2>Reliability and Performance</h2>
+
+<p>My primary reason for upgrading my router was that my previous router, an older Linksys in the $30-40 range, didn&rsquo;t reliably reach the entire house.
+After enough complaints from one roommate who&rsquo;s bedroom was in the far corner of the house, I decided to upgrade.</p>
+
+<p>After installing the R7000, I&rsquo;ve stopped having router issues.
+The signal reaches to every corner of the house, and has never cut out.</p>
+
+<p>I eventually even swapped out the Ethernet cables in my two desktop computers, replacing them with this <a href="http://www.amazon.com/gp/product/B007GMPZ0A?ie=UTF8&amp;camp=213733&amp;creative=393185&amp;creativeASIN=B007GMPZ0A&amp;linkCode=shr&amp;tag=itsananderson-20&amp;linkId=E3Z7SM7WKO2M3UVP&amp;psc=1">Dual Band Wireless PCI Express adapter</a>.
+Even after getting rid of the hard line, I get blazing fast speeds on both machines.</p>
+
+<h2>Extra Features</h2>
+
+<h3>Mounting Slots</h3>
+
+<p>One of the things I took advantage of immediately was the slots on the back for mounting it on a wall.
+Moving the router to a more central location in my downstairs hallway provided even better coverage throughout the house.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/mounted-router.jpg" alt="" /></p>
+
+<p><small><em>(yes, that&rsquo;s a Raspberry Pi unceremoniously dangling from the router. Don&rsquo;t judge me)</em></small></p>
+
+<p>Pro tip: make sure there&rsquo;s a power outlet within easy reach of your desired location <strong>before</strong> you start screwing in drywall anchors :)</p>
+
+<h3>Web-based WPS Button</h3>
+
+<p>Most routers support WPS. This allows new clients to connect to a network by clicking a physical button on the router.
+This is convenient, but who wants to have to get up and walk over to the router.</p>
+
+<p>Fortunately the Nighthawk web UI has a button you can push to do the same thing.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/soft-wps-button.png" alt="" /></p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/wifi-client-connected.png" alt="" /></p>
+
+<h3>Easy Firmware Upgrade</h3>
+
+<p>Most of my past routers have had a really archaic update process. Usually you have to manually flash the firmware and go through a convoluted restart process.</p>
+
+<p>The R7000, on the other hand, just requires one or two clicks to install the update and automatically restart.</p>
+
+<h3>And So Much More</h3>
+
+<p>I usually install DD-WRT on any router I buy, but the R7000 has all the features I typically use, so I&rsquo;m just running the stock firmware.
+Here are a few of the things I use most frequently:</p>
+
+<ul>
+<li>View attached devices</li>
+<li>Port forwarding</li>
+<li>Assign static LAN IPs</li>
+<li>View traffic statistics</li>
+</ul>
+
+
+<h2>In Conclusion</h2>
+
+<p>If you&rsquo;re tired of buying cheap routers that crap out after a year or two, I highly recommend the <a href="http://www.amazon.com/gp/product/B00F0DD0I6?ie=UTF8&amp;camp=213733&amp;creative=393185&amp;creativeASIN=B00F0DD0I6&amp;linkCode=shr&amp;tag=itsananderson-20&amp;linkId=BOLZOX4JTJAYBWR2">Nighthawk R7000</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[A New Adventure in DevDiv]]></title>
@@ -3281,172 +3395,6 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 <p><img src="//itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg"></p>
 
 <p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Thoughts On Implementing a REST Level 3 API in Node]]></title>
-    <link href="http://willi.am/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node/"/>
-    <updated>2014-06-27T20:25:43-07:00</updated>
-    <id>http://willi.am/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node</id>
-    <content type="html"><![CDATA[<p><strong>Warning: stream of consciousness ahead</strong></p>
-
-<p>I&rsquo;ve been thinking about the the pieces that would be needed to implement a REST Level 3 API in Node.
-I won&rsquo;t go into the details of REST Level 3 in this post, but the one of the most important concepts is that clients to the API don&rsquo;t manually build URIs for their API calls, but instead receive them as hypermedia metadata from other calls to your API.</p>
-
-<p>Node has some great frameworks for building web servers.
-I frequently use <a href="http://expressjs.com/">Express</a>, which is built on top of the <a href="http://www.senchalabs.org/connect/">Connect</a> middleware package.
-Unfortunately, Express doesn&rsquo;t make it easy to add hypermedia links to API responses in a DRY way.</p>
-
-<p>Another option is <a href="http://mcavage.me/node-restify/">node-restify</a>.
-This is a popular choice for building REST APIs in Node, but again, it falls down when it comes to Hypermedia.
-Here at least you can link to different API endpoints without hardcoding URLs, but there&rsquo;s still no unified way to automatically add hypermedia links to responses.</p>
-
-<p>I&rsquo;ve tried other frameworks as well.
-<a href="http://hapijs.com/">Hapi</a> comes closest, but still doesn&rsquo;t quite solve my problems with hypermedia.</p>
-
-<p>Perhaps I&rsquo;m spoiled by the relatively elegant solutions that can be accomplished in strictly typed languages.
-In C#, for example, you can keep a registry of hypermedia providers associated with different types.
-When a response of a specific type is returned by a controller, the assocated hypermedia provider is invoked, and it returns a dictionary of URIs for that type.
-The controller doesn&rsquo;t even have to be aware of the hypermedia provider.</p>
-
-<p>In JavaScript, it&rsquo;s a little harder to associate types with providers, since most responses are just anonymous objects.
-I do have some alternative ideas, though.
-The first that comes to mind is to associate with URLs.
-Most importantly, being able to say &ldquo;this route, and any route below it uses the same provider&rdquo;.
-For example, consider the following routes.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GET  /users
-</span><span class='line'>POST /users
-</span><span class='line'>GET  /users/1
-</span><span class='line'>GET  /users/1/edit
-</span><span class='line'>GET  /users/1/delete</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All of those URLs could probably use an identical (or almost identical) link provider.
-Something like the following would be useful:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">hypermedia</span><span class="p">(</span><span class="s1">&#39;/users*&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">user</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;self&quot;</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;edit&quot;</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;/edit&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;delete&quot;</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;/delete&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="p">};</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;find-all&quot;</span><span class="o">:</span> <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;create&quot;</span><span class="o">:</span> <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="p">};</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;m not really tied to that syntax, nor is this an awesome example.
-The main idea is, I want to abstract hypermedia so controllers don&rsquo;t have to worry about it.</p>
-
-<p>The other part of this is that controllers need to send their response back through a middleware, rather than directly to the client.
-In my mind, this means the best solution is to return the object.
-Since Node is async, simply returning the object probably isn&rsquo;t an option in most cases.
-This means the next best choice would be to return a promise from the controller.
-The middleware then waits for the promise to resolve, and then handles the result.
-Finally, the controller should still be able to send a response directly to the client through the res.send() function.
-In that case, no hypermedia links would be provided.</p>
-
-<p>If the controller needs to make an async call, but that call doesn&rsquo;t automatically provide a promise, a nice simplification would be to provide a function on the response object that does the same thing.
-For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:id&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">res</span><span class="p">.</span><span class="nx">respond</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span> <span class="c1">// res.respond could invoke hypermedia providers before response </span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course you can usually use Q&rsquo;s &ldquo;denodify&rdquo; utilities, but the point here is a little flexibility. Here&rsquo;s how a Q promise might be returned. The framework would &ldquo;then&rdquo; the promise and essentially forward the result to <code>req.respond()</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:id&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">nfinvoke</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="s2">&quot;getUser&quot;</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you want to do something with the promise result, you still can with promises.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:id&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">nfinvoke</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="s2">&quot;getUser&quot;</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="kd">var</span> <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;User not found&#39;</span><span class="p">);</span>
-</span><span class='line'>                <span class="nx">err</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="mi">404</span><span class="p">;</span>
-</span><span class='line'>                <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="nx">user</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The other great thing to note here is that we don&rsquo;t have to call <code>next(err)</code> to pass this exception to our error handler. We can throw it, and let the framework <code>.catch()</code> the exception from the promise we return.</p>
-
-<p>The basic idea for an implementation of this is that the routing framework calls your endpoint handler, and expects it to do one of three things:</p>
-
-<ol>
-<li>Return a promise, or value (buffer, stream, string, javascript object)</li>
-<li>Call <code>next()</code> to pass controll to the next handler</li>
-<li>Call <code>res.send()</code>, <code>res.write()</code>, or <code>res.end()</code> like you would in Express</li>
-</ol>
-
-
-<p>In the first case, the framework can allow hypermedia providers, and theoretically anything, to modify the response &ldquo;on the way out the door&rdquo;.
-This would be my main objective in implementing something like this.</p>
-
-<p>I may take a stab at a prototype, but I realize that at this point, any Node web framework probably needs a name that starts with &ldquo;Yet Another&rdquo;.
-Mostly, I&rsquo;m curious how well it would work for &ldquo;real&rdquo; api development.</p>
-
-<p>Thoughts? Does something like this already exist? Hit me up on <a href="https://twitter.com/itsananderson/">my Twitter account</a>.</p>
 ]]></content>
   </entry>
   
