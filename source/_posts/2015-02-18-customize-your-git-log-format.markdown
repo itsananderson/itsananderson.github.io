@@ -13,7 +13,7 @@ They also look for areas where they can create custom jigs to speed up their wor
 Watching and reading about these craftsmen and their tools, I've noticed parallels in my full time craft: Software Development.
 
 In the next few posts, I'll share some of the software "jigs" I've created to make myself more efficient.
-The primary focus of these jigs will be Git.
+The primary focus posts will be configuration and customization of Git.
 
 Git Log: Your Own Personal Journal
 ---
@@ -21,7 +21,7 @@ Git Log: Your Own Personal Journal
 If you're not already aware, your Git log is a critical tool for working with source control.
 Because your memory's not perfect, a good log helps you recall what you've done, and the motivation behind it.
 
-I've [written before TODO](todo) about writing good commit messages, as has David in his series "Committed to Good Commits".
+I've [written before](http://willi.am/blog/2014/05/06/git-for-devs-who-cant-commit-good/) about writing good commit messages, as has David in his series ["Committed to Good Commits"](http://www.davidruttka.com/blog/2014/06/04/committed-to-good-commits-messages/).
 If your commit logs are sprinkled with gems like "did stuff" and "it finally works!", you'll want to check out those posts.
 
 Choose Your Details With `--format`
@@ -95,5 +95,7 @@ If you want to test out different custom formats quickly, you can pass them dire
 ```
 git log --format=format:"%C(auto)%h %C(green)%aN%Creset %s"
 ```
+
+You can find the different placeholder options in the same [Pretty Formats](https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats) section of the Git Log documentation.
 
 // image //
