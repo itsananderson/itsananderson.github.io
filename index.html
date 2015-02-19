@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I bought a new Wi-Fi router about a year ago, and I&rsquo;ve been so happy with it that I decided to write a review. The Goods Netgear has a truly &hellip;">
+	<meta name="description" content="Over the last few months, I&#8217;ve been learning about woodworking in my spare time. As I&#8217;ve read articles and watched YouTube videos, I&# &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +79,129 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/02/19/customize-your-git-log-format/">
+		
+			Customize Your Git Log Format</a>
+	</h2>
+	<div class="entry-content">
+		<blockquote><p>Over the last few months, I&#8217;ve been learning about woodworking in my spare time. As I&#8217;ve read articles and watched YouTube videos, I&#8217;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&#8217;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&#8217;ve noticed parallels in my full time craft: Software Development.</p><p>In the next few posts, I&#8217;ll share some of the software &#8220;jigs&#8221; I&#8217;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git.</p></blockquote>
+
+
+<h2>Git Log: Your Own Personal Journal</h2>
+
+<p>If you&rsquo;re not already aware, your Git log is a critical tool for working with source control.
+Because your memory&rsquo;s not perfect, a good log helps you recall what you&rsquo;ve done, and the motivation behind it.</p>
+
+<p>I&rsquo;ve <a href="http://willi.am/blog/2014/05/06/git-for-devs-who-cant-commit-good/">written before</a> about writing good commit messages, as has David in his series <a href="http://www.davidruttka.com/blog/2014/06/04/committed-to-good-commits-messages/">&ldquo;Committed to Good Commits&rdquo;</a>.
+If your commit logs are sprinkled with gems like &ldquo;did stuff&rdquo; and &ldquo;it finally works!&rdquo;, you&rsquo;ll want to check out those posts.</p>
+
+<h2>Choose Your Details With <code>--format</code></h2>
+
+<p>Depending on what you&rsquo;re looking for in your log, you may want different levels of detail.
+The Git log documentation has a <a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats">full list of the built-in formats</a>.</p>
+
+<p>For example, if you&rsquo;re trying to find the SHA for a recent change, you may just want to see the SHA and the commit subject for each commit.
+In that case, <code>git log --format=oneline</code> or <code>git log --oneline</code> is what you need.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-oneline.png"></p>
+
+<p>If you need verbose output, including the full message and author info, <code>--format=medium</code> is a good option.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-medium.png"></p>
+
+<p>Finally, if you want every single detail from the commit, <code>--format=fuller</code> will give you that.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-fuller.png"></p>
+
+<p>If you want to make any of these formats your default, you can do so with the following command:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git config --global format.pretty oneline <span class="c"># replace oneline with the format you want</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Limit Results With <code>-n</code></h2>
+
+<p>If you only want to see the last few commits, you can use the <code>-n</code> flag.
+The more verbose version is <code>-n &lt;number&gt;</code> (e.g. <code>-n 5</code> to show the last 5 commits).</p>
+
+<p>Alternatively, you can use an even quicker shortcut.
+Just use <code>-&lt;number&gt;</code>. For example: <code>git log -5</code> will show the last 5 commits.</p>
+
+<h2>Fully Customize Your Log Output</h2>
+
+<p>Depending on how you use your commit log, you may find that no built-in log format exactly fits your needs.
+What I&rsquo;ve found is that the verbose formats are too hard to scan through, and the succinct ones don&rsquo;t have vital info.</p>
+
+<p>To solve this problem, I created a custom log format, which I use almost exclusively.</p>
+
+<p>You can configure my format with the following command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global format.pretty format:"%C(auto)%h %d%Creset %s%n%Cgreen%ad%Creset %aN &lt;%aE>%n"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The output looks like this:</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-custom.png"></p>
+
+<p>This format also works with the <code>--graph</code> flag:</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-graph-format.png"></p>
+
+<p>What I like about this format is that it only uses three lines per commit, but it has all the information I care about.
+I also inserted color codes for the various parts of the message, which makes it even easier to grok.</p>
+
+<h2>In Conclusion</h2>
+
+<p>Hopefully these examples give you some ideas about what you can do to customize your commit log.
+Don&rsquo;t feel like you need to use my custom log format as-is.
+The whole point is to customize it to fit your needs.</p>
+
+<p>If you want to test out different custom formats quickly, you can pass them directly to <code>git log</code> like so:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git log --format=format:"%C(auto)%h %C(green)%aN%Creset %s"</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-custom-flag.png"></p>
+
+<p>You can find the different placeholder options in the same <a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats">Pretty Formats</a> section of the Git Log documentation.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-19T14:29:06-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1018,320 +1141,6 @@ About all you can do at this point is init, clone, and query branches/commits, b
 
 
 	<a class='category' href='/blog/categories/git/'>Git</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/08/16/gulp-automation-path-abstraction/">
-		
-			Gulp Automation: Path Abstraction</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths <em>a lot</em>.
-Paths for sources, paths for destinations.
-Paths to watch for changes.
-You get the picture.</p>
-
-<p>Without some organization, things can quickly get out of hand.</p>
-
-<h2>Store Paths In Variables</h2>
-
-<p>As tempting as it might be to shove an extra path into a task definition, resist the urge.
-Instead, define your paths as variables.
-This allows you to share and compose path groups without repetition.</p>
-
-<p>As an example, consider a common use case.
-You want to lint your JavaScript for your application code and tests, but you only want to minify your application code and run tests against your test code.
-You could approach it like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">,</span> <span class="s1">&#39;test/*.js&#39;</span><span class="p">])</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;minify&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">])</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">([</span><span class="s1">&#39;test/*.js&#39;</span><span class="p">])</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This isn&rsquo;t bad, but things can quickly get out of hand.
-At this point already, if you moved your application code to a folder called &lsquo;src&rsquo;, you&rsquo;d have to update your gulpfile in two places.
-Three if you&rsquo;d added a &lsquo;watch&rsquo; task.</p>
-
-<p>When you abstract your paths, you can reuse them throughout your gulpfile.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">appPaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">];</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">testPaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test/*.js&#39;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">appPaths</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">testPaths</span><span class="p">))</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;minify&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">appPaths</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minify</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">testPaths</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">test</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Again, this is a simple example, but hopefully it illustrates the point.</p>
-
-<h2>Breaking Into <code>require</code>able Pieces</h2>
-
-<p>Once your paths are in variables, you can abstract them further by putting them their own file.</p>
-
-<p>To illustrate, suppose you have Karma tests.
-Karma uses its own configuration file, but gulp-karma overrides some if them, which can make it hard to avoid duplicating configurations.
-Consider the following config:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// karma.conf.js</span>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
-</span><span class='line'>        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s1">&#39;vendor/angular.js&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s1">&#39;app/*.js&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s1">&#39;test/*.js&#39;</span>
-</span><span class='line'>        <span class="p">],</span>
-</span><span class='line'>        <span class="nx">reporters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="nx">autoWatch</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jasmine&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;PhantomJS&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s1">&#39;karma-jasmine&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s1">&#39;karma-spec-reporter&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s1">&#39;karma-phantomjs-launcher&#39;</span>
-</span><span class='line'>        <span class="p">],</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Not too bad, but again, we&rsquo;re duplicating logic.
-Back in the gulpfile, we&rsquo;ll have a task like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">vendorPaths</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vendor/angular.js&#39;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;karma&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">vendorPaths</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">appPaths</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">testPaths</span><span class="p">))</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">karma</span><span class="p">({</span> <span class="nx">configFile</span><span class="o">:</span> <span class="s1">&#39;karma.conf.js&#39;</span> <span class="p">}));</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Suddenly, there&rsquo;s path duplication between the Karma config file and the gulpfile.
-To fix this, simply define your paths in another file that&rsquo;s included by both.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;app/*.js&#39;</span><span class="p">];</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test/*.js&#39;</span><span class="p">];</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">vendor</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vendor/angular.js&#39;</span><span class="p">];</span>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">app</span><span class="o">:</span> <span class="nx">app</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">test</span><span class="o">:</span> <span class="nx">test</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">vendor</span><span class="o">:</span> <span class="nx">vendor</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">karma</span><span class="o">:</span> <span class="nx">vendor</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">app</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">test</span><span class="p">)</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then your gulpfile should look like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./paths&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">app</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">test</span><span class="p">))</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">lint</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;minify&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">app</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minify</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">test</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">test</span><span class="p">());</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;karma&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">karma</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">karma</span><span class="p">({</span> <span class="nx">configFile</span><span class="o">:</span> <span class="s1">&#39;karma.conf.js&#39;</span> <span class="p">}));</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>And your karma.conf.js can look like this:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// karma.conf.js</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./paths&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">config</span><span class="p">.</span><span class="nx">set</span><span class="p">({</span>
-</span><span class='line'>        <span class="nx">files</span><span class="o">:</span> <span class="nx">paths</span><span class="p">.</span><span class="nx">karma</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">reporters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="nx">autoWatch</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">frameworks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;jasmine&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="nx">browsers</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;PhantomJS&#39;</span><span class="p">],</span>
-</span><span class='line'>        <span class="nx">plugins</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>            <span class="s1">&#39;karma-jasmine&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s1">&#39;karma-spec-reporter&#39;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s1">&#39;karma-phantomjs-launcher&#39;</span>
-</span><span class='line'>        <span class="p">],</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There you have it.
-Nice and DRY.</p>
-
-<p>Here&rsquo;s a <a href="https://gist.github.com/itsananderson/61bad88e4470679a4f13">Gist of the completed example</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-16T00:57:44-07:00" pubdate data-updated="true">Aug 16<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/gulp/'>Gulp</a>
 
 
 </div>

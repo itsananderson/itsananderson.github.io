@@ -7,8 +7,11 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Warning: stream of consciousness ahead I&rsquo;ve been thinking about the the pieces that would be needed to implement a REST Level 3 API in Node.
-I &hellip;">
+	<meta name="description" content="This is the introduction to a series on working with Azure Blob Storage in Node. Introduction
+First Steps
+Creating Blobs
+Downloading Blobs
+Listing &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,6 +83,87 @@ I &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/06/30/azure-blob-storage-and-node/">
+		
+			Azure Blob Storage and Node</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>This is the introduction to a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><strong>Introduction</strong></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
+<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
+</ol>
+
+
+<p>Over the weekend I put together a service called <a href="http://placebacon.net">placebacon</a> that serves placeholder bacon images.
+It&rsquo;s certainly not the first placeholder image service, but it&rsquo;s the first one that makes your designs look delicious :)</p>
+
+<p><img src="http://placebacon.net/800/100?image=9"></p>
+
+<p>I decided to build the service on Azure so that it can easily be scaled if anyone actually starts using it.
+Caching generated images with Azure Blob Storage made the most sense.</p>
+
+<p>The Azure team has released an npm package called <a href="https://www.npmjs.org/package/azure-storage">azure-storage</a>, which I used to interact with the Azure Blobs.
+The documentation for the azure-storage package is fairly good, but I still mostly found myself digging into the source code to figure things out.
+I&rsquo;m writing this blog series to make it easier for other Node developers to work with the Node bindings for Azure Blob Storage.</p>
+
+<h2>Placebacon&rsquo;s Service Architecture</h2>
+
+<p>To set a framework for the upcoming discussions about Blob Storage, I&rsquo;m providing a high-level overview of placebacon&rsquo;s architecture.</p>
+
+<p>First, I need a way to resize images in Node.
+After spending several frustrating hours trying to find an image manipulation module that works in Windows, I decided that a Linux VM would be the easiest way to resize images in Node.
+Since I&rsquo;m using the Azure infrastructure, setting up a Linux VM is straightforward, but I also want to take advantage of the simple scaling ability of Azure Websites.</p>
+
+<p>To accomplish this, I decided to have a lightweight Ubuntu VM for resizing images.
+Then I put together an Azure website (in Node, of course) that requests resized images from the service running on Ubuntu, and caches the results in Blob Storage.</p>
+
+<p>This (literal) back-of-an-envolope drawing illustrates the layout.</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/placebacon-architecture.jpg"></p>
+
+<p>With the architecture design out of the way, next time I&rsquo;ll cover the <a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">steps for getting started with Azure Blob Storage</a>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-30T14:09:17-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -950,69 +1034,6 @@ This one is very specific to GitHub&rsquo;s pull request workflow.</p>
 
 
 	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/05/08/inspecting-git-traffic-in-fiddler/">
-		
-			Inspecting Git Traffic in Fiddler</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make Git send traffic through Fiddler.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global http.proxy 127.0.0.1:8888
-</span><span class='line'>git config --global http.sslVerify false</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This tells Git to use Fiddler as the proxy, and to turn off SSL certificate verification (so it doesn&rsquo;t balk at Fiddler&rsquo;s cert).</p>
-
-<p>Make sure Fiddler&rsquo;s actually running, or Git won&rsquo;t be able to connect.</p>
-
-<p>If you just want to use Fiddler for a single repository, run the commands from within that repository without the <code>--global</code> flag. Obviously this work for the <code>git clone</code> command, so you&rsquo;ll have to use a global configuration if you want to inspect that.</p>
-
-<p>When you&rsquo;re done, make sure you undo your changes:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global --unset http.proxy
-</span><span class='line'>git config --global --unset http.sslVerify</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Again, remove the <code>--global</code> flag if you&rsquo;re just inspecting traffic for a single repository.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-08T07:32:26-07:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/fiddler/'>Fiddler</a>, <a class='category' href='/blog/categories/git/'>Git</a>
 
 
 </div>
