@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-19T08:58:44-08:00</updated>
+  <updated>2015-02-26T23:13:35-08:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,132 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Dynamically Configure Your Git Email]]></title>
+    <link href="http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email/"/>
+    <updated>2015-02-27T14:29:42-08:00</updated>
+    <id>http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email</id>
+    <content type="html"><![CDATA[<blockquote><p>This post is the second in a series on tuning your Git environment.
+The first post on <a href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/">customizing your git log</a> isn&rsquo;t a prerequisite, but may be useful.</p></blockquote>
+
+<h2>Managing Multiple Commit Emails</h2>
+
+<p>If you use Git at work and in your personal time, managing the email you use for commit messages can be tricky.</p>
+
+<p>When my previous team first started using Git, I had several instances where I accidentally committed to our team repository with my personal email address.
+This wasn&rsquo;t a big problem, but it made the repository history look a little messy, and it meant my picture didn&rsquo;t show up properly in the UI tools.</p>
+
+<h2>Simple Fix: Manually Configure Email Per Repository</h2>
+
+<p>My first solution was to remove the global configuration for my email address:</p>
+
+<p><code>git config --global --unset user.email</code></p>
+
+<p>This way when I committed into a fresh repository, I&rsquo;d get a warning that I hadn&rsquo;t configured my email.</p>
+
+<p>```
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:</p>
+
+<pre><code>git config --global user.name "Your Name"
+git config --global user.email you@example.com
+</code></pre>
+
+<p>After doing this, you may fix the identity used for this commit with:</p>
+
+<pre><code>git commit --amend --reset-author
+</code></pre>
+
+<p> 1 file changed, 0 insertions(+), 0 deletions(&ndash;)
+ create mode 100644 foo1
+```</p>
+
+<p>Then I just had to configure my email <strong>locally</strong> for that repository:</p>
+
+<p><code>git config user.email will@itsananderson.com</code></p>
+
+<p>And update the commit with the right author data:</p>
+
+<p><code>git commit --amend --reset-author</code></p>
+
+<h2>Medium Fix: Add Some Git Aliases</h2>
+
+<p>Running through those steps for every new repository quickly becomes tedious, especially when you like to spin up GitHub projects for every idea that pops into your head.</p>
+
+<p>To simplify things, I first created an alias for the <code>git commit --amend --reset-author</code> command.
+I called it <code>cara</code> for &ldquo;Commit Amend Reset Author&rdquo;, but you could call it whatever you&rsquo;ll remember.
+With that alias, it&rsquo;s super quick to fix a commit if I create it with the wrong author email.</p>
+
+<p>The next thing I aliased was a script to guess the author email based on the repository URL.
+I created a script and put it in <code>~/.git-scripts/email-guess.sh</code> (again, call it whatever you&rsquo;ll remember).</p>
+
+<p>```sh</p>
+
+<h1>!/bin/bash</h1>
+
+<p>remote=<code>git remote -v | awk '/\(push\)$/ {print $2}'</code>
+email=<a href="&#x6d;&#x61;&#x69;&#x6c;&#x74;&#x6f;&#x3a;&#119;&#x69;&#108;&#x6c;&#64;&#105;&#116;&#115;&#x61;&#110;&#x61;&#110;&#100;&#x65;&#114;&#115;&#x6f;&#110;&#x2e;&#x63;&#111;&#109;">&#x77;&#x69;&#x6c;&#x6c;&#x40;&#x69;&#116;&#115;&#x61;&#110;&#97;&#110;&#x64;&#101;&#x72;&#x73;&#x6f;&#110;&#46;&#x63;&#111;&#x6d;</a> # default</p>
+
+<p>if [[ $remote == <em>github.com:Microsoft</em> ]]; then
+  email=<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x77;&#x69;&#x61;&#x6e;&#x64;&#x40;&#109;&#x69;&#99;&#114;&#x6f;&#115;&#x6f;&#102;&#116;&#46;&#x63;&#x6f;&#x6d;">&#119;&#x69;&#97;&#x6e;&#100;&#64;&#109;&#105;&#x63;&#114;&#x6f;&#x73;&#x6f;&#102;&#x74;&#x2e;&#x63;&#111;&#x6d;</a>
+fi
+if [[ $remote == <em>itsananderson.visualstudio.com</em> ]]; then
+  email=<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#119;&#x69;&#x6c;&#x6c;&#x40;&#x63;&#x6f;&#x64;&#x65;&#x61;&#119;&#x68;&#105;&#108;&#101;&#46;&#x63;&#x6f;&#109;">&#x77;&#x69;&#108;&#x6c;&#64;&#x63;&#111;&#100;&#101;&#97;&#119;&#104;&#x69;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a>
+fi</p>
+
+<p>echo &ldquo;Configuring user.email as $email&rdquo;
+git config user.email $email
+```</p>
+
+<p>The script isn&rsquo;t exactly a masterpiece, but it gets the job done.
+<a href="https://github.com/itsananderson/git-better/blob/master/itsananderson/git-scripts/email-guess.sh">Feel free to copy and modify it to meet your needs</a>.</p>
+
+<p>For the script to be useful, I aliased it as <code>git email-guess</code>:</p>
+
+<p><code>git config --global alias.email-guess \!". ~/.git-scripts/email-guess.sh" ""</code></p>
+
+<p>So now when I clone a new repository, I just <code>git email-guess</code> to set the email.
+If I forgot to do it before my first commit, I follow it with <code>git cara</code> to fix that commit&rsquo;s author.</p>
+
+<h2>Advanced Fix: Full Automation</h2>
+
+<p>Reducing the work of author email management to only 1 or 2 commands is nice, but I wanted to eliminate it altogether.
+This is where <a href="http://www.git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git hooks</a> came in handy.</p>
+
+<p>You can configure a Git hook manually for each repository, but again, we want this to be automated.
+To do that, you&rsquo;ll want to modify the template hooks Git uses when it creates new repositories.</p>
+
+<p>On Windows, these hook templates are located somewhere near <code>C:\Program Files (x86)\Git\share\git-core\templates\hooks</code>.
+On OS X and Linux, they should be somewhere under the Git directory.
+Running <code>which git</code> or <code>cat &#96;which git&#96;</code> should point you in the right direction.</p>
+
+<p>Once you locate the template hooks directory, create a file called <code>post-checkout</code> with the following contents:</p>
+
+<p>```sh</p>
+
+<h1>!/bin/bash</h1>
+
+<p>if [[ $1 == 00000000000* ]]; then
+  git email-guess
+fi
+```</p>
+
+<p>All this does is test whether Git checked out a freshly cloned repository (thus &ldquo;previous SHA&rdquo; is all zeros).
+If so, it runs <code>git email-guess</code> to set up the correct author email.</p>
+
+<h2>Wrapping Up</h2>
+
+<p>So that&rsquo;s the full rundown of my email configuration setup.
+As I said in the previous post, you should take this as an example that you can customize it to fit your needs.</p>
+
+<p>You can find most of my Git configuration in my <a href="https://github.com/itsananderson/git-better">git-better</a> repository on GitHub.</p>
+
+<p>As one example, there are many other Git hooks that you can take advantage of.
+<a href="http://www.git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Take a look</a> to see if there are any that you could use to automate a frequent task.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Customize Your Git Log Format]]></title>
@@ -184,171 +310,6 @@ Since I had a seemingly perfect use case, I decided to dive in.</p>
 
 <p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
 About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[The Dark Side of the Force Push]]></title>
-    <link href="http://willi.am/blog/2014/08/12/the-dark-side-of-the-force-push/"/>
-    <updated>2014-08-12T23:26:08-07:00</updated>
-    <id>http://willi.am/blog/2014/08/12/the-dark-side-of-the-force-push</id>
-    <content type="html"><![CDATA[<p>Let&rsquo;s talk about force pushing in Git.
-We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely.</p>
-
-<p>TL;DR</p>
-
-<p>Do this:</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/obi-wan-droids.gif" alt="Force Push Droids" /></p>
-
-<p>Not this:</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/obi-wan-hates.gif" alt="Force Push Fail" /></p>
-
-<h2>Pushing Changes</h2>
-
-<p>When you push changes to a remote server, Git prevents you from pushing your changes if the remote has changes you&rsquo;re missing.
-This feature is designed to prevent data loss.
-If you run into this, you&rsquo;ll likely see a message similar to this:</p>
-
-<p><code>
-$ git push origin my-branch
-To git@github.com:itsananderson/foo.git
- ! [rejected]        my-branch -&gt; my-branch (non-fast-forward)
-error: failed to push some refs to 'git@github.com:itsananderson/foo.git'
-hint: Updates were rejected because the tip of your current branch is behind
-hint: its remote counterpart. Integrate the remote changes (e.g.
-hint: 'git pull ...') before pushing again.
-hint: See the 'Note about fast-forwards' in 'git push --help' for details.
-</code></p>
-
-<p>99% of the time, the appropriate solution to this message is to <code>git pull</code> to fetch changes from the server,
-then <code>git push origin my-branch</code> to push your updated branch to the server.</p>
-
-<h2>Rebasing</h2>
-
-<p>The only real exception to the &ldquo;always pull, then push&rdquo; rule, is rebasing.
-When you rebase, you&rsquo;re creating a copy of your commit history.
-Git treats this new copy of history as a completely different set of commits (because it is).</p>
-
-<p>I won&rsquo;t go into deep detail about rebasing, because it&rsquo;s been covered many times before.
-GitHub has a good <a href="https://help.github.com/articles/using-git-rebase">tutorial on rebasing</a>.
-If you want some <a href="http://willi.am/git-fundamentals-rebasing/">high-level concept slides on rebasing</a>, I wrote some for a team presentation.</p>
-
-<p>Point is, when you rebase a branch that you&rsquo;ve pushed to a remote server, your copy of the branch and the server&rsquo;s copy will be considered completely distinct.
-This means when you try to push, the remote server will reject your changes because they&rsquo;re not a fast-forward.
-However, if you <code>git pull</code>, you&rsquo;ll end up with two copies of the branch which are then merged with a merge commit.
-In addition to muddling your commit history, this will re-introduce whatever you were trying to change with your rebase.</p>
-
-<p>In this very specific case, the correct solution <em>might</em> be to <code>git push origin my-branch -f</code>.</p>
-
-<h2>Force Push Basics</h2>
-
-<p>So you have a branch that you&rsquo;ve rebased, and you want to force push it to the remote server.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/force-push-will-smith.gif" alt="Will Smith Force Push" /></p>
-
-<p>First, make sure nobody&rsquo;s pulled down your branch and done local work off of it.
-If they have, your force push may make it difficult for them to reconcile their changes with yours.</p>
-
-<p>If you&rsquo;re working on a team and need to rebase a shared branch, here are the steps:</p>
-
-<ol>
-<li>Make sure your team has committed and pushed any pending changes</li>
-<li>Ask your team to pause work on that branch temporarily</li>
-<li>Make sure you have the latest changes for that branch (git pull)</li>
-<li>Rebase, then <code>git push origin &lt;yourbranch&gt; -f</code></li>
-<li>Have your team fix up their local branches with <code>git checkout &lt;yourbranch&gt;</code>, <code>git fetch</code> and <code>git reset --hard origin/&lt;yourbranch&gt;</code></li>
-</ol>
-
-
-<p>As you can see, this is a complicated process.
-It requires team coordination, and potentially blocks team members from doing work while you rebase.
-As a general rule, avoid rebasing or otherwise modifying history on pushed branches unless you&rsquo;ve accidentally published <a href="https://help.github.com/articles/remove-sensitive-data">sensitive data</a>.</p>
-
-<p>If you&rsquo;re working alone, the process is a little simpler.
-Simply rebase and then <code>git push origin &lt;yourbranch&gt; -f</code>.
-Keep in mind, however, that you may still cause headaches for other people if you rebase on a public GitHub (Bitbucket, etc.) repository.</p>
-
-<h2>Aside: Understanding Remote Tracking Branches</h2>
-
-<p>Git uses the concept of remote tracking branches (or branch upstreams) to help you associate your local branches with the branches on remote servers.
-If you&rsquo;ve ever seen this message, that&rsquo;s what it&rsquo;s talking about: <code>Branch my-branch set up to track remote branch my-branch origin.</code></p>
-
-<p>Additionally, if you&rsquo;ve seen this message when you ran <code>git status</code>, it means your branch is tracking a remote branch:</p>
-
-<p><code>
-On branch my-branch
-Your branch and 'origin/my-branch' have diverged,
-and have 5 and 2 different commit each, respectively.
-</code></p>
-
-<p>Finally, when you run <code>git pull</code> or <code>git push</code>, Git can use the remote tracking branch to know which remote branch to interact with.
-This keeps you from having to type <code>git pull origin my-branch</code> every time.</p>
-
-<p>There&rsquo;s a blog post with more info on <a href="http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/">remote tracking branches and upstreams</a>.</p>
-
-<h2>Force Push Pitfalls</h2>
-
-<p>When you start force pushing, there are a few pitfalls you should be aware of.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/force-push-yoda.gif" alt="Yoda Force Push" /></p>
-
-<h3>Overwriting Changes</h3>
-
-<p>Before you force push a branch, double check that nobody has pushed new changes to that branch.
-If they have, and you don&rsquo;t pull them in, you&rsquo;ll overwrite them when you force push.</p>
-
-<p>With online source control, you can just browse the repository and check the commit history for your branch.</p>
-
-<p>If you don&rsquo;t have a web UI, you can also check directly in the source.</p>
-
-<ol>
-<li>Run <code>git fetch</code> to pull down the latest changes to your machine</li>
-<li>Run <code>git log origin/&lt;yourbranch&gt;</code> to remote branch&rsquo;s log</li>
-<li>If you don&rsquo;t see any new commits, it&rsquo;s probably safe to proceed (ignoring developer race conditions)</li>
-<li>If you see new changes, resolve them into your local branch before you force push</li>
-</ol>
-
-
-<p>As with software, you can run into a race condition.
-If somebody pushes changes between when you fetch and when you push, you may still overwrite them.
-To avoid this, communicate with your team.
-A simple &ldquo;don&rsquo;t push anything on <yourbranch> for a minute&rdquo;, followed up by an &ldquo;all clear&rdquo; should do the trick.</p>
-
-<h3>Overwriting Other Branches</h3>
-
-<p>When you push and pull, Git can use remote tracking branches (see above) to infer which remote branch you want to push/pull from.
-This is generally ok for normal push/pull activity, but when you force push, it can be dangerous.</p>
-
-<p>By default, Git responds to <code>git push</code> by pushing <em>all</em> branches that exist on both your local machine and the remote server.
-This means, if you have commits on master and my-feature-branch, and you run <code>git push</code>, it will push your changes from both branches at once.</p>
-
-<p>In Git 2.0, this behavior was changed to only push the current branch, but older versions still have this unexpected behavior.
-To fix it, run the following command:</p>
-
-<p><code>git config --global push.default simple</code></p>
-
-<p>Now if you run <code>git push</code>, it will only try to push your current branch.</p>
-
-<p>The default push behavior becomes especially dangerous when you force push.
-If, for example, you run <code>git push -f</code>, and your master branch is behind the remote server&rsquo;s master,
-you may accidentally remove commits from master.</p>
-
-<p>For this reason, I recommend two things:</p>
-
-<ol>
-<li>Configure push.default with the safer <code>simple</code> setting</li>
-<li>Always explicitly state the remote and branch name when you force push: <code>git push -f origin my-feature-branch</code></li>
-</ol>
-
-
-<h2>In Conclusion</h2>
-
-<p>Hopefully this gives you a good overview of the how/why/when of force pushing.</p>
-
-<p>If you haven&rsquo;t already, be sure to read the section on force push pitfalls.
-They&rsquo;re important to understand, and they&rsquo;re the main reason I wrote this post.</p>
 ]]></content>
   </entry>
   

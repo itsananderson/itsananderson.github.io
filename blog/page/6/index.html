@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; &hellip;">
+	<meta name="description" content="Part of my Science Fiction course requires me to write a flash fiction. It turned out well enough that I&rsquo;m not embarrassed to let people read &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +79,67 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/02/07/time-honored-destiny/">
+		
+			Time Honored Destiny</a>
+	</h2>
+	<div class="entry-content">
+		<p>Part of my Science Fiction course requires me to write a flash fiction. It turned out well enough that I&rsquo;m not embarrassed to let people read it, so here it is.</p>
+
+<blockquote>
+
+<p style="text-align: center; font-weight: bold;">Time Honored Destiny</p>
+
+It had been four months since the event. Four months of hell. If Thomas hadn&#8217;t started his project years before the outbreak, he would have given up weeks ago. The world had been shocked by how quickly the sickness spread. Thomas didn&#8217;t have time to be shocked. He just kept working. Before the sickness everyone had told him time travel wasn&#8217;t possible. They tried to convince him that he was wasting his time. He wondered how their opinion might change if they knew that his work might be the salvation of the human race.
+
+&#8220;It&#8217;s finally ready.&#8221; Thomas glanced at John, the only other person immune to the sickness. He was glad to have a companion to listen to his ramblings but wished it was someone who could respond. John was completely paralyzed. His body was so horribly disfigured it was almost unrecognizable as human. Thomas had found him a week after the first outbreak while looking for supplies at a nearby hospital. At first he&#8217;d thought the disfigurement was some strange manifestation of the sickness, but the hospital records said he&#8217;d been in a bus accident. He had never been identified by the hospital, so Thomas christened him John Doe. At the time he&#8217;d laughed at the generic name and promised to come up with something better, but with all of his creativity being poured into his work he never had the time.
+
+The machine only had room for Thomas, but if he was successful he would change history for both of them. John had been crippled before the outbreak, but by changing the past, Thomas could at least ensure he&#8217;d receive the medical attention he needed.
+
+Trembling with excitement, Thomas calibrated the machine to place him across the street from the CDC headquarters in Atlanta. He gave himself a month before the initial outbreak. Surely that would be enough time to prevent the world&#8217;s doom. All they had to do was find patient zero. By seizing one improperly sanitized needle from a washed up heroin junkie they could prevent the end of humanity.
+
+&#8220;Wish me luck.&#8221; He murmured. The countdown commenced. 3&#8230;2&#8230;1&#8230;
+
+After a few instants he immerged, dizzy and disoriented. He spotted the entrance to the CDC and stepped into the street. In his excitement he didn&#8217;t even see the bus as it raced toward him.
+</blockquote>
+
+
+<p>That&rsquo;s it. Whatcha think?</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-07T19:51:46-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman</a>, <a class='category' href='/blog/categories/writing/'>Writing</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -906,164 +967,6 @@
 
 
 	<a class='category' href='/blog/categories/gmail/'>Gmail</a>, <a class='category' href='/blog/categories/jquery/'>jQuery</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/14/converting-php-associative-arrays-to-variables/">
-		
-			Converting PHP Associative Arrays to Variables</a>
-	</h2>
-	<div class="entry-content">
-		<p><strong>EDIT: <a href="http://nickohrn.com/">Nick Ohrn</a> pointed out that <a href="http://us.php.net/extract" title="PHP Manual Entry for extract">extract</a> does this automatically. The following post is still a valid look at how this could be implemented if the functionality didn&rsquo;t already exist, but it is better to use extract because it is likely more efficient.</strong></p>
-
-<p>Associative arrays are one of my favorite PHP features. They&rsquo;re simple to use and easy to understand. Sometimes though, being able to reference the values of associative arrays with variables can be more convenient. Today I&rsquo;m going to share a simple way to convert a associative arrays to variables.</p>
-
-<p>OK, if you&rsquo;re not sure what we&rsquo;re trying to accomplish here, take a look at the following example.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$list</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;var1&#39;</span> <span class="o">=&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span> <span class="s1">&#39;var2&#39;</span> <span class="o">=&amp;</span><span class="nx">gt</span><span class="p">;</span> <span class="s1">&#39;value2&#39;</span> <span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>To reference the elements in the array, you&rsquo;ll have to use the array key like this.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">echo</span> <span class="nv">$list</span><span class="p">[</span><span class="s1">&#39;var1&#39;</span><span class="p">];</span> <span class="c1">//prints &#39;value1&#39;</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$list</span><span class="p">[</span><span class="s1">&#39;var2&#39;</span><span class="p">];</span> <span class="c1">//prints &#39;value2&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>What we&rsquo;d like to do instead is reference the values using variable names like this.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">echo</span> <span class="nv">$var1</span><span class="p">;</span> <span class="c1">//print &#39;value1&#39;</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$var2</span><span class="p">;</span> <span class="c1">//print &#39;value2&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is possible through what the PHP Manual calls &lsquo;variable variables&rsquo;. The idea is that the value of one variable is used as the name of another variable. Here&rsquo;s an example.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$hello</span> <span class="o">=</span> <span class="s1">&#39;world&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$$hello</span> <span class="o">=</span> <span class="s1">&#39;howdy&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$world</span><span class="p">;</span> <span class="c1">//prints &#39;howdy&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Here, the value of <code>$hello</code> is analyzed and used as the name of the variable to which <code>'howdy'</code> is assigned.</p>
-
-<p>Now it&rsquo;s not a big step to expand this to an associative array. Consider the following code.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$list</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span> <span class="s1">&#39;var1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span> <span class="s1">&#39;var2&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value2&#39;</span> <span class="p">);</span>
-</span><span class='line'><span class="k">foreach</span> <span class="p">(</span> <span class="nv">$list</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span> <span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$var1</span><span class="p">;</span> <span class="c1">//prints &#39;value1&#39;</span>
-</span><span class='line'><span class="k">echo</span> <span class="nv">$var2</span><span class="p">;</span> <span class="c1">//prints &#39;value2&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So we&rsquo;ve accomplished what we set out to do. I must caution you, though, about a couple of things which might trip you up.</p>
-
-<p>First, make sure the keys are valid variable names. If you don&rsquo;t you&rsquo;ll run into problems when you execute the script.</p>
-
-<p>Second, be <em>very</em> careful when using this with user input. For example, the following code is insecure.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// login.php</span>
-</span><span class='line'><span class="c1">// checks the username and password in the GET request</span>
-</span><span class='line'><span class="nv">$realuser</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$realpass</span> <span class="o">=</span> <span class="s1">&#39;secret&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="k">foreach</span> <span class="p">(</span> <span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span> <span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="nv">$user</span> <span class="o">==</span> <span class="nv">$realuser</span> <span class="o">&amp;&amp;</span> <span class="nv">$pass</span> <span class="o">==</span> <span class="nv">$realpass</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login correct&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login incorrect&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are several problems here. First, we don&rsquo;t <em>know</em> that $user and $pass have been initialized. We should check this before using them. Second (and more importantly) a cleverly generated request could let a user log in without a correct username/password. For example: <code>login.php?user=me&amp;pass=wrong&amp;realpass=wrong</code></p>
-
-<p>When the script runs through the list of variables, it will assign a new value of <code>wrong</code> to $realpass. Because <code>$realpass</code> and <code>$pass</code> have the same value (as do <code>$user</code> and <code>$realuser</code>), the page will allow them to log in.</p>
-
-<p>Here is a way to keep things a little safer by prefixing all the <code>$_GET[]</code> values.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="c1">// login.php</span>
-</span><span class='line'><span class="c1">// checks the username and password in GET request</span>
-</span><span class='line'><span class="nv">$realuser</span> <span class="o">=</span> <span class="s1">&#39;me&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$realpass</span> <span class="o">=</span> <span class="s1">&#39;secret&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="k">foreach</span> <span class="p">(</span> <span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span> <span class="err">$</span><span class="p">{</span><span class="s1">&#39;get_&#39;</span><span class="p">;</span> <span class="o">.</span> <span class="nv">$key</span><span class="p">}</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span> <span class="p">}</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="nb">isset</span><span class="p">(</span> <span class="nv">$get_user</span> <span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span> <span class="nv">$get_pass</span> <span class="p">)</span>
-</span><span class='line'>    <span class="o">&amp;&amp;</span> <span class="nv">$get_user</span> <span class="o">==</span> <span class="nv">$realuser</span> <span class="o">&amp;&amp;</span> <span class="nv">$get_pass</span> <span class="o">==</span> <span class="nv">$realpass</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login correct&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'> <span class="k">echo</span> <span class="s1">&#39;login incorrect&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now the <code>$_GET[]</code> values are prefixed with <code>get_</code> so they can&rsquo;t interfere with other variables in the script. Additionally <code>isset</code> is used to ensure that the values of the variables has actually been set.</p>
-
-<p>To use something like this, you&rsquo;d still need to check for invalid variable names, but I won&rsquo;t go into that for this example.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-14T21:39:35-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/php/'>PHP</a>
 
 
 </div>

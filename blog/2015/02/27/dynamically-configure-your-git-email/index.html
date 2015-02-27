@@ -1,0 +1,296 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Dynamically Configure Your Git Email - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="This post is the second in a series on tuning your Git environment.
+The first post on customizing your git log isn&rsquo;t a prerequisite, but may be &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Dynamically Configure Your Git Email</h2>
+	<div class="entry-content"><blockquote><p>This post is the second in a series on tuning your Git environment.
+The first post on <a href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/">customizing your git log</a> isn&rsquo;t a prerequisite, but may be useful.</p></blockquote>
+
+<h2>Managing Multiple Commit Emails</h2>
+
+<p>If you use Git at work and in your personal time, managing the email you use for commit messages can be tricky.</p>
+
+<p>When my previous team first started using Git, I had several instances where I accidentally committed to our team repository with my personal email address.
+This wasn&rsquo;t a big problem, but it made the repository history look a little messy, and it meant my picture didn&rsquo;t show up properly in the UI tools.</p>
+
+<h2>Simple Fix: Manually Configure Email Per Repository</h2>
+
+<p>My first solution was to remove the global configuration for my email address:</p>
+
+<p><code>git config --global --unset user.email</code></p>
+
+<p>This way when I committed into a fresh repository, I&rsquo;d get a warning that I hadn&rsquo;t configured my email.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Your name and email address were configured automatically based
+</span><span class='line'>on your username and hostname. Please check that they are accurate.
+</span><span class='line'>You can suppress this message by setting them explicitly:
+</span><span class='line'>
+</span><span class='line'>    git config --global user.name "Your Name"
+</span><span class='line'>    git config --global user.email you@example.com
+</span><span class='line'>
+</span><span class='line'>After doing this, you may fix the identity used for this commit with:
+</span><span class='line'>
+</span><span class='line'>    git commit --amend --reset-author
+</span><span class='line'>
+</span><span class='line'> 1 file changed, 0 insertions(+), 0 deletions(-)
+</span><span class='line'> create mode 100644 foo1</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I just had to configure my email <strong>locally</strong> for that repository:</p>
+
+<p><code>git config user.email will@itsananderson.com</code></p>
+
+<p>And update the commit with the right author data:</p>
+
+<p><code>git commit --amend --reset-author</code></p>
+
+<h2>Medium Fix: Add Some Git Aliases</h2>
+
+<p>Running through those steps for every new repository quickly becomes tedious, especially when you like to spin up GitHub projects for every idea that pops into your head.</p>
+
+<p>To simplify things, I first created an alias for the <code>git commit --amend --reset-author</code> command.
+I called it <code>cara</code> for &ldquo;Commit Amend Reset Author&rdquo;, but you could call it whatever you&rsquo;ll remember.
+With that alias, it&rsquo;s super quick to fix a commit if I create it with the wrong author email.</p>
+
+<p>The next thing I aliased was a script to guess the author email based on the repository URL.
+I created a script and put it in <code>~/.git-scripts/email-guess.sh</code> (again, call it whatever you&rsquo;ll remember).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">remote</span><span class="o">=</span><span class="sb">`</span>git remote -v | awk <span class="s1">&#39;/\(push\)$/ {print $2}&#39;</span><span class="sb">`</span>
+</span><span class='line'><span class="nv">email</span><span class="o">=</span>will@itsananderson.com <span class="c"># default</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[[</span> <span class="nv">$remote</span> <span class="o">==</span> *github.com:Microsoft* <span class="o">]]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nv">email</span><span class="o">=</span>wiand@microsoft.com
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[[</span> <span class="nv">$remote</span> <span class="o">==</span> *itsananderson.visualstudio.com* <span class="o">]]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span><span class="nv">email</span><span class="o">=</span>will@codeawhile.com
+</span><span class='line'><span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;Configuring user.email as $email&quot;</span>
+</span><span class='line'>git config user.email <span class="nv">$email</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The script isn&rsquo;t exactly a masterpiece, but it gets the job done.
+<a href="https://github.com/itsananderson/git-better/blob/master/itsananderson/git-scripts/email-guess.sh">Feel free to copy and modify it to meet your needs</a>.</p>
+
+<p>For the script to be useful, I aliased it as <code>git email-guess</code>:</p>
+
+<p><code>git config --global alias.email-guess \!". ~/.git-scripts/email-guess.sh" ""</code></p>
+
+<p>So now when I clone a new repository, I just <code>git email-guess</code> to set the email.
+If I forgot to do it before my first commit, I follow it with <code>git cara</code> to fix that commit&rsquo;s author.</p>
+
+<h2>Advanced Fix: Full Automation</h2>
+
+<p>Reducing the work of author email management to only 1 or 2 commands is nice, but I wanted to eliminate it altogether.
+This is where <a href="http://www.git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Git hooks</a> came in handy.</p>
+
+<p>You can configure a Git hook manually for each repository, but again, we want this to be automated.
+To do that, you&rsquo;ll want to modify the template hooks Git uses when it creates new repositories.</p>
+
+<p>On Windows, these hook templates are located somewhere near <code>C:\Program Files (x86)\Git\share\git-core\templates\hooks</code>.
+On OS X and Linux, they should be somewhere under the Git directory.
+Running <code>which git</code> or <code>cat &#96;which git&#96;</code> should point you in the right direction.</p>
+
+<p>Once you locate the template hooks directory, create a file called <code>post-checkout</code> with the following contents:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[[</span> <span class="nv">$1</span> <span class="o">==</span> 00000000000* <span class="o">]]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">  </span>git email-guess
+</span><span class='line'><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>All this does is test whether Git checked out a freshly cloned repository (thus &ldquo;previous SHA&rdquo; is all zeros).
+If so, it runs <code>git email-guess</code> to set up the correct author email.</p>
+
+<h2>Wrapping Up</h2>
+
+<p>So that&rsquo;s the full rundown of my email configuration setup.
+As I said in the previous post, you should take this as an example that you can customize it to fit your needs.</p>
+
+<p>You can find most of my Git configuration in my <a href="https://github.com/itsananderson/git-better">git-better</a> repository on GitHub.</p>
+
+<p>As one example, there are many other Git hooks that you can take advantage of.
+<a href="http://www.git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">Take a look</a> to see if there are any that you could use to automate a frequent task.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-02-27T14:29:42-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>
