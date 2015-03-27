@@ -4,7 +4,7 @@
   <title><![CDATA[Category: WordPress | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/wordpress/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[New Plugin WP SendGrid]]></title>
     <link href="http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid/"/>
-    <updated>2011-12-15T08:49:43-08:00</updated>
+    <updated>2011-12-15T10:49:43-06:00</updated>
     <id>http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid</id>
     <content type="html"><![CDATA[<p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
 At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time
@@ -45,7 +45,7 @@ After a few more hours of work, I had a complete plugin with a nice configuratio
   <entry>
     <title type="html"><![CDATA[New Plugin: Minimum Password Strength]]></title>
     <link href="http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength/"/>
-    <updated>2011-12-14T14:09:34-08:00</updated>
+    <updated>2011-12-14T16:09:34-06:00</updated>
     <id>http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength</id>
     <content type="html"><![CDATA[<p>A couple of years ago I released a plugin called
 &ldquo;<a href="/plugins/minimum-password-length/">Minimum Password Length</a>&rdquo;.
@@ -65,7 +65,7 @@ but Minimum Password Strength is the first one that&rsquo;s there from the start
   <entry>
     <title type="html"><![CDATA[PHP Static Methods in WordPress Plugins]]></title>
     <link href="http://willi.am/blog/2011/04/26/php-static-methods-in-wordpress-plugins/"/>
-    <updated>2011-04-26T13:16:52-07:00</updated>
+    <updated>2011-04-26T15:16:52-05:00</updated>
     <id>http://willi.am/blog/2011/04/26/php-static-methods-in-wordpress-plugins</id>
     <content type="html"><![CDATA[<p><p style="background-color: #faa; padding: 5px">
 <strong>Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it difficult to mock dependencies for unit tests. I leave this post up for posterity, but I no longer recommend this design pattern.</strong><p></p>
@@ -155,7 +155,7 @@ Add_Brackets::start();
   <entry>
     <title type="html"><![CDATA[WordCamp Seattle Slides 2011]]></title>
     <link href="http://willi.am/blog/2011/04/16/wordcamp-seattle-slides-2011/"/>
-    <updated>2011-04-16T13:28:00-07:00</updated>
+    <updated>2011-04-16T15:28:00-05:00</updated>
     <id>http://willi.am/blog/2011/04/16/wordcamp-seattle-slides-2011</id>
     <content type="html"><![CDATA[<p>Here are my WordCamp Seattle slides, along with my code samples.</p>
 
@@ -172,7 +172,7 @@ Add_Brackets::start();
   <entry>
     <title type="html"><![CDATA[WordPress Custom Post Statuses]]></title>
     <link href="http://willi.am/blog/2011/02/19/wordpress-custom-post-statuses/"/>
-    <updated>2011-02-19T12:59:07-08:00</updated>
+    <updated>2011-02-19T14:59:07-06:00</updated>
     <id>http://willi.am/blog/2011/02/19/wordpress-custom-post-statuses</id>
     <content type="html"><![CDATA[<p>WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of states and a WordPress custom post status. If you want to make certain posts stand out, or need a custom way to categorize your posts, this is simple way to do it.</p>
 

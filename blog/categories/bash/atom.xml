@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Bash | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/bash/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Escaping Exclamation Marks in Bash]]></title>
     <link href="http://willi.am/blog/2014/05/22/escaping-exclamation-marks-in-bash/"/>
-    <updated>2014-05-22T18:25:22-07:00</updated>
+    <updated>2014-05-22T20:25:22-05:00</updated>
     <id>http://willi.am/blog/2014/05/22/escaping-exclamation-marks-in-bash</id>
     <content type="html"><![CDATA[<p>If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this:</p>
 

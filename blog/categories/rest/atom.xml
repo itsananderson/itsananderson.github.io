@@ -4,7 +4,7 @@
   <title><![CDATA[Category: REST | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/rest/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Thoughts On Implementing a REST Level 3 API in Node]]></title>
     <link href="http://willi.am/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node/"/>
-    <updated>2014-06-27T20:25:43-07:00</updated>
+    <updated>2014-06-27T22:25:43-05:00</updated>
     <id>http://willi.am/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node</id>
     <content type="html"><![CDATA[<p><strong>Warning: stream of consciousness ahead</strong></p>
 

@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -14,9 +14,44 @@
 
   
   <entry>
+    <title type="html"><![CDATA[Obvious Code]]></title>
+    <link href="http://willi.am/blog/2015/03/27/obvious-code/"/>
+    <updated>2015-03-27T06:10:17-05:00</updated>
+    <id>http://willi.am/blog/2015/03/27/obvious-code</id>
+    <content type="html"><![CDATA[<p>A week or two ago, I got this feedback on a code review:</p>
+
+<blockquote><p>You&rsquo;re using <code>foo ? foo : ""</code> here.
+It would be shorter and more obvious if you wrote it as <code>foo || ""</code></p></blockquote>
+
+<p>This was valid feedback, and I updated the code.</p>
+
+<p>After I&rsquo;d checked in my changes, I got the following IM from a senior member of my team:</p>
+
+<blockquote><p>I see you did <code>foo || ""</code>? What does the <code>||</code> mean?</p></blockquote>
+
+<p>:)</p>
+
+<p>This was a good reminder of two things:</p>
+
+<ul>
+<li>&ldquo;Obvious code&rdquo; is a subjective concept</li>
+<li>No matter how experienced you are with something, you&rsquo;ll still find blind spots from time to time</li>
+</ul>
+
+
+<p><em>P.S.</em> If that syntax is also new to you, it&rsquo;s taking advantage of how JavaScript does &ldquo;or&rdquo;.
+A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last value if none are truthy:</p>
+
+<p>e.g. <code>false || 0 === 0</code> and <code>0 || false === false</code> and <code>foo || "" === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
+
+<p>Many JavaScript developers use this behavior as a shortcut for settings default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[Dynamically Configure Your Git Email]]></title>
     <link href="http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email/"/>
-    <updated>2015-02-27T14:29:42-08:00</updated>
+    <updated>2015-02-27T16:29:42-06:00</updated>
     <id>http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email</id>
     <content type="html"><![CDATA[<blockquote><p>This post is the second in a series on tuning your Git environment.
 The first post on <a href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/">customizing your git log</a> isn&rsquo;t a prerequisite, but may be useful.</p></blockquote>
@@ -169,7 +204,7 @@ As I said in the previous post, you should take this as an example that you can 
   <entry>
     <title type="html"><![CDATA[Customize Your Git Log Format]]></title>
     <link href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/"/>
-    <updated>2015-02-19T14:29:06-08:00</updated>
+    <updated>2015-02-19T16:29:06-06:00</updated>
     <id>http://willi.am/blog/2015/02/19/customize-your-git-log-format</id>
     <content type="html"><![CDATA[<blockquote><p>Over the last few months, I&#8217;ve been learning about woodworking in my spare time. As I&#8217;ve read articles and watched YouTube videos, I&#8217;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&#8217;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&#8217;ve noticed parallels in my full time craft: Software Development.</p><p>In the next few posts, I&#8217;ll share some of the software &#8220;jigs&#8221; I&#8217;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git.</p></blockquote>
 
@@ -259,9 +294,9 @@ The whole point is to customize it to fit your needs.</p>
   
   <entry>
     <title type="html"><![CDATA[Netgear Nighthawk AC1900 (R7000) Review]]></title>
-    <link href="http://willi.am/blog/2015/02/04/netgear-nighthawk-ac1900-r7000-review/"/>
-    <updated>2015-02-04T22:13:14-08:00</updated>
-    <id>http://willi.am/blog/2015/02/04/netgear-nighthawk-ac1900-r7000-review</id>
+    <link href="http://willi.am/blog/2015/02/05/netgear-nighthawk-ac1900-r7000-review/"/>
+    <updated>2015-02-05T00:13:14-06:00</updated>
+    <id>http://willi.am/blog/2015/02/05/netgear-nighthawk-ac1900-r7000-review</id>
     <content type="html"><![CDATA[<p>I bought a new Wi-Fi router about a year ago, and I&rsquo;ve been so happy with it that I decided to write a review.</p>
 
 <h2>The Goods</h2>
@@ -374,7 +409,7 @@ Here are a few of the things I use most frequently:</p>
   <entry>
     <title type="html"><![CDATA[A New Adventure in DevDiv]]></title>
     <link href="http://willi.am/blog/2014/11/12/a-new-adventure-in-devdiv/"/>
-    <updated>2014-11-12T16:40:57-08:00</updated>
+    <updated>2014-11-12T18:40:57-06:00</updated>
     <id>http://willi.am/blog/2014/11/12/a-new-adventure-in-devdiv</id>
     <content type="html"><![CDATA[<p>Starting Monday, I&rsquo;m joining a new team at Microsoft.
 Even though I&rsquo;m moving within the company, this will be a completely new experience, and I&rsquo;m pumped.</p>
@@ -428,7 +463,7 @@ That&rsquo;s why a developer tools team was so appealing to me, and why I&rsquo;
   <entry>
     <title type="html"><![CDATA[Ignoring JavaScript Libraries While Debugging]]></title>
     <link href="http://willi.am/blog/2014/10/28/ignoring-javascript-libraries-while-debugging/"/>
-    <updated>2014-10-28T14:33:06-07:00</updated>
+    <updated>2014-10-28T16:33:06-05:00</updated>
     <id>http://willi.am/blog/2014/10/28/ignoring-javascript-libraries-while-debugging</id>
     <content type="html"><![CDATA[<p>Debugging front-end JavaScript can sometimes be painful.
 When you rely on third-party libraries and frameworks, you find yourself stepping back and forth between the library&rsquo;s code and your own.
@@ -473,7 +508,7 @@ Most of the time, it&rsquo;s safe to assume that these third-party libraries are
   <entry>
     <title type="html"><![CDATA[Unpacking a Git Database]]></title>
     <link href="http://willi.am/blog/2014/10/14/unpacking-a-git-database/"/>
-    <updated>2014-10-14T13:57:15-07:00</updated>
+    <updated>2014-10-14T15:57:15-05:00</updated>
     <id>http://willi.am/blog/2014/10/14/unpacking-a-git-database</id>
     <content type="html"><![CDATA[<p>While writing the <a href="http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">previous post</a>, I discovered a cool Git command which I thought I&rsquo;d share.</p>
 
@@ -504,7 +539,7 @@ Your packed objects are unpacked into <code>.git/objects/</code> folder.</p>
   <entry>
     <title type="html"><![CDATA[For the Last Time: Git Stores Snapshots Not Diffs]]></title>
     <link href="http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/"/>
-    <updated>2014-10-14T10:15:11-07:00</updated>
+    <updated>2014-10-14T12:15:11-05:00</updated>
     <id>http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs</id>
     <content type="html"><![CDATA[<p>I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
 <strong>Git stores a snapshot of the entire file, not a diff</strong></p>
@@ -538,7 +573,7 @@ If you want a more detailed explanation about how Git stores data, you can watch
   <entry>
     <title type="html"><![CDATA[Understanding Node's require Function]]></title>
     <link href="http://willi.am/blog/2014/10/12/understanding-nodes-require-function/"/>
-    <updated>2014-10-12T09:24:25-07:00</updated>
+    <updated>2014-10-12T11:24:25-05:00</updated>
     <id>http://willi.am/blog/2014/10/12/understanding-nodes-require-function</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s <code>require()</code> function, or simply fail to fully utilize it well.
 Let&rsquo;s talk about some examples.</p>
@@ -652,7 +687,7 @@ Depending on how you&rsquo;re pinning your versions, you may find yourself with 
   <entry>
     <title type="html"><![CDATA[Only Run One Suite or Spec in Jasmine]]></title>
     <link href="http://willi.am/blog/2014/09/25/only-run-one-suite-or-spec-in-jasmine/"/>
-    <updated>2014-09-25T00:30:43-07:00</updated>
+    <updated>2014-09-25T02:30:43-05:00</updated>
     <id>http://willi.am/blog/2014/09/25/only-run-one-suite-or-spec-in-jasmine</id>
     <content type="html"><![CDATA[<p>My team uses Karma (and thus Jasmine) to test our AngularJS applications.
 Sometimes when a single test is failing, it&rsquo;s a pain to re-run every test while you iterate on a fix.</p>
@@ -848,7 +883,7 @@ Sometimes when a single test is failing, it&rsquo;s a pain to re-run every test 
   <entry>
     <title type="html"><![CDATA[Use Blob Storage For Your Static Site Images]]></title>
     <link href="http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images/"/>
-    <updated>2014-09-24T01:37:53-07:00</updated>
+    <updated>2014-09-24T03:37:53-05:00</updated>
     <id>http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images</id>
     <content type="html"><![CDATA[<p>The purpose of this post is to show how easy it is to use cloud storage for your static blog&rsquo;s binary resources.
 I&rsquo;ll be showing specific examples for Azure Blob Storage and GitHub Pages, but the same principles should apply to AWS, as well as any other static blogging service.</p>
@@ -892,9 +927,9 @@ If you have enough images, it may not be reasonable to manually update the posts
   
   <entry>
     <title type="html"><![CDATA[Introducing Edge-Git]]></title>
-    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
-    <updated>2014-09-16T22:50:30-07:00</updated>
-    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
+    <link href="http://willi.am/blog/2014/09/17/introducing-edge-git/"/>
+    <updated>2014-09-17T00:50:30-05:00</updated>
+    <id>http://willi.am/blog/2014/09/17/introducing-edge-git</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
 The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
 Unfortunately both repositories are severely lacking in features and documentation.
@@ -917,7 +952,7 @@ About all you can do at this point is init, clone, and query branches/commits, b
   <entry>
     <title type="html"><![CDATA[Gulp Automation: Path Abstraction]]></title>
     <link href="http://willi.am/blog/2014/08/16/gulp-automation-path-abstraction/"/>
-    <updated>2014-08-16T00:57:44-07:00</updated>
+    <updated>2014-08-16T02:57:44-05:00</updated>
     <id>http://willi.am/blog/2014/08/16/gulp-automation-path-abstraction</id>
     <content type="html"><![CDATA[<p>If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths <em>a lot</em>.
 Paths for sources, paths for destinations.
@@ -1198,9 +1233,9 @@ Nice and DRY.</p>
   
   <entry>
     <title type="html"><![CDATA[The Dark Side of the Force Push]]></title>
-    <link href="http://willi.am/blog/2014/08/12/the-dark-side-of-the-force-push/"/>
-    <updated>2014-08-12T23:26:08-07:00</updated>
-    <id>http://willi.am/blog/2014/08/12/the-dark-side-of-the-force-push</id>
+    <link href="http://willi.am/blog/2014/08/13/the-dark-side-of-the-force-push/"/>
+    <updated>2014-08-13T01:26:08-05:00</updated>
+    <id>http://willi.am/blog/2014/08/13/the-dark-side-of-the-force-push</id>
     <content type="html"><![CDATA[<p>Let&rsquo;s talk about force pushing in Git.
 We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely.</p>
 
@@ -1373,7 +1408,7 @@ They&rsquo;re important to understand, and they&rsquo;re the main reason I wrote
   <entry>
     <title type="html"><![CDATA[Test Your API With Supertest]]></title>
     <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
-    <updated>2014-07-28T14:18:23-07:00</updated>
+    <updated>2014-07-28T16:18:23-05:00</updated>
     <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
     <content type="html"><![CDATA[<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
 Despite being new to me, the package has been around for about 2 years.</p>
@@ -1593,7 +1628,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
   <entry>
     <title type="html"><![CDATA[Storing Data as Newline Delimited JSON Entries]]></title>
     <link href="http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries/"/>
-    <updated>2014-07-16T13:48:29-07:00</updated>
+    <updated>2014-07-16T15:48:29-05:00</updated>
     <id>http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries</id>
     <content type="html"><![CDATA[<p>You can store data as newline delimited JSON entries.
 Since JSON encodes newline characters, you can use newlines to separate entries.</p>
@@ -1749,7 +1784,7 @@ Not only does it pretty print, but it allows you to pull out specific data, and 
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: All Together]]></title>
     <link href="http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/"/>
-    <updated>2014-07-09T21:16:08-07:00</updated>
+    <updated>2014-07-09T23:16:08-05:00</updated>
     <id>http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -2203,7 +2238,7 @@ There are probably better ways of getting an evenly distributed selection of ima
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Blob Metadata]]></title>
     <link href="http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/"/>
-    <updated>2014-07-08T20:47:12-07:00</updated>
+    <updated>2014-07-08T22:47:12-05:00</updated>
     <id>http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -2551,7 +2586,7 @@ In the final post in this series, we&rsquo;ll talk about putting everything toge
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Listing Blobs]]></title>
     <link href="http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/"/>
-    <updated>2014-07-07T17:33:03-07:00</updated>
+    <updated>2014-07-07T19:33:03-05:00</updated>
     <id>http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -2853,7 +2888,7 @@ In the next post, we&rsquo;ll cover <a href="http://willi.am/blog/2014/07/08/azu
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
     <link href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/"/>
-    <updated>2014-07-03T16:23:46-07:00</updated>
+    <updated>2014-07-03T18:23:46-05:00</updated>
     <id>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -3118,326 +3153,6 @@ This is powerfull when combined with the <code>getBlobProperties</code> method.<
 
 <p>In this post we covered how to check whether a blob exists, and how to download the blob.
 In the next post, we&rsquo;ll cover <a href="http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">how to list containers and blobs</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Azure Blob Storage and Node: Creating Blobs]]></title>
-    <link href="http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/"/>
-    <updated>2014-07-02T13:27:10-07:00</updated>
-    <id>http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs</id>
-    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><strong>Creating Blobs</strong></li>
-<li><a href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><a href="http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><a href="http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li><a href="http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
-</ol>
-
-
-<h2>Uploading to Azure Blob Storage</h2>
-
-<p>In the <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">previous post</a>, we talked about how to set up and connect to an Azure Storage account, and how to create a blob container.
-Today we&rsquo;ll discuss how to upload blobs.</p>
-
-<h3>Account Connection Boilerplate</h3>
-
-<p>To upload to blob storage, you first need to create a client instance.
-To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createContainerIfNotExists</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t create container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s created&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s already exists&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// Your code goes here</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
-
-<h3>Uploading a String</h3>
-
-<p>Uploading a string is easy with the <code>createBlockBlobFromText</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createBlockBlobFromText</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;my-awesome-text-blob&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;Hello, World!&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t upload string&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;String uploaded successfully&#39;</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The above code creates a blob called &ldquo;my-awesome-text-blob&rdquo; inside our container with the content &ldquo;Hello, World!&rdquo;.</p>
-
-<h3>Uploading a File</h3>
-
-<p>Uploading a file is just as simple as uploading a string. Use the <code>createBlockBlobFromFile</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="s1">&#39;hello-world.txt&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createBlockBlobFromFile</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;my-awesome-file-blob&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">fileName</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t upload file %s&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;File %s uploaded successfully&#39;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The above code creates a blob called &ldquo;my-awesome-file-blob&rdquo; inside our container with the contents of &ldquo;hello-world.txt&rdquo;.</p>
-
-<h3>Uploading a Stream</h3>
-
-<p>Again, uploading streams is easy with azure-storage.
-Just use the <code>createBlockBlobFromStream</code> method.
-The one caveat here is that you need to know the length of the stream you&rsquo;re uploading.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// For simplicity, assume getSomeStream() returns a readable stream</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">myStream</span> <span class="o">=</span> <span class="nx">getSomeStream</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">myStreamLength</span> <span class="o">=</span> <span class="nx">getSomeStreamLength</span><span class="p">();</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createBlockBlobFromStream</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>    <span class="s1">&#39;my-awesome-stream-blob&#39;</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">myStream</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">myStreamLength</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t upload stream&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Stream uploaded successfully&#39;</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Uploading an HTTP Response</h3>
-
-<p>You can also download a file and upload it to blob storage.
-This is useful for things like caching API responses.</p>
-
-<p>For this, we&rsquo;ll use <code>createWriteStreamToBlockBlob</code> to get a writable stream that saves to a blob.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="s1">&#39;index.html&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">domain</span> <span class="o">=</span> <span class="s1">&#39;example.com&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">requestOptions</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">host</span><span class="o">:</span> <span class="nx">domain</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">port</span><span class="o">:</span> <span class="mi">80</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">path</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">fileName</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">requestOptions</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">httpResponse</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="mi">200</span> <span class="o">!==</span> <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Unexpected status code: %d&#39;</span><span class="p">,</span> <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">writeStream</span> <span class="o">=</span> <span class="nx">blobService</span><span class="p">.</span><span class="nx">createWriteStreamToBlockBlob</span><span class="p">(</span>
-</span><span class='line'>            <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">fileName</span><span class="p">,</span>
-</span><span class='line'>            <span class="p">{</span> <span class="nx">contentType</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span> <span class="p">},</span>
-</span><span class='line'>            <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
-</span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t upload file %s from %s&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">,</span> <span class="nx">domain</span><span class="p">);</span>
-</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;File %s from %s uploaded&#39;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">,</span> <span class="nx">domain</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>        <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">writeStream</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Got error: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This example is a bit more complex, but the main idea is to create a write stream for the blob we want to create.
-Then we fetch <a href="http://example.com/index.html">http://example.com/index.html</a> and <code>.pipe</code> the response to the blob&rsquo;s write stream;</p>
-
-<p>If you&rsquo;re doing this in a web server, you&rsquo;ll probably also want to pipe the http.get response to the client.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/somepath&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">requestOptions</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">httpResponse</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="mi">200</span> <span class="o">!==</span> <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">502</span><span class="p">,</span> <span class="s1">&#39;Unexpected status code: &#39;</span> <span class="o">+</span> <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="c1">// ...</span>
-</span><span class='line'>            <span class="c1">// Blob stream setup code from above</span>
-</span><span class='line'>            <span class="c1">// ...</span>
-</span><span class='line'>
-</span><span class='line'>            <span class="c1">// Pipe server response to both the blob and the client who made this request</span>
-</span><span class='line'>            <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">writeStream</span><span class="p">);</span>
-</span><span class='line'>            <span class="nx">httpResponse</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">502</span><span class="p">,</span> <span class="s2">&quot;Got error: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Setting a Content Type</h3>
-
-<p>You may have noticed that the previoius example passed an extra option to <code>createWriteStreamToBlockBlob</code>.
-There are a number of properties you can set on a blob, but the most useful is the contentType property.
-This determines the Content-Type header that will be set if the blob is accessed or streamed directly from blob storage.</p>
-
-<p>By default the content type is set to &lsquo;application/octet-stream&rsquo;.
-If you create a blob with this type and try to access it with your browser, it will simply be downloaded rather than displayed as the desired type (text, html, image).</p>
-
-<p>To set a custom content type, pass something like <code>{ contentType: 'image/jpeg' }</code> before your callback function.
-Note that <code>createBlockBlobFromFile</code> will infer the content type from the file extension.
-Also,<code>createBlockBlobFromText</code> automatically sets the content type to <code>text/plain;charset="utf-9"</code> when it&rsquo;s given a string.</p>
-
-<p>There are a number of other properties that can be set on a blob, including contentEncoding, contentLanguage, and metadata (which will be covered in a later post).</p>
-
-<p>The easiest way to see the different options is to look in <code>lib\services\blob\blobservice.js</code> inside the azure-storage package.</p>
-
-<h3>Conclusion</h3>
-
-<p>In this post we&rsquo;ve covered the many ways to create Azure blobs in Node.
-Next time we&rsquo;ll talk about <a href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">downloading blobs</a>.</p>
 ]]></content>
   </entry>
   

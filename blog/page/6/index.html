@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Part of my Science Fiction course requires me to write a flash fiction. It turned out well enough that I&rsquo;m not embarrassed to let people read &hellip;">
+	<meta name="description" content="WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -84,6 +84,102 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2011/02/19/wordpress-custom-post-statuses/">
+		
+			WordPress Custom Post Statuses</a>
+	</h2>
+	<div class="entry-content">
+		<p>WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of states and a WordPress custom post status. If you want to make certain posts stand out, or need a custom way to categorize your posts, this is simple way to do it.</p>
+
+<p>The following screenshot illustrates some of the default post states.</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/wordpress-post-status-samples.png" alt="Before adding WordPress Custom Post Statuses" /></p>
+
+<h2>Adding a new WordPress Custom Post Status</h2>
+
+<p>Adding your own states is actually pretty easy. The following code snippet should get you going in the right direction.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">My_Custom_Post_State</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">function</span> <span class="nf">My_Custom_Post_State</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">__construct</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;display_post_states&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;custom_post_state&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">function</span> <span class="nf">custom_post_state</span><span class="p">(</span> <span class="nv">$states</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">global</span> <span class="nv">$post</span><span class="p">;</span>
+</span><span class='line'>    <span class="nv">$show_custom_state</span> <span class="o">=</span> <span class="k">null</span> <span class="o">!==</span> <span class="nx">get_post_meta</span><span class="p">(</span> <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">,</span> <span class="s1">&#39;_some_costom_field&#39;</span> <span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nv">$show_custom_state</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$states</span><span class="p">[]</span> <span class="o">=</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">&#39;Custom State&#39;</span> <span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="nv">$states</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">new</span> <span class="nx">My_Custom_Post_State</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Result of Adding a WordPress Custom Post Status</h2>
+
+<p>Assuming you have code elsewhere that is adding the custom field to posts, you&rsquo;ll see something like this.</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/custom-state-sample.png" alt="After Adding WordPress Custom Post Statuses" /></p>
+
+<p>If you added code to add a custom field called <code>_some_custom_field</code> to certain posts, those posts would show up with the &lsquo;Custom State&rsquo; status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field.</p>
+
+<p>That&rsquo;s pretty much it. Obviously there are more useful examples, but this should be enough to get you started.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-19T14:59:07-06:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2011/02/07/time-honored-destiny/">
 		
 			Time Honored Destiny</a>
@@ -129,7 +225,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2011-02-07T19:51:46-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2011</time></div>
+<time datetime="2011-02-07T21:51:46-06:00" pubdate data-updated="true">Feb 7<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -212,7 +308,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2011-01-28T19:57:07-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
+<time datetime="2011-01-28T21:57:07-06:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -309,7 +405,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-12-13T20:54:19-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2010</time></div>
+<time datetime="2010-12-13T22:54:19-06:00" pubdate data-updated="true">Dec 13<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -325,7 +421,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2010/03/29/customizing-the-p2-wordpress-theme/">
+		<a href="/blog/2010/03/30/customizing-the-p2-wordpress-theme/">
 		
 			Customizing the P2 WordPress Theme</a>
 	</h2>
@@ -446,7 +542,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-03-29T22:00:35-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time></div>
+<time datetime="2010-03-30T00:00:35-05:00" pubdate data-updated="true">Mar 30<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -462,7 +558,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2010/03/14/netbeans-ftp-file-permissions-fix/">
+		<a href="/blog/2010/03/15/netbeans-ftp-file-permissions-fix/">
 		
 			Netbeans FTP File Permissions Fix</a>
 	</h2>
@@ -517,7 +613,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-03-14T22:04:51-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2010</time></div>
+<time datetime="2010-03-15T00:04:51-05:00" pubdate data-updated="true">Mar 15<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -665,7 +761,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-03-12T21:08:59-08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time></div>
+<time datetime="2010-03-12T23:08:59-06:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -681,7 +777,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2009/05/21/multiple-wordpress-blogs-on-one-wordpress-core/">
+		<a href="/blog/2009/05/22/multiple-wordpress-blogs-on-one-wordpress-core/">
 		
 			Multiple WordPress Blogs on One WordPress Core</a>
 	</h2>
@@ -740,7 +836,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2009-05-21T22:14:53-07:00" pubdate data-updated="true">May 21<span>st</span>, 2009</time></div>
+<time datetime="2009-05-22T00:14:53-05:00" pubdate data-updated="true">May 22<span>nd</span>, 2009</time></div>
 	<div class="tags">
 
 
@@ -756,7 +852,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2009/05/04/the-obscure-wordpress-get-option-parameter/">
+		<a href="/blog/2009/05/05/the-obscure-wordpress-get-option-parameter/">
 		
 			The Obscure WordPress Get_option Parameter</a>
 	</h2>
@@ -807,7 +903,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2009-05-04T22:18:54-07:00" pubdate data-updated="true">May 4<span>th</span>, 2009</time></div>
+<time datetime="2009-05-05T00:18:54-05:00" pubdate data-updated="true">May 5<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
@@ -823,7 +919,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2009/03/17/limit-your-wordpress-rss-feed-to-one-category/">
+		<a href="/blog/2009/03/18/limit-your-wordpress-rss-feed-to-one-category/">
 		
 			Limit Your WordPress RSS Feed to One Category</a>
 	</h2>
@@ -876,97 +972,11 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2009-03-17T22:23:38-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2009</time></div>
+<time datetime="2009-03-18T00:23:38-05:00" pubdate data-updated="true">Mar 18<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam/">
-		
-			Using jQuery and Gmail&#8217;s Plus-Addressing to Fight Email Spam</a>
-	</h2>
-	<div class="entry-content">
-		<p>Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com&rdquo;). This does an OK job, but it&rsquo;s also a royal pain for the visitor, who has to type in, or fix your email address if they want to send you an email. The ultimate spam fighting question arises: &ldquo;How do you keep bots out while letting real users in&rdquo;. GMail&rsquo;s plus-addressing feature and jQuery might be able to bring us one step closer to an answer.</p>
-
-<p>If you use Google&rsquo;s email services (GMail or Google Apps), you have a powerful email feature available. Plus-addressing means that bill&#64;gmail.com, bill+something&#64;gmail.com and bill+anything&#64;gmail.com all point to the same email address. When deciding what address to deliver the message to, Google drops everything after the plus sign. you can then actually use filters to move items to folders inside your mailbox (for example, you could use example+bank&#64;gmail.com for your banking). Doing this also makes it just a little harder (though not impossible) for bots to get your real email address.</p>
-
-<p>By default, you probably don&rsquo;t want to display a &ldquo;plus address&rdquo; on a contact page, jQuery comes to our rescue here, allowing us to remove the &ldquo;plus&rdquo; part for users with JavaScript support. The following script looks for all email links and removes the &ldquo;plus&rdquo; portion from the href and the inner text.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">jQuery</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-</span><span class='line'>  <span class="nx">jQuery</span><span class="p">(</span><span class="s1">&#39;a[href^=mailto:]&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nx">removeSpamProtection</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">removeSpamProtection</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">element</span><span class="p">){</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">jQuery</span><span class="p">(</span><span class="nx">element</span><span class="p">);</span>
-</span><span class='line'>  <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span> <span class="nx">link</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\+[a-zA-Z]*/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
-</span><span class='line'>      <span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">link</span><span class="p">.</span><span class="nx">text</span><span class="p">().</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\+[a-zA-Z]*/</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now all visitors with JavaScript support will see something like:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;mailto:example@example.com&quot;</span><span class="nt">&gt;</span>example@example.com<span class="nt">&lt;/a&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Visitors without JavaScript support will see:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;mailto:example+spamblock@example.com&quot;</span><span class="nt">&gt;</span>example+spamblock@example.com<span class="nt">&lt;/a&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Normal visitors will see your real email address while bots and visitors without JavaScript will see something else. The bots will (hopefully) be confused by the plus sign. If not, they will be sending an email to an address that you can easily filter into a &ldquo;maybe spam&rdquo; folder.</p>
-
-<p>So there you have it. A very short piece of JavaScript (thanks to the wonders of jQuery) that you can include in your WordPress theme or install as a separate plugin.</p>
-
-<p>What do you do to protect your email online? Do you have another method that works better? If so, please share it in the comments!</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-02-26T21:26:55-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2009</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/gmail/'>Gmail</a>, <a class='category' href='/blog/categories/jquery/'>jQuery</a>
 
 
 </div>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Fiddler | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/fiddler/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Inspecting Git Traffic in Fiddler]]></title>
     <link href="http://willi.am/blog/2014/05/08/inspecting-git-traffic-in-fiddler/"/>
-    <updated>2014-05-08T07:32:26-07:00</updated>
+    <updated>2014-05-08T09:32:26-05:00</updated>
     <id>http://willi.am/blog/2014/05/08/inspecting-git-traffic-in-fiddler</id>
     <content type="html"><![CDATA[<p>If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make Git send traffic through Fiddler.</p>
 
@@ -45,7 +45,7 @@ git config --global --unset http.sslVerify
   <entry>
     <title type="html"><![CDATA[A Lesson in Debugging: Verify Your Tools]]></title>
     <link href="http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/"/>
-    <updated>2014-04-08T08:10:41-07:00</updated>
+    <updated>2014-04-08T10:10:41-05:00</updated>
     <id>http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools</id>
     <content type="html"><![CDATA[<p>This is a cautionary tale</p>
 

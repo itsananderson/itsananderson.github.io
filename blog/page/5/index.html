@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve been exploring Angular over the last few months, and I really like the way it works. Because I like to use Markdown for things like my &hellip;">
+	<meta name="description" content="I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -84,6 +84,68 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/">
+		
+			Using &#8220;Controller as&#8221; Syntax in Angular Routes</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
+the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
+The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$routeProvider</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;Views/Home/Index.html&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">controller</span><span class="o">:</span> <span class="s1">&#39;HomeCtrl&#39;</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">controllerAs</span><span class="o">:</span> <span class="s1">&#39;vm&#39;</span>
+</span><span class='line'>    <span class="p">})</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">otherwise</span><span class="p">({</span> <span class="nx">redirectTo</span><span class="o">:</span> <span class="s1">&#39;/&#39;</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-03T11:33:58-06:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2013</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/angular/'>Angular</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2013/10/09/creating-an-angular-markdown-preview/">
 		
 			Creating an Angular Markdown Preview</a>
@@ -148,7 +210,7 @@
   
 
 
-<time datetime="2013-10-09T17:56:26-07:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time></div>
+<time datetime="2013-10-09T19:56:26-05:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time></div>
 	<div class="tags">
 
 
@@ -164,7 +226,7 @@
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2011/12/15/configuring-github-on-windows/">
+		<a href="/blog/2011/12/16/configuring-github-on-windows/">
 		
 			Configuring GitHub on Windows</a>
 	</h2>
@@ -285,7 +347,7 @@ There&rsquo;s more to Git (which I&rsquo;m still learning about), but this shoul
   
 
 
-<time datetime="2011-12-15T22:21:44-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
+<time datetime="2011-12-16T00:21:44-06:00" pubdate data-updated="true">Dec 16<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -346,7 +408,7 @@ After a few more hours of work, I had a complete plugin with a nice configuratio
   
 
 
-<time datetime="2011-12-15T08:49:43-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
+<time datetime="2011-12-15T10:49:43-06:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -398,7 +460,7 @@ but Minimum Password Strength is the first one that&rsquo;s there from the start
   
 
 
-<time datetime="2011-12-14T14:09:34-08:00" pubdate data-updated="true">Dec 14<span>th</span>, 2011</time></div>
+<time datetime="2011-12-14T16:09:34-06:00" pubdate data-updated="true">Dec 14<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -553,7 +615,7 @@ Quarters must be formatted with a trailing zero. Example: 201220 is Winter quart
   
 
 
-<time datetime="2011-11-29T11:50:03-08:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time></div>
+<time datetime="2011-11-29T13:50:03-06:00" pubdate data-updated="true">Nov 29<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -675,7 +737,7 @@ Ideally, the inherited get_instance() method would return an instance of the act
   
 
 
-<time datetime="2011-09-05T13:09:43-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2011</time></div>
+<time datetime="2011-09-05T15:09:43-05:00" pubdate data-updated="true">Sep 5<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 </div>
@@ -823,7 +885,7 @@ Ideally, the inherited get_instance() method would return an instance of the act
   
 
 
-<time datetime="2011-04-26T13:16:52-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time></div>
+<time datetime="2011-04-26T15:16:52-05:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -872,7 +934,7 @@ Ideally, the inherited get_instance() method would return an instance of the act
   
 
 
-<time datetime="2011-04-16T13:28:00-07:00" pubdate data-updated="true">Apr 16<span>th</span>, 2011</time></div>
+<time datetime="2011-04-16T15:28:00-05:00" pubdate data-updated="true">Apr 16<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -1013,107 +1075,11 @@ You can repeat this process with other aliases to add more XAMPP alias directori
   
 
 
-<time datetime="2011-02-24T12:35:42-08:00" pubdate data-updated="true">Feb 24<span>th</span>, 2011</time></div>
+<time datetime="2011-02-24T14:35:42-06:00" pubdate data-updated="true">Feb 24<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/xampp/'>XAMPP</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/02/19/wordpress-custom-post-statuses/">
-		
-			WordPress Custom Post Statuses</a>
-	</h2>
-	<div class="entry-content">
-		<p>WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of states and a WordPress custom post status. If you want to make certain posts stand out, or need a custom way to categorize your posts, this is simple way to do it.</p>
-
-<p>The following screenshot illustrates some of the default post states.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/wordpress-post-status-samples.png" alt="Before adding WordPress Custom Post Statuses" /></p>
-
-<h2>Adding a new WordPress Custom Post Status</h2>
-
-<p>Adding your own states is actually pretty easy. The following code snippet should get you going in the right direction.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">My_Custom_Post_State</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">function</span> <span class="nf">My_Custom_Post_State</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">__construct</span><span class="p">();</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;display_post_states&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;custom_post_state&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">function</span> <span class="nf">custom_post_state</span><span class="p">(</span> <span class="nv">$states</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">global</span> <span class="nv">$post</span><span class="p">;</span>
-</span><span class='line'>    <span class="nv">$show_custom_state</span> <span class="o">=</span> <span class="k">null</span> <span class="o">!==</span> <span class="nx">get_post_meta</span><span class="p">(</span> <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">ID</span><span class="p">,</span> <span class="s1">&#39;_some_costom_field&#39;</span> <span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nv">$show_custom_state</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$states</span><span class="p">[]</span> <span class="o">=</span> <span class="nx">__</span><span class="p">(</span> <span class="s1">&#39;Custom State&#39;</span> <span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nv">$states</span><span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">new</span> <span class="nx">My_Custom_Post_State</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Result of Adding a WordPress Custom Post Status</h2>
-
-<p>Assuming you have code elsewhere that is adding the custom field to posts, you&rsquo;ll see something like this.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/custom-state-sample.png" alt="After Adding WordPress Custom Post Statuses" /></p>
-
-<p>If you added code to add a custom field called <code>_some_custom_field</code> to certain posts, those posts would show up with the &lsquo;Custom State&rsquo; status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field.</p>
-
-<p>That&rsquo;s pretty much it. Obviously there are more useful examples, but this should be enough to get you started.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-19T12:59:07-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>

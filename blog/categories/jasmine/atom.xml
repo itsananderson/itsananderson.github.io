@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Jasmine | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/jasmine/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Only Run One Suite or Spec in Jasmine]]></title>
     <link href="http://willi.am/blog/2014/09/25/only-run-one-suite-or-spec-in-jasmine/"/>
-    <updated>2014-09-25T00:30:43-07:00</updated>
+    <updated>2014-09-25T02:30:43-05:00</updated>
     <id>http://willi.am/blog/2014/09/25/only-run-one-suite-or-spec-in-jasmine</id>
     <content type="html"><![CDATA[<p>My team uses Karma (and thus Jasmine) to test our AngularJS applications.
 Sometimes when a single test is failing, it&rsquo;s a pain to re-run every test while you iterate on a fix.</p>

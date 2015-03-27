@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Understanding Node's require Function]]></title>
     <link href="http://willi.am/blog/2014/10/12/understanding-nodes-require-function/"/>
-    <updated>2014-10-12T09:24:25-07:00</updated>
+    <updated>2014-10-12T11:24:25-05:00</updated>
     <id>http://willi.am/blog/2014/10/12/understanding-nodes-require-function</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s <code>require()</code> function, or simply fail to fully utilize it well.
 Let&rsquo;s talk about some examples.</p>
@@ -111,9 +111,9 @@ Depending on how you&rsquo;re pinning your versions, you may find yourself with 
   
   <entry>
     <title type="html"><![CDATA[Introducing Edge-Git]]></title>
-    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
-    <updated>2014-09-16T22:50:30-07:00</updated>
-    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
+    <link href="http://willi.am/blog/2014/09/17/introducing-edge-git/"/>
+    <updated>2014-09-17T00:50:30-05:00</updated>
+    <id>http://willi.am/blog/2014/09/17/introducing-edge-git</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
 The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
 Unfortunately both repositories are severely lacking in features and documentation.
@@ -136,7 +136,7 @@ About all you can do at this point is init, clone, and query branches/commits, b
   <entry>
     <title type="html"><![CDATA[Test Your API With Supertest]]></title>
     <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
-    <updated>2014-07-28T14:18:23-07:00</updated>
+    <updated>2014-07-28T16:18:23-05:00</updated>
     <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
     <content type="html"><![CDATA[<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
 Despite being new to me, the package has been around for about 2 years.</p>
@@ -322,7 +322,7 @@ request</p>
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: All Together]]></title>
     <link href="http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/"/>
-    <updated>2014-07-09T21:16:08-07:00</updated>
+    <updated>2014-07-09T23:16:08-05:00</updated>
     <id>http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -642,7 +642,7 @@ return parseInt(hash, 16) % imageCount;
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Blob Metadata]]></title>
     <link href="http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/"/>
-    <updated>2014-07-08T20:47:12-07:00</updated>
+    <updated>2014-07-08T22:47:12-05:00</updated>
     <id>http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 

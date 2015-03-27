@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Windows | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/windows/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Configuring GitHub on Windows]]></title>
-    <link href="http://willi.am/blog/2011/12/15/configuring-github-on-windows/"/>
-    <updated>2011-12-15T22:21:44-08:00</updated>
-    <id>http://willi.am/blog/2011/12/15/configuring-github-on-windows</id>
+    <link href="http://willi.am/blog/2011/12/16/configuring-github-on-windows/"/>
+    <updated>2011-12-16T00:21:44-06:00</updated>
+    <id>http://willi.am/blog/2011/12/16/configuring-github-on-windows</id>
     <content type="html"><![CDATA[<p>If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you.</p>
 
 <h2>Getting Started</h2>

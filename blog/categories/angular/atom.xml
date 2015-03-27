@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Angular | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/angular/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-02-26T23:13:35-08:00</updated>
+  <updated>2015-03-27T06:49:53-05:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Using "Controller As" Syntax in Angular Routes]]></title>
     <link href="http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes/"/>
-    <updated>2013-12-03T09:33:58-08:00</updated>
+    <updated>2013-12-03T11:33:58-06:00</updated>
     <id>http://willi.am/blog/2013/12/03/using-controller-as-syntax-in-angular-routes</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
 the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
@@ -42,7 +42,7 @@ $routeProvider</p>
   <entry>
     <title type="html"><![CDATA[Creating an Angular Markdown Preview]]></title>
     <link href="http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/"/>
-    <updated>2013-10-09T17:56:26-07:00</updated>
+    <updated>2013-10-09T19:56:26-05:00</updated>
     <id>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
 
