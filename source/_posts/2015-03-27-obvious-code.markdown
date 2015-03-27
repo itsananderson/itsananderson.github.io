@@ -27,6 +27,6 @@ This was a good reminder of two things:
 *P.S.* If that syntax is also new to you, it's taking advantage of how JavaScript does "or".
 A JavaScript *or* returns the first *truthy* value, or the last value if none are truthy:
 
-e.g. `false || 0 === 0` and `0 || false === false` and `foo || "" === ""` (assuming foo is "falsey")
+e.g. `(false || 0) === 0` and `(0 || false) === false` and `(foo || "") === ""` (assuming foo is "falsey")
 
 Many JavaScript developers use this behavior as a shortcut for settings default values, because `null` and `undefined` are falsey.
