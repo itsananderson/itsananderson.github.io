@@ -105,7 +105,7 @@ It would be shorter and more obvious if you wrote it as <code>foo || ""</code></
 <p><em>P.S.</em> If that syntax is also new to you, it&rsquo;s taking advantage of how JavaScript does &ldquo;or&rdquo;.
 A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last value if none are truthy:</p>
 
-<p>e.g. <code>false || 0 === 0</code> and <code>0 || false === false</code> and <code>foo || "" === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
+<p>e.g. <code>(false || 0) === 0</code> and <code>(0 || false) === false</code> and <code>(foo || "") === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
 
 <p>Many JavaScript developers use this behavior as a shortcut for settings default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
 </div>
