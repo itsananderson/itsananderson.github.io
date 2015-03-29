@@ -4,7 +4,7 @@
   <title><![CDATA[Category: PHP | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/php/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[PHP Code Completion for Globals]]></title>
     <link href="http://willi.am/blog/2011/01/28/php-code-completion-for-globals/"/>
-    <updated>2011-01-28T21:57:07-06:00</updated>
+    <updated>2011-01-28T19:57:07-08:00</updated>
     <id>http://willi.am/blog/2011/01/28/php-code-completion-for-globals</id>
     <content type="html"><![CDATA[<p>Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project.</p>
 
@@ -63,7 +63,7 @@ global $wpdb;
   <entry>
     <title type="html"><![CDATA[Converting PHP Associative Arrays to Variables]]></title>
     <link href="http://willi.am/blog/2009/01/14/converting-php-associative-arrays-to-variables/"/>
-    <updated>2009-01-14T23:39:35-06:00</updated>
+    <updated>2009-01-14T21:39:35-08:00</updated>
     <id>http://willi.am/blog/2009/01/14/converting-php-associative-arrays-to-variables</id>
     <content type="html"><![CDATA[<p><strong>EDIT: <a href="http://nickohrn.com/">Nick Ohrn</a> pointed out that <a href="http://us.php.net/extract" title="PHP Manual Entry for extract">extract</a> does this automatically. The following post is still a valid look at how this could be implemented if the functionality didn&rsquo;t already exist, but it is better to use extract because it is likely more efficient.</strong></p>
 

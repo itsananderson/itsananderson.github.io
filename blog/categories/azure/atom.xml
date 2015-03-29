@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Use Blob Storage For Your Static Site Images]]></title>
     <link href="http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images/"/>
-    <updated>2014-09-24T03:37:53-05:00</updated>
+    <updated>2014-09-24T01:37:53-07:00</updated>
     <id>http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images</id>
     <content type="html"><![CDATA[<p>The purpose of this post is to show how easy it is to use cloud storage for your static blog&rsquo;s binary resources.
 I&rsquo;ll be showing specific examples for Azure Blob Storage and GitHub Pages, but the same principles should apply to AWS, as well as any other static blogging service.</p>
@@ -61,7 +61,7 @@ If you have enough images, it may not be reasonable to manually update the posts
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: All Together]]></title>
     <link href="http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/"/>
-    <updated>2014-07-09T23:16:08-05:00</updated>
+    <updated>2014-07-09T21:16:08-07:00</updated>
     <id>http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -381,7 +381,7 @@ return parseInt(hash, 16) % imageCount;
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Blob Metadata]]></title>
     <link href="http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/"/>
-    <updated>2014-07-08T22:47:12-05:00</updated>
+    <updated>2014-07-08T20:47:12-07:00</updated>
     <id>http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -619,7 +619,7 @@ In the final post in this series, we&rsquo;ll talk about putting everything toge
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Listing Blobs]]></title>
     <link href="http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/"/>
-    <updated>2014-07-07T19:33:03-05:00</updated>
+    <updated>2014-07-07T17:33:03-07:00</updated>
     <id>http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 
@@ -827,7 +827,7 @@ In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage
   <entry>
     <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
     <link href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/"/>
-    <updated>2014-07-03T18:23:46-05:00</updated>
+    <updated>2014-07-03T16:23:46-07:00</updated>
     <id>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs</id>
     <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
 

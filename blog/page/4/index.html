@@ -7,7 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Microsoft made some anouncements about the next generation of ASP.NET today. David Fowler published a post about the reasoning behind some of the &hellip;">
+	<meta name="description" content="Something cool that Scott Hanselman talked about in his blog post on vNext
+was the ability to save a C# file in Visual Studio and view the change in &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -84,6 +85,69 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2014/05/14/live-compiling-aspnet-vnext-with-nodemon/">
+		
+			Live Compiling ASP.NET vNext With Nodemon</a>
+	</h2>
+	<div class="entry-content">
+		<p>Something cool that Scott Hanselman talked about in his <a href="http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx">blog post on vNext</a>
+was the ability to save a C# file in Visual Studio and view the change in the browser without manually rebuilding.</p>
+
+<p>After spending a little time messing around with the <a href="https://github.com/aspnet">newly released code</a>, I wanted similar functionality when editing C# files outside Visual Studio.
+I didn&rsquo;t see a documented way to do that, but there&rsquo;s an easy workaround if you have Node installed.</p>
+
+<p>First install the &ldquo;nodemon&rdquo; package.
+This package monitors a directory for file chanages and respawns a child process whenever anything changes.</p>
+
+<p><code>npm install -g nodemon</code></p>
+
+<p>Now that nodemon is installed, you can use it to live-rerun your app.</p>
+
+<p><code>nodemon --exec "K.cmd web" -e cs,json</code></p>
+
+<p>This tells Nodemon to watch for changes to <em>.cs and </em>.json files and to restart &ldquo;K.cmd web&rdquo; when changes are detected.
+Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is configured for your project.</p>
+
+<p>Note that if you&rsquo;re running in Git Bash on Windows or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code>, <code>K.cmd web</code>, or <code>K.sh web</code>.</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
+
+<p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-14T12:47:24-07:00" pubdate data-updated="true">May 14<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/asp-dot-net/'>ASP.NET</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2014/05/12/net-vnext-sounds-awesome/">
 		
 			ASP.NET vNext Sounds Awesome</a>
@@ -130,7 +194,7 @@ When a new fixed NuGet-distributed version shows up, update the version and dele
   
 
 
-<time datetime="2014-05-12T21:32:26-05:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time></div>
+<time datetime="2014-05-12T19:32:26-07:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -229,7 +293,7 @@ This one is very specific to GitHub&rsquo;s pull request workflow.</p>
   
 
 
-<time datetime="2014-05-12T12:57:58-05:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time></div>
+<time datetime="2014-05-12T10:57:58-07:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -292,7 +356,7 @@ This one is very specific to GitHub&rsquo;s pull request workflow.</p>
   
 
 
-<time datetime="2014-05-08T09:32:26-05:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time></div>
+<time datetime="2014-05-08T07:32:26-07:00" pubdate data-updated="true">May 8<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -388,7 +452,7 @@ However, Azure could look at a setting in package.json during the site setup pro
   
 
 
-<time datetime="2014-05-07T08:57:05-05:00" pubdate data-updated="true">May 7<span>th</span>, 2014</time></div>
+<time datetime="2014-05-07T06:57:05-07:00" pubdate data-updated="true">May 7<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -582,7 +646,7 @@ This allows you to pretend that you never make any mistakes :)</p>
   
 
 
-<time datetime="2014-05-06T15:50:34-05:00" pubdate data-updated="true">May 6<span>th</span>, 2014</time></div>
+<time datetime="2014-05-06T13:50:34-07:00" pubdate data-updated="true">May 6<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -698,7 +762,7 @@ The <em>raw</em> data</p>
   
 
 
-<time datetime="2014-04-08T10:10:41-05:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time></div>
+<time datetime="2014-04-08T08:10:41-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -714,7 +778,7 @@ The <em>raw</em> data</p>
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2014/04/08/understanding-vim-command-line-and-search-history/">
+		<a href="/blog/2014/04/07/understanding-vim-command-line-and-search-history/">
 		
 			Understanding Vim Command Line and Search History</a>
 	</h2>
@@ -781,7 +845,7 @@ Hopefully after reading this post, you&rsquo;ll feel the same way!</p>
   
 
 
-<time datetime="2014-04-08T00:48:12-05:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time></div>
+<time datetime="2014-04-07T22:48:12-07:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -822,7 +886,7 @@ Hopefully after reading this post, you&rsquo;ll feel the same way!</p>
   
 
 
-<time datetime="2014-03-30T11:48:36-05:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time></div>
+<time datetime="2014-03-30T09:48:36-07:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -898,145 +962,11 @@ for handling a package that may or may not be installed. In short, you use a try
   
 
 
-<time datetime="2014-03-29T12:12:23-05:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time></div>
+<time datetime="2014-03-29T10:12:23-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/">
-		
-			Pass Dynamic Flags to NuGet With PowerShell Splatting</a>
-	</h2>
-	<div class="entry-content">
-		<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
-</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
-</span><span class='line'><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
-</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="err">@</span><span class="p">{</span><span class="n">Properties</span><span class="p">=</span><span class="s2">&quot;Configuration=$configuration&quot;</span><span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Build</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Symbols</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
-</span><span class='line'>    <span class="n">popd</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
-HashSet of arguments, and throw an error like the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>nuget : Unknown option: &#39;-Build:True&#39;
-</span><span class='line'>At line:1 char:38
-</span><span class='line'>+ nuget pack $project $nugetArgs
-</span><span class='line'>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-</span><span class='line'>    + CategoryInfo          : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException
-</span><span class='line'>    + FullyQualifiedErrorId : NativeCommandError
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Digging into the <a href="http://nuget.codeplex.com/SourceControl/latest#src/CommandLine/CommandLineParser.cs">source code</a>,
-I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
-(If I&rsquo;m wrong, leave a comment!)</p>
-
-<p>Fortunately, there&rsquo;s a <em>fairly</em> reasonable workaround: Pass an array of arguments rather than a HashSet:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
-</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
-</span><span class='line'><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
-</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="s2">&quot;-Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;Configuration=$configuration&quot;</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Build&quot;</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Symbols&quot;</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
-</span><span class='line'>    <span class="n">popd</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
-This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-07T11:24:32-06:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/nuget/'>NuGet</a>, <a class='category' href='/blog/categories/powershell/'>Powershell</a>
 
 
 </div>

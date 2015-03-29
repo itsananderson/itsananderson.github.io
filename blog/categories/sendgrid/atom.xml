@@ -4,7 +4,7 @@
   <title><![CDATA[Category: SendGrid | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/sendgrid/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[New Plugin WP SendGrid]]></title>
     <link href="http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid/"/>
-    <updated>2011-12-15T10:49:43-06:00</updated>
+    <updated>2011-12-15T08:49:43-08:00</updated>
     <id>http://willi.am/blog/2011/12/15/new-plugin-wp-sendgrid</id>
     <content type="html"><![CDATA[<p>A couple of months ago, I had the opportunity to attend an <a href="http://www.apihackday.com/">API Hackday</a> event in Bloomington.
 At the event, I created some cool WordPress tools using <a href="http://www.twilio.com/">Twilio</a>, but I ended up having some free time

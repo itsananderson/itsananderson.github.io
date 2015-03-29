@@ -7,7 +7,9 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of &hellip;">
+	<meta name="description" content="If you&rsquo;ve read my post on adding aliases to WampServer,
+you may be curious about how to add aliases to XAMPP.
+While WampServer has a nice (if &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -79,6 +81,147 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/02/24/creating-xampp-alias-directories/">
+		
+			Creating XAMPP Alias Directories</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;ve read my post on <a href="/blog/2009/01/14/wamp-alias-directories/">adding aliases to WampServer</a>,
+you may be curious about how to add aliases to XAMPP.
+While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
+Fortunately, creating XAMPP alias directories by hand is pretty easy.</p>
+
+<h2>Preparing to Create XAMPP Alias Directories</h2>
+
+<p>The first thing you&rsquo;ll want to do is add an alias directory to your XAMPP install.
+If you&rsquo;re running Windows, create the following folder.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>C:\xampp\apache\conf\alias</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Next, you&rsquo;ll need to change your Apache configuration file.
+You can find it under <code>C:\xampp\apache\conf\httpd.conf</code>.
+To make changes, you&rsquo;ll need to edit it as an administrator.
+If you&rsquo;re running Windows Vista or above, your best bet is to open Notepad as an administrator and then open httpd.conf.
+To open Notepad (or any other application) as an administrator, right-click on it and select &ldquo;Run as administrator&rdquo;.
+You can also launch Notepad as an administrator from the start menu with <code>Ctrl+Shift+Enter</code> while Notepad is selected.</p>
+
+<p>Once you&rsquo;ve opened httpd.conf, add the following to the end and save it.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Include "conf/alias/*"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now Apache will look in the alias folder for more configuration files.
+This way you can add an alias by simply adding a new configuration file to the conf/alias/ folder.</p>
+
+<h2>Creating XAMPP Alias Directories</h2>
+
+<p>Let&rsquo;s add some XAMPP alias directories.
+Suppose you want to add an alias called &ldquo;dev&rdquo;.
+First, download <a href="/uploads/xampp-alias-template.txt">this alias template file</a> and place it in the alias folder.
+Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
+You&rsquo;ll need to edit the template (again, as an administrator) and replace &ldquo;DIRECTORY&rdquo; (it&rsquo;s there twice) with the path to the alias and &ldquo;ALIAS&rdquo; with the name of your alias.
+In our example, it looks something like this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;directory "c:\users\foo\programming\dev"&gt;
+</span><span class='line'>    #
+</span><span class='line'>    # Possible values for the Options directive are "None", "All",
+</span><span class='line'>    # or any combination of:
+</span><span class='line'>    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
+</span><span class='line'>    #
+</span><span class='line'>    # Note that "MultiViews" must be named *explicitly* --- "Options All"
+</span><span class='line'>    # doesn't give it to you.
+</span><span class='line'>    #
+</span><span class='line'>    # The Options directive is both complicated and important.  Please see
+</span><span class='line'>    # http://httpd.apache.org/docs/2.2/mod/core.html#options
+</span><span class='line'>    # for more information.
+</span><span class='line'>    #
+</span><span class='line'>    Options Indexes FollowSymLinks Includes ExecCGI
+</span><span class='line'>
+</span><span class='line'>    #
+</span><span class='line'>    # AllowOverride controls what directives may be placed in .htaccess files.
+</span><span class='line'>    # It can be "All", "None", or any combination of the keywords:
+</span><span class='line'>    #   Options FileInfo AuthConfig Limit
+</span><span class='line'>    #
+</span><span class='line'>    AllowOverride All
+</span><span class='line'>
+</span><span class='line'>    #
+</span><span class='line'>    # Controls who can get stuff from this server.
+</span><span class='line'>    #     Order allow,deny
+</span><span class='line'>    Allow from all
+</span><span class='line'>&lt;/Directory&gt;
+</span><span class='line'>
+</span><span class='line'>Alias /dev "C:\users\foo\programming\dev"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Restart Apache (you can do so from the XAMPP control panel) and check out <a href="http://localhost/dev.">http://localhost/dev.</a>
+You can repeat this process with other aliases to add more XAMPP alias directories.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-02-24T12:35:42-08:00" pubdate data-updated="true">Feb 24<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/xampp/'>XAMPP</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -164,7 +307,7 @@
   
 
 
-<time datetime="2011-02-19T14:59:07-06:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time></div>
+<time datetime="2011-02-19T12:59:07-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -225,7 +368,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2011-02-07T21:51:46-06:00" pubdate data-updated="true">Feb 7<span>th</span>, 2011</time></div>
+<time datetime="2011-02-07T19:51:46-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -308,7 +451,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2011-01-28T21:57:07-06:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
+<time datetime="2011-01-28T19:57:07-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
 	<div class="tags">
 
 
@@ -405,7 +548,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-12-13T22:54:19-06:00" pubdate data-updated="true">Dec 13<span>th</span>, 2010</time></div>
+<time datetime="2010-12-13T20:54:19-08:00" pubdate data-updated="true">Dec 13<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -421,7 +564,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2010/03/30/customizing-the-p2-wordpress-theme/">
+		<a href="/blog/2010/03/29/customizing-the-p2-wordpress-theme/">
 		
 			Customizing the P2 WordPress Theme</a>
 	</h2>
@@ -542,7 +685,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-03-30T00:00:35-05:00" pubdate data-updated="true">Mar 30<span>th</span>, 2010</time></div>
+<time datetime="2010-03-29T22:00:35-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -558,7 +701,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2010/03/15/netbeans-ftp-file-permissions-fix/">
+		<a href="/blog/2010/03/14/netbeans-ftp-file-permissions-fix/">
 		
 			Netbeans FTP File Permissions Fix</a>
 	</h2>
@@ -613,7 +756,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-03-15T00:04:51-05:00" pubdate data-updated="true">Mar 15<span>th</span>, 2010</time></div>
+<time datetime="2010-03-14T22:04:51-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -761,7 +904,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2010-03-12T23:08:59-06:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time></div>
+<time datetime="2010-03-12T21:08:59-08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time></div>
 	<div class="tags">
 
 
@@ -777,7 +920,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2009/05/22/multiple-wordpress-blogs-on-one-wordpress-core/">
+		<a href="/blog/2009/05/21/multiple-wordpress-blogs-on-one-wordpress-core/">
 		
 			Multiple WordPress Blogs on One WordPress Core</a>
 	</h2>
@@ -836,7 +979,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2009-05-22T00:14:53-05:00" pubdate data-updated="true">May 22<span>nd</span>, 2009</time></div>
+<time datetime="2009-05-21T22:14:53-07:00" pubdate data-updated="true">May 21<span>st</span>, 2009</time></div>
 	<div class="tags">
 
 
@@ -852,7 +995,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2009/05/05/the-obscure-wordpress-get-option-parameter/">
+		<a href="/blog/2009/05/04/the-obscure-wordpress-get-option-parameter/">
 		
 			The Obscure WordPress Get_option Parameter</a>
 	</h2>
@@ -903,76 +1046,7 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
   
 
 
-<time datetime="2009-05-05T00:18:54-05:00" pubdate data-updated="true">May 5<span>th</span>, 2009</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/03/18/limit-your-wordpress-rss-feed-to-one-category/">
-		
-			Limit Your WordPress RSS Feed to One Category</a>
-	</h2>
-	<div class="entry-content">
-		<p>When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works.</p>
-
-<p>As with just about anything in WordPress, you can use Actions and Filters to customize the way WordPress RSS Feeds. I chose to filter the query because it already has built in category filtering functionality. First I hooked into the query filter.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">add_filter</span><span class="p">(</span><span class="s1">&#39;pre_get_posts&#39;</span><span class="p">,</span> <span class="s1">&#39;filterRSSQuery&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Then I created a function called &lsquo;filterRSSQuery&rsquo; which does just what the name suggests.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">filterRSSQuery</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">is_feed</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;category_name&#39;</span><span class="p">,</span> <span class="s1">&#39;News&#39;</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nv">$query</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The code is pretty straight foreward, but here&rsquo;s a breakdown. First we test to see if the query is for a feed (we don&rsquo;t want to do this filtering anywhere else). Then we set the &lsquo;category_name&rsquo; argument to &lsquo;News&rsquo; (you would change this to whatever category you want to show up). Finally, you return the modified query object.</p>
-
-<p>Overall, this is pretty simple, but extremely powerful.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-03-18T00:23:38-05:00" pubdate data-updated="true">Mar 18<span>th</span>, 2009</time></div>
+<time datetime="2009-05-04T22:18:54-07:00" pubdate data-updated="true">May 4<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 

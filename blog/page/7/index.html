@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com& &hellip;">
+	<meta name="description" content="When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -84,6 +84,75 @@
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2009/03/17/limit-your-wordpress-rss-feed-to-one-category/">
+		
+			Limit Your WordPress RSS Feed to One Category</a>
+	</h2>
+	<div class="entry-content">
+		<p>When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works.</p>
+
+<p>As with just about anything in WordPress, you can use Actions and Filters to customize the way WordPress RSS Feeds. I chose to filter the query because it already has built in category filtering functionality. First I hooked into the query filter.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">add_filter</span><span class="p">(</span><span class="s1">&#39;pre_get_posts&#39;</span><span class="p">,</span> <span class="s1">&#39;filterRSSQuery&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I created a function called &lsquo;filterRSSQuery&rsquo; which does just what the name suggests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">filterRSSQuery</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">is_feed</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;category_name&#39;</span><span class="p">,</span> <span class="s1">&#39;News&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nv">$query</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code is pretty straight foreward, but here&rsquo;s a breakdown. First we test to see if the query is for a feed (we don&rsquo;t want to do this filtering anywhere else). Then we set the &lsquo;category_name&rsquo; argument to &lsquo;News&rsquo; (you would change this to whatever category you want to show up). Finally, you return the modified query object.</p>
+
+<p>Overall, this is pretty simple, but extremely powerful.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-17T22:23:38-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2009</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam/">
 		
 			Using jQuery and Gmail&#8217;s Plus-Addressing to Fight Email Spam</a>
@@ -154,7 +223,7 @@
   
 
 
-<time datetime="2009-02-26T23:26:55-06:00" pubdate data-updated="true">Feb 26<span>th</span>, 2009</time></div>
+<time datetime="2009-02-26T21:26:55-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
@@ -312,7 +381,7 @@
   
 
 
-<time datetime="2009-01-14T23:39:35-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
+<time datetime="2009-01-14T21:39:35-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
@@ -412,7 +481,7 @@ Wamp alias directories are a great way to improve project organization.</p>
   
 
 
-<time datetime="2009-01-14T14:45:43-06:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
+<time datetime="2009-01-14T12:45:43-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
 	<div class="tags">
 
 
@@ -461,7 +530,7 @@ Wamp alias directories are a great way to improve project organization.</p>
   
 
 
-<time datetime="2008-12-30T23:49:40-06:00" pubdate data-updated="true">Dec 30<span>th</span>, 2008</time></div>
+<time datetime="2008-12-30T21:49:40-08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2008</time></div>
 	<div class="tags">
 
 
@@ -580,7 +649,7 @@ I first remember seeing them in <a title="ANGEL Learning" href="http://angellear
   
 
 
-<time datetime="2008-12-23T23:54:39-06:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time></div>
+<time datetime="2008-12-23T21:54:39-08:00" pubdate data-updated="true">Dec 23<span>rd</span>, 2008</time></div>
 	<div class="tags">
 
 

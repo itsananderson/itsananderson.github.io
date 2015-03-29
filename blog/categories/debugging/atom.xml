@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Debugging | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/debugging/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Ignoring JavaScript Libraries While Debugging]]></title>
     <link href="http://willi.am/blog/2014/10/28/ignoring-javascript-libraries-while-debugging/"/>
-    <updated>2014-10-28T16:33:06-05:00</updated>
+    <updated>2014-10-28T14:33:06-07:00</updated>
     <id>http://willi.am/blog/2014/10/28/ignoring-javascript-libraries-while-debugging</id>
     <content type="html"><![CDATA[<p>Debugging front-end JavaScript can sometimes be painful.
 When you rely on third-party libraries and frameworks, you find yourself stepping back and forth between the library&rsquo;s code and your own.
@@ -61,7 +61,7 @@ Most of the time, it&rsquo;s safe to assume that these third-party libraries are
   <entry>
     <title type="html"><![CDATA[A Lesson in Debugging: Verify Your Tools]]></title>
     <link href="http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/"/>
-    <updated>2014-04-08T10:10:41-05:00</updated>
+    <updated>2014-04-08T08:10:41-07:00</updated>
     <id>http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools</id>
     <content type="html"><![CDATA[<p>This is a cautionary tale</p>
 

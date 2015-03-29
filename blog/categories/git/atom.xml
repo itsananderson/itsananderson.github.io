@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Dynamically Configure Your Git Email]]></title>
     <link href="http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email/"/>
-    <updated>2015-02-27T16:29:42-06:00</updated>
+    <updated>2015-02-27T14:29:42-08:00</updated>
     <id>http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email</id>
     <content type="html"><![CDATA[<blockquote><p>This post is the second in a series on tuning your Git environment.
 The first post on <a href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/">customizing your git log</a> isn&rsquo;t a prerequisite, but may be useful.</p></blockquote>
@@ -78,13 +78,13 @@ I created a script and put it in <code>~/.git-scripts/email-guess.sh</code> (aga
 <h1>!/bin/bash</h1>
 
 <p>remote=<code>git remote -v | awk '/\(push\)$/ {print $2}'</code>
-email=<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#111;&#x3a;&#x77;&#x69;&#x6c;&#x6c;&#64;&#105;&#116;&#x73;&#97;&#x6e;&#97;&#x6e;&#100;&#x65;&#x72;&#115;&#x6f;&#110;&#x2e;&#x63;&#111;&#109;">&#x77;&#x69;&#x6c;&#x6c;&#x40;&#105;&#x74;&#x73;&#x61;&#x6e;&#x61;&#110;&#x64;&#x65;&#x72;&#x73;&#111;&#110;&#x2e;&#x63;&#x6f;&#x6d;</a> # default</p>
+email=<a href="&#x6d;&#x61;&#105;&#108;&#116;&#x6f;&#x3a;&#119;&#x69;&#x6c;&#x6c;&#x40;&#105;&#116;&#115;&#x61;&#110;&#97;&#110;&#100;&#x65;&#x72;&#x73;&#x6f;&#x6e;&#46;&#x63;&#111;&#109;">&#x77;&#105;&#108;&#108;&#x40;&#105;&#x74;&#115;&#x61;&#110;&#97;&#x6e;&#x64;&#101;&#x72;&#x73;&#111;&#110;&#x2e;&#99;&#x6f;&#109;</a> # default</p>
 
 <p>if [[ $remote == <em>github.com:Microsoft</em> ]]; then
-  email=<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#58;&#119;&#105;&#x61;&#x6e;&#100;&#64;&#x6d;&#105;&#x63;&#x72;&#x6f;&#115;&#111;&#x66;&#116;&#46;&#99;&#111;&#x6d;">&#x77;&#105;&#97;&#x6e;&#x64;&#x40;&#x6d;&#x69;&#99;&#x72;&#x6f;&#x73;&#111;&#102;&#x74;&#46;&#x63;&#x6f;&#x6d;</a>
+  email=<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x77;&#105;&#x61;&#x6e;&#x64;&#x40;&#x6d;&#105;&#99;&#x72;&#111;&#115;&#x6f;&#102;&#116;&#x2e;&#99;&#x6f;&#x6d;">&#119;&#x69;&#97;&#110;&#100;&#x40;&#109;&#105;&#x63;&#114;&#x6f;&#x73;&#111;&#102;&#x74;&#x2e;&#99;&#111;&#109;</a>
 fi
 if [[ $remote == <em>itsananderson.visualstudio.com</em> ]]; then
-  email=<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#119;&#105;&#x6c;&#108;&#x40;&#99;&#111;&#100;&#101;&#97;&#119;&#104;&#105;&#x6c;&#x65;&#46;&#99;&#x6f;&#109;">&#119;&#x69;&#x6c;&#x6c;&#64;&#x63;&#111;&#100;&#x65;&#x61;&#x77;&#x68;&#105;&#x6c;&#x65;&#46;&#x63;&#x6f;&#109;</a>
+  email=<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#58;&#119;&#105;&#x6c;&#x6c;&#64;&#99;&#111;&#x64;&#101;&#97;&#119;&#x68;&#105;&#x6c;&#101;&#46;&#99;&#111;&#109;">&#119;&#105;&#108;&#108;&#64;&#x63;&#x6f;&#100;&#101;&#x61;&#119;&#x68;&#x69;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;</a>
 fi</p>
 
 <p>echo &ldquo;Configuring user.email as $email&rdquo;
@@ -142,9 +142,13 @@ As I said in the previous post, you should take this as an example that you can 
   <entry>
     <title type="html"><![CDATA[Customize Your Git Log Format]]></title>
     <link href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/"/>
-    <updated>2015-02-19T16:29:06-06:00</updated>
+    <updated>2015-02-19T14:29:06-08:00</updated>
     <id>http://willi.am/blog/2015/02/19/customize-your-git-log-format</id>
-    <content type="html"><![CDATA[<p><blockquote><p>Over the last few months, I&rsquo;ve been learning about woodworking in my spare time. As I&rsquo;ve read articles and watched YouTube videos, I&rsquo;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&rsquo;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&rsquo;ve noticed parallels in my full time craft: Software Development.</p></p><p><p>In the next few posts, I&rsquo;ll share some of the software &ldquo;jigs&rdquo; I&rsquo;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git.</p></blockquote></p>
+    <content type="html"><![CDATA[<p>{% blockquote %}
+Over the last few months, I&rsquo;ve been learning about woodworking in my spare time. As I&rsquo;ve read articles and watched YouTube videos, I&rsquo;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&rsquo;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&rsquo;ve noticed parallels in my full time craft: Software Development.</p>
+
+<p>In the next few posts, I&rsquo;ll share some of the software &ldquo;jigs&rdquo; I&rsquo;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git.
+{% endblockquote %}</p>
 
 <h2>Git Log: Your Own Personal Journal</h2>
 
@@ -162,15 +166,15 @@ The Git log documentation has a <a href="https://www.kernel.org/pub/software/scm
 <p>For example, if you&rsquo;re trying to find the SHA for a recent change, you may just want to see the SHA and the commit subject for each commit.
 In that case, <code>git log --format=oneline</code> or <code>git log --oneline</code> is what you need.</p>
 
-<p><img class="<a" src="href="http://itsananderson.blob.core.windows.net/post-images/git-log-oneline.png">http://itsananderson.blob.core.windows.net/post-images/git-log-oneline.png</a>"></p>
+<p>{% img <a href="http://itsananderson.blob.core.windows.net/post-images/git-log-oneline.png">http://itsananderson.blob.core.windows.net/post-images/git-log-oneline.png</a> %}</p>
 
 <p>If you need verbose output, including the full message and author info, <code>--format=medium</code> is a good option.</p>
 
-<p><img class="<a" src="href="http://itsananderson.blob.core.windows.net/post-images/git-log-medium.png">http://itsananderson.blob.core.windows.net/post-images/git-log-medium.png</a>"></p>
+<p>{% img <a href="http://itsananderson.blob.core.windows.net/post-images/git-log-medium.png">http://itsananderson.blob.core.windows.net/post-images/git-log-medium.png</a> %}</p>
 
 <p>Finally, if you want every single detail from the commit, <code>--format=fuller</code> will give you that.</p>
 
-<p><img class="<a" src="href="http://itsananderson.blob.core.windows.net/post-images/git-log-fuller.png">http://itsananderson.blob.core.windows.net/post-images/git-log-fuller.png</a>"></p>
+<p>{% img <a href="http://itsananderson.blob.core.windows.net/post-images/git-log-fuller.png">http://itsananderson.blob.core.windows.net/post-images/git-log-fuller.png</a> %}</p>
 
 <p>If you want to make any of these formats your default, you can do so with the following command:</p>
 
@@ -195,16 +199,17 @@ What I&rsquo;ve found is that the verbose formats are too hard to scan through, 
 
 <p>You can configure my format with the following command:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git config &mdash;global format.pretty format:&ldquo;%C(auto)%h %d%Creset %s%n%Cgreen%ad%Creset %aN &lt;%aE>%n&rdquo;</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock %}
+git config &mdash;global format.pretty format:&ldquo;%C(auto)%h %d%Creset %s%n%Cgreen%ad%Creset %aN &lt;%aE>%n&rdquo;
+{% endcodeblock %}</p>
 
 <p>The output looks like this:</p>
 
-<p><img class="<a" src="href="http://itsananderson.blob.core.windows.net/post-images/git-log-custom.png">http://itsananderson.blob.core.windows.net/post-images/git-log-custom.png</a>"></p>
+<p>{% img <a href="http://itsananderson.blob.core.windows.net/post-images/git-log-custom.png">http://itsananderson.blob.core.windows.net/post-images/git-log-custom.png</a> %}</p>
 
 <p>This format also works with the <code>--graph</code> flag:</p>
 
-<p><img class="<a" src="href="http://itsananderson.blob.core.windows.net/post-images/git-log-graph-format.png">http://itsananderson.blob.core.windows.net/post-images/git-log-graph-format.png</a>"></p>
+<p>{% img <a href="http://itsananderson.blob.core.windows.net/post-images/git-log-graph-format.png">http://itsananderson.blob.core.windows.net/post-images/git-log-graph-format.png</a> %}</p>
 
 <p>What I like about this format is that it only uses three lines per commit, but it has all the information I care about.
 I also inserted color codes for the various parts of the message, which makes it even easier to grok.</p>
@@ -217,10 +222,11 @@ The whole point is to customize it to fit your needs.</p>
 
 <p>If you want to test out different custom formats quickly, you can pass them directly to <code>git log</code> like so:</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git log &mdash;format=format:&ldquo;%C(auto)%h %C(green)%aN%Creset %s&rdquo;</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock %}
+git log &mdash;format=format:&ldquo;%C(auto)%h %C(green)%aN%Creset %s&rdquo;
+{% endcodeblock %}</p>
 
-<p><img class="<a" src="href="http://itsananderson.blob.core.windows.net/post-images/git-log-custom-flag.png">http://itsananderson.blob.core.windows.net/post-images/git-log-custom-flag.png</a>"></p>
+<p>{% img <a href="http://itsananderson.blob.core.windows.net/post-images/git-log-custom-flag.png">http://itsananderson.blob.core.windows.net/post-images/git-log-custom-flag.png</a> %}</p>
 
 <p>You can find the different placeholder options in the same <a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats">Pretty Formats</a> section of the Git Log documentation.</p>
 ]]></content>
@@ -229,7 +235,7 @@ The whole point is to customize it to fit your needs.</p>
   <entry>
     <title type="html"><![CDATA[Unpacking a Git Database]]></title>
     <link href="http://willi.am/blog/2014/10/14/unpacking-a-git-database/"/>
-    <updated>2014-10-14T15:57:15-05:00</updated>
+    <updated>2014-10-14T13:57:15-07:00</updated>
     <id>http://willi.am/blog/2014/10/14/unpacking-a-git-database</id>
     <content type="html"><![CDATA[<p>While writing the <a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">previous post</a>, I discovered a cool Git command which I thought I&rsquo;d share.</p>
 
@@ -258,7 +264,7 @@ Your packed objects are unpacked into <code>.git/objects/</code> folder.</p>
   <entry>
     <title type="html"><![CDATA[For the Last Time: Git Stores Snapshots Not Diffs]]></title>
     <link href="http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/"/>
-    <updated>2014-10-14T12:15:11-05:00</updated>
+    <updated>2014-10-14T10:15:11-07:00</updated>
     <id>http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs</id>
     <content type="html"><![CDATA[<p>I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
 <strong>Git stores a snapshot of the entire file, not a diff</strong></p>
@@ -291,9 +297,9 @@ If you want a more detailed explanation about how Git stores data, you can watch
   
   <entry>
     <title type="html"><![CDATA[Introducing Edge-Git]]></title>
-    <link href="http://willi.am/blog/2014/09/17/introducing-edge-git/"/>
-    <updated>2014-09-17T00:50:30-05:00</updated>
-    <id>http://willi.am/blog/2014/09/17/introducing-edge-git</id>
+    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
+    <updated>2014-09-16T22:50:30-07:00</updated>
+    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
 The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
 Unfortunately both repositories are severely lacking in features and documentation.

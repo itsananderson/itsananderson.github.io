@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Markdown | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/markdown/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Creating an Angular Markdown Preview]]></title>
     <link href="http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview/"/>
-    <updated>2013-10-09T19:56:26-05:00</updated>
+    <updated>2013-10-09T17:56:26-07:00</updated>
     <id>http://willi.am/blog/2013/10/09/creating-an-angular-markdown-preview</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been exploring <a href="http://angularjs.org/" title="Angular Project Homepage">Angular</a> over the last few months, and I really like the way it works.</p>
 

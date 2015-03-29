@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Chrome | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/chrome/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Creating a Custom Chrome Search Engine]]></title>
     <link href="http://willi.am/blog/2011/11/29/creating-a-custom-chrome-search-engine/"/>
-    <updated>2011-11-29T13:50:03-06:00</updated>
+    <updated>2011-11-29T11:50:03-08:00</updated>
     <id>http://willi.am/blog/2011/11/29/creating-a-custom-chrome-search-engine</id>
     <content type="html"><![CDATA[<p>Custom search engines in Chrome are a pretty cool feature.
 For example, <a href="http://jetheis.com/blog/2011/11/28/accelerating-rose-hulman-schedule-lookup-with-google-chrome/">Jimmy Theis has a great blog post</a>

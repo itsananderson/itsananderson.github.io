@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Netbeans | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/netbeans/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-27T06:52:01-05:00</updated>
+  <updated>2015-03-29T02:51:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Netbeans FTP File Permissions Fix]]></title>
-    <link href="http://willi.am/blog/2010/03/15/netbeans-ftp-file-permissions-fix/"/>
-    <updated>2010-03-15T00:04:51-05:00</updated>
-    <id>http://willi.am/blog/2010/03/15/netbeans-ftp-file-permissions-fix</id>
+    <link href="http://willi.am/blog/2010/03/14/netbeans-ftp-file-permissions-fix/"/>
+    <updated>2010-03-14T22:04:51-07:00</updated>
+    <id>http://willi.am/blog/2010/03/14/netbeans-ftp-file-permissions-fix</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been trying out Netbeans' &ldquo;PHP Application from Remote Server&rdquo; feature this weekend. The idea is that when you save a file, it uploads that file to a remote server where it can be run.</p>
 
 <p>The problem I ran into is that when Netbeans uploads that file and overwrites the old version, the permissions on the file change. I did some searching and it sounds like Netbeans doesn&rsquo;t set permissions on the file, which means it just takes the server default. This doesn&rsquo;t make much sense (should keep permissions of previous file) and for me it meant that the permissions were set so low that I couldn&rsquo;t run the PHP scripts I was uploading.</p>
