@@ -29,4 +29,4 @@ A JavaScript *or* returns the first *truthy* value, or the last value if none ar
 
 e.g. `(false || 0) === 0` and `(0 || false) === false` and `(foo || "") === ""` (assuming foo is "falsey")
 
-Many JavaScript developers use this behavior as a shortcut for settings default values, because `null` and `undefined` are falsey.
+Many JavaScript developers use this behavior as a shortcut for setting default values, because `null` and `undefined` are falsey.
