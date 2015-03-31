@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-29T02:51:24-07:00</updated>
+  <updated>2015-03-31T09:32:51-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -44,7 +44,7 @@ A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last va
 
 <p>e.g. <code>(false || 0) === 0</code> and <code>(0 || false) === false</code> and <code>(foo || "") === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
 
-<p>Many JavaScript developers use this behavior as a shortcut for settings default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
+<p>Many JavaScript developers use this behavior as a shortcut for setting default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
 ]]></content>
   </entry>
   

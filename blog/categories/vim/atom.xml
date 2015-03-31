@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vim | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/vim/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-29T02:51:24-07:00</updated>
+  <updated>2015-03-31T09:32:51-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -45,7 +45,7 @@ let @d='0dw'
 
 <h4>&ldquo;How&rsquo;d I get here, and how do I get away&rdquo;</h4>
 
-<p>{% img //itsananderson.blob.core.windows.net/post-images/vim-command-line-history.png %}</p>
+<p><img src="//itsananderson.blob.core.windows.net/post-images/vim-command-line-history.png"></p>
 
 <p>Don&rsquo;t dispair. You&rsquo;ve discovered Vim&rsquo;s command line history. This is the list of commands you&rsquo;ve run. They&rsquo;re stored in <code>~/.viminfo</code> or <code>~/_viminfo</code>, depending on your system configuration</p>
 

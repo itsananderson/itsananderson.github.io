@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Express | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/express/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-29T02:51:24-07:00</updated>
+  <updated>2015-03-31T09:32:51-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -34,9 +34,9 @@
 
 <p>Since Azure first looks for a server.js file when it starts a site, the easiest solution I&rsquo;ve found is to add a <code>server.js</code> file with the following contents.</p>
 
-<p>{% codeblock lang:javascript %}
-require(&lsquo;./bin/www&rsquo;);
-{% endcodeblock %}</p>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">require</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;.</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">www</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Now, when Azure starts your site, it will require server.js, which will require bin/www, which will require app.js. After that somewhat convoluted redirection chain, all will again be right in the world.</p>
 
