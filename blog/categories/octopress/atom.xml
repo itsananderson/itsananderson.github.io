@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-03-31T09:32:51-07:00</updated>
+  <updated>2015-05-07T23:21:45-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Configuring an Existing Octopress Site On a New Machine]]></title>
+    <link href="http://willi.am/blog/2015/05/07/configuring-an-existing-octopress-site-on-a-new-machine/"/>
+    <updated>2015-05-07T22:59:57-07:00</updated>
+    <id>http://willi.am/blog/2015/05/07/configuring-an-existing-octopress-site-on-a-new-machine</id>
+    <content type="html"><![CDATA[<p>Every time I set up a new machine, I have to figure out how write posts on my <a href="http://octopress.org">Octopress</a> blog. I usually follow <a href="https://github.com/colca/colca.github.com/blob/source/source/_posts/2014-01-27-octopress-sync-octopress-on-different-machines.markdown">these instructions</a>, but have to tweak them slightly to work for me. I fanally decided to write down the exact steps I use so I don&rsquo;t have to figure them out every time. Hopefully it&rsquo;s useful for someone else as well.</p>
+
+<h3>Step 1 &ndash; Run Octopress setup</h3>
+
+<p><code>
+git clone git://github.com/imathis/octopress.git octopress
+cd octopress    # If you use RVM, You'll be asked if you trust the .rvmrc file (say yes).
+ruby --version  # Should report Ruby 1.9.3
+gem install bundler # On Linux/OSX you may need to run "sudo gem install bundler" instead
+bundle install
+rake install
+rake setup_github_pages
+</code></p>
+
+<p>The main purpose of setting up Octopress like this is to get the main layout configured correctly.</p>
+
+<h3>Step 2 &ndash; Reset to your blog&rsquo;s branch tips</h3>
+
+<p><code>
+git fetch origin source
+git branch --set-upstream-to=origin/source source
+git reset --hard origin/source
+cd _deploy
+git fetch origin master
+git branch --set-upstream-to=origin/master master
+git reset --hard origin master
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Use Blob Storage For Your Static Site Images]]></title>
