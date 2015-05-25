@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Category: React Native - Will Anderson</title>
+	<title>Watching Custom Directories From the React Native Packager - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Category: React Native">
+	<meta name="description" content="React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -80,50 +80,60 @@
 	
 		
 	
-	<div id="content" class="inner">
-	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Watching Custom Directories From the React Native Packager</h2>
+	<div class="entry-content"><p>React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and rebuilds. However, if you link a Node module from a different directory, the packager won&rsquo;t see changes that are made to that package.</p>
+
+<p>It&rsquo;s fairly easy to specify custom folders for the packager to watch. Since the React Native client sets up an <code>npm start</code> command when it generates the project, you can simply modify that script to watch additional folders.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"start": "node_modules/react-native/packager/packager.sh --root ~/custom-package/"</span></code></pre></td></tr></table></div></figure>
 
 
-	
-	
-	<section class="archives"><h1 class="year">2015</h1>
+<p>Unfortunately, when you launch the project in Xcode, it runs the packager directly, rather than running the <code>npm start</code> command, but if you manually run <code>npm start</code> from a terminal window, React Native will use that rather than launching a new instance of the packager. I have an <a href="https://github.com/facebook/react-native/issues/1396">issue opened on the React Native project</a>, suggesting that they run <code>npm start</code> from Xcode, but we&rsquo;ll see if it goes anywhere.</p>
+</div>
 
-<article>
-	<h2 class="title"><a href="/blog/2015/05/24/watching-custom-directories-from-the-react-native-packager/">Watching Custom Directories From the React Native Packager</a></h2>
-	<div class="meta">
-		<div class="date">May 24</div>
-		<div class="tags">
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-24T18:51:57-07:00" pubdate data-updated="true">May 24<span>th</span>, 2015</time></div>
+	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/react-native/'>React Native</a>
 
 
 </div>
-	    
-	</div>
-</article>
 	
-
-	
-
-
-<article>
-	<h2 class="title"><a href="/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/">React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child"</a></h2>
-	<div class="meta">
-		<div class="date">May  8</div>
-		<div class="tags">
-
-
-	<a class='category' href='/blog/categories/react/'>React</a>, <a class='category' href='/blog/categories/react-native/'>React Native</a>
-
-
 </div>
-	    
-	</div>
 </article>
-	
-	</section>
-	
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
 
 </div>
 	<footer id="footer" class="inner">Copyright &copy; 2015

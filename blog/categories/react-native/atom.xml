@@ -4,7 +4,7 @@
   <title><![CDATA[Category: React Native | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/react-native/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-05-13T00:55:48-07:00</updated>
+  <updated>2015-05-24T19:18:36-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Watching Custom Directories From the React Native Packager]]></title>
+    <link href="http://willi.am/blog/2015/05/24/watching-custom-directories-from-the-react-native-packager/"/>
+    <updated>2015-05-24T18:51:57-07:00</updated>
+    <id>http://willi.am/blog/2015/05/24/watching-custom-directories-from-the-react-native-packager</id>
+    <content type="html"><![CDATA[<p>React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and rebuilds. However, if you link a Node module from a different directory, the packager won&rsquo;t see changes that are made to that package.</p>
+
+<p>It&rsquo;s fairly easy to specify custom folders for the packager to watch. Since the React Native client sets up an <code>npm start</code> command when it generates the project, you can simply modify that script to watch additional folders.</p>
+
+<p><code>
+"start": "node_modules/react-native/packager/packager.sh --root ~/custom-package/"
+</code></p>
+
+<p>Unfortunately, when you launch the project in Xcode, it runs the packager directly, rather than running the <code>npm start</code> command, but if you manually run <code>npm start</code> from a terminal window, React Native will use that rather than launching a new instance of the packager. I have an <a href="https://github.com/facebook/react-native/issues/1396">issue opened on the React Native project</a>, suggesting that they run <code>npm start</code> from Xcode, but we&rsquo;ll see if it goes anywhere.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child"]]></title>
