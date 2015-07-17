@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="The WordPress installation process is already incredibly simple, but because I often find myself setting up fresh installations of WordPress for &hellip;">
+	<meta name="description" content="I&rsquo;ve been trying out Netbeans&#8217; &ldquo;PHP Application from Remote Server&rdquo; feature this weekend. The idea is that when you save a &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -81,6 +81,77 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2010/03/14/netbeans-ftp-file-permissions-fix/">
+		
+			Netbeans FTP File Permissions Fix</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve been trying out Netbeans&#8217; &ldquo;PHP Application from Remote Server&rdquo; feature this weekend. The idea is that when you save a file, it uploads that file to a remote server where it can be run.</p>
+
+<p>The problem I ran into is that when Netbeans uploads that file and overwrites the old version, the permissions on the file change. I did some searching and it sounds like Netbeans doesn&rsquo;t set permissions on the file, which means it just takes the server default. This doesn&rsquo;t make much sense (should keep permissions of previous file) and for me it meant that the permissions were set so low that I couldn&rsquo;t run the PHP scripts I was uploading.</p>
+
+<p>It&rsquo;s simple enough to change the permissions on those files.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>chmod -R 777 /path/to/files
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But you have to run this command <em>every</em> time you make a change. This is a royal pain when you&rsquo;re making a lot of small changes (like when you&rsquo;re trying to track down a bug for example).</p>
+
+<p>One solution might be to try hooking into the ftp server daemon to run that command every time something is committed, but that sounded like too much work. I came up with a better solution.</p>
+
+<p>Instead, I decided to just run that command in a loop. The following scripts runs infinitely (until execution is stopped) and waits 1 second, then runs the permission command.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="k">while</span> <span class="o">(</span><span class="nb">true</span><span class="o">)</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">    </span>sleep 1
+</span><span class='line'>    chmod -R 777 /path/to/files
+</span><span class='line'><span class="k">done</span>;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you want to be able to do anything else in the command line while this is running, it&rsquo;s probably a good idea to run it in a screen.</p>
+
+<p>Also, you can end the execution of this script with CTRL+C. Otherwise it will continue executing forever.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-14T22:04:51-07:00" pubdate data-updated="true">Mar 14<span>th</span>, 2010</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/netbeans/'>Netbeans</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
