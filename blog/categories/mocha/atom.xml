@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Mocha, | Will Anderson]]></title>
+  <title><![CDATA[Category: Mocha | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/mocha/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-07-21T16:45:11-07:00</updated>
+  <updated>2015-07-21T16:47:03-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
