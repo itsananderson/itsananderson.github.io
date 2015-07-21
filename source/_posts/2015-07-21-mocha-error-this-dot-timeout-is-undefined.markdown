@@ -3,7 +3,9 @@ layout: post
 title: "Mocha Error - this.timeout is undefined"
 date: 2015-07-21 16:25:25 -0700
 comments: true
-categories: Mocha, Node
+categories:
+- Mocha
+- Node
 ---
 
 If you're using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call `this.timeout()` from your Mocha tests.
