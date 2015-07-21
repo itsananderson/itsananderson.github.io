@@ -7,15 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you want to view all released versions of an npm package, there&rsquo;s an easy way to do it: npm show react-native@* version 1
-2
-3
-4
-5
-6
-7
-8
-9 &hellip;">
+	<meta name="description" content="If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call this.timeout() from your &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -89,6 +81,93 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined/">
+		
+			Mocha Error - this.timeout Is Undefined</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call <code>this.timeout()</code> from your Mocha tests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you look at the compiled output, the source of the problem becomes evident.
+The compiler is taking the value of <code>this</code> from outside the test.
+This is also the behavior you&rsquo;d see if you used a JS engine with ES6 support.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">_this</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Arrow functions specify that the scope of the &ldquo;this&rdquo; variable inside the function is the same as its scope outside the function.
+Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&rdquo; to be the Mocha object that we can call <code>this.timeout()</code> on.</p>
+
+<p>Switching back to the old-school function style fixes the problem:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And there you have it. Be careful with &ldquo;arrow&rdquo; functions in Mocha tests. They&rsquo;re fine to use in most cases, but if you need to call <code>this.timeout()</code>, make sure you switch back to the old-school function syntax.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-21T16:25:25-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mocha/'>Mocha,</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1094,92 +1173,6 @@ Here are a few of the things I use most frequently:</p>
 
 
 	<a class='category' href='/blog/categories/review/'>Review</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/11/12/a-new-adventure-in-devdiv/">
-		
-			A New Adventure in DevDiv</a>
-	</h2>
-	<div class="entry-content">
-		<p>Starting Monday, I&rsquo;m joining a new team at Microsoft.
-Even though I&rsquo;m moving within the company, this will be a completely new experience, and I&rsquo;m pumped.</p>
-
-<h2>What I&rsquo;ve Been Doing</h2>
-
-<p>A year and a half ago, I joined a top-notch team working on <a href="http://blog.jongallant.com/2013/03/new-job-hiring-devs.html">a super secret Win8 app</a>.
-A week after I started, our project was cancelled.
-Oops :)</p>
-
-<p>Our team was part of the Bing Ads org structure, so after a few months of limbo, we took ownership of the management and authoring tools for display ads.
-Getting to work with this team of hand-picked developers has been an amazing experience.
-I&rsquo;ve learned a ton about Agile methodologies, TDD, DevOps, and more.</p>
-
-<p>I got to contribute to many projects in my time on the team, but here are the things I&rsquo;m most proud of:</p>
-
-<ul>
-<li>Building a RESTful API for storing, transforming, searching, and serving image and video assets</li>
-<li>Building a purely static Angular SPA, backed by Node.js microservices</li>
-<li>Converting most of the team&rsquo;s codebase to Git on Visual Studio Online, with CI through Octopus</li>
-<li>Becoming a team resource for Git and JavaScript domain knowledge</li>
-</ul>
-
-
-<h2>What&rsquo;s Next</h2>
-
-<p>I&rsquo;m joining the &ldquo;Client Platform Tools&rdquo; team inside DevDiv.
-They work on the TypeScript language and tooling, as well as the JavaScript tooling in Visual Studio, and the F12 tools in Internet Explorer.</p>
-
-<p>I&rsquo;ll be working on JavaScript profiling and diagnostics (think CPU/memory usage and network calls).
-This will be a new experience for me.
-I&rsquo;ve spent most of the last year and a half writing JavaScript for either the browser or Node, but now I&rsquo;ll be stepping a little deeper and working on the development tools themselves.
-I&rsquo;ll also be jumping into TypeScript, the language in which most of the tools are written.</p>
-
-<p>Thinking about everything I&rsquo;m going to be learning about and working on, I&rsquo;m excited, optimistic, and honestly a little scared.</p>
-
-<p><strong>But that&rsquo;s good</strong>.</p>
-
-<p>If changing teams didn&rsquo;t move me outside my comfort zone, it&rsquo;d be the wrong move.</p>
-
-<p>I&rsquo;ve found that there are two things that get me pumped about what I&rsquo;m working on.
-The first is that it&rsquo;s challenging.
-I love learning, and it turns out working on problems I don&rsquo;t quite know how to solve is a great way to learn.</p>
-
-<p>The second thing I love is doing work that makes a difference.
-I don&rsquo;t only mean that in an altruistic sense, but in a broader, &ldquo;makes someone&rsquo;s job/life easier&rdquo; kind of way.
-That&rsquo;s why a developer tools team was so appealing to me, and why I&rsquo;m so excited about what the next chapter will bring.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-11-12T16:40:57-08:00" pubdate data-updated="true">Nov 12<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/visual-studio/'>Visual Studio</a>
 
 
 </div>

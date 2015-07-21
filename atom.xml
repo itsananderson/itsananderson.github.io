@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://willi.am/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-07-17T11:29:18-07:00</updated>
+  <updated>2015-07-21T16:45:11-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,61 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mocha Error - this.timeout is undefined]]></title>
+    <link href="http://willi.am/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined/"/>
+    <updated>2015-07-21T16:25:25-07:00</updated>
+    <id>http://willi.am/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call <code>this.timeout()</code> from your Mocha tests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you look at the compiled output, the source of the problem becomes evident.
+The compiler is taking the value of <code>this</code> from outside the test.
+This is also the behavior you&rsquo;d see if you used a JS engine with ES6 support.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">_this</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Arrow functions specify that the scope of the &ldquo;this&rdquo; variable inside the function is the same as its scope outside the function.
+Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&rdquo; to be the Mocha object that we can call <code>this.timeout()</code> on.</p>
+
+<p>Switching back to the old-school function style fixes the problem:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And there you have it. Be careful with &ldquo;arrow&rdquo; functions in Mocha tests. They&rsquo;re fine to use in most cases, but if you need to call <code>this.timeout()</code>, make sure you switch back to the old-school function syntax.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Viewing All Versions of an NPM Package (Including Pre-Release)]]></title>
@@ -1732,226 +1787,6 @@ you may accidentally remove commits from master.</p>
 
 <p>If you haven&rsquo;t already, be sure to read the section on force push pitfalls.
 They&rsquo;re important to understand, and they&rsquo;re the main reason I wrote this post.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Test Your API With Supertest]]></title>
-    <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
-    <updated>2014-07-28T14:18:23-07:00</updated>
-    <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
-    <content type="html"><![CDATA[<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
-Despite being new to me, the package has been around for about 2 years.</p>
-
-<h2>Setup</h2>
-
-<p>You can configure supertest in a couple ways.
-If you&rsquo;re testing an external site, you can configure supertest with the site&rsquo;s base url:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;supertest&#39;</span><span class="p">)(</span><span class="s1">&#39;http://example.com/&#39;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you&rsquo;re testing an Express app, you can pass the app to supertest, and let it worry about setup/teardown of your site.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">myApp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../app.js&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;supertest&#39;</span><span class="p">)(</span><span class="nx">myApp</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
-This allows you to just write your tests, without worrying about starting apps, conflicting ports, etc.</p>
-
-<h2>Writing a Test</h2>
-
-<p>Once you&rsquo;ve imported supertest, it&rsquo;s quite simple to use.
-In my examples, I&rsquo;ll be using the test framework provided by <a href="https://npmjs.org/package/mocha">Mocha</a>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;my api&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;returns hello world&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">request</span><span class="p">.</span>
-</span><span class='line'>            <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-</span><span class='line'>            <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Hello, World!&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This is about as simple as the tests get.
-We call the root of the site, and expect the response body to equal &ldquo;Hello, World!&rdquo;.</p>
-
-<p>Since the request is async, we take in a &ldquo;done&rdquo; parameter (which Mocha passes to us).
-We call that at the end of the test when we&rsquo;ve actually had a chance to verify the server response.</p>
-
-<p>You can easily test a JSON response with supertest:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span><span class="p">.</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">},</span> <span class="nx">done</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Headers are also simple to verify.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span><span class="p">.</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Status codes are even easier.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/some-error-route&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Oops. Something went wrong&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can do non-GET requests.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">};</span>
-</span><span class='line'><span class="nx">request</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create-user&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="nx">done</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can set headers for the request.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>You can match regular expressions against headers and bodies.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/redirect&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Location&#39;</span><span class="o">:</span> <span class="sr">/\/destination/</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="mi">301</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you need to do multiple requests in series, you can chain the &ldquo;expect&rdquo; callbacks:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Kick things off</span>
-</span><span class='line'><span class="nx">purgeUsers</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">purgeUsers</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">request</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users/purge&#39;</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="nx">checkNoUsers</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">checkNoUsers</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">request</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">([],</span> <span class="nx">addUser</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">addUser</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">request</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">})</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="nx">checkUsers</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">function</span> <span class="nx">checkUsers</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="nx">request</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">([{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">}],</span> <span class="nx">done</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Finally, if you need to do some custom processing on a result, use the <code>.end()</code> function.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">assert</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;assert&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">request</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
-</span><span class='line'>    <span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">foo</span><span class="p">,</span> <span class="s1">&#39;Bar&#39;</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">done</span><span class="p">();</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
 ]]></content>
   </entry>
   

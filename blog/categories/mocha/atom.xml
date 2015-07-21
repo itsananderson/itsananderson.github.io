@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mocha, | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/mocha/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2015-07-21T16:45:11-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Mocha Error - this.timeout is undefined]]></title>
+    <link href="http://willi.am/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined/"/>
+    <updated>2015-07-21T16:25:25-07:00</updated>
+    <id>http://willi.am/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call <code>this.timeout()</code> from your Mocha tests.</p>
+
+<p>```javascript
+it(&ldquo;foo&rdquo;, (done) => {</p>
+
+<pre><code>this.timeout(1000);
+// test some things
+</code></pre>
+
+<p>});
+```</p>
+
+<p>If you look at the compiled output, the source of the problem becomes evident.
+The compiler is taking the value of <code>this</code> from outside the test.
+This is also the behavior you&rsquo;d see if you used a JS engine with ES6 support.</p>
+
+<p>```javascript
+var _this = this;
+it(&ldquo;foo&rdquo;, function(done) {</p>
+
+<pre><code>_this.timeout(1000);
+// test some things
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Arrow functions specify that the scope of the &ldquo;this&rdquo; variable inside the function is the same as its scope outside the function.
+Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&rdquo; to be the Mocha object that we can call <code>this.timeout()</code> on.</p>
+
+<p>Switching back to the old-school function style fixes the problem:</p>
+
+<p>```javascript
+it(&ldquo;foo&rdquo;, function(done) {</p>
+
+<pre><code>this.timeout(1000);
+// test some things
+</code></pre>
+
+<p>});
+```</p>
+
+<p>And there you have it. Be careful with &ldquo;arrow&rdquo; functions in Mocha tests. They&rsquo;re fine to use in most cases, but if you need to call <code>this.timeout()</code>, make sure you switch back to the old-school function syntax.</p>
+]]></content>
+  </entry>
+  
+</feed>

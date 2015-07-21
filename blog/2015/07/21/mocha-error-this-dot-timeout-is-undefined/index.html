@@ -1,0 +1,199 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Mocha Error - this.timeout is undefined - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call this.timeout() from your &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<link href="/atom.xml" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/about">About</a></li>
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/about">About</a></li>
+	<li><a href="/plugins">WordPress Plugins</a></li>
+	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="/atom.xml" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Mocha Error - this.timeout Is Undefined</h2>
+	<div class="entry-content"><p>If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call <code>this.timeout()</code> from your Mocha tests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you look at the compiled output, the source of the problem becomes evident.
+The compiler is taking the value of <code>this</code> from outside the test.
+This is also the behavior you&rsquo;d see if you used a JS engine with ES6 support.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">_this</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+</span><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">_this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Arrow functions specify that the scope of the &ldquo;this&rdquo; variable inside the function is the same as its scope outside the function.
+Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&rdquo; to be the Mocha object that we can call <code>this.timeout()</code> on.</p>
+
+<p>Switching back to the old-school function style fixes the problem:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">it</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// test some things</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And there you have it. Be careful with &ldquo;arrow&rdquo; functions in Mocha tests. They&rsquo;re fine to use in most cases, but if you need to call <code>this.timeout()</code>, make sure you switch back to the old-school function syntax.</p>
+</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-21T16:25:25-07:00" pubdate data-updated="true">Jul 21<span>st</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/mocha/'>Mocha,</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2015
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-07-17T11:29:18-07:00</updated>
+  <updated>2015-07-21T16:45:11-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,57 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mocha Error - this.timeout is undefined]]></title>
+    <link href="http://willi.am/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined/"/>
+    <updated>2015-07-21T16:25:25-07:00</updated>
+    <id>http://willi.am/blog/2015/07/21/mocha-error-this-dot-timeout-is-undefined</id>
+    <content type="html"><![CDATA[<p>If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call <code>this.timeout()</code> from your Mocha tests.</p>
+
+<p>```javascript
+it(&ldquo;foo&rdquo;, (done) => {</p>
+
+<pre><code>this.timeout(1000);
+// test some things
+</code></pre>
+
+<p>});
+```</p>
+
+<p>If you look at the compiled output, the source of the problem becomes evident.
+The compiler is taking the value of <code>this</code> from outside the test.
+This is also the behavior you&rsquo;d see if you used a JS engine with ES6 support.</p>
+
+<p>```javascript
+var _this = this;
+it(&ldquo;foo&rdquo;, function(done) {</p>
+
+<pre><code>_this.timeout(1000);
+// test some things
+</code></pre>
+
+<p>});
+```</p>
+
+<p>Arrow functions specify that the scope of the &ldquo;this&rdquo; variable inside the function is the same as its scope outside the function.
+Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&rdquo; to be the Mocha object that we can call <code>this.timeout()</code> on.</p>
+
+<p>Switching back to the old-school function style fixes the problem:</p>
+
+<p>```javascript
+it(&ldquo;foo&rdquo;, function(done) {</p>
+
+<pre><code>this.timeout(1000);
+// test some things
+</code></pre>
+
+<p>});
+```</p>
+
+<p>And there you have it. Be careful with &ldquo;arrow&rdquo; functions in Mocha tests. They&rsquo;re fine to use in most cases, but if you need to call <code>this.timeout()</code>, make sure you switch back to the old-school function syntax.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Viewing All Versions of an NPM Package (Including Pre-Release)]]></title>
@@ -398,326 +449,6 @@ request</p>
 <p>```</p>
 
 <p>There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Azure Blob Storage and Node: All Together]]></title>
-    <link href="http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/"/>
-    <updated>2014-07-09T21:16:08-07:00</updated>
-    <id>http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together</id>
-    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li><strong>All Together</strong></li>
-</ol>
-
-
-<h1>Building a Complete Service Over Azure Blob Storage</h1>
-
-<p>In the last post, we covered <a href="blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">working with blob metadata</a>.
-In this final post, we&rsquo;ll talk about putting all the previous pieces together to create a service that is backed by blob storage.</p>
-
-<p>As a concrete example, we&rsquo;ll implement the image serving portion of <a href="http://placebacon.net/">placebacon</a>.
-To keep things simple, we won&rsquo;t go into the Jade views, just the part that actually serves images.</p>
-
-<h3>Creating an Node Server</h3>
-
-<p>We&rsquo;ll use Express to serve the images.
-We could work with any number of HTTP frameworks in Node, but Express is pretty simple to understand, so that&rsquo;s what we&rsquo;ll use.</p>
-
-<p>First, create a package.json file so we can save our npm dependencies.</p>
-
-<p>```bash
-npm init</p>
-
-<h1>Follow the prompts</h1>
-
-<h1>If in doubt, keep the defaults</h1>
-
-<h1>For &ldquo;entry point&rdquo;, enter &ldquo;server.js&rdquo;</h1>
-
-<p>```</p>
-
-<p>Next install some dependencies.</p>
-
-<p><code>bash
-npm install --save express azure-storage debug
-</code></p>
-
-<p>The &ldquo;express&rdquo; and &ldquo;azure-storage&rdquo; packages should be pretty self-explanatory.
-The &ldquo;debug&rdquo; prints debug output, and can be a selectively turned on and off.
-We&rsquo;ll talk about how to use &ldquo;debug&rdquo; in a bit.</p>
-
-<p>When we initialized the package.json, we set server.js as the entry point.
-Let&rsquo;s create that.
-(Skip ahead if you&rsquo;re familiar with Express)</p>
-
-<p>```javascript
-var debug = require(&lsquo;debug&rsquo;)(&lsquo;placebacon:server&rsquo;),</p>
-
-<pre><code>storage = require('azure-storage'),
-http = require('http'),
-util = require('util'),
-express = require('express'),
-app = express();
-</code></pre>
-
-<p>app.set(&lsquo;port&rsquo;, process.env.PORT || 3000);</p>
-
-<p>// TODO: add server routes</p>
-
-<p>var server = app.listen(app.get(&lsquo;port&rsquo;), function() {</p>
-
-<pre><code>debug('Placebacon server listening on port %d', server.address().port);
-</code></pre>
-
-<p>});
-```</p>
-
-<p>We&rsquo;re requiring the &ldquo;debug&rdquo; package, then calling the function it exports with &lsquo;placebacon:server&rsquo;.
-This tells &ldquo;debug&rdquo; to only print log output if the DEBUG environment variable matches &lsquo;placebacon:server&rsquo;.
-For example:</p>
-
-<p>```bash
-node server.js</p>
-
-<h1>[no output]</h1>
-
-<p>DEBUG=placebacon:server node server.js</p>
-
-<h1>=> Placebacon server listening on port 3000</h1>
-
-<p>DEBUG=placebacon:* node server.js</p>
-
-<h1>=> Placebacon server listening on port 3000</h1>
-
-<p>```</p>
-
-<p>As you can see from the above examples, &ldquo;debug&rdquo; makes it easy to turn debugging statements on and off without modifying your code.</p>
-
-<h3>Defining the Route</h3>
-
-<p>Next let&rsquo;s add a route.
-In the javascript snippet above, replace the &ldquo;TODO&rdquo; line with the following code.</p>
-
-<p>```javascript
-// Matches /100/200 &ndash;> 100x200 image
-// Matches /100     &ndash;> 100x100 image
-app.get(&lsquo;/:width/:height?&rsquo;, function(req, res, next) {</p>
-
-<pre><code>var width = parseInt(req.params.width);
-var height = req.params.height ? parseInt(req.params.height) : width; 
-
-// If width or height isn't a number, go to next route
-if (isNaN(width) || isNaN(height)) {
-    next();
-    return;
-}
-
-var selectedImage = 0; // TODO: choose a random image
-var urlTemplate = 'http://placebacon.net/%d/%d?image=%d';
-var imageUrl = util.format(urlTemplate, width, height, selectedImage);
-
-
-debug('Fetching from %s', imageUrl);
-http.get(imageUrl, function(imageResponse) {
-    if (200 !== imageResponse.statusCode) {
-        debug('Unexpected response: %d - %s',
-              imageResponse.statusCode, imageResponse.statusMessage);
-        res.send(502, imageResponse.statusMessage);
-        return;
-    } else {
-        imageResponse.pipe(res);
-    }
-}).on('error', function(err) {
-    console.error('Error fetching from %s: %j', imageUrl, err);
-    res.send(502, util.format("Error downloading %s: %s",
-        imageUrl,
-        e.message));
-});
-</code></pre>
-
-<p>});
-```</p>
-
-<p>At this point we have a fairly functional non-caching proxy.
-Let&rsquo;s briefly go over the code.</p>
-
-<p>First, the route is defined as <code>/:width/:height?</code>.
-This tells Express that we want to match routes with one or two parts (the question mark makes the second part optional).
-Those two parts will be mapped to <code>req.params.width</code> and <code>req.params.height</code>.
-If the second part is left off, <code>req.params.height</code> will be undefined.</p>
-
-<p>Inside our route handler, we first parse the width and height as integers.
-If the height is missing, it defaults to the value of &ldquo;width&rdquo;.
-This allows users to use /100 as a shortcut for /100/100.</p>
-
-<p>Next we check that width and height are actually integers.
-If they aren&rsquo;t, we call &ldquo;next()&rdquo;, to pass control onto the next route handler.
-In this case, there isn&rsquo;t another handler, so Express will send a 404.</p>
-
-<p>Next we select an image.
-In this sample, it&rsquo;s hardcoded to zero, but normally we&rsquo;ll want to select a random image based on width and height.
-We&rsquo;ll add that later.</p>
-
-<p>Based on the image selection and resolution, we construct a URL to our backend.
-In the sample it points at placebacon.com to make it easy to run the sample, but normally you&rsquo;d point this at whatever service you&rsquo;re using to resize your images.
-You&rsquo;ll also probably want to put the &ldquo;urlTemplate&rdquo; value in a config, but for the sake of code sample simplicity, it&rsquo;s hardcoded</p>
-
-<p>Finally, we make an http request to the image url and pipe the response to our client.
-The rest of the code is just error handling.</p>
-
-<h3>Using Blob Storage</h3>
-
-<p>In the code samples above, we don&rsquo;t actually use blob storage.
-Since blob storage is what this series is all about, let&rsquo;s integrate it as a caching layer.</p>
-
-<p>Resizing and cropping images can be an expensive operation.
-On placebacon, it can take a several seconds.
-Obviously that&rsquo;s not acceptible for every request, so generated images need to be cached to speed up responses.</p>
-
-<p>First, make sure you&rsquo;ve set up your site to connect to to blob storage.
-The &ldquo;<a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a>&rdquo; post in this series has instructions on how to do that.</p>
-
-<p>Next, let&rsquo;s make sure the blob container exists.</p>
-
-<p>At the top of &ldquo;server.js&rdquo;, right below the requires, add the container creation boilerplate we saw in the previous posts.</p>
-
-<p>```javascript
-var blobService = storage.createBlobService();
-var containerName = &lsquo;placeholder-images&rsquo;;
-blobService.createContainerIfNotExists(containerName,</p>
-
-<pre><code>function(err, result, response) {
-    if (err) {
-        console.log("Couldn't create container %s", containerName);
-        console.error(err);
-    } else {
-        if (result) {
-            console.log('Container %s created', containerName);
-        } else {
-            console.log('Container %s already exists', containerName);
-        }
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<p>Now in the route handler, we can interact with the blob storage container.</p>
-
-<p>```
-// Matches /100/200 &ndash;> 100x200 image
-// Matches /100     &ndash;> 100x100 image
-app.get(&lsquo;/:width/:height?&rsquo;, function(req, res, next) {</p>
-
-<pre><code>var width = parseInt(req.params.width);
-var height = req.params.height ? parseInt(req.params.height) : width; 
-
-// If width or height isn't a number, go to next route
-if (isNaN(width) || isNaN(height)) {
-    next();
-    return;
-}
-
-var selectedImage = 0; // TODO: choose a random image
-
-var blobName = util.format("%d-%d-%s", width, height, selectedImage);
-blobService.getBlobProperties(
-    containerName,
-    blobName,
-    function(err, properties, status) {
-        if (status.isSuccessful) {
-            res.header('Content-Type', 'image/jpeg');
-            blobService.createReadStream(containerName, blobName).pipe(res);
-        } else {
-            // Blob doesn't exist
-            // Fetch it from the service
-            var urlTemplate = 'http://placebacon.net/%d/%d?image=%d';
-            var imageUrl = util.format(
-                urlTemplate,
-                width,
-                height,
-                selectedImage);
-
-            debug('Fetching from %s', imageUrl);
-            http.get(imageUrl, function(imageResponse) {
-                if (200 !== imageResponse.statusCode) {
-                    debug(
-                        'Unexpected response: %d - %s',
-                        imageResponse.statusCode,
-                        imageResponse.statusMessage);
-                    res.send(502, imageResponse.statusMessage);
-                    return;
-                } else {
-
-                    // Create a write  stream
-                    var blob = blobService.createWriteStreamToBlockBlob(
-                        containerName,
-                        blobName,
-                        { contentType: 'image/jpeg' },
-                        function(error, result, response){
-                            if(error){
-                                console.log("Couldn't upload %s", blobName);
-                                console.error(error);
-                            } else {
-                                console.log('Blob %s uploaded', blobName);
-                            }
-                        });
-
-                    imageResponse.pipe(blob);
-
-                    res.header('Content-Type', 'image/jpeg');
-                    imageResponse.pipe(res);
-                }
-            }).on('error', function(err) {
-                console.error('Error fetching from %s: %j', imageUrl, err);
-                res.send(502, util.format("Error downloading %s: %s",
-                    imageUrl,
-                    e.message));
-            });
-        }
-    });
-</code></pre>
-
-<p>});
-```</p>
-
-<h3>Final Polish</h3>
-
-<p>One last improvement we can make is to image selection.
-In the above example, we hardcoded to the &ldquo;0th&rdquo; image, but we really want to select a pseudo-random image.
-The only problem is, we want a specific resolution to always result in the same image, so using Math.random() isn&rsquo;t sufficient.</p>
-
-<p>Using crypto to hash the width/height is a pretty straightforward solution.
-There are probably better ways of getting an evenly distributed selection of images, but this works pretty well.</p>
-
-<p>```
-var crypto = require(&lsquo;crypto&rsquo;);
-var imageCount = 10;</p>
-
-<p>function selectImage(width, height) {</p>
-
-<pre><code>var md5 = crypto.createHash('md5');
-md5.update(width + '-' + height);
-// Digest and take the first handful of characters
-var hash = md5.digest('hex').substring(0, 8);
-return parseInt(hash, 16) % imageCount;
-</code></pre>
-
-<p>}
-```</p>
-
-<h3>Sample Code</h3>
-
-<p>If you want to try the code in this post, you can check out the <a href="https://github.com/itsananderson/azure-blob-storage-node-sample">GitHub project page</a>.</p>
 ]]></content>
   </entry>
   
