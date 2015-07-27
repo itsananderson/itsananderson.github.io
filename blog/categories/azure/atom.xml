@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Azure | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/azure/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-07-21T16:47:03-07:00</updated>
+  <updated>2015-07-26T17:23:01-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Debugging Node.js Azure Web Apps (Websites)]]></title>
+    <link href="http://willi.am/blog/2015/07/24/debugging-nodejs-azure-web-apps/"/>
+    <updated>2015-07-24T14:35:23-07:00</updated>
+    <id>http://willi.am/blog/2015/07/24/debugging-nodejs-azure-web-apps</id>
+    <content type="html"><![CDATA[<p>Deploying Node websites to Azure is really simple with their <a href="https://azure.microsoft.com/en-us/documentation/articles/web-sites-nodejs-develop-deploy-mac/#publish-your-application">Git deployment feature</a>. However, sometimes debugging problems can be challenging. Here are some of the tricks I&rsquo;ve discovered for diagnosing problems with Node apps in Azure.</p>
+
+<h2>Viewing Application Output</h2>
+
+<p>To view application logs (a.k.a. stdout and stderr) from your app, you can turn on Application Logging from the management portal&rsquo;s &ldquo;Configure&rdquo; tab.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/enable-application-logging.png" alt="" /></p>
+
+<p>Note that application logging will only be turned on for 12 hours, so if you need to be able to see historical logs, you need to save them to a file from within your application.</p>
+
+<p>To view the logs, you can go to the Kudu dashboard at &ldquo;<yourazuresite>.scm.azurewebsites.net&rdquo;.
+Select either CMD or PowerShell from the &ldquo;Debug console&rdquo; menu, then navigate to <code>LogFiles/Application</code>.
+Scroll until you find <code>index.html</code> and click the download button (which will display it in your browser).</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/application-logs.png" alt="" /></p>
+
+<p>From there you can scan through for the logs from the time period you&rsquo;re interested in and click the &ldquo;log&rdquo; link. Notice that the logs are split by &ldquo;stdout&rdquo; and &ldquo;stderr&rdquo;.</p>
+
+<h2>Other IIS Logs</h2>
+
+<p>To enable other IIS related logs, go to the &ldquo;site diagnostics&rdquo; section. These settings can be useful for debugging IIS level issues.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/enable-iis-logging.png" alt="" /></p>
+
+<p>You can find these logs in a few different folders under &ldquo;LogFiles&rdquo; in the Kudu dashboard.</p>
+
+<h2>Using Node Debugger</h2>
+
+<p><a href="https://github.com/node-inspector/node-inspector">Node Inspector</a> is a really useful tool for digging into problems with your Node app.
+I&rsquo;ll often spin it up locally if I&rsquo;m investigating an issue that isn&rsquo;t easily revealed with a <code>console.log</code> statement.
+However, sometimes bugs only reproduce on the server. If that happens, using the version of Node Inspector built into Azure can be really useful.</p>
+
+<h3>Enabling Websockets</h3>
+
+<p>Node inspector uses WebSockets to communicate between the UI and the debugger backend.
+Since Azure Websites doesn&rsquo;t enable them by default, you&rsquo;ll need to manually enable WebSockets in the &ldquo;Configure&rdquo; tab of the management portal.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/enable-websockets.png" alt="" /></p>
+
+<h3>Check Your Web.config</h3>
+
+<p>If you deployed your site with a Git push, Kudu should have generated a Web.config with correct configuration for debugging. If not, I have a <a href="https://gist.github.com/itsananderson/a1e65b046285f7e57c70">generalized Gist</a> that I use as a starting point. Just change the references to <code>bin/www</code> to reflect the correct entrypoint for your app.</p>
+
+<h3>Enable Debugging</h3>
+
+<p>To enable debugging, you can either modify your <code>Web.config</code> or create/modify an <code>iisnode.yml</code> file.</p>
+
+<p>In the Web.config, it looks like this:</p>
+
+<p>```xml</p>
+
+<!-- You'll find a placeholder near the end of the generated Web.config -->
+
+
+<pre><code>&lt;iisnode debuggingEnabled="true"/&gt;
+</code></pre>
+
+<p>  &lt;/system.webServer>
+</configuration>
+```</p>
+
+<p>Or in <code>iisnode.yml</code>, it looks like this:</p>
+
+<p><code>
+debuggingEnabled: true
+</code></p>
+
+<p>The advantage of using <code>iisnode.yml</code> is that you don&rsquo;t have to worry about a new deployment generating over your existing configuration. It&rsquo;s also worth noting that you can configure a bunch of other settings in both the <a href="https://github.com/tjanczuk/iisnode/blob/master/src/samples/configuration/iisnode.yml">iisnode.yml</a> and the <a href="https://github.com/tjanczuk/iisnode/blob/master/src/samples/configuration/web.config">Web.config</a>.</p>
+
+<h3>Testing Out the Debugger</h3>
+
+<p>To use the debugger, go to your azure website, and append the entry point path, and <code>/debug</code>. So for example, if your entry file was <code>server.js</code>, you&rsquo;d go to <code>&lt;yoursite&gt;.azurewebsites.net/server.js/debug</code></p>
+
+<p>If everything&rsquo;s configured correctly, you should see the debugger. You can set breakpoints and debug the route handlers for your app.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/node-debug.png" alt="" /></p>
+
+<p>Keep in mind that when you set a breakpoint, the entire app is halted. This means you probably don&rsquo;t want to attach the debugger to an app that&rsquo;s serving production traffic.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Use Blob Storage For Your Static Site Images]]></title>
@@ -821,198 +907,6 @@ function(err, result) {
 
 <p>In this post we covered listing blobs and containers in your storage account.
 In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">blob metadata</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Azure Blob Storage and Node: Downloading Blobs]]></title>
-    <link href="http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/"/>
-    <updated>2014-07-03T16:23:46-07:00</updated>
-    <id>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs</id>
-    <content type="html"><![CDATA[<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><strong>Downloading Blobs</strong></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
-<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
-</ol>
-
-
-<h2>Downloading From Blob Storage</h2>
-
-<p><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Last time</a> we talked about creating Azure blobs.
-This time we&rsquo;ll turn things around and talk about downloading Azure blobs.</p>
-
-<h3>Account Connection Boilerplate</h3>
-
-<p>As stated in the previous post, to work with blob storage, you first need to create a client instance.
-To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
-
-<p>```javascript
-var storage = require(&lsquo;azure-storage&rsquo;);
-var blobService = storage.createBlobService();
-var containerName = &lsquo;your-container-name&rsquo;;
-blobService.createContainerIfNotExists(</p>
-
-<pre><code>containerName,
-function(err, result, response) {
-    if (err) {
-        console.log("Couldn't create container %s", containerName);
-        console.error(err);
-    } else {
-        if (result) {
-            console.log('Container %s created', containerName);
-        } else {
-            console.log('Container %s already exists', containerName);
-        }
-
-        // Your code goes here
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<p>Again, for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
-
-<h3>Checking if a Blob Exists</h3>
-
-<p>In some cases, you don&rsquo;t need a blob&rsquo;s contents, you just need to know if it exists.
-You can do this with the <code>getBlobProperties</code> method.</p>
-
-<p>```javascript
-var blobName = &lsquo;my-nonexistent-blob&rsquo;
-blobService.getBlobProperties(</p>
-
-<pre><code>containerName,
-blobName,
-function(err, properties, status) {
-    if (status.isSuccessful) {
-        // Blob exists
-    } else {
-        // Blob doesn't exist
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<h3>Downloading a Blob As Text</h3>
-
-<p>To download a blob as a text string, use the <code>getBlobToText</code> method.</p>
-
-<p>```javascript
-var blobName = &lsquo;my-awesome-text-blob&rsquo;;
-blobService.getBlobToText(</p>
-
-<pre><code>containerName,
-blobName,
-function(err, blobContent, blob) {
-    if (err) {
-        console.error("Couldn't download blob %s", blobName);
-        console.error(err);
-    } else {
-        console.log("Sucessfully downloaded blob %s", blobName);
-        console.log(blobContent);
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<h3>Downloading a Blob to a File</h3>
-
-<p>To download a blob to a file, use the <code>getBlobToFile</code> method.</p>
-
-<p>```javascript
-var fs = require(&lsquo;fs&rsquo;);
-var fileName = &lsquo;hello-world.txt&rsquo;;
-var blobName = &lsquo;my-awesome-file-blob&rsquo;;
-blobService.getBlobToFile(</p>
-
-<pre><code>containerName,
-blobName,
-fileName,
-function(err, blob) {
-    if (err) {
-        console.error("Couldn't download blob %s", blobName);
-        console.error(err);
-    } else {
-        console.log("Sucessfully downloaded blob %s to %s", blobName, fileName);
-        fs.readFile(fileName, function(err, fileContents) {
-            if (err) {
-                console.error("Couldn't read file %s", fileName);
-                console.error(err);
-            } else {
-                console.log(fileContents);
-            }
-        });
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<h3>Downloading a Blob to a Stream</h3>
-
-<p>To download a blob to a stream, use the <code>getBlobToStream</code> method.</p>
-
-<p>```javascript
-// For simplicity, assume getSomeStream returns a writable stream
-var myStream = getSomeStream();
-var blobName = &lsquo;my-awesome-stream-blob&rsquo;;
-blobService.getBlobToStream(</p>
-
-<pre><code>containerName,
-blobName,
-myStream,
-function(err, blob) {
-    if (err) {
-        console.error("Couldn't download blob %s", blobName);
-        console.error(err);
-    } else {
-        console.log("Sucessfully downloaded blob %s", blobName);
-    }
-});
-</code></pre>
-
-<p>```</p>
-
-<p>You can also integrate with a web server to enable downloads from blob storage.
-This is powerfull when combined with the <code>getBlobProperties</code> method.</p>
-
-<p>In the following example, we use the <code>createReadStream</code> method so we can easily pipe the stream to the server response object.</p>
-
-<p>```javascript
-app.get(&lsquo;/download/:file&rsquo;, function(req, res) {</p>
-
-<pre><code>var fileName = req.params.file;
-blobService.getBlobProperties(
-    containerName,
-    fileName,
-    function(err, properties, status) {
-        if (err) {
-            res.send(502, "Error fetching file: %s", err.message);
-        } else if (!status.isSuccessful) {
-            res.send(404, "The file %s does not exist", fileName);
-        } else {
-            res.header('Content-Type', properties.contentType);
-            blobService.createReadStream(containerName, fileName).pipe(res);
-        }
-    });
-</code></pre>
-
-<p>});
-```</p>
-
-<h3>Conclusion</h3>
-
-<p>In this post we covered how to check whether a blob exists, and how to download the blob.
-In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">how to list containers and blobs</a>.</p>
 ]]></content>
   </entry>
   

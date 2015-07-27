@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Node | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/node/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2015-07-21T16:47:03-07:00</updated>
+  <updated>2015-07-26T17:23:01-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Debugging Node.js Azure Web Apps (Websites)]]></title>
+    <link href="http://willi.am/blog/2015/07/24/debugging-nodejs-azure-web-apps/"/>
+    <updated>2015-07-24T14:35:23-07:00</updated>
+    <id>http://willi.am/blog/2015/07/24/debugging-nodejs-azure-web-apps</id>
+    <content type="html"><![CDATA[<p>Deploying Node websites to Azure is really simple with their <a href="https://azure.microsoft.com/en-us/documentation/articles/web-sites-nodejs-develop-deploy-mac/#publish-your-application">Git deployment feature</a>. However, sometimes debugging problems can be challenging. Here are some of the tricks I&rsquo;ve discovered for diagnosing problems with Node apps in Azure.</p>
+
+<h2>Viewing Application Output</h2>
+
+<p>To view application logs (a.k.a. stdout and stderr) from your app, you can turn on Application Logging from the management portal&rsquo;s &ldquo;Configure&rdquo; tab.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/enable-application-logging.png" alt="" /></p>
+
+<p>Note that application logging will only be turned on for 12 hours, so if you need to be able to see historical logs, you need to save them to a file from within your application.</p>
+
+<p>To view the logs, you can go to the Kudu dashboard at &ldquo;<yourazuresite>.scm.azurewebsites.net&rdquo;.
+Select either CMD or PowerShell from the &ldquo;Debug console&rdquo; menu, then navigate to <code>LogFiles/Application</code>.
+Scroll until you find <code>index.html</code> and click the download button (which will display it in your browser).</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/application-logs.png" alt="" /></p>
+
+<p>From there you can scan through for the logs from the time period you&rsquo;re interested in and click the &ldquo;log&rdquo; link. Notice that the logs are split by &ldquo;stdout&rdquo; and &ldquo;stderr&rdquo;.</p>
+
+<h2>Other IIS Logs</h2>
+
+<p>To enable other IIS related logs, go to the &ldquo;site diagnostics&rdquo; section. These settings can be useful for debugging IIS level issues.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/enable-iis-logging.png" alt="" /></p>
+
+<p>You can find these logs in a few different folders under &ldquo;LogFiles&rdquo; in the Kudu dashboard.</p>
+
+<h2>Using Node Debugger</h2>
+
+<p><a href="https://github.com/node-inspector/node-inspector">Node Inspector</a> is a really useful tool for digging into problems with your Node app.
+I&rsquo;ll often spin it up locally if I&rsquo;m investigating an issue that isn&rsquo;t easily revealed with a <code>console.log</code> statement.
+However, sometimes bugs only reproduce on the server. If that happens, using the version of Node Inspector built into Azure can be really useful.</p>
+
+<h3>Enabling Websockets</h3>
+
+<p>Node inspector uses WebSockets to communicate between the UI and the debugger backend.
+Since Azure Websites doesn&rsquo;t enable them by default, you&rsquo;ll need to manually enable WebSockets in the &ldquo;Configure&rdquo; tab of the management portal.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/enable-websockets.png" alt="" /></p>
+
+<h3>Check Your Web.config</h3>
+
+<p>If you deployed your site with a Git push, Kudu should have generated a Web.config with correct configuration for debugging. If not, I have a <a href="https://gist.github.com/itsananderson/a1e65b046285f7e57c70">generalized Gist</a> that I use as a starting point. Just change the references to <code>bin/www</code> to reflect the correct entrypoint for your app.</p>
+
+<h3>Enable Debugging</h3>
+
+<p>To enable debugging, you can either modify your <code>Web.config</code> or create/modify an <code>iisnode.yml</code> file.</p>
+
+<p>In the Web.config, it looks like this:</p>
+
+<p>```xml</p>
+
+<!-- You'll find a placeholder near the end of the generated Web.config -->
+
+
+<pre><code>&lt;iisnode debuggingEnabled="true"/&gt;
+</code></pre>
+
+<p>  &lt;/system.webServer>
+</configuration>
+```</p>
+
+<p>Or in <code>iisnode.yml</code>, it looks like this:</p>
+
+<p><code>
+debuggingEnabled: true
+</code></p>
+
+<p>The advantage of using <code>iisnode.yml</code> is that you don&rsquo;t have to worry about a new deployment generating over your existing configuration. It&rsquo;s also worth noting that you can configure a bunch of other settings in both the <a href="https://github.com/tjanczuk/iisnode/blob/master/src/samples/configuration/iisnode.yml">iisnode.yml</a> and the <a href="https://github.com/tjanczuk/iisnode/blob/master/src/samples/configuration/web.config">Web.config</a>.</p>
+
+<h3>Testing Out the Debugger</h3>
+
+<p>To use the debugger, go to your azure website, and append the entry point path, and <code>/debug</code>. So for example, if your entry file was <code>server.js</code>, you&rsquo;d go to <code>&lt;yoursite&gt;.azurewebsites.net/server.js/debug</code></p>
+
+<p>If everything&rsquo;s configured correctly, you should see the debugger. You can set breakpoints and debug the route handlers for your app.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/node-debug.png" alt="" /></p>
+
+<p>Keep in mind that when you set a breakpoint, the entire app is halted. This means you probably don&rsquo;t want to attach the debugger to an app that&rsquo;s serving production traffic.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Mocha Error - this.timeout is undefined]]></title>
@@ -263,192 +349,6 @@ Since I had a seemingly perfect use case, I decided to dive in.</p>
 
 <p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
 About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Test Your API With Supertest]]></title>
-    <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
-    <updated>2014-07-28T14:18:23-07:00</updated>
-    <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
-    <content type="html"><![CDATA[<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
-Despite being new to me, the package has been around for about 2 years.</p>
-
-<h2>Setup</h2>
-
-<p>You can configure supertest in a couple ways.
-If you&rsquo;re testing an external site, you can configure supertest with the site&rsquo;s base url:</p>
-
-<p><code>javascript
-var request = require('supertest')('http://example.com/');
-</code></p>
-
-<p>If you&rsquo;re testing an Express app, you can pass the app to supertest, and let it worry about setup/teardown of your site.</p>
-
-<p><code>javascript
-var myApp = require('../app.js');
-var request = require('supertest')(myApp);
-</code></p>
-
-<p>The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
-This allows you to just write your tests, without worrying about starting apps, conflicting ports, etc.</p>
-
-<h2>Writing a Test</h2>
-
-<p>Once you&rsquo;ve imported supertest, it&rsquo;s quite simple to use.
-In my examples, I&rsquo;ll be using the test framework provided by <a href="https://npmjs.org/package/mocha">Mocha</a>.</p>
-
-<p>```javascript
-describe(&lsquo;my api&rsquo;, function() {</p>
-
-<pre><code>it('returns hello world', function(done) {
-    request.
-        .get('/')
-        .expect('Hello, World!', done);
-});
-</code></pre>
-
-<p>});
-```</p>
-
-<p>This is about as simple as the tests get.
-We call the root of the site, and expect the response body to equal &ldquo;Hello, World!&rdquo;.</p>
-
-<p>Since the request is async, we take in a &ldquo;done&rdquo; parameter (which Mocha passes to us).
-We call that at the end of the test when we&rsquo;ve actually had a chance to verify the server response.</p>
-
-<p>You can easily test a JSON response with supertest:</p>
-
-<p>```javascript
-request.</p>
-
-<pre><code>.get('/')
-.expect({message: "Hello, World!"}, done);
-</code></pre>
-
-<p>```</p>
-
-<p>Headers are also simple to verify.</p>
-
-<p>```javascript
-request.</p>
-
-<pre><code>.get('/foo')
-.expect('Content-Type', 'application/json', done);
-</code></pre>
-
-<p>```</p>
-
-<p>Status codes are even easier.</p>
-
-<p>```javascript
-request</p>
-
-<pre><code>.get('/some-error-route')
-.expect(500, 'Oops. Something went wrong', done);
-</code></pre>
-
-<p>```</p>
-
-<p>You can do non-GET requests.</p>
-
-<p>```javascript
-var user = {name: &lsquo;Bob&rsquo;};
-request</p>
-
-<pre><code>.post('/create-user')
-.send(user)
-.expect({success:true}, done);
-</code></pre>
-
-<p>```</p>
-
-<p>You can set headers for the request.</p>
-
-<p>```javascript
-request</p>
-
-<pre><code>.get('/foo')
-.set('Accept', 'text/plain')
-.expect('Content-Type', 'text/plain', done);
-</code></pre>
-
-<p>```
-You can match regular expressions against headers and bodies.</p>
-
-<p>```javascript
-request</p>
-
-<pre><code>.get('/redirect')
-.expect('Location': /\/destination/)
-.expect(301, done);
-</code></pre>
-
-<p>```</p>
-
-<p>If you need to do multiple requests in series, you can chain the &ldquo;expect&rdquo; callbacks:</p>
-
-<p>```javascript
-// Kick things off
-purgeUsers();</p>
-
-<p>function purgeUsers() {</p>
-
-<pre><code>request
-    .get('/users/purge')
-    .expect({success:true}, checkNoUsers);
-</code></pre>
-
-<p>}</p>
-
-<p>function checkNoUsers(err) {</p>
-
-<pre><code>if (err) done(err);
-request
-    .get('/users')
-    .expect([], addUser);
-</code></pre>
-
-<p>}</p>
-
-<p>function addUser() {</p>
-
-<pre><code>if (err) done(err);
-request
-    .post('/users')
-    .send({name: 'Bob'})
-    .expect({success:true}, checkUsers);
-</code></pre>
-
-<p>}</p>
-
-<p>function checkUsers(err) {</p>
-
-<pre><code>if (err) done(err);
-request
-    .get('/users')
-    .expect([{name: 'Bob'}], done);
-</code></pre>
-
-<p>}
-```</p>
-
-<p>Finally, if you need to do some custom processing on a result, use the <code>.end()</code> function.</p>
-
-<p>```javascript
-var assert = require(&lsquo;assert&rsquo;);
-request</p>
-
-<pre><code>.get('/foo')
-.end(function(err, result) {
-    assert.equal(result.body.foo, 'Bar');
-    done();
-});
-</code></pre>
-
-<p>```</p>
-
-<p>There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
 ]]></content>
   </entry>
   

@@ -7,8 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I recently discovered supertest, which is a fantastic tool for testing your API.
-Despite being new to me, the package has been around for about 2 &hellip;">
+	<meta name="description" content="Let&rsquo;s talk about force pushing in Git.
+We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely. TL;DR Do &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -82,6 +82,212 @@ Despite being new to me, the package has been around for about 2 &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/08/12/the-dark-side-of-the-force-push/">
+		
+			The Dark Side of the Force Push</a>
+	</h2>
+	<div class="entry-content">
+		<p>Let&rsquo;s talk about force pushing in Git.
+We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely.</p>
+
+<p>TL;DR</p>
+
+<p>Do this:</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/obi-wan-droids.gif" alt="Force Push Droids" /></p>
+
+<p>Not this:</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/obi-wan-hates.gif" alt="Force Push Fail" /></p>
+
+<h2>Pushing Changes</h2>
+
+<p>When you push changes to a remote server, Git prevents you from pushing your changes if the remote has changes you&rsquo;re missing.
+This feature is designed to prevent data loss.
+If you run into this, you&rsquo;ll likely see a message similar to this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push origin my-branch
+</span><span class='line'>To git@github.com:itsananderson/foo.git
+</span><span class='line'> ! [rejected]        my-branch -&gt; my-branch (non-fast-forward)
+</span><span class='line'>error: failed to push some refs to 'git@github.com:itsananderson/foo.git'
+</span><span class='line'>hint: Updates were rejected because the tip of your current branch is behind
+</span><span class='line'>hint: its remote counterpart. Integrate the remote changes (e.g.
+</span><span class='line'>hint: 'git pull ...') before pushing again.
+</span><span class='line'>hint: See the 'Note about fast-forwards' in 'git push --help' for details.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>99% of the time, the appropriate solution to this message is to <code>git pull</code> to fetch changes from the server,
+then <code>git push origin my-branch</code> to push your updated branch to the server.</p>
+
+<h2>Rebasing</h2>
+
+<p>The only real exception to the &ldquo;always pull, then push&rdquo; rule, is rebasing.
+When you rebase, you&rsquo;re creating a copy of your commit history.
+Git treats this new copy of history as a completely different set of commits (because it is).</p>
+
+<p>I won&rsquo;t go into deep detail about rebasing, because it&rsquo;s been covered many times before.
+GitHub has a good <a href="https://help.github.com/articles/using-git-rebase">tutorial on rebasing</a>.
+If you want some <a href="http://willi.am/git-fundamentals-rebasing/">high-level concept slides on rebasing</a>, I wrote some for a team presentation.</p>
+
+<p>Point is, when you rebase a branch that you&rsquo;ve pushed to a remote server, your copy of the branch and the server&rsquo;s copy will be considered completely distinct.
+This means when you try to push, the remote server will reject your changes because they&rsquo;re not a fast-forward.
+However, if you <code>git pull</code>, you&rsquo;ll end up with two copies of the branch which are then merged with a merge commit.
+In addition to muddling your commit history, this will re-introduce whatever you were trying to change with your rebase.</p>
+
+<p>In this very specific case, the correct solution <em>might</em> be to <code>git push origin my-branch -f</code>.</p>
+
+<h2>Force Push Basics</h2>
+
+<p>So you have a branch that you&rsquo;ve rebased, and you want to force push it to the remote server.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/force-push-will-smith.gif" alt="Will Smith Force Push" /></p>
+
+<p>First, make sure nobody&rsquo;s pulled down your branch and done local work off of it.
+If they have, your force push may make it difficult for them to reconcile their changes with yours.</p>
+
+<p>If you&rsquo;re working on a team and need to rebase a shared branch, here are the steps:</p>
+
+<ol>
+<li>Make sure your team has committed and pushed any pending changes</li>
+<li>Ask your team to pause work on that branch temporarily</li>
+<li>Make sure you have the latest changes for that branch (git pull)</li>
+<li>Rebase, then <code>git push origin &lt;yourbranch&gt; -f</code></li>
+<li>Have your team fix up their local branches with <code>git checkout &lt;yourbranch&gt;</code>, <code>git fetch</code> and <code>git reset --hard origin/&lt;yourbranch&gt;</code></li>
+</ol>
+
+
+<p>As you can see, this is a complicated process.
+It requires team coordination, and potentially blocks team members from doing work while you rebase.
+As a general rule, avoid rebasing or otherwise modifying history on pushed branches unless you&rsquo;ve accidentally published <a href="https://help.github.com/articles/remove-sensitive-data">sensitive data</a>.</p>
+
+<p>If you&rsquo;re working alone, the process is a little simpler.
+Simply rebase and then <code>git push origin &lt;yourbranch&gt; -f</code>.
+Keep in mind, however, that you may still cause headaches for other people if you rebase on a public GitHub (Bitbucket, etc.) repository.</p>
+
+<h2>Aside: Understanding Remote Tracking Branches</h2>
+
+<p>Git uses the concept of remote tracking branches (or branch upstreams) to help you associate your local branches with the branches on remote servers.
+If you&rsquo;ve ever seen this message, that&rsquo;s what it&rsquo;s talking about: <code>Branch my-branch set up to track remote branch my-branch origin.</code></p>
+
+<p>Additionally, if you&rsquo;ve seen this message when you ran <code>git status</code>, it means your branch is tracking a remote branch:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>On branch my-branch
+</span><span class='line'>Your branch and 'origin/my-branch' have diverged,
+</span><span class='line'>and have 5 and 2 different commit each, respectively.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, when you run <code>git pull</code> or <code>git push</code>, Git can use the remote tracking branch to know which remote branch to interact with.
+This keeps you from having to type <code>git pull origin my-branch</code> every time.</p>
+
+<p>There&rsquo;s a blog post with more info on <a href="http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/">remote tracking branches and upstreams</a>.</p>
+
+<h2>Force Push Pitfalls</h2>
+
+<p>When you start force pushing, there are a few pitfalls you should be aware of.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/force-push-yoda.gif" alt="Yoda Force Push" /></p>
+
+<h3>Overwriting Changes</h3>
+
+<p>Before you force push a branch, double check that nobody has pushed new changes to that branch.
+If they have, and you don&rsquo;t pull them in, you&rsquo;ll overwrite them when you force push.</p>
+
+<p>With online source control, you can just browse the repository and check the commit history for your branch.</p>
+
+<p>If you don&rsquo;t have a web UI, you can also check directly in the source.</p>
+
+<ol>
+<li>Run <code>git fetch</code> to pull down the latest changes to your machine</li>
+<li>Run <code>git log origin/&lt;yourbranch&gt;</code> to remote branch&rsquo;s log</li>
+<li>If you don&rsquo;t see any new commits, it&rsquo;s probably safe to proceed (ignoring developer race conditions)</li>
+<li>If you see new changes, resolve them into your local branch before you force push</li>
+</ol>
+
+
+<p>As with software, you can run into a race condition.
+If somebody pushes changes between when you fetch and when you push, you may still overwrite them.
+To avoid this, communicate with your team.
+A simple &ldquo;don&rsquo;t push anything on <yourbranch> for a minute&rdquo;, followed up by an &ldquo;all clear&rdquo; should do the trick.</p>
+
+<h3>Overwriting Other Branches</h3>
+
+<p>When you push and pull, Git can use remote tracking branches (see above) to infer which remote branch you want to push/pull from.
+This is generally ok for normal push/pull activity, but when you force push, it can be dangerous.</p>
+
+<p>By default, Git responds to <code>git push</code> by pushing <em>all</em> branches that exist on both your local machine and the remote server.
+This means, if you have commits on master and my-feature-branch, and you run <code>git push</code>, it will push your changes from both branches at once.</p>
+
+<p>In Git 2.0, this behavior was changed to only push the current branch, but older versions still have this unexpected behavior.
+To fix it, run the following command:</p>
+
+<p><code>git config --global push.default simple</code></p>
+
+<p>Now if you run <code>git push</code>, it will only try to push your current branch.</p>
+
+<p>The default push behavior becomes especially dangerous when you force push.
+If, for example, you run <code>git push -f</code>, and your master branch is behind the remote server&rsquo;s master,
+you may accidentally remove commits from master.</p>
+
+<p>For this reason, I recommend two things:</p>
+
+<ol>
+<li>Configure push.default with the safer <code>simple</code> setting</li>
+<li>Always explicitly state the remote and branch name when you force push: <code>git push -f origin my-feature-branch</code></li>
+</ol>
+
+
+<h2>In Conclusion</h2>
+
+<p>Hopefully this gives you a good overview of the how/why/when of force pushing.</p>
+
+<p>If you haven&rsquo;t already, be sure to read the section on force push pitfalls.
+They&rsquo;re important to understand, and they&rsquo;re the main reason I wrote this post.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-12T23:26:08-07:00" pubdate data-updated="true">Aug 12<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -2636,204 +2842,6 @@ Then I put together an Azure website (in Node, of course) that requests resized 
 
 
 	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/06/27/thoughts-on-implementing-a-rest-level-3-api-in-node/">
-		
-			Thoughts on Implementing a REST Level 3 API in Node</a>
-	</h2>
-	<div class="entry-content">
-		<p><strong>Warning: stream of consciousness ahead</strong></p>
-
-<p>I&rsquo;ve been thinking about the the pieces that would be needed to implement a REST Level 3 API in Node.
-I won&rsquo;t go into the details of REST Level 3 in this post, but the one of the most important concepts is that clients to the API don&rsquo;t manually build URIs for their API calls, but instead receive them as hypermedia metadata from other calls to your API.</p>
-
-<p>Node has some great frameworks for building web servers.
-I frequently use <a href="http://expressjs.com/">Express</a>, which is built on top of the <a href="http://www.senchalabs.org/connect/">Connect</a> middleware package.
-Unfortunately, Express doesn&rsquo;t make it easy to add hypermedia links to API responses in a DRY way.</p>
-
-<p>Another option is <a href="http://mcavage.me/node-restify/">node-restify</a>.
-This is a popular choice for building REST APIs in Node, but again, it falls down when it comes to Hypermedia.
-Here at least you can link to different API endpoints without hardcoding URLs, but there&rsquo;s still no unified way to automatically add hypermedia links to responses.</p>
-
-<p>I&rsquo;ve tried other frameworks as well.
-<a href="http://hapijs.com/">Hapi</a> comes closest, but still doesn&rsquo;t quite solve my problems with hypermedia.</p>
-
-<p>Perhaps I&rsquo;m spoiled by the relatively elegant solutions that can be accomplished in strictly typed languages.
-In C#, for example, you can keep a registry of hypermedia providers associated with different types.
-When a response of a specific type is returned by a controller, the assocated hypermedia provider is invoked, and it returns a dictionary of URIs for that type.
-The controller doesn&rsquo;t even have to be aware of the hypermedia provider.</p>
-
-<p>In JavaScript, it&rsquo;s a little harder to associate types with providers, since most responses are just anonymous objects.
-I do have some alternative ideas, though.
-The first that comes to mind is to associate with URLs.
-Most importantly, being able to say &ldquo;this route, and any route below it uses the same provider&rdquo;.
-For example, consider the following routes.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GET  /users
-</span><span class='line'>POST /users
-</span><span class='line'>GET  /users/1
-</span><span class='line'>GET  /users/1/edit
-</span><span class='line'>GET  /users/1/delete</span></code></pre></td></tr></table></div></figure>
-
-
-<p>All of those URLs could probably use an identical (or almost identical) link provider.
-Something like the following would be useful:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">hypermedia</span><span class="p">(</span><span class="s1">&#39;/users*&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">route</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nx">user</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;self&quot;</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;edit&quot;</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;/edit&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;delete&quot;</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="nx">user</span><span class="p">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;/delete&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="p">};</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="p">{</span>
-</span><span class='line'>            <span class="s2">&quot;find-all&quot;</span><span class="o">:</span> <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-</span><span class='line'>            <span class="s2">&quot;create&quot;</span><span class="o">:</span> <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
-</span><span class='line'>        <span class="p">};</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I&rsquo;m not really tied to that syntax, nor is this an awesome example.
-The main idea is, I want to abstract hypermedia so controllers don&rsquo;t have to worry about it.</p>
-
-<p>The other part of this is that controllers need to send their response back through a middleware, rather than directly to the client.
-In my mind, this means the best solution is to return the object.
-Since Node is async, simply returning the object probably isn&rsquo;t an option in most cases.
-This means the next best choice would be to return a promise from the controller.
-The middleware then waits for the promise to resolve, and then handles the result.
-Finally, the controller should still be able to send a response directly to the client through the res.send() function.
-In that case, no hypermedia links would be provided.</p>
-
-<p>If the controller needs to make an async call, but that call doesn&rsquo;t automatically provide a promise, a nice simplification would be to provide a function on the response object that does the same thing.
-For example:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:id&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">db</span><span class="p">.</span><span class="nx">getUser</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">res</span><span class="p">.</span><span class="nx">respond</span><span class="p">(</span><span class="nx">user</span><span class="p">);</span> <span class="c1">// res.respond could invoke hypermedia providers before response </span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course you can usually use Q&rsquo;s &ldquo;denodify&rdquo; utilities, but the point here is a little flexibility. Here&rsquo;s how a Q promise might be returned. The framework would &ldquo;then&rdquo; the promise and essentially forward the result to <code>req.respond()</code>.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:id&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">nfinvoke</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="s2">&quot;getUser&quot;</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you want to do something with the promise result, you still can with promises.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/user/:id&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">nfinvoke</span><span class="p">(</span><span class="nx">db</span><span class="p">,</span> <span class="s2">&quot;getUser&quot;</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">id</span><span class="p">)</span>
-</span><span class='line'>        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">user</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="kd">var</span> <span class="nx">err</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;User not found&#39;</span><span class="p">);</span>
-</span><span class='line'>                <span class="nx">err</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="mi">404</span><span class="p">;</span>
-</span><span class='line'>                <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">return</span> <span class="nx">user</span><span class="p">;</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The other great thing to note here is that we don&rsquo;t have to call <code>next(err)</code> to pass this exception to our error handler. We can throw it, and let the framework <code>.catch()</code> the exception from the promise we return.</p>
-
-<p>The basic idea for an implementation of this is that the routing framework calls your endpoint handler, and expects it to do one of three things:</p>
-
-<ol>
-<li>Return a promise, or value (buffer, stream, string, javascript object)</li>
-<li>Call <code>next()</code> to pass controll to the next handler</li>
-<li>Call <code>res.send()</code>, <code>res.write()</code>, or <code>res.end()</code> like you would in Express</li>
-</ol>
-
-
-<p>In the first case, the framework can allow hypermedia providers, and theoretically anything, to modify the response &ldquo;on the way out the door&rdquo;.
-This would be my main objective in implementing something like this.</p>
-
-<p>I may take a stab at a prototype, but I realize that at this point, any Node web framework probably needs a name that starts with &ldquo;Yet Another&rdquo;.
-Mostly, I&rsquo;m curious how well it would work for &ldquo;real&rdquo; api development.</p>
-
-<p>Thoughts? Does something like this already exist? Hit me up on <a href="https://twitter.com/itsananderson/">my Twitter account</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-27T20:25:43-07:00" pubdate data-updated="true">Jun 27<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/rest/'>REST</a>
 
 
 </div>
