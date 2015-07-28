@@ -19,7 +19,7 @@ To view application logs (a.k.a. stdout and stderr) from your app, you can turn 
 
 Note that application logging will only be turned on for 12 hours, so if you need to be able to see historical logs, you need to save them to a file from within your application.
 
-To view the logs, you can go to the Kudu dashboard at "<yourazuresite>.scm.azurewebsites.net".
+To view the logs, you can go to the Kudu dashboard at "&lt;yourazuresite&gt;.scm.azurewebsites.net".
 Select either CMD or PowerShell from the "Debug console" menu, then navigate to `LogFiles/Application`.
 Scroll until you find `index.html` and click the download button (which will display it in your browser).
 
@@ -77,7 +77,7 @@ The advantage of using `iisnode.yml` is that you don't have to worry about a new
 
 ### Testing Out the Debugger
 
-To use the debugger, go to your azure website, and append the entry point path, and `/debug`. So for example, if your entry file was `server.js`, you'd go to `<yoursite>.azurewebsites.net/server.js/debug`
+To use the debugger, go to your azure website, and append the entry point path, and `/debug`. So for example, if your entry file was `server.js`, you'd go to `<yourazuresite>.azurewebsites.net/server.js/debug`
 
 If everything's configured correctly, you should see the debugger. You can set breakpoints and debug the route handlers for your app.
 
