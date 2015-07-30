@@ -319,6 +319,75 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 
 
 </div>
+	<div class="subscribe"><!-- temp hacky inline style -->
+<style>
+	#subscribe {
+		margin: 20px 0;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		background-color: #f2f2f2;
+	}
+
+	#subscribe-form-email {
+		display: block;
+		border-radius: 3px;
+		width: calc(100% - 12px);
+		padding: 3px 5px;
+		font-size: 10pt;
+		border: 1px solid #ccc;
+	}
+
+	#subscribe-form-submit {
+		width: 100%;
+		border: 1px solid #ccc;
+		border-radius: 3px;
+		background-color: #eee;
+		padding: 5px 0;
+		font-size: 12pt;
+		color: #777;
+	}
+</style>
+<div id="subscribe">
+	<p>Like this article? Subscribe to get email notifications about new posts.</p>
+	<form method="post" id="subscribe-form" action="http://william-backend.azurewebsites.net/subscribe">
+		<p><input type="email" id="subscribe-form-email" name="email" placeholder="email@example.com"/></p>
+		<p style="margin-top: 5px;"><input type="submit" value="Subscribe" /></p>
+		<p id="subscribe-form-message-fail" style="color: red"></p>
+		<p id="subscribe-form-message-success" style="color: green"></p>
+	</form>
+
+	<script type="text/javascript">
+		var form = document.getElementById("subscribe-form");
+		var targetUrl = form.getAttribute("action");
+		var emailInput = document.getElementById("subscribe-form-email");
+		var messageSuccess = document.getElementById("subscribe-form-message-success");
+		var messageFail = document.getElementById("subscribe-form-message-fail");
+
+		form.addEventListener("submit", function(e) {
+			e.preventDefault();
+
+			messageSuccess.innerText = "";
+			messageFail.innerText = "";
+
+			var email = emailInput.value;
+			if (!email) {
+				messageFail.innerText = "Invalid Email :(";
+			} else {
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", targetUrl, true);
+				xhr.setRequestHeader("Accept", "text/plain");
+
+				xhr.onload = function(e) {
+					messageSuccess.innerText = xhr.response;
+				}
+
+				xhr.send(email);
+			}
+		});
+	</script>
+</div>
+</div>
 	
 </div>
 </article>
@@ -337,6 +406,7 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 	</div>
 	-->
 </div>
+
 
 
 </div>
