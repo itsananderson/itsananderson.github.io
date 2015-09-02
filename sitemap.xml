@@ -180,31 +180,31 @@
     </url>
     <url>
         <loc>http://willi.am/blog/2014/06/30/azure-blob-storage-and-node/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:19:50-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:18:37-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:20:55-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:22:10-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:23:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:24:04-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/09/azure-blob-storage-and-node-all-together/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:25:05-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/blog/2014/07/16/storing-data-as-newline-delimited-json-entries/</loc>
@@ -318,11 +318,11 @@
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:25:05-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2015-08-29T14:08:59-07:00</lastmod>
+        <lastmod>2015-09-02T03:25:05-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/node-modules/</loc>
@@ -378,6 +378,6 @@
     </url>
     <url>
         <loc>http://willi.am/robots.txt</loc>
-        <lastmod>2015-05-07T22:50:10-07:00</lastmod>
+        <lastmod>2015-09-02T03:17:19-07:00</lastmod>
     </url>
 </urlset>
