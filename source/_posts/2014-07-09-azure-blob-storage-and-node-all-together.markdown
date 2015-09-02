@@ -4,6 +4,7 @@ title: "Azure Blob Storage and Node: All Together"
 date: 2014-07-09 21:16:08 -0700
 comments: true
 categories: Azure Node
+description: In this blog post, we bring together all the concepts from the previous posts in the series to create a complete example app.
 ---
 
 **This is part of a series on working with Azure Blob Storage in Node.**

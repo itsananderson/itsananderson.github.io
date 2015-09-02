@@ -4,6 +4,7 @@ title: "Azure Blob Storage and Node: Downloading Blobs"
 date: 2014-07-03 16:23:46 -0700
 comments: true
 categories: Azure Node
+description: In this post, we discuss how to download Azure blobs with both public and restricted access using Node.
 ---
 
 **This is part of a series on working with Azure Blob Storage in Node.**

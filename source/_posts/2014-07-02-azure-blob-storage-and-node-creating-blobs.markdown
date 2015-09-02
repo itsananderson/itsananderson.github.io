@@ -4,6 +4,7 @@ title: "Azure Blob Storage and Node: Creating Blobs"
 date: 2014-07-02 13:27:10 -0700
 comments: true
 categories: Azure Node
+description: In this post, we cover how to create blobs and attach metadata during blob creation.
 ---
 
 

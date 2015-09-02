@@ -4,6 +4,7 @@ title: "Azure Blob Storage and Node"
 date: 2014-06-30 14:09:17 -0700
 comments: true
 categories: Node Azure
+description: In this introductary post, we discuss the Azure Storage service and the reasons for using it
 ---
 
 **This is the introduction to a series on working with Azure Blob Storage in Node.**

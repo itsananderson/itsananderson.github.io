@@ -4,6 +4,7 @@ title: "Azure Blob Storage and Node: Listing Blobs"
 date: 2014-07-07 17:33:03 -0700
 comments: true
 categories: Azure Node
+description: In this blog post, we cover how to list containers and blobs in an Azure Storage account.
 ---
 
 **This is part of a series on working with Azure Blob Storage in Node.**

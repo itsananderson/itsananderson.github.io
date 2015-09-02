@@ -4,6 +4,7 @@ title: "Azure Blob Storage and Node: Blob Metadata"
 date: 2014-07-08 20:47:12 -0700
 comments: true
 categories: Azure Node
+description: In this blog post, we discuss how to work with Azure Storage blob metadata in Node.
 ---
 
 **This is part of a series on working with Azure Blob Storage in Node.**
