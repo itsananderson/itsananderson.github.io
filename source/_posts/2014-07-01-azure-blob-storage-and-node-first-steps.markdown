@@ -4,7 +4,7 @@ title: "Azure Blob Storage and Node: First Steps"
 date: 2014-07-01 06:00:03 -0700
 comments: true
 categories: Azure Node
-description: In this "getting started" post, we discuss the first steps for configuring our azure storage account.
+description: In this 'getting started' post, we discuss the first steps for configuring our azure storage account.
 ---
 
 **This is part of a series on working with Azure Blob Storage in Node.**
