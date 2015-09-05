@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Programming | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/programming/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2015-09-05T08:04:23-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Software Engineering and the No True Scotsman Fallacy]]></title>
+    <link href="http://willi.am/blog/2015/09/05/software-engineering-and-the-no-true-scotsman-fallacy/"/>
+    <updated>2015-09-05T08:00:51-07:00</updated>
+    <id>http://willi.am/blog/2015/09/05/software-engineering-and-the-no-true-scotsman-fallacy</id>
+    <content type="html"><![CDATA[<blockquote><p>&ldquo;If you rely on jQuery you&rsquo;re a jQuery developer, not a <em>real</em> developer.&rdquo;</p>
+
+<p>&ldquo;Nobody actually <em>enjoys</em> writing JavaScript, they just do it because it&rsquo;s the only thing that runs in the browser&rdquo;</p>
+
+<p>&ldquo;Only academics use languages like Haskell and Lisp&rdquo;</p>
+
+<p>&ldquo;Real developers don&rsquo;t use Windows&rdquo;</p></blockquote>
+
+<p>If you&rsquo;ve been in the developer community for any time at all, you&rsquo;ve probably heard statements like these. They&rsquo;re popular because they&rsquo;re easy to repeat and they boost the ego of the person who says them. They&rsquo;re also over-generalizations.</p>
+
+<p>Sure, some developers rely too heavily on jQuery. JavaScript definitely has some not-good parts that annoy many developers. Some technologies are mostly used in academia. Lots of developers prefer OS X and Linux.</p>
+
+<p>But that&rsquo;s not the whole picture.</p>
+
+<p>Many developers know when to use jQuery for a quick solution, and when to reach for other tools. Lots of developers actually like JavaScript, and use it everywhere they can. There are large communities of people building real software with &ldquo;academic&rdquo; technology. While you and I are tweaking our <code>.bash_profile</code>, lots of <em>real</em> developers are using Windows and Visual Studio to get shit done.</p>
+
+<p>I believe these kinds of generalizations continue to live on partly because of the &ldquo;No true Scotsman&rdquo; fallacy.</p>
+
+<blockquote><p><em>Person A</em>: &ldquo;No Scotsman puts sugar on his porridge.&rdquo;</p>
+
+<p><em>Person B</em>: &ldquo;But my uncle Angus likes sugar with his porridge.&rdquo;</p>
+
+<p><em>Person A</em>: &ldquo;Ah yes, but no <em>true</em> Scotsman puts sugar on his porridge.&rdquo;</p>
+
+<p><strong><a href="https://en.wikipedia.org/wiki/No_true_Scotsman#Examples">No true Scotsman</a> &ndash; Wikipedia</strong></p></blockquote>
+
+<p>The core of this fallacy is the rejection of evidence that contradicts our beliefs. It&rsquo;s sort of a rhetorical form of <a href="https://en.wikipedia.org/wiki/Confirmation_bias">confirmation bias</a>.</p>
+
+<p>What a convenient thing to be able to say &ldquo;No real developer does X&rdquo;. Any counter-examples can be easily rejected, because obviously anyone who says &ldquo;wait, I do X&rdquo; isn&rsquo;t a real developer. No need to actually back up your claim.</p>
+
+<p>Instead of rejecting technology, patterns, or methodologies because they&rsquo;re not what &ldquo;real developers&rdquo; use, we should be willing to listen to people who have chosen that path. They chose it for a reason, and it&rsquo;s worth hearing them out, even if their situation doesn&rsquo;t match your own.</p>
+]]></content>
+  </entry>
+  
+</feed>

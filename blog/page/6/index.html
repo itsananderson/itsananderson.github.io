@@ -7,8 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="A couple of months ago, I had the opportunity to attend an API Hackday event in Bloomington.
-At the event, I created some cool WordPress tools using &hellip;">
+	<meta name="description" content="If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -82,6 +81,143 @@ At the event, I created some cool WordPress tools using &hellip;">
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/12/15/configuring-github-on-windows/">
+		
+			Configuring GitHub on Windows</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you.</p>
+
+<h2>Getting Started</h2>
+
+<p>First you need to grab a copy of <a href="http://code.google.com/p/msysgit/">Git for Windows</a>.
+Once you&rsquo;ve downloaded the latest version, launch it and go through the license and location screens.
+Once you get to the &ldquo;Select Components&rdquo; screen, make sure both Context menu entries are selected.
+If you want, select the TrueType font option.
+That one shouldn&rsquo;t really matter.</p>
+
+<p><img class="size-full wp-image-1130 aligncenter" title="select-components" alt="" src="//itsananderson.blob.core.windows.net/post-images/select-components.png" width="539" height="428" /></p>
+
+<p>Jump ahead a few more frames and you&rsquo;ll get to the SSH executable option.
+Choose &ldquo;OpenSSH&rdquo;, unless you have a compelling reason to use Plink.</p>
+
+<p><img class="aligncenter size-full wp-image-1131" title="openssh" alt="" src="//itsananderson.blob.core.windows.net/post-images/openssh.png" width="546" height="432" /></p>
+
+<p>Run through the rest of the frames, accepting the defaults.
+You now have Git installed on your machine, but we&rsquo;re not quite done yet.
+GitHub uses public/private key encryption.
+This means you don&rsquo;t commit with a username and password, like most SVN setups.
+Instead, you tell GitHub your public key, then use your private key to authenticate.</p>
+
+<h2>Generating a Public Key</h2>
+
+<p>GitHub has a detailed article on setting up your SSH keys on Mac/Windows/Linux.
+I recommend <a href="https://help.github.com/articles/generating-ssh-keys">checking it out</a>.</p>
+
+<h2>Clone a Repository From GitHub</h2>
+
+<p>You&rsquo;re just about there.
+Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
+Make sure SSH is selected.</p>
+
+<p><img class="aligncenter size-full wp-image-1135" title="github-url" alt="" src="//itsananderson.blob.core.windows.net/post-images/github-url.png" width="664" height="33" /></p>
+
+<p>Open up Git Bash.
+You should be able to find it in your start menu.
+&ldquo;cd&rdquo; to the directory where you plan on checking out your code.
+For example, if you want your code to be located in C:\programming\project then you want to &ldquo;cd&rdquo; to C:\programming.</p>
+
+<p>Type out &ldquo;git clone &rdquo;, but don&rsquo;t hit enter yet.
+Go to the top left corner of the Git Bash window and click.
+In the menu that pops up, select Edit &ndash;> Paste to paste the URL of your repository, but still don&rsquo;t hit enter.
+Finally, type the name you want to call the project folder.
+In our example, you&rsquo;d want something like this:</p>
+
+<p><code>git clone git@github.com:itsananderson/wp-sendgrid.git project</code></p>
+
+<p>Now you can hit enter :)</p>
+
+<p>If you entered a passphrase for your private key, it will ask you for it.
+If all goes well, your repository should be downloaded.</p>
+
+<h2>Some Sample Commands</h2>
+
+<p>This isn&rsquo;t really a tutorial on Git commands, but here are a few to get you started:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># See what files have changed:</span>
+</span><span class='line'>git status
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add a file (new or modified, it doesn&#39;t matter. You need to add it to commit it)</span>
+</span><span class='line'>git add file.php
+</span><span class='line'>
+</span><span class='line'><span class="c"># Add several files:</span>
+</span><span class='line'>git add *.php
+</span><span class='line'>
+</span><span class='line'><span class="c"># Commit your changes locally (just stores a local snapshot of your changes):  </span>
+</span><span class='line'>git commit -m <span class="s2">&quot;Your commit message here&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Push your changes up to GitHub:</span>
+</span><span class='line'>git push -u origin master
+</span><span class='line'>
+</span><span class='line'><span class="c"># Pull down updates from GitHub:</span>
+</span><span class='line'>git pull
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That&rsquo;s about it.
+There&rsquo;s more to Git (which I&rsquo;m still learning about), but this should hopefully be enough to help you get started.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-15T22:21:44-08:00" pubdate data-updated="true">Dec 15<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/github/'>GitHub</a>, <a class='category' href='/blog/categories/windows/'>Windows</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -961,89 +1097,6 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
 
 
 	<a class='category' href='/blog/categories/rose-hulman/'>Rose-Hulman</a>, <a class='category' href='/blog/categories/writing/'>Writing</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/01/28/php-code-completion-for-globals/">
-		
-			PHP Code Completion for Globals</a>
-	</h2>
-	<div class="entry-content">
-		<p>Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/netbeans-code-completion.png" alt="" /></p>
-
-<p>The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects.</p>
-
-<h2>Concrete PHP Code Completion Example</h2>
-
-<p>The example I&rsquo;ll use is the $wpdb global variable defined in WordPress. It contains an instance of the &ldquo;wpdb&rdquo; class, which wraps around the database connection and provides a bunch of helper methods. It&rsquo;s defined in the global scope, so when you use it in another file, your IDE has no clue what type it is. This means it can&rsquo;t provide any PHP code completion.</p>
-
-<p>If you add the following code snippet to the beginning of your function (or file, if applicable), it will tell your IDE the type of the $wpdb variable without actually affecting the execution of your code.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="k">false</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nv">$wpdb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wpdb</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>As you can see, the code inside the if statement will never execute, but every IDE I&rsquo;ve ever used isn&rsquo;t smart enough to figure that out, so they assume the type of the $wpdb variable is now wpdb.</p>
-
-<p>When you add the snippet, you get PHP code completion suggestions that look something like this:</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/netbeans-globals-code-completion.png" alt="" /></p>
-
-<p>The nice thing about doing this is that if you forget to remove the code snippet, it won&rsquo;t break anything. You&rsquo;ll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It&rsquo;s probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later.</p>
-
-<p><strong>Update</strong>: You can also do this with PHPDoc.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
-</span><span class='line'><span class="sd"> * @var $wpdb wpdb</span>
-</span><span class='line'><span class="sd"> */</span>
-</span><span class='line'><span class="k">global</span> <span class="nv">$wpdb</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This also gives your IDE a hint about what type $wpdb has, and doesn&rsquo;t polute your code with a bunch of non-executing statements.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-01-28T19:57:07-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/php/'>PHP</a>
 
 
 </div>

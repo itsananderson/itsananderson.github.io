@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Deploying Node websites to Azure is really simple with their Git deployment feature. However, sometimes debugging problems can be challenging. Here &hellip;">
+	<meta name="description" content="&ldquo;If you rely on jQuery you&rsquo;re a jQuery developer, not a real developer.&rdquo; &ldquo;Nobody actually enjoys writing JavaScript, they &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -81,6 +81,77 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/09/05/software-engineering-and-the-no-true-scotsman-fallacy/">
+		
+			Software Engineering and the No True Scotsman Fallacy</a>
+	</h2>
+	<div class="entry-content">
+		<blockquote><p>&ldquo;If you rely on jQuery you&rsquo;re a jQuery developer, not a <em>real</em> developer.&rdquo;</p>
+
+<p>&ldquo;Nobody actually <em>enjoys</em> writing JavaScript, they just do it because it&rsquo;s the only thing that runs in the browser&rdquo;</p>
+
+<p>&ldquo;Only academics use languages like Haskell and Lisp&rdquo;</p>
+
+<p>&ldquo;Real developers don&rsquo;t use Windows&rdquo;</p></blockquote>
+
+<p>If you&rsquo;ve been in the developer community for any time at all, you&rsquo;ve probably heard statements like these. They&rsquo;re popular because they&rsquo;re easy to repeat and they boost the ego of the person who says them. They&rsquo;re also over-generalizations.</p>
+
+<p>Sure, some developers rely too heavily on jQuery. JavaScript definitely has some not-good parts that annoy many developers. Some technologies are mostly used in academia. Lots of developers prefer OS X and Linux.</p>
+
+<p>But that&rsquo;s not the whole picture.</p>
+
+<p>Many developers know when to use jQuery for a quick solution, and when to reach for other tools. Lots of developers actually like JavaScript, and use it everywhere they can. There are large communities of people building real software with &ldquo;academic&rdquo; technology. While you and I are tweaking our <code>.bash_profile</code>, lots of <em>real</em> developers are using Windows and Visual Studio to get shit done.</p>
+
+<p>I believe these kinds of generalizations continue to live on partly because of the &ldquo;No true Scotsman&rdquo; fallacy.</p>
+
+<blockquote><p><em>Person A</em>: &ldquo;No Scotsman puts sugar on his porridge.&rdquo;</p>
+
+<p><em>Person B</em>: &ldquo;But my uncle Angus likes sugar with his porridge.&rdquo;</p>
+
+<p><em>Person A</em>: &ldquo;Ah yes, but no <em>true</em> Scotsman puts sugar on his porridge.&rdquo;</p>
+
+<p><strong><a href="https://en.wikipedia.org/wiki/No_true_Scotsman#Examples">No true Scotsman</a> &ndash; Wikipedia</strong></p></blockquote>
+
+<p>The core of this fallacy is the rejection of evidence that contradicts our beliefs. It&rsquo;s sort of a rhetorical form of <a href="https://en.wikipedia.org/wiki/Confirmation_bias">confirmation bias</a>.</p>
+
+<p>What a convenient thing to be able to say &ldquo;No real developer does X&rdquo;. Any counter-examples can be easily rejected, because obviously anyone who says &ldquo;wait, I do X&rdquo; isn&rsquo;t a real developer. No need to actually back up your claim.</p>
+
+<p>Instead of rejecting technology, patterns, or methodologies because they&rsquo;re not what &ldquo;real developers&rdquo; use, we should be willing to listen to people who have chosen that path. They chose it for a reason, and it&rsquo;s worth hearing them out, even if their situation doesn&rsquo;t match your own.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-09-05T08:00:51-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/programming/'>Programming</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1018,129 +1089,6 @@ As I said in the previous post, you should take this as an example that you can 
 
 
 <time datetime="2015-02-27T14:29:42-08:00" pubdate data-updated="true">Feb 27<span>th</span>, 2015</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/02/19/customize-your-git-log-format/">
-		
-			Customize Your Git Log Format</a>
-	</h2>
-	<div class="entry-content">
-		<blockquote><p>Over the last few months, I&#8217;ve been learning about woodworking in my spare time. As I&#8217;ve read articles and watched YouTube videos, I&#8217;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&#8217;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&#8217;ve noticed parallels in my full time craft: Software Development.</p><p>In the next few posts, I&#8217;ll share some of the software &#8220;jigs&#8221; I&#8217;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git.</p></blockquote>
-
-
-<h2>Git Log: Your Own Personal Journal</h2>
-
-<p>If you&rsquo;re not already aware, your Git log is a critical tool for working with source control.
-Because your memory&rsquo;s not perfect, a good log helps you recall what you&rsquo;ve done, and the motivation behind it.</p>
-
-<p>I&rsquo;ve <a href="http://willi.am/blog/2014/05/06/git-for-devs-who-cant-commit-good/">written before</a> about writing good commit messages, as has David in his series <a href="http://www.davidruttka.com/blog/2014/06/04/committed-to-good-commits-messages/">&ldquo;Committed to Good Commits&rdquo;</a>.
-If your commit logs are sprinkled with gems like &ldquo;did stuff&rdquo; and &ldquo;it finally works!&rdquo;, you&rsquo;ll want to check out those posts.</p>
-
-<h2>Choose Your Details With <code>--format</code></h2>
-
-<p>Depending on what you&rsquo;re looking for in your log, you may want different levels of detail.
-The Git log documentation has a <a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats">full list of the built-in formats</a>.</p>
-
-<p>For example, if you&rsquo;re trying to find the SHA for a recent change, you may just want to see the SHA and the commit subject for each commit.
-In that case, <code>git log --format=oneline</code> or <code>git log --oneline</code> is what you need.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-oneline.png"></p>
-
-<p>If you need verbose output, including the full message and author info, <code>--format=medium</code> is a good option.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-medium.png"></p>
-
-<p>Finally, if you want every single detail from the commit, <code>--format=fuller</code> will give you that.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-fuller.png"></p>
-
-<p>If you want to make any of these formats your default, you can do so with the following command:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git config --global format.pretty oneline <span class="c"># replace oneline with the format you want</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Limit Results With <code>-n</code></h2>
-
-<p>If you only want to see the last few commits, you can use the <code>-n</code> flag.
-The more verbose version is <code>-n &lt;number&gt;</code> (e.g. <code>-n 5</code> to show the last 5 commits).</p>
-
-<p>Alternatively, you can use an even quicker shortcut.
-Just use <code>-&lt;number&gt;</code>. For example: <code>git log -5</code> will show the last 5 commits.</p>
-
-<h2>Fully Customize Your Log Output</h2>
-
-<p>Depending on how you use your commit log, you may find that no built-in log format exactly fits your needs.
-What I&rsquo;ve found is that the verbose formats are too hard to scan through, and the succinct ones don&rsquo;t have vital info.</p>
-
-<p>To solve this problem, I created a custom log format, which I use almost exclusively.</p>
-
-<p>You can configure my format with the following command:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git config --global format.pretty format:"%C(auto)%h %d%Creset %s%n%Cgreen%ad%Creset %aN &lt;%aE>%n"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The output looks like this:</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-custom.png"></p>
-
-<p>This format also works with the <code>--graph</code> flag:</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-graph-format.png"></p>
-
-<p>What I like about this format is that it only uses three lines per commit, but it has all the information I care about.
-I also inserted color codes for the various parts of the message, which makes it even easier to grok.</p>
-
-<h2>In Conclusion</h2>
-
-<p>Hopefully these examples give you some ideas about what you can do to customize your commit log.
-Don&rsquo;t feel like you need to use my custom log format as-is.
-The whole point is to customize it to fit your needs.</p>
-
-<p>If you want to test out different custom formats quickly, you can pass them directly to <code>git log</code> like so:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git log --format=format:"%C(auto)%h %C(green)%aN%Creset %s"</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/git-log-custom-flag.png"></p>
-
-<p>You can find the different placeholder options in the same <a href="https://www.kernel.org/pub/software/scm/git/docs/git-log.html#_pretty_formats">Pretty Formats</a> section of the Git Log documentation.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-19T14:29:06-08:00" pubdate data-updated="true">Feb 19<span>th</span>, 2015</time></div>
 	<div class="tags">
 
 

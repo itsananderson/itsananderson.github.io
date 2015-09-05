@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Dougal Campbell published an article the other day suggesting that the way many themes are handling the new Post Formats feature is wrong. While I &hellip;">
+	<meta name="description" content="Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -81,6 +81,89 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/01/28/php-code-completion-for-globals/">
+		
+			PHP Code Completion for Globals</a>
+	</h2>
+	<div class="entry-content">
+		<p>Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project.</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/netbeans-code-completion.png" alt="" /></p>
+
+<p>The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects.</p>
+
+<h2>Concrete PHP Code Completion Example</h2>
+
+<p>The example I&rsquo;ll use is the $wpdb global variable defined in WordPress. It contains an instance of the &ldquo;wpdb&rdquo; class, which wraps around the database connection and provides a bunch of helper methods. It&rsquo;s defined in the global scope, so when you use it in another file, your IDE has no clue what type it is. This means it can&rsquo;t provide any PHP code completion.</p>
+
+<p>If you add the following code snippet to the beginning of your function (or file, if applicable), it will tell your IDE the type of the $wpdb variable without actually affecting the execution of your code.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="k">false</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nv">$wpdb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">wpdb</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, the code inside the if statement will never execute, but every IDE I&rsquo;ve ever used isn&rsquo;t smart enough to figure that out, so they assume the type of the $wpdb variable is now wpdb.</p>
+
+<p>When you add the snippet, you get PHP code completion suggestions that look something like this:</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/netbeans-globals-code-completion.png" alt="" /></p>
+
+<p>The nice thing about doing this is that if you forget to remove the code snippet, it won&rsquo;t break anything. You&rsquo;ll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It&rsquo;s probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later.</p>
+
+<p><strong>Update</strong>: You can also do this with PHPDoc.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="sd">/**</span>
+</span><span class='line'><span class="sd"> * @var $wpdb wpdb</span>
+</span><span class='line'><span class="sd"> */</span>
+</span><span class='line'><span class="k">global</span> <span class="nv">$wpdb</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This also gives your IDE a hint about what type $wpdb has, and doesn&rsquo;t polute your code with a bunch of non-executing statements.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-01-28T19:57:07-08:00" pubdate data-updated="true">Jan 28<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/php/'>PHP</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -983,106 +1066,6 @@
 
 
 	<a class='category' href='/blog/categories/php/'>PHP</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/01/14/wamp-alias-directories/">
-		
-			Wamp Alias Directories</a>
-	</h2>
-	<div class="entry-content">
-		<p>I use <a href="http://www.wampserver.com/">Wamp Server</a> together with <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a> to develop PHP applications on my local machine.
-This works well because I can do debugging (thanks to <a href="http://www.xdebug.org/">xdebug</a>) and can readily view and edit files.
-I usually don&rsquo;t like to place projects in the <code>c:\wamp\www</code> folder, preferring instead to place them in more logical places in my personal directory.
-Wamp alias directories are a great way to improve project organization.</p>
-
-<p>The easiest way to facilitate this is to create alias directories in Apache that point to these different locations. Wamp Server provides an interface for creating wamp alias directories for Apache.</p>
-
-<h2>Adding Wamp Alias Directories</h2>
-
-<p>Click on the tray icon and select Apache &rarr; Alias directories &rarr;  Add an alias. A new command prompt window opens where you can enter the alias information.</p>
-
-<p>Creating an alias like this, you&rsquo;ll probably notice that in order for the URL to work, you have to have a trailing slash at the end (e.g. <code>http://localhost/example/</code> will work while <code>http://localhost/example</code> won&rsquo;t). This can be a bit of a pain, but there is fortunately a quick fix.</p>
-
-<h2>Fixing Your Wamp Alias Directories</h2>
-
-<p>Click on the Wamp Server tray icon again and select Apache &rarr; Alias directories &rarr; [alias url] &ndash;> Edit alias. This will open the alias file in Notepad. Remove the trailing slash from the relative URL.</p>
-
-<p>For Example</p>
-
-<p><code>Alias /example/ "c:/path/to/example/"</code></p>
-
-<p>Would become</p>
-
-<p><code>Alias /example "c:/path/to/example/"</code></p>
-
-<p>Save the file and close Notepad. Wamp Server should restart automatically (if not, you can restart it manually from the tray icon). Once it has restarted, you&rsquo;re alias should now work with or without the trailing slash. Why Wamp Server doesn&rsquo;t do this automatically, I&rsquo;m not sure, but at least there&rsquo;s a simple fix.</p>
-
-<h2>Updating Wamp so Alias Directories Just Work</h2>
-
-<p>Thanks to Ozan Hazer for pointing out that you can actually change the alias template, and save yourself from having to perform multiple steps every time you add an alias.</p>
-
-<p>Open <code>c:\wamp\scripts\addAlias.php</code> and locate the line starting with <code>$newConfFileContents =</code>.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Find:
-</span><span class='line'>$newConfFileContents = 'Alias /'.$newAliasDir.'/
-</span><span class='line'>
-</span><span class='line'># Replace it with:
-</span><span class='line'>$newConfFileContents = 'Alias /'.$newAliasDir.'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Open <code>c:\wamp\scripts\refresh.php</code>.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Find:
-</span><span class='line'>preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match);
-</span><span class='line'>
-</span><span class='line'># Replace it with:
-</span><span class='line'>preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match);</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Be sure to back up these files before you edit them, since breaking them could potentially break other Wamp functionality.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-01-14T12:45:43-08:00" pubdate data-updated="true">Jan 14<span>th</span>, 2009</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/wamp/'>Wamp</a>
 
 
 </div>
