@@ -20,7 +20,7 @@ description: In this blog post, we bring together all the concepts from the prev
 Building a Complete Service Over Azure Blob Storage
 ===
 
-In the last post, we covered [working with blob metadata](blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/).
+In the last post, we covered [working with blob metadata](/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/).
 In this final post, we'll talk about putting all the previous pieces together to create a service that is backed by blob storage.
 
 As a concrete example, we'll implement the image serving portion of [placebacon](http://placebacon.net/).
