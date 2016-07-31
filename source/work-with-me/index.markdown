@@ -7,7 +7,9 @@ sharing: false
 footer: false
 ---
 
-I'm now accepting new clients for part-time consulting and software development work. If you're interested in working with me on a project, you can get in touch with me at [will@itsananderson.com](mailto:will@itsananderson.com).
+<div style="background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+I'm now accepting new clients for part-time consulting and software development work. If you're interested in working with me on a project, you can get in touch with me at [will@itsananderson.com](mailto:will@itsananderson.com)
+</div>
 
 About Me
 ---
