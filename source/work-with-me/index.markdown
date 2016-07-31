@@ -8,7 +8,9 @@ footer: false
 ---
 
 <div style="background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
-I'm now accepting new clients for part-time consulting and software development work. If you're interested in working with me on a project, you can get in touch with me at [will@itsananderson.com](mailto:will@itsananderson.com)
+
+I'm now accepting new clients for part-time consulting and software development work. If you're interested in working with me on a project, you can get in touch with me at <a href="mailto:will@itsananderson.com">will@itsananderson.com</a>
+
 </div>
 
 About Me

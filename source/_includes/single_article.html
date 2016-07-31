@@ -14,7 +14,13 @@
 	</div>
 {% else %}
 	<h2 class="title">{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</h2>
-	<div class="entry-content">{{ content }}</div>
+	<div class="entry-content">
+		{{ content }}
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
 {% endif %}
 
 <div class="meta">
