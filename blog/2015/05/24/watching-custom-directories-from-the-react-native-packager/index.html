@@ -23,9 +23,7 @@
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
 <nav id="main-nav"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </nav>
@@ -33,9 +31,7 @@
 	<div class="alignleft menu">
 		<a class="button">Menu</a>
 		<div class="container"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </div>
@@ -82,7 +78,8 @@
 	
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Watching Custom Directories From the React Native Packager</h2>
-	<div class="entry-content"><p>React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and rebuilds. However, if you link a Node module from a different directory, the packager won&rsquo;t see changes that are made to that package.</p>
+	<div class="entry-content">
+		<p>React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and rebuilds. However, if you link a Node module from a different directory, the packager won&rsquo;t see changes that are made to that package.</p>
 
 <p>It&rsquo;s fairly easy to specify custom folders for the packager to watch. Since the React Native client sets up an <code>npm start</code> command when it generates the project, you can simply modify that script to watch additional folders.</p>
 
@@ -91,7 +88,12 @@
 
 
 <p>Unfortunately, when you launch the project in Xcode, it runs the packager directly, rather than running the <code>npm start</code> command, but if you manually run <code>npm start</code> from a terminal window, React Native will use that rather than launching a new instance of the packager. I have an <a href="https://github.com/facebook/react-native/issues/1396">issue opened on the React Native project</a>, suggesting that they run <code>npm start</code> from Xcode, but we&rsquo;ll see if it goes anywhere.</p>
-</div>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
 
 
 <div class="meta">
@@ -137,7 +139,7 @@
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Will Anderson
 

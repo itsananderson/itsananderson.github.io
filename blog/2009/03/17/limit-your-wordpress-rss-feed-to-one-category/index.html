@@ -23,9 +23,7 @@
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
 <nav id="main-nav"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </nav>
@@ -33,9 +31,7 @@
 	<div class="alignleft menu">
 		<a class="button">Menu</a>
 		<div class="container"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </div>
@@ -82,7 +78,8 @@
 	
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Limit Your WordPress RSS Feed to One Category</h2>
-	<div class="entry-content"><p>When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works.</p>
+	<div class="entry-content">
+		<p>When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works.</p>
 
 <p>As with just about anything in WordPress, you can use Actions and Filters to customize the way WordPress RSS Feeds. I chose to filter the query because it already has built in category filtering functionality. First I hooked into the query filter.</p>
 
@@ -111,7 +108,12 @@
 <p>The code is pretty straight foreward, but here&rsquo;s a breakdown. First we test to see if the query is for a feed (we don&rsquo;t want to do this filtering anywhere else). Then we set the &lsquo;category_name&rsquo; argument to &lsquo;News&rsquo; (you would change this to whatever category you want to show up). Finally, you return the modified query object.</p>
 
 <p>Overall, this is pretty simple, but extremely powerful.</p>
-</div>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
 
 
 <div class="meta">
@@ -157,7 +159,7 @@
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Will Anderson
 

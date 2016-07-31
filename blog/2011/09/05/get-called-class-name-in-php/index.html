@@ -8,7 +8,7 @@
 
 	
 	<meta name="description" content="I posted a few months ago about using static methods in WordPress plugins.
-I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve &hellip;">
+I&rsquo;ve used that method myself for the last few months, and I&rsquo; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -24,9 +24,7 @@ I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve &hell
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
 <nav id="main-nav"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </nav>
@@ -34,9 +32,7 @@ I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve &hell
 	<div class="alignleft menu">
 		<a class="button">Menu</a>
 		<div class="container"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </div>
@@ -83,7 +79,8 @@ I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve &hell
 	
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Get Called Class Name in PHP</h2>
-	<div class="entry-content"><p>I posted a few months ago about <a href="http://www.itsananderson.com/2011/04/using-static-methods-in-wordpress-plugins/">using static methods in WordPress plugins</a>.
+	<div class="entry-content">
+		<p>I posted a few months ago about <a href="http://www.itsananderson.com/2011/04/using-static-methods-in-wordpress-plugins/">using static methods in WordPress plugins</a>.
 I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
 One part, however, was a source of some pain: Inheritance.
 This can be solved by utilizing PHP&rsquo;s <code>get_called_class()</code> function to get called class names in from your static functions.</p>
@@ -165,7 +162,12 @@ Ideally, the inherited get_instance() method would return an instance of the act
 
 
 <p>You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh?</p>
-</div>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
 
 
 <div class="meta">
@@ -207,7 +209,7 @@ Ideally, the inherited get_instance() method would return an instance of the act
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Will Anderson
 

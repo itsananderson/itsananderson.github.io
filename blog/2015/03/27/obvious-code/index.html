@@ -8,7 +8,7 @@
 
 	
 	<meta name="description" content="A week or two ago, I got this feedback on a code review: You&rsquo;re using foo ? foo : "" here.
-It would be shorter and more obvious if you wrote it &hellip;">
+It would be shorter and more obvious if you wrote &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -24,9 +24,7 @@ It would be shorter and more obvious if you wrote it &hellip;">
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
 <nav id="main-nav"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </nav>
@@ -34,9 +32,7 @@ It would be shorter and more obvious if you wrote it &hellip;">
 	<div class="alignleft menu">
 		<a class="button">Menu</a>
 		<div class="container"><ul class="main">
-	<li><a href="/about">About</a></li>
-	<li><a href="/plugins">WordPress Plugins</a></li>
-	<li><a href="/node-modules">Node Modules</a></li>
+	<li><a href="/work-with-me">Work With Me</a></li>
 	<li><a href="/blog/archives">Archives</a></li>
 </ul>
 </div>
@@ -83,7 +79,8 @@ It would be shorter and more obvious if you wrote it &hellip;">
 	
 	<div id="content" class="inner"><article class="post">
 	<h2 class="title">Obvious Code</h2>
-	<div class="entry-content"><p>A week or two ago, I got this feedback on a code review:</p>
+	<div class="entry-content">
+		<p>A week or two ago, I got this feedback on a code review:</p>
 
 <blockquote><p>You&rsquo;re using <code>foo ? foo : ""</code> here.
 It would be shorter and more obvious if you wrote it as <code>foo || ""</code></p></blockquote>
@@ -110,7 +107,12 @@ A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last va
 <p>e.g. <code>(false || 0) === 0</code> and <code>(0 || false) === false</code> and <code>(foo || "") === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
 
 <p>Many JavaScript developers use this behavior as a shortcut for setting default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
-</div>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
 
 
 <div class="meta">
@@ -156,7 +158,7 @@ A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last va
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2015
+	<footer id="footer" class="inner">Copyright &copy; 2016
 
     Will Anderson
 
