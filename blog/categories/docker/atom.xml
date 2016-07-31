@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Docker | Will Anderson]]></title>
+  <link href="http://willi.am/blog/categories/docker/atom.xml" rel="self"/>
+  <link href="http://willi.am/"/>
+  <updated>2016-07-30T22:26:18-07:00</updated>
+  <id>http://willi.am/</id>
+  <author>
+    <name><![CDATA[Will Anderson]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Docker for Windows: Sharing Host Volumes]]></title>
+    <link href="http://willi.am/blog/2016/07/30/docker-for-windows-sharing-host-volumes/"/>
+    <updated>2016-07-30T21:15:38-07:00</updated>
+    <id>http://willi.am/blog/2016/07/30/docker-for-windows-sharing-host-volumes</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across.</p>
+
+<p>Docker lets you share volumes between your containers and your host machine. This is handy during development time, when you want to be able to quickly iterate without having to continually rebuild your container.</p>
+
+<h3>The Suspicious Empty Directory</h3>
+
+<p>When I first tried sharing a volume, I typed this into PowerShell:</p>
+
+<p>```</p>
+
+<blockquote><p>dir c:\docker</p></blockquote>
+
+<pre><code>Directory: C:\docker
+</code></pre>
+
+<p>Mode                LastWriteTime         Length Name</p>
+
+<hr />
+
+<p>-a&mdash;&mdash;        7/30/2016   9:47 PM              8 test.txt</p>
+
+<blockquote><p>docker run -it -v c:/docker:/host ubuntu bash
+root@333a10babe3a:/# ls /host
+root@333a10babe3a:/#
+```</p></blockquote>
+
+<p>Hmm&hellip; As you can see, the <code>c:\docker</code> folder has a test file, but it doesn&rsquo;t show up in the Docker container.
+After some head scratching, I figured out the missing piece: Out of the box, Docker isn&rsquo;t configured with permissions to share your drives with your containers.</p>
+
+<h3>Giving Docker Access</h3>
+
+<p>To give Docker access to your computer&rsquo;s drives, right click on the Docker icon in your taskbar, then click &ldquo;Settings&hellip;&rdquo;</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-settings.gif" alt="" /></p>
+
+<p>Under the &ldquo;Shared Drives&rdquo; section, check the drives you&rsquo;d like to share, then click &ldquo;Apply&rdquo;</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-shared-drives.png" alt="" /></p>
+
+<p>Docker will ask you for credentials, which it uses to access the drives.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-shared-drives-credentials.png" alt="" /></p>
+
+<p>(Note that if you log into your computer with a Windows Live account, your username should be something like &ldquo;MicrosoftAccount\you&#64;live.com&rdquo;)</p>
+
+<p>Once you save your credentials, you should be able to share volumes from your host computer to your containers.</p>
+
+<p>```</p>
+
+<blockquote><p>docker run -it -v c:/docker:/host ubuntu bash
+root@00aca8c2f880:/# ls /host
+test.txt
+root@00aca8c2f880:/#
+```</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>

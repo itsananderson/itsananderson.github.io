@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://william-backend.azurewebsites.net/feed/" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-07-30T17:36:04-07:00</updated>
+  <updated>2016-07-30T22:26:18-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Docker for Windows: Sharing Host Volumes]]></title>
+    <link href="http://willi.am/blog/2016/07/30/docker-for-windows-sharing-host-volumes/"/>
+    <updated>2016-07-30T21:15:38-07:00</updated>
+    <id>http://willi.am/blog/2016/07/30/docker-for-windows-sharing-host-volumes</id>
+    <content type="html"><![CDATA[<p>I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across.</p>
+
+<p>Docker lets you share volumes between your containers and your host machine. This is handy during development time, when you want to be able to quickly iterate without having to continually rebuild your container.</p>
+
+<h3>The Suspicious Empty Directory</h3>
+
+<p>When I first tried sharing a volume, I typed this into PowerShell:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; dir c:\docker
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    Directory: C:\docker
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Mode                LastWriteTime         Length Name
+</span><span class='line'>----                -------------         ------ ----
+</span><span class='line'>-a----        7/30/2016   9:47 PM              8 test.txt
+</span><span class='line'>
+</span><span class='line'>&gt; docker run -it -v c:/docker:/host ubuntu bash
+</span><span class='line'>root@333a10babe3a:/# ls /host
+</span><span class='line'>root@333a10babe3a:/#</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmm&hellip; As you can see, the <code>c:\docker</code> folder has a test file, but it doesn&rsquo;t show up in the Docker container.
+After some head scratching, I figured out the missing piece: Out of the box, Docker isn&rsquo;t configured with permissions to share your drives with your containers.</p>
+
+<h3>Giving Docker Access</h3>
+
+<p>To give Docker access to your computer&rsquo;s drives, right click on the Docker icon in your taskbar, then click &ldquo;Settings&hellip;&rdquo;</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-settings.gif" alt="" /></p>
+
+<p>Under the &ldquo;Shared Drives&rdquo; section, check the drives you&rsquo;d like to share, then click &ldquo;Apply&rdquo;</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-shared-drives.png" alt="" /></p>
+
+<p>Docker will ask you for credentials, which it uses to access the drives.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-shared-drives-credentials.png" alt="" /></p>
+
+<p>(Note that if you log into your computer with a Windows Live account, your username should be something like &ldquo;MicrosoftAccount\you&#64;live.com&rdquo;)</p>
+
+<p>Once you save your credentials, you should be able to share volumes from your host computer to your containers.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;docker run -it -v c:/docker:/host ubuntu bash
+</span><span class='line'>root@00aca8c2f880:/# ls /host
+</span><span class='line'>test.txt
+</span><span class='line'>root@00aca8c2f880:/#</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Software Engineering and the No True Scotsman Fallacy]]></title>
@@ -1432,30 +1506,6 @@ If you have enough images, it may not be reasonable to manually update the posts
 <p>Now, inside the container, click &ldquo;Upload&rdquo;. You can select multiple images. Once they&rsquo;ve uploaded, double check that their content types are correct. The default is application/octet-stream, which most browsers will try to download, rather than display as an image. The public URL for a given image is pretty easy to get from the storage account, container, and blob name, but if you&rsquo;re not sure, just double click the blob, and it&rsquo;ll show you the public URL.</p>
 
 <p>That&rsquo;s about it. Happy blogging.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Introducing Edge-Git]]></title>
-    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
-    <updated>2014-09-16T22:50:30-07:00</updated>
-    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
-The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
-Unfortunately both repositories are severely lacking in features and documentation.
-I couldn&rsquo;t even install node-gitteh on Windows, and I spent an unsuccessful evening trying to get nodegit to do something as simple as fetching changes.</p>
-
-<p>Eventually I came to the conclusion that no libgit2 bindings for Node are functional enough for my use.</p>
-
-<p>I&rsquo;d used <a href="https://github.com/libgit2/libgit2sharp">LibGit2Sharp</a> for a .NET project in the past.
-It&rsquo;s an amazingly high-quality project.
-While the documentation is sparse, the copious unit tests make it easy to figure out how to accomplish different tasks.</p>
-
-<p>I&rsquo;d read about <a href="http://tjanczuk.github.io/edge/">Edge.js</a>, which lets you interop between .NET and Node, but hadn&rsquo;t actually done anything with it.
-Since I had a seemingly perfect use case, I decided to dive in.</p>
-
-<p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
-About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
 ]]></content>
   </entry>
   
