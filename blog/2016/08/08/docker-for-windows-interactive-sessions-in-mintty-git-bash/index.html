@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>WordPress Plugins - Will Anderson</title>
+	<title>Docker for Windows: Interactive Sessions In MinTTY Git Bash - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I enjoy developing plugins for WordPress and I love working on new ideas. Here is a list of open source plugins I&rsquo;ve released so far. Active &hellip;">
+	<meta name="description" content="I recently installed Docker for Windows on my laptop. When I tried running the default docker run -it ubuntu bash demo from Git Bash, I ran into an &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -76,50 +76,67 @@
 	
 		
 	
-	<div id="content" class="inner"><article class="page">
-    
-    <h1 class="title">WordPress Plugins</h1>
-    
-    <div class="entry-content"><p>I enjoy developing plugins for WordPress and I love working on new ideas. Here is a list of open source plugins I&rsquo;ve released so far.</p>
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Docker for Windows: Interactive Sessions in MinTTY Git Bash</h2>
+	<div class="entry-content">
+		<p>I recently installed Docker for Windows on my laptop. When I tried running the default <code>docker run -it ubuntu bash</code> demo from Git Bash, I ran into an issue I hadn&rsquo;t seen before.</p>
 
-<h2>Active Plugins</h2>
-
-<ul>
-<li><a href="/plugins/code-snippets/">Code Snippets</a></li>
-<li><a href="/plugins/dev-profiles/">Dev Profiles</a></li>
-<li><a href="/plugins/minimum-password-length/">Minimum Password Length</a></li>
-<li><a href="/plugins/minimum-password-strength/">Minimum Password Strength</a></li>
-<li><a href="/plugins/naughty-monkey/">Naughty Monkey</a></li>
-<li><a href="/plugins/short-comment-filter/">Short Comment Filter</a></li>
-<li><a href="/plugins/wp-sendgrid/">WP SendGrid</a></li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ docker run -it ubuntu bash
+</span><span class='line'>the input device is not a TTY. If you are using mintty, try prefixing the command with 'winpty'</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Deprecated Plugins</h2>
+<p>As it turns out, following the instructions and prefixing the command with <code>winpty</code> does work</p>
 
-<ul>
-<li><a href="/plugins/enable-codepress/">Enable CodePress</a> (deprecated)</li>
-<li><a href="/plugins/random-headers/">Random Headers</a> (deprecated)</li>
-<li><a href="/plugins/remove-editor-and-install-pages/">Remove Editor/Install Pages</a> (deprecated)</li>
-</ul>
-
-
-<h2>Why</h2>
-
-<p>I&rsquo;ve had fun developing these plugins and have found them useful, so I want to share them with you. Using them places you under no obligation, but if you&rsquo;d like to say thanks, there are a couple ways you can do so.</p>
-
-<ol>
-<li><strong>Just Say Thanks</strong>. Are you using one of my plugins? I&rsquo;d love to know what you think. Have an idea for an improvement, or want to report a bug? You can grab me at <a href="mailto:will@itsananderson.com"><a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#119;&#x69;&#x6c;&#x6c;&#64;&#x69;&#116;&#115;&#x61;&#110;&#x61;&#110;&#x64;&#x65;&#x72;&#x73;&#x6f;&#110;&#46;&#99;&#111;&#x6d;">&#119;&#105;&#108;&#108;&#64;&#105;&#116;&#115;&#x61;&#x6e;&#x61;&#x6e;&#100;&#x65;&#x72;&#115;&#111;&#110;&#46;&#x63;&#111;&#109;</a></a> and let me know.</li>
-<li><strong>Hire Me</strong>. If you&rsquo;re working on a project that needs custom Theme/Plugin work, I&rsquo;m available for hire.
-I&rsquo;m not always able to take on new projects, but if you&rsquo;re interested in working with me, <a href="mailto:will@itsananderson.com">send me an email</a> describing what you want and I&rsquo;ll let you know.</li>
-<li><strong>Donate</strong>
-If you want to send a &ldquo;monetary thank you note&rdquo; I won&rsquo;t say no to PayPal donations.
-You can send a donation directly to will@itsananderson.com, or just click the shiny little Donate button below.</li>
-</ol>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ winpty docker run -it ubuntu bash
+</span><span class='line'>root@88448b75631d:/#</span></code></pre></td></tr></table></div></figure>
 
 
-<p><form action="https://www.paypal.com/cgi-bin/webscr" method="post"> <input name="cmd" type="hidden" value="_s-xclick" /> <input name="hosted_button_id" type="hidden" value="7081044" /> <input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_donate_SM.gif" type="image" /> <img src="https://www.paypal.com/en_US/i/scr/pixel.gif" border="0" alt="" width="1" height="1" />
-</form></p>
+<p>However, I&rsquo;m never satisfied with just getting around an issue, so I did some more digging.
+Turns out the issue here is the use of MinTTY to host the Git Bash prompt.
+If you&rsquo;ve installed Git for Windows, you&rsquo;ll recall the following configuration window.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/git-bash-mintty.png" alt="Git Bash MinTTY configuration" /></p>
+
+<p>If you select the &ldquo;Use MinTTY&rdquo; option, your Bash pompt will be hosted in the MinTTY terminal emulator, rather than the CMD console that ships with Windows.
+The MinTTY terminal emulator isn&rsquo;t compatible with Windows console programs unless you prefix your commands with <code>winpty</code>.</p>
+
+<p>Personally, I prefer the default CMD console, especially in Windows 10 where features like window resizing and text selection are drastically improved.
+If you want to go back to that mode, simply re-run the Git for Windows installer and chose the non-MinTTY option.
+If you want to stick with MinTTY, you just need to prefix your interactive Docker (and Python, and Node, and &hellip;) commands with <code>winpty</code>.</p>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-08-08T19:01:41-07:00" pubdate data-updated="true">Aug 8<span>th</span>, 2016</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/docker/'>Docker</a>
+
+
+</div>
+	
 </div>
 </article>
 

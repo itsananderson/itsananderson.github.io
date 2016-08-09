@@ -7,8 +7,8 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="This post is the second in a series on tuning your Git environment.
-The first post on customizing your git log isn&rsquo;t a prerequisite, but may &hellip;">
+	<meta name="description" content="A week or two ago, I got this feedback on a code review: You&rsquo;re using foo ? foo : "" here.
+It would be shorter and more obvious if you wrote &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -78,6 +78,73 @@ The first post on customizing your git log isn&rsquo;t a prerequisite, but may &
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/03/27/obvious-code/">
+		
+			Obvious Code</a>
+	</h2>
+	<div class="entry-content">
+		<p>A week or two ago, I got this feedback on a code review:</p>
+
+<blockquote><p>You&rsquo;re using <code>foo ? foo : ""</code> here.
+It would be shorter and more obvious if you wrote it as <code>foo || ""</code></p></blockquote>
+
+<p>This was valid feedback, and I updated the code.</p>
+
+<p>After I&rsquo;d checked in my changes, I got the following IM from a senior member of my team:</p>
+
+<blockquote><p>I see you did <code>foo || ""</code>? What does the <code>||</code> mean?</p></blockquote>
+
+<p>:)</p>
+
+<p>This was a good reminder of two things:</p>
+
+<ul>
+<li>&ldquo;Obvious code&rdquo; is a subjective concept</li>
+<li>No matter how experienced you are with something, you&rsquo;ll still find blind spots from time to time</li>
+</ul>
+
+
+<p><em>P.S.</em> If that syntax is also new to you, it&rsquo;s taking advantage of how JavaScript does &ldquo;or&rdquo;.
+A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last value if none are truthy:</p>
+
+<p>e.g. <code>(false || 0) === 0</code> and <code>(0 || false) === false</code> and <code>(foo || "") === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
+
+<p>Many JavaScript developers use this behavior as a shortcut for setting default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-03-27T04:10:17-07:00" pubdate data-updated="true">Mar 27<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1192,83 +1259,6 @@ Sometimes when a single test is failing, it&rsquo;s a pain to re-run every test 
 
 
 	<a class='category' href='/blog/categories/jasmine/'>Jasmine</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/tdd/'>TDD</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/09/24/use-blob-storage-for-your-static-site-images/">
-		
-			Use Blob Storage for Your Static Site Images</a>
-	</h2>
-	<div class="entry-content">
-		<p>The purpose of this post is to show how easy it is to use cloud storage for your static blog&rsquo;s binary resources.
-I&rsquo;ll be showing specific examples for Azure Blob Storage and GitHub Pages, but the same principles should apply to AWS, as well as any other static blogging service.</p>
-
-<h2>Avoid Large Binaries in Git</h2>
-
-<p>When ever you check a file (or a change to an existing file) into Git, it stores a snapshot of the entire file.
-This behavior has many nice benefits, but it means that large files can quickly bloat the size of a Git repository.</p>
-
-<p>Culprits can include images, videos, and executables, to name a few.
-Since we&rsquo;re specifically talking about static blogging, we&rsquo;ll focus on images.</p>
-
-<p>Suppose you add an image to your post.
-If the image takes up 200KB, you&rsquo;re automatically increasing your repository size by around 200KB (ignoring extra Git metadata).
-Every time you modify that image, you&rsquo;re adding yet another 200KB.
-Doing this for a few dozen blog posts can quickly balloon your repo.</p>
-
-<p>Now imaging doing this with a GIF instead. Yikes.</p>
-
-<h2>Move Your Images To Blob Storage</h2>
-
-<p>I&rsquo;m not going to cover redirecting existing images to blob storage.
-When I switched over, I had few enough images that I just decided to manually update the posts that referenced them.
-If you have enough images, it may not be reasonable to manually update the posts that reference them. In that case, you can either try to automate it with a glorified perl script, or just leave the old posts alone and just upload new images to blob storage.</p>
-
-<p>If you&rsquo;re using Azure for your images, you&rsquo;ll want to grab a copy of <a href="http://azurestorageexplorer.codeplex.com/">Azure Storage Explorer</a>. It&rsquo;s a handy little Windows application that gives you a CRUD view into your storage account. My <a href="http://willi.am/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">series on Azure Blob Storage and Node</a> covers setting up your storage account and getting your access keys, so I won&rsquo;t go over that again. Just grab one of your access keys and paste it into the &ldquo;Storage account key&rdquo; field in Storage Explorer&rsquo;s &ldquo;Add Storage Account&rdquo; popup.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/setup-storage-explorer.png" alt="" /></p>
-
-<p>As a last configuration step, open Tools &rarr; Options and go to the &ldquo;Content Types&rdquo; tab, then click &ldquo;Save Changes&rdquo;. Storage Explorer can automatically set content types based on file extensions, but for some reason it&rsquo;s not enabled by default. Opening and saving the options seems to be enough to activate it.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/configure-storage-explorer.png" alt="" /></p>
-
-<p>Now that you&rsquo;ve configured Storage Explorer, you can upload your images. First, create a container. Make sure you set permissions to &ldquo;Public Container&rdquo; or &ldquo;Public Blob&rdquo; so the images can be seen by unauthenticated users.</p>
-
-<p>Now, inside the container, click &ldquo;Upload&rdquo;. You can select multiple images. Once they&rsquo;ve uploaded, double check that their content types are correct. The default is application/octet-stream, which most browsers will try to download, rather than display as an image. The public URL for a given image is pretty easy to get from the storage account, container, and blob name, but if you&rsquo;re not sure, just double click the blob, and it&rsquo;ll show you the public URL.</p>
-
-<p>That&rsquo;s about it. Happy blogging.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-24T01:37:53-07:00" pubdate data-updated="true">Sep 24<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/octopress/'>Octopress</a>
 
 
 </div>

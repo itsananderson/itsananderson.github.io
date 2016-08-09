@@ -7,7 +7,7 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across. &hellip;">
+	<meta name="description" content="I recently installed Docker for Windows on my laptop. When I tried running the default docker run -it ubuntu bash demo from Git Bash, I ran into an &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -77,6 +77,74 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2016/08/08/docker-for-windows-interactive-sessions-in-mintty-git-bash/">
+		
+			Docker for Windows: Interactive Sessions in MinTTY Git Bash</a>
+	</h2>
+	<div class="entry-content">
+		<p>I recently installed Docker for Windows on my laptop. When I tried running the default <code>docker run -it ubuntu bash</code> demo from Git Bash, I ran into an issue I hadn&rsquo;t seen before.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ docker run -it ubuntu bash
+</span><span class='line'>the input device is not a TTY. If you are using mintty, try prefixing the command with 'winpty'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As it turns out, following the instructions and prefixing the command with <code>winpty</code> does work</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ winpty docker run -it ubuntu bash
+</span><span class='line'>root@88448b75631d:/#</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, I&rsquo;m never satisfied with just getting around an issue, so I did some more digging.
+Turns out the issue here is the use of MinTTY to host the Git Bash prompt.
+If you&rsquo;ve installed Git for Windows, you&rsquo;ll recall the following configuration window.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/git-bash-mintty.png" alt="Git Bash MinTTY configuration" /></p>
+
+<p>If you select the &ldquo;Use MinTTY&rdquo; option, your Bash pompt will be hosted in the MinTTY terminal emulator, rather than the CMD console that ships with Windows.
+The MinTTY terminal emulator isn&rsquo;t compatible with Windows console programs unless you prefix your commands with <code>winpty</code>.</p>
+
+<p>Personally, I prefer the default CMD console, especially in Windows 10 where features like window resizing and text selection are drastically improved.
+If you want to go back to that mode, simply re-run the Git for Windows installer and chose the non-MinTTY option.
+If you want to stick with MinTTY, you just need to prefix your interactive Docker (and Python, and Node, and &hellip;) commands with <code>winpty</code>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-08-08T19:01:41-07:00" pubdate data-updated="true">Aug 8<span>th</span>, 2016</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/docker/'>Docker</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -943,73 +1011,6 @@ Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&
 
 
 	<a class='category' href='/blog/categories/octopress/'>Octopress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/03/27/obvious-code/">
-		
-			Obvious Code</a>
-	</h2>
-	<div class="entry-content">
-		<p>A week or two ago, I got this feedback on a code review:</p>
-
-<blockquote><p>You&rsquo;re using <code>foo ? foo : ""</code> here.
-It would be shorter and more obvious if you wrote it as <code>foo || ""</code></p></blockquote>
-
-<p>This was valid feedback, and I updated the code.</p>
-
-<p>After I&rsquo;d checked in my changes, I got the following IM from a senior member of my team:</p>
-
-<blockquote><p>I see you did <code>foo || ""</code>? What does the <code>||</code> mean?</p></blockquote>
-
-<p>:)</p>
-
-<p>This was a good reminder of two things:</p>
-
-<ul>
-<li>&ldquo;Obvious code&rdquo; is a subjective concept</li>
-<li>No matter how experienced you are with something, you&rsquo;ll still find blind spots from time to time</li>
-</ul>
-
-
-<p><em>P.S.</em> If that syntax is also new to you, it&rsquo;s taking advantage of how JavaScript does &ldquo;or&rdquo;.
-A JavaScript <em>or</em> returns the first <em>truthy</em> value, or the last value if none are truthy:</p>
-
-<p>e.g. <code>(false || 0) === 0</code> and <code>(0 || false) === false</code> and <code>(foo || "") === ""</code> (assuming foo is &ldquo;falsey&rdquo;)</p>
-
-<p>Many JavaScript developers use this behavior as a shortcut for setting default values, because <code>null</code> and <code>undefined</code> are falsey.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-03-27T04:10:17-07:00" pubdate data-updated="true">Mar 27<span>th</span>, 2015</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/javascript/'>JavaScript</a>
 
 
 </div>
