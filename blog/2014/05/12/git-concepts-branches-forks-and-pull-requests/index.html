@@ -12,6 +12,33 @@ There&rsquo;s been some confusion about a few Git and DVCS related &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Git Concepts: Branches, Forks, and Pull Requests - Will Anderson" />
+    <meta name="twitter:description" content=" My team recently started migrating our source control from TFVC to Git (yay!).
+There&rsquo;s been some confusion about a few Git and DVCS related terms.
+If you&rsquo;re also confused, don&rsquo;t worry. You&rsquo;re not the only one. Let&rsquo;s talk about some basic Git concepts. Branches Branches are a core concept in Git.
+Unlike centralized version control, branches in Git don&rsquo;t show up as folders in the file system.
+Instead, your project folder only contains the contents of one branch, which you &ldquo;checkout&rdquo; into your working directory. Internally, branches are basically a pointer to a commit, designed to move forward when new commits are created. See this page on git branches for more details. Forks Forking is a concept that exists outside Git.
+In the old days, forking an open source project meant splitting off from the original project, either to continue development or move in a different direction. These days a fork is simply a feature of several open source code hosting websites.
+If I want to introduce a change to an open source project, I obviously can&rsquo;t just edit the repository directly.
+Instead, what I have to do is fork the repository, which creates a copy of that repository that belongs to me.
+I can then modify that fork and, if desired, propose those changes back to the original repository. GitHub has a pretty good article on forking repositories.
+It also talks about creating pull requests. Pull Requests One of the most easily misunderstood concepts in Git is the pull request.
+Part of the reason for the confusion is that in most current pull request workflows, nobody ever &ldquo;pulls&rdquo; changes.
+&ldquo;Merge request&rdquo; would be a more accurate term. When you create a pull request on an open source project, you&rsquo;re usually asking that changes from a branch in your repository be merged with a branch on another repository.
+In most cases, your repository is a fork of the other repository, and you&rsquo;re requesting to merge your changes into their master branch. Pull requests can also be used as a code review workflow within a single repository.
+I&rsquo;ve done this for some of my own open source projects.
+It&rsquo;s really useful for teams who work together on a project. If you&rsquo;re not already doing your feature work in a branch, you should learn to commit good.
+Once you&rsquo;re doing your work in a branch, pull requests are the next logical step.
+As soon as you&rsquo;re at a point where you&rsquo;re not embarassed by your code, create a pull request.
+You can continue pushing new changes to your branch for reviewers to see.
+By starting the feedback loop as early as possible, your peers can help catch issues that you&rsquo;d otherwise have to spend a long time undoing. The other thing pull requests for team projects enables is multiple collaborators.
+Most other code review tools only belong to one person.
+This is a hassle if two people have collaborated on a feature.
+With pull requests, many collaborators can push to a single branch, and all changes can be reviewed as a single unit. Once again, GitHub has a good article on pull requests.
+This one is very specific to GitHub&rsquo;s pull request workflow. I am now accepting new clients for part-time consulting and software development projects. Learn more May 12th, 2014 Git " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +47,7 @@ There&rsquo;s been some confusion about a few Git and DVCS related &hellip;">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

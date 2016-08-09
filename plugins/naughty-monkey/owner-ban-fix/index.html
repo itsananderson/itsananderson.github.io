@@ -11,6 +11,15 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Naughty Monkey Ban Fix - Will Anderson" />
+    <meta name="twitter:description" content="Ok, now you&rsquo;ve done it. You banned yourself from your own website. What a silly thing to do! Here&rsquo;s the deal. you need to go into your the ban list and remove your IP address.
+Sounds easy, right?
+Yeah, that&rsquo;s what you said when I asked if you could avoid logging in as &lsquo;admin&rsquo;. Anyway, if you&rsquo;re not familiar with the WordPress structure, you can find the file you need to edit in /wp-content/plugins/naughty-monkey/ban-list.php Ideally you should just remove your IP from that list, but if you mess it up and can&rsquo;t fix it, you can also replace the contents with the following code. 1
+&lt;?php $ban_list = array() ?&gt; If you&rsquo;re still stuck, you can always send me an email and I can try to help, but keep in mind that I only do this for fun, so it could be a while before I can give you a hand. Now just remember. Don&rsquo;t try to log in as &lsquo;admin&rsquo;!
+" />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +28,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

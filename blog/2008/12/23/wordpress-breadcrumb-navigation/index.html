@@ -12,6 +12,46 @@ I first remember seeing them in ANGEL when my dad was working for the &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="WordPress Breadcrumb Navigation - Will Anderson" />
+    <meta name="twitter:description" content=" Bread Crumbs are something that&rsquo;s been around for quite some time.
+I first remember seeing them in ANGEL when my dad was working for the company in 2005. Similar things can be found in File Browsers, and browser history is really a kind of bread crumb. In my work for IRPA one of the concerns we&rsquo;ve had is making it easy to navigate the site. Because WordPress has limited CMS functionality out of the box, navigation is sometimes difficult on sites with many nested pages. One of the solutions I looked at was Breadcrumbs because they can give users a quick look at their location in the site structure. Over the break (which I&rsquo;m still enjoying) I&rsquo;ve been able to finish implementing breadcrumbs on the IRPA Site. I almost think something like this should be in core, but again, WordPress isn&rsquo;t a CMS, so maybe it wouldn&rsquo;t be useful for most people. One of the things that took me the longest was figuring out how to handle different site settings. A site who&rsquo;s home page displays latest posts needs a slightly different navigation list than a site which has a static home page. Even sites with static pages can have different structures depending on what page is the &ldquo;home&rdquo; page. Anyway, Here&rsquo;s the code if you want to add it to your template. Simply paste the code into your functions.php file and add a call to get_breadcrumbs() where you want the breadcrumb list in your template. It outputs the breadcrumbs as list items. You&rsquo;ll need to put the ul around them yourself in the template. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+function get_breadcrumbs(){ global $post; $separator = &#39; &amp;gt; &#39;; // what to place between the pages if ( is_page() ){ // bread crumb structure only logical on pages $trail = array($post); // initially $trail only contains the current page $parent = $post; // initially set to current post $show_on_front = get_option( &#39;show_on_front&#39;); // does the front page display the latest posts or a static page $page_on_front = get_option( &#39;page_on_front&#39; ); // if it shows a page, what page // while the current page isn&#39;t the home page and it has a parent while ( $parent-&gt;post_parent &amp;&amp; !($parent-&gt;ID == $page_on_front &amp;&amp; &#39;page&#39;) == $show_on_front ){ $parent = get_post( $parent-&gt;post_parent ); // get the current page&#39;s parent array_unshift( $trail, $parent ); // add the parent object to beginning of array } if ( &#39;posts&#39; == $show_on_front ) // if the front page shows latest posts, simply display a home link echo &quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-0&#39;&gt;&lt;a href=&#39;&quot; . get_bloginfo(&#39;home&#39;) . &quot;&#39;&gt;Home&lt;/a&gt;&lt;/li&gt;\n&quot;; // home page link else{ // if the front page displays a static page, display a link to it $home_page = get_post( $page_on_front ); // get the front page object echo &quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-{$home_page-&gt;ID}&#39;&gt;&lt;a href=&#39;&quot; . get_bloginfo(&#39;home&#39;) . &quot;&#39;&gt;$home_page-&gt;post_title&lt;/a&gt;&lt;/li&gt;\n&quot;; // home page link if($trail[0]-&gt;ID == $page_on_front) // if the home page is an ancestor of this page array_shift( $trail ); // remove the home page from the $trail because we&#39;ve already printed it } foreach ( $trail as $page){ // print the link to the current page in the foreach echo &quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-{$page-&gt;ID}&#39; &gt;$separator&lt;a href=&#39;&quot; . get_page_link( $page-&gt;ID ) . &quot;&#39;&gt;{$page-&gt;post_title}&lt;/a&gt;&lt;/li&gt;\n&quot;; } }else{ // if what we&#39;re looking at isn&#39;t a page, simply display a home link echo &quot;&lt;li class=&#39;breadcrumb-item&#39; id=&#39;breadcrumb-0&#39;&gt;&lt;a href=&#39;&quot; . get_bloginfo(&#39;home&#39;) . &quot;&#39;&gt;Home&lt;/a&gt;&lt;/li&gt;\n&quot;; // home page link }
+} If you have any corrections or suggestions for this (rather long) bit of code, please add your comment bellow. I love feedback! I am now accepting new clients for part-time consulting and software development projects. Learn more Dec 23rd, 2008 WordPress " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +60,7 @@ I first remember seeing them in ANGEL when my dad was working for the &hellip;">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

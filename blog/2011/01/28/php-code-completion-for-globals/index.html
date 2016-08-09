@@ -11,6 +11,20 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="PHP Code Completion for Globals - Will Anderson" />
+    <meta name="twitter:description" content=" Any IDE worth using provides code completion suggestions as you type. For example, this is what Netbeans suggests when you type &ldquo;wp_&rdquo; inside a WordPress project. The problem with dynamically typed languages like PHP is that it can be difficult for the IDE to provide PHP code completion for variables that have been defined in the global scope. You can help your IDE by providing it with hints about the types of objects. Concrete PHP Code Completion Example The example I&rsquo;ll use is the $wpdb global variable defined in WordPress. It contains an instance of the &ldquo;wpdb&rdquo; class, which wraps around the database connection and provides a bunch of helper methods. It&rsquo;s defined in the global scope, so when you use it in another file, your IDE has no clue what type it is. This means it can&rsquo;t provide any PHP code completion. If you add the following code snippet to the beginning of your function (or file, if applicable), it will tell your IDE the type of the $wpdb variable without actually affecting the execution of your code. 1
+2
+3
+if ( false ) { $wpdb = new wpdb();
+} As you can see, the code inside the if statement will never execute, but every IDE I&rsquo;ve ever used isn&rsquo;t smart enough to figure that out, so they assume the type of the $wpdb variable is now wpdb. When you add the snippet, you get PHP code completion suggestions that look something like this: The nice thing about doing this is that if you forget to remove the code snippet, it won&rsquo;t break anything. You&rsquo;ll lose a CPU cycle or two evaluating the if statement, but your code will run without any problems. It&rsquo;s probably a good idea to remove it before you release your code, though, since it might be confusing to anyone who looks at it later. Update: You can also do this with PHPDoc. 1
+2
+3
+4
+/** * @var $wpdb wpdb */
+global $wpdb; This also gives your IDE a hint about what type $wpdb has, and doesn&rsquo;t polute your code with a bunch of non-executing statements. I am now accepting new clients for part-time consulting and software development projects. Learn more Jan 28th, 2011 PHP " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +33,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

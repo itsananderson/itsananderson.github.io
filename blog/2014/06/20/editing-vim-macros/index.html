@@ -12,6 +12,17 @@ If you&rsquo;re not familiar with them, there&rsquo;s a great Vim tips article. 
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Editing Vim Macros - Will Anderson" />
+    <meta name="twitter:description" content=" Vim macros are great.
+If you&rsquo;re not familiar with them, there&rsquo;s a great Vim tips article. Something cool I&rsquo;ve discovered is that you can edit macros.
+This is helpful if you accidentally mess up a macro recording, or decide you need to tweak it in some way. If you recorded a macro to register a, you can paste its contents into the current document with "ap.
+From there, you can edit the macro and then yank it back into the a register with "ay This also makes it easy to paste your macros into your vimrc for future use. 1
+2
+&quot; delete first word of line
+let @d=&#39;0dw&#39; I am now accepting new clients for part-time consulting and software development projects. Learn more Jun 20th, 2014 Vim " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +31,7 @@ If you&rsquo;re not familiar with them, there&rsquo;s a great Vim tips article. 
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

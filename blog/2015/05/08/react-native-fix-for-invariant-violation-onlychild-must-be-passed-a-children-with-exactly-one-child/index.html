@@ -12,6 +12,33 @@ Invariant Violation: onlyChild must be passed a children with exactly one child 
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child" - Will Anderson" />
+    <meta name="twitter:description" content=" I recently ran into a new (to me) error in React Native. 1
+Invariant Violation: onlyChild must be passed a children with exactly one child I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out. All of the &ldquo;Touchable&rdquo; components in React Native do an onlyChild check on their children, which throws an error unless there&rsquo;s exactly one child. 1
+2
+3
+4
+return ( &lt;TouchableHighlight&gt; &lt;/TouchableHighlight&gt;
+); // Error: onlyChild must be passed a children with exactly one child Adding a child to the TouchableHighlight will fix the error 1
+2
+3
+4
+5
+return ( &lt;TouchableHighlight&gt; &lt;Text&gt;foo&lt;/Text&gt; &lt;/TouchableHighlight&gt;
+); // OK But adding multiple children will also cause an error 1
+2
+3
+4
+5
+6
+return ( &lt;TouchableHighlight&gt; &lt;Text&gt;foo&lt;/Text&gt; &lt;Text&gt;bar&lt;/Text&gt; &lt;/TouchableHighlight&gt;
+); // Error: onlyChild must be passed a children with exactly one child A quick search through the React Native code reveals the components that verify onlyChild: TouchableBounce
+TouchableHighlight
+TouchableOpacity
+TouchableWithFeedback Hopefully React Native can eventually provide a better message for this issue, but until then, at least this blog post should pop up when you Google the error. I am now accepting new clients for part-time consulting and software development projects. Learn more May 8th, 2015 React, React Native " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +47,7 @@ Invariant Violation: onlyChild must be passed a children with exactly one child 
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

@@ -12,6 +12,95 @@ Despite being new to me, the package has been around for about 2 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Test Your API With Supertest - Will Anderson" />
+    <meta name="twitter:description" content=" I recently discovered supertest, which is a fantastic tool for testing your API.
+Despite being new to me, the package has been around for about 2 years. Setup You can configure supertest in a couple ways.
+If you&rsquo;re testing an external site, you can configure supertest with the site&rsquo;s base url: 1
+var request = require(&#39;supertest&#39;)(&#39;http://example.com/&#39;); If you&rsquo;re testing an Express app, you can pass the app to supertest, and let it worry about setup/teardown of your site. 1
+2
+var myApp = require(&#39;../app.js&#39;);
+var request = require(&#39;supertest&#39;)(myApp); The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
+This allows you to just write your tests, without worrying about starting apps, conflicting ports, etc. Writing a Test Once you&rsquo;ve imported supertest, it&rsquo;s quite simple to use.
+In my examples, I&rsquo;ll be using the test framework provided by Mocha. 1
+2
+3
+4
+5
+6
+7
+describe(&#39;my api&#39;, function() { it(&#39;returns hello world&#39;, function(done) { request. .get(&#39;/&#39;) .expect(&#39;Hello, World!&#39;, done); });
+}); This is about as simple as the tests get.
+We call the root of the site, and expect the response body to equal &ldquo;Hello, World!&rdquo;. Since the request is async, we take in a &ldquo;done&rdquo; parameter (which Mocha passes to us).
+We call that at the end of the test when we&rsquo;ve actually had a chance to verify the server response. You can easily test a JSON response with supertest: 1
+2
+3
+request. .get(&#39;/&#39;) .expect({message: &quot;Hello, World!&quot;}, done); Headers are also simple to verify. 1
+2
+3
+request. .get(&#39;/foo&#39;) .expect(&#39;Content-Type&#39;, &#39;application/json&#39;, done); Status codes are even easier. 1
+2
+3
+request .get(&#39;/some-error-route&#39;) .expect(500, &#39;Oops. Something went wrong&#39;, done); You can do non-GET requests. 1
+2
+3
+4
+5
+var user = {name: &#39;Bob&#39;};
+request .post(&#39;/create-user&#39;) .send(user) .expect({success:true}, done); You can set headers for the request. 1
+2
+3
+4
+request .get(&#39;/foo&#39;) .set(&#39;Accept&#39;, &#39;text/plain&#39;) .expect(&#39;Content-Type&#39;, &#39;text/plain&#39;, done); You can match regular expressions against headers and bodies. 1
+2
+3
+4
+request .get(&#39;/redirect&#39;) .expect(&#39;Location&#39;: /\/destination/) .expect(301, done); If you need to do multiple requests in series, you can chain the &ldquo;expect&rdquo; callbacks: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+// Kick things off
+purgeUsers(); function purgeUsers() { request .get(&#39;/users/purge&#39;) .expect({success:true}, checkNoUsers);
+} function checkNoUsers(err) { if (err) done(err); request .get(&#39;/users&#39;) .expect([], addUser);
+} function addUser() { if (err) done(err); request .post(&#39;/users&#39;) .send({name: &#39;Bob&#39;}) .expect({success:true}, checkUsers);
+} function checkUsers(err) { if (err) done(err); request .get(&#39;/users&#39;) .expect([{name: &#39;Bob&#39;}], done);
+} Finally, if you need to do some custom processing on a result, use the .end() function. 1
+2
+3
+4
+5
+6
+7
+var assert = require(&#39;assert&#39;);
+request .get(&#39;/foo&#39;) .end(function(err, result) { assert.equal(result.body.foo, &#39;Bar&#39;); done(); }); There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with. I am now accepting new clients for part-time consulting and software development projects. Learn more Jul 28th, 2014 Node, Testing " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +109,7 @@ Despite being new to me, the package has been around for about 2 &hellip;">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

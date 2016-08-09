@@ -11,6 +11,18 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Code Snippets - Will Anderson" />
+    <meta name="twitter:description" content="Code Snippets allows you to replace arbitrary text with other arbitrary text. What it does: Arbitrary Snippet &ldquo;Keys&rdquo; &ndash; You don&rsquo;t have to surround them with brackets. They can literally be whatever you want
+Recursive Expansion &ndash; If you include another Snippet &lsquo;Key&rsquo; in the text of another Snippet, it can be expanded recursively.
+Circular Snippet Checking &ndash; Keeps you from creating an infinite expansion loop by Snippets that reference each other.
+Case Insensitivity &ndash; You can chose to replace Snippet &lsquo;Keys&rsquo; without regard to case. What it doesn&rsquo;t do: No Attributes &ndash; Code Snippets doesn&rsquo;t (currently) support attributes (for example [img src="/images/cat.png"]. Snippets are static, meaning they can&rsquo;t be changed using arguments. Installation As with all WordPress plugins, you&rsquo;ll need to download the archive and upload its contents into your WordPress plugin directory.
+Once it has been uploaded you&rsquo;ll need to activate it from the administration menu. After Code Snippets has been activated, a new submenu page will appear in Settings called &lsquo;Code Snippets&rsquo;. This is where you can create and edit Code Snippets. Usage Empty input boxes will always appear below the list of current Snippets.
+Enter the Snippet information and click &lsquo;Save Snippets&rsquo; to add a new Snippet. To delete a snippet, delete the text in its name field and click &lsquo;Save Snippets&rsquo;. Be careful not to create two snippets with the same name. If you do this, the first duplicate snippet will, unfortunately, be lost. If you want a snippet to replace &lsquo;keys&rsquo; without regard for case, uncheck &lsquo;Case Sensitive&rsquo;. If you don&rsquo;t want to expand snippet keys a snippet&rsquo;s value may contain (see the third example), uncheck &lsquo;Expand&rsquo;. Examples I&rsquo;ll start with the reason I created Code Snippets. I wanted a super simple way to add Google Syntax Highlighting by way of the WordPress Plugin of the same name. Doing this required remembering and typing out a somewhat long piece of code. By using Code Snippets, I can now simply type out [php] and have it replaced with &lt;pre name="code" class="php"&gt;.
+A simpler example is simply word replacement. Let&rsquo;s say you want to replace all occurrences of &lsquo;WordPress&rsquo; with &lsquo;Habari&rsquo; (you heretic!). This is simple with Code Snippets. Simply define a snippet who&rsquo;s name is WordPress and who&rsquo;s value is Habari. If you want to replace ALL occurrences of WordPress without regard for case, simply uncheck &ldquo;Case Sensitive&rdquo;.
+Let&rsquo;s assume we&rsquo;ve already added the previous example, but now we want to take all occurrences of &lsquo;Habari&rsquo; with a link to the Habari project. Simply create another Code Snippet who&rsquo;s name is Habari and who&rsquo;s value is &lt;a href="http://www.habariproject.org/" &gt;Habari&lt;/a&gt;. Here you must uncheck &lsquo;Expand&rsquo; since you&rsquo;re including the Snippet name in its value (failure to uncheck &lsquo;Expand&rsquo; would cause a Circular Snippet Error). You can also uncheck &lsquo;Case Sensitive&rsquo; if you&rsquo;d like to replace all occurrences of &lsquo;Habari&rsquo; regardless of case. " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +31,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

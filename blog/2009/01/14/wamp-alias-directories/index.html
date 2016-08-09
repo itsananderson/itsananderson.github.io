@@ -12,6 +12,28 @@ This works well because I can do debugging (thanks to &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Wamp Alias Directories - Will Anderson" />
+    <meta name="twitter:description" content=" I use Wamp Server together with PhpStorm to develop PHP applications on my local machine.
+This works well because I can do debugging (thanks to xdebug) and can readily view and edit files.
+I usually don&rsquo;t like to place projects in the c:\wamp\www folder, preferring instead to place them in more logical places in my personal directory.
+Wamp alias directories are a great way to improve project organization. The easiest way to facilitate this is to create alias directories in Apache that point to these different locations. Wamp Server provides an interface for creating wamp alias directories for Apache. Adding Wamp Alias Directories Click on the tray icon and select Apache &rarr; Alias directories &rarr; Add an alias. A new command prompt window opens where you can enter the alias information. Creating an alias like this, you&rsquo;ll probably notice that in order for the URL to work, you have to have a trailing slash at the end (e.g. http://localhost/example/ will work while http://localhost/example won&rsquo;t). This can be a bit of a pain, but there is fortunately a quick fix. Fixing Your Wamp Alias Directories Click on the Wamp Server tray icon again and select Apache &rarr; Alias directories &rarr; [alias url] &ndash;> Edit alias. This will open the alias file in Notepad. Remove the trailing slash from the relative URL. For Example Alias /example/ "c:/path/to/example/" Would become Alias /example "c:/path/to/example/" Save the file and close Notepad. Wamp Server should restart automatically (if not, you can restart it manually from the tray icon). Once it has restarted, you&rsquo;re alias should now work with or without the trailing slash. Why Wamp Server doesn&rsquo;t do this automatically, I&rsquo;m not sure, but at least there&rsquo;s a simple fix. Updating Wamp so Alias Directories Just Work Thanks to Ozan Hazer for pointing out that you can actually change the alias template, and save yourself from having to perform multiple steps every time you add an alias. Open c:\wamp\scripts\addAlias.php and locate the line starting with $newConfFileContents =. 1
+2
+3
+4
+5
+# Find:
+$newConfFileContents = 'Alias /'.$newAliasDir.'/ # Replace it with:
+$newConfFileContents = 'Alias /'.$newAliasDir.' Open c:\wamp\scripts\refresh.php. 1
+2
+3
+4
+5
+# Find:
+preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match); # Replace it with:
+preg_match('|^Alias /'.$newalias_dir.'/ "(.+)"|',$alias_contents,$match); Be sure to back up these files before you edit them, since breaking them could potentially break other Wamp functionality. I am now accepting new clients for part-time consulting and software development projects. Learn more Jan 14th, 2009 Apache, Wamp " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +42,7 @@ This works well because I can do debugging (thanks to &hellip;">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

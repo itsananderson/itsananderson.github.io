@@ -11,6 +11,24 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Customize Your Git Log Format - Will Anderson" />
+    <meta name="twitter:description" content=" Over the last few months, I&#8217;ve been learning about woodworking in my spare time. As I&#8217;ve read articles and watched YouTube videos, I&#8217;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&#8217;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&#8217;ve noticed parallels in my full time craft: Software Development.In the next few posts, I&#8217;ll share some of the software &#8220;jigs&#8221; I&#8217;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git. Git Log: Your Own Personal Journal If you&rsquo;re not already aware, your Git log is a critical tool for working with source control.
+Because your memory&rsquo;s not perfect, a good log helps you recall what you&rsquo;ve done, and the motivation behind it. I&rsquo;ve written before about writing good commit messages, as has David in his series &ldquo;Committed to Good Commits&rdquo;.
+If your commit logs are sprinkled with gems like &ldquo;did stuff&rdquo; and &ldquo;it finally works!&rdquo;, you&rsquo;ll want to check out those posts. Choose Your Details With --format Depending on what you&rsquo;re looking for in your log, you may want different levels of detail.
+The Git log documentation has a full list of the built-in formats. For example, if you&rsquo;re trying to find the SHA for a recent change, you may just want to see the SHA and the commit subject for each commit.
+In that case, git log --format=oneline or git log --oneline is what you need. If you need verbose output, including the full message and author info, --format=medium is a good option. Finally, if you want every single detail from the commit, --format=fuller will give you that. If you want to make any of these formats your default, you can do so with the following command: 1
+git config --global format.pretty oneline # replace oneline with the format you want Limit Results With -n If you only want to see the last few commits, you can use the -n flag.
+The more verbose version is -n &lt;number&gt; (e.g. -n 5 to show the last 5 commits). Alternatively, you can use an even quicker shortcut.
+Just use -&lt;number&gt;. For example: git log -5 will show the last 5 commits. Fully Customize Your Log Output Depending on how you use your commit log, you may find that no built-in log format exactly fits your needs.
+What I&rsquo;ve found is that the verbose formats are too hard to scan through, and the succinct ones don&rsquo;t have vital info. To solve this problem, I created a custom log format, which I use almost exclusively. You can configure my format with the following command: 1
+git config --global format.pretty format:"%C(auto)%h %d%Creset %s%n%Cgreen%ad%Creset %aN &lt;%aE>%n" The output looks like this: This format also works with the --graph flag: What I like about this format is that it only uses three lines per commit, but it has all the information I care about.
+I also inserted color codes for the various parts of the message, which makes it even easier to grok. In Conclusion Hopefully these examples give you some ideas about what you can do to customize your commit log.
+Don&rsquo;t feel like you need to use my custom log format as-is.
+The whole point is to customize it to fit your needs. If you want to test out different custom formats quickly, you can pass them directly to git log like so: 1
+git log --format=format:"%C(auto)%h %C(green)%aN%Creset %s" You can find the different placeholder options in the same Pretty Formats section of the Git Log documentation. I am now accepting new clients for part-time consulting and software development projects. Learn more Feb 19th, 2015 Git " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +37,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

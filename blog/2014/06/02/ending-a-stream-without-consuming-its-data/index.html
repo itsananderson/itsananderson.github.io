@@ -13,6 +13,35 @@ After a bit of &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Ending a Stream Without Consuming Its Data - Will Anderson" />
+    <meta name="twitter:description" content=" I ran into an issue recently while writing a node module.
+My process would sometimes complete its work, but wouldn&rsquo;t end.
+After a bit of debugging, I figured out what was happening. I had implemented a handler for the HTTP &ldquo;location&rdquo; header.
+If a response came back with that header, I would ignore that response and go fetch the new location instead.
+Unfortunately, whenever I did that, the process would finish fetching the new location, and then just hang there for about a minute bofore exiting.
+The reason this happened was because I wasn&rsquo;t properly handling the first response. Here&rsquo;s an oversimplified explanation of what happens.
+This is from my limited understanding of Node internals, so the details may be slighly off, but the overall idea is correct. When you use the &ldquo;http&rdquo; module to make a request in Node, the response it gives you is a stream.
+If you don&rsquo;t do anything to consume that stream&rsquo;s data, Node doesn&rsquo;t exit because there&rsquo;s still work to be done (consuming the stream).
+In order to get Node to exit without something clunky like process.exit(), you just need to switch the stream to &ldquo;flowing&rdquo; mode. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+var http = require(&#39;http&#39;); var responseHandler = function(response) { if (response.headers.location) { http.get(response.headers.location, responseHandler); response.resume(); } else { response.pipe(process.stdout); }
+}; http.get(process.argv[2], responseHandler); Notice on line 6 how I&rsquo;ve called response.resume().
+This switches the response stream to &ldquo;flowing&rdquo; mode.
+According to the streams documentation,
+this is the way to finish a stream if you don&rsquo;t care about consuming its data. I am now accepting new clients for part-time consulting and software development projects. Learn more Jun 2nd, 2014 Node " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -21,6 +50,7 @@ After a bit of &hellip;">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

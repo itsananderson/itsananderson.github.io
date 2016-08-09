@@ -11,6 +11,65 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Converting PHP Associative Arrays to Variables - Will Anderson" />
+    <meta name="twitter:description" content=" EDIT: Nick Ohrn pointed out that extract does this automatically. The following post is still a valid look at how this could be implemented if the functionality didn&rsquo;t already exist, but it is better to use extract because it is likely more efficient. Associative arrays are one of my favorite PHP features. They&rsquo;re simple to use and easy to understand. Sometimes though, being able to reference the values of associative arrays with variables can be more convenient. Today I&rsquo;m going to share a simple way to convert a associative arrays to variables. OK, if you&rsquo;re not sure what we&rsquo;re trying to accomplish here, take a look at the following example. 1
+$list = array( &#39;var1&#39; =&amp;gt; &#39;value1&#39;, &#39;var2&#39; =&amp;gt; &#39;value2&#39; ); To reference the elements in the array, you&rsquo;ll have to use the array key like this. 1
+2
+echo $list[&#39;var1&#39;]; //prints &#39;value1&#39;
+echo $list[&#39;var2&#39;]; //prints &#39;value2&#39; What we&rsquo;d like to do instead is reference the values using variable names like this. 1
+2
+echo $var1; //print &#39;value1&#39;
+echo $var2; //print &#39;value2&#39; This is possible through what the PHP Manual calls &lsquo;variable variables&rsquo;. The idea is that the value of one variable is used as the name of another variable. Here&rsquo;s an example. 1
+2
+3
+$hello = &#39;world&#39;;
+$$hello = &#39;howdy&#39;;
+echo $world; //prints &#39;howdy&#39; Here, the value of $hello is analyzed and used as the name of the variable to which 'howdy' is assigned. Now it&rsquo;s not a big step to expand this to an associative array. Consider the following code. 1
+2
+3
+4
+$list = array( &#39;var1&#39; =&gt; &#39;value1&#39;, &#39;var2&#39; =&gt; &#39;value2&#39; );
+foreach ( $list as $key =&gt; $value ) { $$key = $value; }
+echo $var1; //prints &#39;value1&#39;
+echo $var2; //prints &#39;value2&#39; So we&rsquo;ve accomplished what we set out to do. I must caution you, though, about a couple of things which might trip you up. First, make sure the keys are valid variable names. If you don&rsquo;t you&rsquo;ll run into problems when you execute the script. Second, be very careful when using this with user input. For example, the following code is insecure. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+// login.php
+// checks the username and password in the GET request
+$realuser = &#39;me&#39;;
+$realpass = &#39;secret&#39;;
+foreach ( $_GET as $key =&gt; $value ) { $$key = $value; }
+if ( $user == $realuser &amp;&amp; $pass == $realpass ) { echo &#39;login correct&#39;;
+} else { echo &#39;login incorrect&#39;;
+} There are several problems here. First, we don&rsquo;t know that $user and $pass have been initialized. We should check this before using them. Second (and more importantly) a cleverly generated request could let a user log in without a correct username/password. For example: login.php?user=me&amp;pass=wrong&amp;realpass=wrong When the script runs through the list of variables, it will assign a new value of wrong to $realpass. Because $realpass and $pass have the same value (as do $user and $realuser), the page will allow them to log in. Here is a way to keep things a little safer by prefixing all the $_GET[] values. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+// login.php
+// checks the username and password in GET request
+$realuser = &#39;me&#39;;
+$realpass = &#39;secret&#39;;
+foreach ( $_GET as $key =&gt; $value ) { ${&#39;get_&#39;; . $key} = $value; }
+if ( isset( $get_user ) &amp;&amp; isset( $get_pass ) &amp;&amp; $get_user == $realuser &amp;&amp; $get_pass == $realpass ) { echo &#39;login correct&#39;;
+} else { echo &#39;login incorrect&#39;;
+} Now the $_GET[] values are prefixed with get_ so they can&rsquo;t interfere with other variables in the script. Additionally isset is used to ensure that the values of the variables has actually been set. To use something like this, you&rsquo;d still need to check for invalid variable names, but I won&rsquo;t go into that for this example. I am now accepting new clients for part-time consulting and software development projects. Learn more Jan 14th, 2009 PHP " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +78,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

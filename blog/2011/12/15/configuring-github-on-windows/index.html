@@ -11,6 +11,54 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Configuring GitHub on Windows - Will Anderson" />
+    <meta name="twitter:description" content=" If you&rsquo;re a Windows developer like me, you&rsquo;ve probably had trouble working with GitHub on Windows. Here&rsquo;s what I did. Hopefully this will be helpful to you. Getting Started First you need to grab a copy of Git for Windows.
+Once you&rsquo;ve downloaded the latest version, launch it and go through the license and location screens.
+Once you get to the &ldquo;Select Components&rdquo; screen, make sure both Context menu entries are selected.
+If you want, select the TrueType font option.
+That one shouldn&rsquo;t really matter. Jump ahead a few more frames and you&rsquo;ll get to the SSH executable option.
+Choose &ldquo;OpenSSH&rdquo;, unless you have a compelling reason to use Plink. Run through the rest of the frames, accepting the defaults.
+You now have Git installed on your machine, but we&rsquo;re not quite done yet.
+GitHub uses public/private key encryption.
+This means you don&rsquo;t commit with a username and password, like most SVN setups.
+Instead, you tell GitHub your public key, then use your private key to authenticate. Generating a Public Key GitHub has a detailed article on setting up your SSH keys on Mac/Windows/Linux.
+I recommend checking it out. Clone a Repository From GitHub You&rsquo;re just about there.
+Go to your GitHub repository and select and copy the text in the textbox near the top of the page.
+Make sure SSH is selected. Open up Git Bash.
+You should be able to find it in your start menu.
+&ldquo;cd&rdquo; to the directory where you plan on checking out your code.
+For example, if you want your code to be located in C:\programming\project then you want to &ldquo;cd&rdquo; to C:\programming. Type out &ldquo;git clone &rdquo;, but don&rsquo;t hit enter yet.
+Go to the top left corner of the Git Bash window and click.
+In the menu that pops up, select Edit &ndash;> Paste to paste the URL of your repository, but still don&rsquo;t hit enter.
+Finally, type the name you want to call the project folder.
+In our example, you&rsquo;d want something like this: git clone git@github.com:itsananderson/wp-sendgrid.git project Now you can hit enter :) If you entered a passphrase for your private key, it will ask you for it.
+If all goes well, your repository should be downloaded. Some Sample Commands This isn&rsquo;t really a tutorial on Git commands, but here are a few to get you started: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+# See what files have changed:
+git status # Add a file (new or modified, it doesn&#39;t matter. You need to add it to commit it)
+git add file.php # Add several files:
+git add *.php # Commit your changes locally (just stores a local snapshot of your changes): git commit -m &quot;Your commit message here&quot; # Push your changes up to GitHub:
+git push -u origin master # Pull down updates from GitHub:
+git pull That&rsquo;s about it.
+There&rsquo;s more to Git (which I&rsquo;m still learning about), but this should hopefully be enough to help you get started. I am now accepting new clients for part-time consulting and software development projects. Learn more Dec 15th, 2011 GitHub, Windows " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +67,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

@@ -12,6 +12,30 @@ This is usually fine. You just include a package.json in &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Testing Whether an NPM Module Is Installed - Will Anderson" />
+    <meta name="twitter:description" content=" Node doesn&rsquo;t have a well documented way of checking whether a module is available.
+This is usually fine. You just include a package.json in your project, and expect people to run npm install.
+This is how most popular Node frameworks work. But what if you have a devDependency entry that you want to include only if it is installed?
+I searched for an answer and didn&rsquo;t find anything conclusive, so I&rsquo;m documenting what I did find in case I forget later. Buried in NPM&rsquo;s package.json documentation is an example
+for handling a package that may or may not be installed. In short, you use a try/catch. Here&rsquo;s an example: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+var program; try { program = require(&#39;commander&#39;);
+} catch (er) { // Any code to run if this module doesn&#39;t exist
+} if (program) { program.version(&#39;0.0.1&#39;) .option(&#39;-n, --name[name]&#39;, &#39;Your name&#39;) .parse(process.argv);
+} I am now accepting new clients for part-time consulting and software development projects. Learn more Mar 29th, 2014 NPM, Node " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -20,6 +44,7 @@ This is usually fine. You just include a package.json in &hellip;">
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

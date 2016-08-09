@@ -11,6 +11,19 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="The Obscure WordPress get_option Parameter - Will Anderson" />
+    <meta name="twitter:description" content=" Any WordPress Plugin developer worth their salt knows about the get_option function, which allows options to be retrieved from the database. What I recently discovered is that this function accepts a second parameter, indicating a default value to be returned if the option doesn&rsquo;t exist in the database. Here&rsquo;s a simple example of the &ldquo;old&rdquo; and &ldquo;new&rdquo; ways of retrieving options from the database: old: 1
+2
+3
+4
+$option = get_option( &#39;Option Name&#39; );
+if( false === $option ) {
+$option = &#39;My real option value.&#39;;
+} new: 1
+$option = get_option(&#39;option_name&#39;, &#39;default&#39;); As you can see, this simplifies option retrieval and makes your code just a little easier to read. EDIT: Thanks Nick Ohrn for pointing out a bug in the first code snippet. I&rsquo;ve updated it so nobody is confused. I am now accepting new clients for part-time consulting and software development projects. Learn more May 4th, 2009 WordPress " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +32,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>

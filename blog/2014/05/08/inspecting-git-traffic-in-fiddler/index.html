@@ -11,6 +11,17 @@
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Inspecting Git Traffic in Fiddler - Will Anderson" />
+    <meta name="twitter:description" content=" If you ever need to inspect Git traffic to diagnose problems, or are just curious about the internal workings of Git, it&rsquo;s pretty easy to make Git send traffic through Fiddler. 1
+2
+git config --global http.proxy 127.0.0.1:8888
+git config --global http.sslVerify false This tells Git to use Fiddler as the proxy, and to turn off SSL certificate verification (so it doesn&rsquo;t balk at Fiddler&rsquo;s cert). Make sure Fiddler&rsquo;s actually running, or Git won&rsquo;t be able to connect. If you just want to use Fiddler for a single repository, run the commands from within that repository without the --global flag. Obviously this work for the git clone command, so you&rsquo;ll have to use a global configuration if you want to inspect that. When you&rsquo;re done, make sure you undo your changes: 1
+2
+git config --global --unset http.proxy
+git config --global --unset http.sslVerify Again, remove the --global flag if you&rsquo;re just inspecting traffic for a single repository. I am now accepting new clients for part-time consulting and software development projects. Learn more May 8th, 2014 Fiddler, Git " />
+
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
 	<link href="/favicon.ico" rel="shortcut icon">
@@ -19,6 +30,7 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	
 </head>
+
 
 <body>
 	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
