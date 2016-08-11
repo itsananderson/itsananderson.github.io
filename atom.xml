@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://william-backend.azurewebsites.net/feed/" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-11T07:55:39-07:00</updated>
+  <updated>2016-08-11T07:59:20-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -59,7 +59,7 @@ Then as a cleanup step, you can uninstall do2unix from the image (unless the ima
 </span><span class='line'>
 </span><span class='line'>COPY docker-entrypoint.sh /entrypoint.sh
 </span><span class='line'>
-</span><span class='line'># RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
+</span><span class='line'>RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 </span><span class='line'>
 </span><span class='line'>ENTRYPOINT ["/entrypoint.sh"]</span></code></pre></td></tr></table></div></figure>
 

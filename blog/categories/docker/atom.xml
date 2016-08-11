@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-11T07:55:39-07:00</updated>
+  <updated>2016-08-11T07:59:20-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -50,7 +50,7 @@ FROM ubuntu:latest</p>
 
 <p>COPY docker-entrypoint.sh /entrypoint.sh</p>
 
-<h1>RUN dos2unix /entrypoint.sh &amp;&amp; apt-get &mdash;purge remove -y dos2unix &amp;&amp; rm -rf /var/lib/apt/lists/*</h1>
+<p>RUN dos2unix /entrypoint.sh &amp;&amp; apt-get &mdash;purge remove -y dos2unix &amp;&amp; rm -rf /var/lib/apt/lists/*</p>
 
 <p>ENTRYPOINT [&ldquo;/entrypoint.sh&rdquo;]
 ```</p>
