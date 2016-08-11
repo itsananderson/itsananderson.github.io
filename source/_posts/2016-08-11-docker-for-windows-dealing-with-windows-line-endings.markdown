@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Docker for Windows: Dealing With Windows Line Endings"
-date: 2016-08-15 23:54:08 -0700
+date: 2016-08-11 23:54:08 -0700
 comments: true
 categories: Docker
 ---
