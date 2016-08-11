@@ -7,27 +7,22 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com& &hellip;">
+	<meta name="description" content="When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com&rdquo;). This does an OK job, but it&rsquo;s also a royal pain for the visitor, who has to type in, or fix your email address if they want to send you an email. The ultimate spam fighting question arises: &ldquo;How do you keep bots out while letting real users in&rdquo;. GMail&rsquo;s plus-addressing feature and jQuery might be able to bring us one step closer to an answer. If you use Google&rsquo;s email services (GMail or Google Apps), you have a powerful email feature available. Plus-addressing means that bill&#64;gmail.com, bill+something&#64;gmail.com and bill+anything&#64;gmail.com all point to the same email address. When deciding what address to deliver the message to, Google drops everything after the plus sign. you can then actually use filters to move items to folders inside your mailbox (for example, you could use example+bank&#64;gmail.com for your banking). Doing this also makes it just a little harder (though not impossible) for bots to get your real email address. By default, you probably don&rsquo;t want to display a &ldquo;plus address&rdquo; on a contact page, jQuery comes to our rescue here, allowing us to remove the &ldquo;plus&rdquo; part for users with JavaScript support. The following script looks for all email links and removes the &ldquo;plus&rdquo; portion from the href and the inner text. 1
+    <meta name="twitter:description" content=" When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works. As with just about anything in WordPress, you can use Actions and Filters to customize the way WordPress RSS Feeds. I chose to filter the query because it already has built in category filtering functionality. First I hooked into the query filter. 1
+add_filter(&#39;pre_get_posts&#39;, &#39;filterRSSQuery&#39;); Then I created a function called &lsquo;filterRSSQuery&rsquo; which does just what the name suggests. 1
 2
 3
 4
 5
 6
-7
-8
-9
-jQuery(document).ready(function(){ jQuery(&#39;a[href^=mailto:]&#39;).each(removeSpamProtection);
-}); function removeSpamProtection(index, element){ var link = jQuery(element); link.attr(&#39;href&#39;, link.attr(&#39;href&#39;).replace(/\+[a-zA-Z]*/, &#39;&#39;)) .text(link.text().replace(/\+[a-zA-Z]*/, &#39;&#39;));
-} Now all visitors with JavaScript support will see something like: 1
-&lt;a href=&quot;mailto:example@example.com&quot;&gt;example@example.com&lt;/a&gt; Visitors without JavaScript support will see: 1
-&lt;a href=&quot;mailto:example+spamblock@example.com&quot;&gt;example+spamblock@example.com&lt;/a&gt; Normal visitors will see your real email address while bots and visitors without JavaScript will see something else. The bots will (hopefully) be confused by the plus sign. If not, they will be sending an email to an address that you can easily filter into a &ldquo;maybe spam&rdquo; folder. So there you have it. A very short piece of JavaScript (thanks to the wonders of jQuery) that you can include in your WordPress theme or install as a separate plugin. What do you do to protect your email online? Do you have another method that works better? If so, please share it in the comments! Feb 26th, 2009 Gmail, jQuery " />
+function filterRSSQuery($query) { if ( $query-&gt;is_feed ) { $query-&gt;set(&#39;category_name&#39;, &#39;News&#39;); } return $query;
+} The code is pretty straight foreward, but here&rsquo;s a breakdown. First we test to see if the query is for a feed (we don&rsquo;t want to do this filtering anywhere else). Then we set the &lsquo;category_name&rsquo; argument to &lsquo;News&rsquo; (you would change this to whatever category you want to show up). Finally, you return the modified query object. Overall, this is pretty simple, but extremely powerful. Mar 17th, 2009 WordPress " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -96,6 +91,75 @@ jQuery(document).ready(function(){ jQuery(&#39;a[href^=mailto:]&#39;).each(remov
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2009/03/17/limit-your-wordpress-rss-feed-to-one-category/">
+		
+			Limit Your WordPress RSS Feed to One Category</a>
+	</h2>
+	<div class="entry-content">
+		<p>When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works.</p>
+
+<p>As with just about anything in WordPress, you can use Actions and Filters to customize the way WordPress RSS Feeds. I chose to filter the query because it already has built in category filtering functionality. First I hooked into the query filter.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">add_filter</span><span class="p">(</span><span class="s1">&#39;pre_get_posts&#39;</span><span class="p">,</span> <span class="s1">&#39;filterRSSQuery&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then I created a function called &lsquo;filterRSSQuery&rsquo; which does just what the name suggests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">function</span> <span class="nf">filterRSSQuery</span><span class="p">(</span><span class="nv">$query</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span> <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">is_feed</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">set</span><span class="p">(</span><span class="s1">&#39;category_name&#39;</span><span class="p">,</span> <span class="s1">&#39;News&#39;</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nv">$query</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The code is pretty straight foreward, but here&rsquo;s a breakdown. First we test to see if the query is for a feed (we don&rsquo;t want to do this filtering anywhere else). Then we set the &lsquo;category_name&rsquo; argument to &lsquo;News&rsquo; (you would change this to whatever category you want to show up). Finally, you return the modified query object.</p>
+
+<p>Overall, this is pretty simple, but extremely powerful.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-03-17T22:23:38-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2009</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">

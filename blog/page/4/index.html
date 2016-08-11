@@ -25,8 +25,8 @@ Creating Blobs
 Downloading Blobs
 Listing Blobs
 Blob Metadata
-All Together Uploading to Azure Blob Storage In the previous post, we talked about how to set up and connect to an Azure Storage account, and how to create a blob container.
-Today we&rsquo;ll discuss how to upload blobs. Account Connection Boilerplate To upload to blob storage, you first need to create a client instance.
+All Together Downloading From Blob Storage Last time we talked about creating Azure blobs.
+This time we&rsquo;ll turn things around and talk about downloading Azure blobs. Account Connection Boilerplate As stated in the previous post, to work with blob storage, you first need to create a client instance.
 To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples. 1
 2
 3
@@ -44,11 +44,13 @@ To avoid duplicating code over and over, we&rsquo;ll do that once here, and assu
 15
 16
 17
+18
+19
 var storage = require(&#39;azure-storage&#39;);
 var blobService = storage.createBlobService();
 var containerName = &#39;your-container-name&#39;;
-blobService.createContainerIfNotExists(containerName, function(err, result, response) { if (err) { console.log(&quot;Couldn&#39;t create container %s&quot;, containerName); console.error(err); } else { if (result) { console.log(&#39;Container %s created&#39;, containerName); } else { console.log(&#39;Container %s already exists&#39;, containerName); } // Your code goes here }
-}); Now for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above. Uploading a String Uploading a string is easy with the createBlockBlobFromText method. 1
+blobService.createContainerIfNotExists( containerName, function(err, result, response) { if (err) { console.log(&quot;Couldn&#39;t create container %s&quot;, containerName); console.error(err); } else { if (result) { console.log(&#39;Container %s created&#39;, containerName); } else { console.log(&#39;Container %s already exists&#39;, containerName); } // Your code goes here } }); Again, for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above. Checking if a Blob Exists In some cases, you don&rsquo;t need a blob&rsquo;s contents, you just need to know if it exists.
+You can do this with the getBlobProperties method. 1
 2
 3
 4
@@ -59,24 +61,8 @@ blobService.createContainerIfNotExists(containerName, function(err, result, resp
 9
 10
 11
-12
-blobService.createBlockBlobFromText( containerName, &#39;my-awesome-text-blob&#39;, &#39;Hello, World!&#39;, function(error, result, response){ if(error){ console.log(&quot;Couldn&#39;t upload string&quot;); console.error(error); } else { console.log(&#39;String uploaded successfully&#39;); } }); The above code creates a blob called &ldquo;my-awesome-text-blob&rdquo; inside our container with the content &ldquo;Hello, World!&rdquo;. Uploading a File Uploading a file is just as simple as uploading a string. Use the createBlockBlobFromFile method. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-var fileName = &#39;hello-world.txt&#39;;
-blobService.createBlockBlobFromFile( containerName, &#39;my-awesome-file-blob&#39;, fileName, function(error, result, response){ if(error){ console.log(&quot;Couldn&#39;t upload file %s&quot;, fileName); console.error(error); } else { console.log(&#39;File %s uploaded successfully&#39;, fileName); } }); The above code creates a blob called &ldquo;my-awesome-file-blob&rdquo; inside our container with the contents of &ldquo;hello-world.txt&rdquo;. Uploading a Stream Again, uploading streams is easy with azure-storage.
-Just use the createBlockBlobFromStream method.
-The one caveat here is that you need to know the length of the stream you&rsquo;re uploading. 1
+var blobName = &#39;my-nonexistent-blob&#39;
+blobService.getBlobProperties( containerName, blobName, function(err, properties, status) { if (status.isSuccessful) { // Blob exists } else { // Blob doesn&#39;t exist } }); Downloading a Blob As Text To download a blob as a text string, use the getBlobToText method. 1
 2
 3
 4
@@ -89,14 +75,8 @@ The one caveat here is that you need to know the length of the stream you&rsquo;
 11
 12
 13
-14
-15
-16
-// For simplicity, assume getSomeStream() returns a readable stream
-var myStream = getSomeStream();
-var myStreamLength = getSomeStreamLength();
-blobService.createBlockBlobFromStream( containerName, &#39;my-awesome-stream-blob&#39;, myStream, myStreamLength, function(error, result, response){ if(error){ console.log(&quot;Couldn&#39;t upload stream&quot;); console.error(error); } else { console.log(&#39;Stream uploaded successfully&#39;); } }); Uploading an HTTP Response You can also download a file and upload it to blob storage.
-This is useful for things like caching API responses. For this, we&rsquo;ll use createWriteStreamToBlockBlob to get a writable stream that saves to a blob. 1
+var blobName = &#39;my-awesome-text-blob&#39;;
+blobService.getBlobToText( containerName, blobName, function(err, blobContent, blob) { if (err) { console.error(&quot;Couldn&#39;t download blob %s&quot;, blobName); console.error(err); } else { console.log(&quot;Sucessfully downloaded blob %s&quot;, blobName); console.log(blobContent); } }); Downloading a Blob to a File To download a blob to a file, use the getBlobToFile method. 1
 2
 3
 4
@@ -119,21 +99,29 @@ This is useful for things like caching API responses. For this, we&rsquo;ll use 
 21
 22
 23
-24
-25
-26
-27
-28
-29
-30
-31
-var http = require(&#39;http&#39;); var fileName = &#39;index.html&#39;;
-var domain = &#39;example.com&#39;;
-var requestOptions = { host: domain, port: 80, path: &#39;/&#39; + fileName
-}; http.get(requestOptions, function (httpResponse) { if (200 !== httpResponse.statusCode) { console.log(&#39;Unexpected status code: %d&#39;, httpResponse.statusCode); } else { var writeStream = blobService.createWriteStreamToBlockBlob( containerName, fileName, { contentType: &#39;text/html&#39; }, function(error, result, response){ if(error){ console.log(&quot;Couldn&#39;t upload file %s from %s&quot;, fileName, domain); console.error(error); } else { console.log(&#39;File %s from %s uploaded&#39;, fileName, domain); } }); httpResponse.pipe(writeStream); }
-}).on(&#39;error&#39;, function(e) { console.log(&quot;Got error: &quot; + e.message);
-}); This example is a bit more complex, but the main idea is to create a write stream for the blob we want to create.
-Then we fetch http://example.com/index.html and .pipe the response to the blob&rsquo;s write stream; If you&rsquo;re doing this in a web server, you&rsquo;ll probably also want to pipe the http.get response to the client. 1
+var fs = require(&#39;fs&#39;);
+var fileName = &#39;hello-world.txt&#39;;
+var blobName = &#39;my-awesome-file-blob&#39;;
+blobService.getBlobToFile( containerName, blobName, fileName, function(err, blob) { if (err) { console.error(&quot;Couldn&#39;t download blob %s&quot;, blobName); console.error(err); } else { console.log(&quot;Sucessfully downloaded blob %s to %s&quot;, blobName, fileName); fs.readFile(fileName, function(err, fileContents) { if (err) { console.error(&quot;Couldn&#39;t read file %s&quot;, fileName); console.error(err); } else { console.log(fileContents); } }); } }); Downloading a Blob to a Stream To download a blob to a stream, use the getBlobToStream method. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+// For simplicity, assume getSomeStream returns a writable stream
+var myStream = getSomeStream();
+var blobName = &#39;my-awesome-stream-blob&#39;;
+blobService.getBlobToStream( containerName, blobName, myStream, function(err, blob) { if (err) { console.error(&quot;Couldn&#39;t download blob %s&quot;, blobName); console.error(err); } else { console.log(&quot;Sucessfully downloaded blob %s&quot;, blobName); } }); You can also integrate with a web server to enable downloads from blob storage.
+This is powerfull when combined with the getBlobProperties method. In the following example, we use the createReadStream method so we can easily pipe the stream to the server response object. 1
 2
 3
 4
@@ -149,18 +137,9 @@ Then we fetch http://example.com/index.html and .pipe the response to the blob&r
 14
 15
 16
-17
-18
-19
-20
-app.get(&#39;/somepath&#39;, function(req, res) { http.get(requestOptions, function (httpResponse) { if (200 !== httpResponse.statusCode) { res.send(502, &#39;Unexpected status code: &#39; + httpResponse.statusCode); } else { // ... // Blob stream setup code from above // ... // Pipe server response to both the blob and the client who made this request httpResponse.pipe(writeStream); httpResponse.pipe(res); } }).on(&#39;error&#39;, function(e) { res.send(502, &quot;Got error: &quot; + e.message); });
-}); Setting a Content Type You may have noticed that the previoius example passed an extra option to createWriteStreamToBlockBlob.
-There are a number of properties you can set on a blob, but the most useful is the contentType property.
-This determines the Content-Type header that will be set if the blob is accessed or streamed directly from blob storage. By default the content type is set to &lsquo;application/octet-stream&rsquo;.
-If you create a blob with this type and try to access it with your browser, it will simply be downloaded rather than displayed as the desired type (text, html, image). To set a custom content type, pass something like { contentType: 'image/jpeg' } before your callback function.
-Note that createBlockBlobFromFile will infer the content type from the file extension.
-Also,createBlockBlobFromText automatically sets the content type to text/plain;charset="utf-9" when it&rsquo;s given a string. There are a number of other properties that can be set on a blob, including contentEncoding, contentLanguage, and metadata (which will be covered in a later post). The easiest way to see the different options is to look in lib\services\blob\blobservice.js inside the azure-storage package. Conclusion In this post we&rsquo;ve covered the many ways to create Azure blobs in Node.
-Next time we&rsquo;ll talk about downloading blobs. Jul 2nd, 2014 Azure, Node " />
+app.get(&#39;/download/:file&#39;, function(req, res) { var fileName = req.params.file; blobService.getBlobProperties( containerName, fileName, function(err, properties, status) { if (err) { res.send(502, &quot;Error fetching file: %s&quot;, err.message); } else if (!status.isSuccessful) { res.send(404, &quot;The file %s does not exist&quot;, fileName); } else { res.header(&#39;Content-Type&#39;, properties.contentType); blobService.createReadStream(containerName, fileName).pipe(res); } });
+}); Conclusion In this post we covered how to check whether a blob exists, and how to download the blob.
+In the next post, we&rsquo;ll cover how to list containers and blobs. Jul 3rd, 2014 Azure, Node " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -229,6 +208,309 @@ Next time we&rsquo;ll talk about downloading blobs. Jul 2nd, 2014 Azure, Node " 
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">
+		
+			Azure Blob Storage and Node: Downloading Blobs</a>
+	</h2>
+	<div class="entry-content">
+		<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
+
+<ol>
+<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
+<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
+<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
+<li><strong>Downloading Blobs</strong></li>
+<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
+<li><a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">Blob Metadata</a></li>
+<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
+</ol>
+
+
+<h2>Downloading From Blob Storage</h2>
+
+<p><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Last time</a> we talked about creating Azure blobs.
+This time we&rsquo;ll turn things around and talk about downloading Azure blobs.</p>
+
+<h3>Account Connection Boilerplate</h3>
+
+<p>As stated in the previous post, to work with blob storage, you first need to create a client instance.
+To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createContainerIfNotExists</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t create container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s created&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s already exists&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="c1">// Your code goes here</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Again, for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
+
+<h3>Checking if a Blob Exists</h3>
+
+<p>In some cases, you don&rsquo;t need a blob&rsquo;s contents, you just need to know if it exists.
+You can do this with the <code>getBlobProperties</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-nonexistent-blob&#39;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobProperties</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">properties</span><span class="p">,</span> <span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">status</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// Blob exists</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="c1">// Blob doesn&#39;t exist</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Downloading a Blob As Text</h3>
+
+<p>To download a blob as a text string, use the <code>getBlobToText</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-text-blob&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobToText</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blobContent</span><span class="p">,</span> <span class="nx">blob</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t download blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Sucessfully downloaded blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">blobContent</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Downloading a Blob to a File</h3>
+
+<p>To download a blob to a file, use the <code>getBlobToFile</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="s1">&#39;hello-world.txt&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-file-blob&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobToFile</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">fileName</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blob</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t download blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Sucessfully downloaded blob %s to %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">fileName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">fileContents</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t read file %s&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
+</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fileContents</span><span class="p">);</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">});</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Downloading a Blob to a Stream</h3>
+
+<p>To download a blob to a stream, use the <code>getBlobToStream</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// For simplicity, assume getSomeStream returns a writable stream</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">myStream</span> <span class="o">=</span> <span class="nx">getSomeStream</span><span class="p">();</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-stream-blob&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobToStream</span><span class="p">(</span>
+</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
+</span><span class='line'>    <span class="nx">myStream</span><span class="p">,</span>
+</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blob</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t download blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Sucessfully downloaded blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can also integrate with a web server to enable downloads from blob storage.
+This is powerfull when combined with the <code>getBlobProperties</code> method.</p>
+
+<p>In the following example, we use the <code>createReadStream</code> method so we can easily pipe the stream to the server response object.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/download/:file&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">params</span><span class="p">.</span><span class="nx">file</span><span class="p">;</span>
+</span><span class='line'>    <span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobProperties</span><span class="p">(</span>
+</span><span class='line'>        <span class="nx">containerName</span><span class="p">,</span>
+</span><span class='line'>        <span class="nx">fileName</span><span class="p">,</span>
+</span><span class='line'>        <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">properties</span><span class="p">,</span> <span class="nx">status</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">502</span><span class="p">,</span> <span class="s2">&quot;Error fetching file: %s&quot;</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">status</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">res</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">404</span><span class="p">,</span> <span class="s2">&quot;The file %s does not exist&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">res</span><span class="p">.</span><span class="nx">header</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="nx">properties</span><span class="p">.</span><span class="nx">contentType</span><span class="p">);</span>
+</span><span class='line'>                <span class="nx">blobService</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">res</span><span class="p">);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Conclusion</h3>
+
+<p>In this post we covered how to check whether a blob exists, and how to download the blob.
+In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">how to list containers and blobs</a>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-03T16:23:46-07:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1492,69 +1774,6 @@ Fortunately there&rsquo;s a workaround.</p>
 
 
 	<a class='category' href='/blog/categories/bash/'>Bash</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/05/14/live-compiling-aspnet-vnext-with-nodemon/">
-		
-			Live Compiling ASP.NET vNext With Nodemon</a>
-	</h2>
-	<div class="entry-content">
-		<p>Something cool that Scott Hanselman talked about in his <a href="http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx">blog post on vNext</a>
-was the ability to save a C# file in Visual Studio and view the change in the browser without manually rebuilding.</p>
-
-<p>After spending a little time messing around with the <a href="https://github.com/aspnet">newly released code</a>, I wanted similar functionality when editing C# files outside Visual Studio.
-I didn&rsquo;t see a documented way to do that, but there&rsquo;s an easy workaround if you have Node installed.</p>
-
-<p>First install the &ldquo;nodemon&rdquo; package.
-This package monitors a directory for file chanages and respawns a child process whenever anything changes.</p>
-
-<p><code>npm install -g nodemon</code></p>
-
-<p>Now that nodemon is installed, you can use it to live-rerun your app.</p>
-
-<p><code>nodemon --exec "K.cmd web" -e cs,json</code></p>
-
-<p>This tells Nodemon to watch for changes to <em>.cs and </em>.json files and to restart &ldquo;K.cmd web&rdquo; when changes are detected.
-Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is configured for your project.</p>
-
-<p>Note that if you&rsquo;re running in Git Bash on Windows or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code>, <code>K.cmd web</code>, or <code>K.sh web</code>.</p>
-
-<p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
-
-<p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-14T12:47:24-07:00" pubdate data-updated="true">May 14<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/asp-dot-net/'>ASP.NET</a>, <a class='category' href='/blog/categories/node/'>Node</a>
 
 
 </div>

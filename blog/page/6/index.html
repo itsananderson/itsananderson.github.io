@@ -7,23 +7,63 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use &hellip;">
+	<meta name="description" content="While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" I&rsquo;ve been using the new &ldquo;Controller as&rdquo; syntax in Angular for a few months, but today I realized I didn&rsquo;t know how to use
-the syntax for route controllers. After spending a few minutes scratching my head and &ldquo;Googling with Bing&rdquo;, I figured it out.
-The $routeProvider supports a &ldquo;controllerAs&rdquo; property for routes: 1
+    <meta name="twitter:description" content=" While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following: 1
 2
 3
 4
 5
 6
 7
-$routeProvider .when(&#39;/&#39;, { templateUrl: &#39;Views/Home/Index.html&#39;, controller: &#39;HomeCtrl&#39;, controllerAs: &#39;vm&#39; }) .otherwise({ redirectTo: &#39;/&#39; }); That&rsquo;s it. Not very complicated, but hopefully it will save someone a few minutes of research. Dec 3rd, 2013 Angular, JavaScript " />
+8
+9
+10
+11
+12
+13
+14
+15
+Function Package-Project( [string]$folder, [switch]$build, [switch]$symbols
+) { pushd $folder $nugetArgs = @{Properties=&quot;Configuration=$configuration&quot;} if($build) { $nugetArgs.Build=$True } if($symbols) { $nugetArgs.Symbols=$True } nuget pack @nugetArgs popd
+} Package-Project ProjectA
+Package-Project ProjectB Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
+HashSet of arguments, and throw an error like the following: 1
+2
+3
+4
+5
+6
+nuget : Unknown option: &#39;-Build:True&#39;
+At line:1 char:38
++ nuget pack $project $nugetArgs
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ + CategoryInfo : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException + FullyQualifiedErrorId : NativeCommandError Digging into the source code,
+I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
+(If I&rsquo;m wrong, leave a comment!) Fortunately, there&rsquo;s a fairly reasonable workaround: Pass an array of arguments rather than a HashSet: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+Function Package-Project( [string]$folder, [switch]$build, [switch]$symbols
+) { pushd $folder $nugetArgs = &quot;-Properties&quot;, &quot;Configuration=$configuration&quot; if($build) { $nugetArgs += &quot;-Build&quot; } if($symbols) { $nugetArgs += &quot;-Symbols&quot; } nuget pack @nugetArgs popd
+} Package-Project ProjectA
+Package-Project ProjectB So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
+This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective. Feb 7th, 2014 NuGet, Powershell " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -92,6 +132,140 @@ $routeProvider .when(&#39;/&#39;, { templateUrl: &#39;Views/Home/Index.html&#39;
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/">
+		
+			Pass Dynamic Flags to NuGet With PowerShell Splatting</a>
+	</h2>
+	<div class="entry-content">
+		<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
+</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
+</span><span class='line'><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
+</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="err">@</span><span class="p">{</span><span class="n">Properties</span><span class="p">=</span><span class="s2">&quot;Configuration=$configuration&quot;</span><span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Build</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Symbols</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
+</span><span class='line'>    <span class="n">popd</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
+HashSet of arguments, and throw an error like the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>nuget : Unknown option: &#39;-Build:True&#39;
+</span><span class='line'>At line:1 char:38
+</span><span class='line'>+ nuget pack $project $nugetArgs
+</span><span class='line'>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</span><span class='line'>    + CategoryInfo          : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException
+</span><span class='line'>    + FullyQualifiedErrorId : NativeCommandError
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Digging into the <a href="http://nuget.codeplex.com/SourceControl/latest#src/CommandLine/CommandLineParser.cs">source code</a>,
+I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
+(If I&rsquo;m wrong, leave a comment!)</p>
+
+<p>Fortunately, there&rsquo;s a <em>fairly</em> reasonable workaround: Pass an array of arguments rather than a HashSet:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
+</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
+</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
+</span><span class='line'><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
+</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="s2">&quot;-Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;Configuration=$configuration&quot;</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Build&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Symbols&quot;</span> <span class="p">}</span>
+</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
+</span><span class='line'>    <span class="n">popd</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
+</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
+This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-02-07T09:24:32-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/nuget/'>NuGet</a>, <a class='category' href='/blog/categories/powershell/'>Powershell</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -952,147 +1126,6 @@ Ideally, the inherited get_instance() method would return an instance of the act
 
 
 	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/02/24/creating-xampp-alias-directories/">
-		
-			Creating XAMPP Alias Directories</a>
-	</h2>
-	<div class="entry-content">
-		<p>If you&rsquo;ve read my post on <a href="/blog/2009/01/14/wamp-alias-directories/">adding aliases to WampServer</a>,
-you may be curious about how to add aliases to XAMPP.
-While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
-Fortunately, creating XAMPP alias directories by hand is pretty easy.</p>
-
-<h2>Preparing to Create XAMPP Alias Directories</h2>
-
-<p>The first thing you&rsquo;ll want to do is add an alias directory to your XAMPP install.
-If you&rsquo;re running Windows, create the following folder.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>C:\xampp\apache\conf\alias</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Next, you&rsquo;ll need to change your Apache configuration file.
-You can find it under <code>C:\xampp\apache\conf\httpd.conf</code>.
-To make changes, you&rsquo;ll need to edit it as an administrator.
-If you&rsquo;re running Windows Vista or above, your best bet is to open Notepad as an administrator and then open httpd.conf.
-To open Notepad (or any other application) as an administrator, right-click on it and select &ldquo;Run as administrator&rdquo;.
-You can also launch Notepad as an administrator from the start menu with <code>Ctrl+Shift+Enter</code> while Notepad is selected.</p>
-
-<p>Once you&rsquo;ve opened httpd.conf, add the following to the end and save it.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Include "conf/alias/*"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now Apache will look in the alias folder for more configuration files.
-This way you can add an alias by simply adding a new configuration file to the conf/alias/ folder.</p>
-
-<h2>Creating XAMPP Alias Directories</h2>
-
-<p>Let&rsquo;s add some XAMPP alias directories.
-Suppose you want to add an alias called &ldquo;dev&rdquo;.
-First, download <a href="/uploads/xampp-alias-template.txt">this alias template file</a> and place it in the alias folder.
-Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
-You&rsquo;ll need to edit the template (again, as an administrator) and replace &ldquo;DIRECTORY&rdquo; (it&rsquo;s there twice) with the path to the alias and &ldquo;ALIAS&rdquo; with the name of your alias.
-In our example, it looks something like this:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;directory "c:\users\foo\programming\dev"&gt;
-</span><span class='line'>    #
-</span><span class='line'>    # Possible values for the Options directive are "None", "All",
-</span><span class='line'>    # or any combination of:
-</span><span class='line'>    #   Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews
-</span><span class='line'>    #
-</span><span class='line'>    # Note that "MultiViews" must be named *explicitly* --- "Options All"
-</span><span class='line'>    # doesn't give it to you.
-</span><span class='line'>    #
-</span><span class='line'>    # The Options directive is both complicated and important.  Please see
-</span><span class='line'>    # http://httpd.apache.org/docs/2.2/mod/core.html#options
-</span><span class='line'>    # for more information.
-</span><span class='line'>    #
-</span><span class='line'>    Options Indexes FollowSymLinks Includes ExecCGI
-</span><span class='line'>
-</span><span class='line'>    #
-</span><span class='line'>    # AllowOverride controls what directives may be placed in .htaccess files.
-</span><span class='line'>    # It can be "All", "None", or any combination of the keywords:
-</span><span class='line'>    #   Options FileInfo AuthConfig Limit
-</span><span class='line'>    #
-</span><span class='line'>    AllowOverride All
-</span><span class='line'>
-</span><span class='line'>    #
-</span><span class='line'>    # Controls who can get stuff from this server.
-</span><span class='line'>    #     Order allow,deny
-</span><span class='line'>    Allow from all
-</span><span class='line'>&lt;/Directory&gt;
-</span><span class='line'>
-</span><span class='line'>Alias /dev "C:\users\foo\programming\dev"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Restart Apache (you can do so from the XAMPP control panel) and check out <a href="http://localhost/dev.">http://localhost/dev.</a>
-You can repeat this process with other aliases to add more XAMPP alias directories.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-02-24T12:35:42-08:00" pubdate data-updated="true">Feb 24<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/xampp/'>XAMPP</a>
 
 
 </div>

@@ -7,23 +7,19 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Microsoft made some anouncements about the next generation of ASP.NET today. David Fowler published a post about the reasoning behind some of the &hellip;">
+	<meta name="description" content="Something cool that Scott Hanselman talked about in his blog post on vNext
+was the ability to save a C# file in Visual Studio and view the change in &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" Microsoft made some anouncements about the next generation of ASP.NET today. David Fowler published a post about the reasoning behind some of the changes.
-Scott Hanselman published a post with more details about the features that are coming our way.
-There&rsquo;s a ton of stuff to be excited about here, but my favorite part is these two paragraphs from Scott&rsquo;s post (emphasis his). The project system is also changing &ndash; we&rsquo;re integrating packages.config, NuGet specifications (nuspec),
-and project files (csprojs) into a unified view of your project dependencies expressed in a project.json file. NuGet packages and class libraries are treated the same.
-You get full intellisense in the project.json file and NuGet packages come down automatically and transparently.
-Even better, let&rsquo;s say NuGet package Foo.Bar has a bug but you&rsquo;ve only got the NuGet package.
-You can make a folder called Foo.Bar in our local project and put the source via &ldquo;git clone&rdquo; in that folder.
-This is great for open source projects.
-That local version overrides the NuGet, allowing you to easily patch bugs locally in libraries while you wait for a new release.
-When a new fixed NuGet-distributed version shows up, update the version and delete the local source. Introducing ASP.NET vNext &ndash; Scott Hanselman Mind. Blown. May 12th, 2014 ASP.NET " />
+    <meta name="twitter:description" content=" Something cool that Scott Hanselman talked about in his blog post on vNext
+was the ability to save a C# file in Visual Studio and view the change in the browser without manually rebuilding. After spending a little time messing around with the newly released code, I wanted similar functionality when editing C# files outside Visual Studio.
+I didn&rsquo;t see a documented way to do that, but there&rsquo;s an easy workaround if you have Node installed. First install the &ldquo;nodemon&rdquo; package.
+This package monitors a directory for file chanages and respawns a child process whenever anything changes. npm install -g nodemon Now that nodemon is installed, you can use it to live-rerun your app. nodemon --exec "K.cmd web" -e cs,json This tells Nodemon to watch for changes to .cs and .json files and to restart &ldquo;K.cmd web&rdquo; when changes are detected.
+Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is configured for your project. Note that if you&rsquo;re running in Git Bash on Windows or on a Linux/OSX machine, the &mdash;exec command will probably be either K web, K.cmd web, or K.sh web. This functionality is on the way for ASP.NET vNext, but for now this is a handy workaround. May 14th, 2014 ASP.NET, Node " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -92,6 +88,69 @@ When a new fixed NuGet-distributed version shows up, update the version and dele
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/05/14/live-compiling-aspnet-vnext-with-nodemon/">
+		
+			Live Compiling ASP.NET vNext With Nodemon</a>
+	</h2>
+	<div class="entry-content">
+		<p>Something cool that Scott Hanselman talked about in his <a href="http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx">blog post on vNext</a>
+was the ability to save a C# file in Visual Studio and view the change in the browser without manually rebuilding.</p>
+
+<p>After spending a little time messing around with the <a href="https://github.com/aspnet">newly released code</a>, I wanted similar functionality when editing C# files outside Visual Studio.
+I didn&rsquo;t see a documented way to do that, but there&rsquo;s an easy workaround if you have Node installed.</p>
+
+<p>First install the &ldquo;nodemon&rdquo; package.
+This package monitors a directory for file chanages and respawns a child process whenever anything changes.</p>
+
+<p><code>npm install -g nodemon</code></p>
+
+<p>Now that nodemon is installed, you can use it to live-rerun your app.</p>
+
+<p><code>nodemon --exec "K.cmd web" -e cs,json</code></p>
+
+<p>This tells Nodemon to watch for changes to <em>.cs and </em>.json files and to restart &ldquo;K.cmd web&rdquo; when changes are detected.
+Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is configured for your project.</p>
+
+<p>Note that if you&rsquo;re running in Git Bash on Windows or on a Linux/OSX machine, the &mdash;exec command will probably be either <code>K web</code>, <code>K.cmd web</code>, or <code>K.sh web</code>.</p>
+
+<p><img src="//itsananderson.blob.core.windows.net/post-images/nodemon-k.png" alt="Live re-compiling with nodemon" /></p>
+
+<p>This functionality is <a href="https://github.com/aspnet/Home/issues/22#issuecomment-43148021">on the way for ASP.NET vNext</a>, but for now this is a handy workaround.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-14T12:47:24-07:00" pubdate data-updated="true">May 14<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/asp-dot-net/'>ASP.NET</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -916,140 +975,6 @@ for handling a package that may or may not be installed. In short, you use a try
 
 
 	<a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/02/07/pass-dynamic-flags-to-nuget-with-powershell-splatting/">
-		
-			Pass Dynamic Flags to NuGet With PowerShell Splatting</a>
-	</h2>
-	<div class="entry-content">
-		<p>While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
-</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
-</span><span class='line'><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
-</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="err">@</span><span class="p">{</span><span class="n">Properties</span><span class="p">=</span><span class="s2">&quot;Configuration=$configuration&quot;</span><span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Build</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span><span class="p">.</span><span class="n">Symbols</span><span class="p">=</span><span class="nv">$True</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
-</span><span class='line'>    <span class="n">popd</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
-HashSet of arguments, and throw an error like the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>nuget : Unknown option: &#39;-Build:True&#39;
-</span><span class='line'>At line:1 char:38
-</span><span class='line'>+ nuget pack $project $nugetArgs
-</span><span class='line'>+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-</span><span class='line'>    + CategoryInfo          : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException
-</span><span class='line'>    + FullyQualifiedErrorId : NativeCommandError
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Digging into the <a href="http://nuget.codeplex.com/SourceControl/latest#src/CommandLine/CommandLineParser.cs">source code</a>,
-I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
-(If I&rsquo;m wrong, leave a comment!)</p>
-
-<p>Fortunately, there&rsquo;s a <em>fairly</em> reasonable workaround: Pass an array of arguments rather than a HashSet:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='powershell'><span class='line'><span class="k">Function</span> <span class="n">Package-Project</span><span class="p">(</span>
-</span><span class='line'>    <span class="no">[string]</span><span class="nv">$folder</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$build</span><span class="p">,</span>
-</span><span class='line'>    <span class="no">[switch]</span><span class="nv">$symbols</span>
-</span><span class='line'><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">pushd</span> <span class="nv">$folder</span>
-</span><span class='line'>    <span class="nv">$nugetArgs</span> <span class="p">=</span> <span class="s2">&quot;-Properties&quot;</span><span class="p">,</span> <span class="s2">&quot;Configuration=$configuration&quot;</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$build</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Build&quot;</span> <span class="p">}</span>
-</span><span class='line'>    <span class="k">if</span><span class="p">(</span><span class="nv">$symbols</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$nugetArgs</span> <span class="p">+=</span> <span class="s2">&quot;-Symbols&quot;</span> <span class="p">}</span>
-</span><span class='line'>    <span class="n">nuget</span> <span class="n">pack</span> <span class="nv">@nugetArgs</span>
-</span><span class='line'>    <span class="n">popd</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectA</span>
-</span><span class='line'><span class="n">Package-Project</span> <span class="n">ProjectB</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
-This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-07T09:24:32-08:00" pubdate data-updated="true">Feb 7<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/nuget/'>NuGet</a>, <a class='category' href='/blog/categories/powershell/'>Powershell</a>
 
 
 </div>
