@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y dos2unix
 
 COPY docker-entrypoint.sh /entrypoint.sh
 
-# RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
+RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/entrypoint.sh"]
 ```
