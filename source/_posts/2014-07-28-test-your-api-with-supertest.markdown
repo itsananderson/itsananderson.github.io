@@ -1,13 +1,13 @@
 ---
 layout: post
-title: "Test Your API With Supertest"
+title: "How To Test Your API With Supertest"
 date: 2014-07-28 14:18:23 -0700
 comments: true
 categories: Testing Node
 ---
 
-I recently discovered [supertest](https://npmjs.org/package/supertest), which is a fantastic tool for testing your API.
-Despite being new to me, the package has been around for about 2 years.
+[Supertest](https://npmjs.org/package/supertest) is a fantastic tool for testing your API.
+Here's how I use it to test APIs.
 
 Setup
 ---
