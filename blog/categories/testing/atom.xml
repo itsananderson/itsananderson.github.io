@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-11T10:57:57-07:00</updated>
+  <updated>2016-08-11T11:29:02-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -14,12 +14,12 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Test Your API With Supertest]]></title>
+    <title type="html"><![CDATA[How To Test Your API With Supertest]]></title>
     <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
     <updated>2014-07-28T14:18:23-07:00</updated>
     <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
-    <content type="html"><![CDATA[<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
-Despite being new to me, the package has been around for about 2 years.</p>
+    <content type="html"><![CDATA[<p><a href="https://npmjs.org/package/supertest">Supertest</a> is a fantastic tool for testing your API.
+Here&rsquo;s how I use it to test APIs.</p>
 
 <h2>Setup</h2>
 
