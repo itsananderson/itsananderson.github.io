@@ -12,7 +12,7 @@ This becomes a problem when you try to create a file in Windows and run it on a 
 
 As a concrete example, if you try to clone the [official WordPress docker image](https://github.com/docker-library/wordpress) and build the image on Windows, you'll run into problems when it tries to execute the `docker-entrypoint.sh` file.
 
-The first line of that file is `#!/bin/bash`, which is the [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix&#41;) syntax to say "run this file using /bin/bash"
+The first line of that file is `#!/bin/bash`, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> syntax to say "run this file using /bin/bash"
 
 However, if the file originated in windows, that first line will be interpreted as "run this file using /bin/bash\r", and "bash\r" of course doesn't exist, so you get this error:
 
