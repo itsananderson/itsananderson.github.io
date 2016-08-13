@@ -4,7 +4,7 @@
   <title><![CDATA[Category: React | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/react/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-11T11:29:02-07:00</updated>
+  <updated>2016-08-13T01:59:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -14,11 +14,17 @@
 
   
   <entry>
-    <title type="html"><![CDATA[React Native: Fix for "onlyChild must be passed a children with exactly one child"]]></title>
+    <title type="html"><![CDATA[React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child"]]></title>
     <link href="http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/"/>
     <updated>2015-05-08T07:37:37-07:00</updated>
     <id>http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child</id>
-    <content type="html"><![CDATA[<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
+    <content type="html"><![CDATA[<p>I recently ran into a new (to me) error in React Native.</p>
+
+<p><code>
+Invariant Violation: onlyChild must be passed a children with exactly one child
+</code></p>
+
+<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
 
 <p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
 

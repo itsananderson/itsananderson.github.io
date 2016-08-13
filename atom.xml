@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://william-backend.azurewebsites.net/feed/" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-11T11:29:02-07:00</updated>
+  <updated>2016-08-13T01:59:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior]]></title>
+    <link href="http://willi.am/blog/2016/08/12/schrodingers-debugger-why-dev-tools-should-warn-you-about-side-effects/"/>
+    <updated>2016-08-12T20:37:26-07:00</updated>
+    <id>http://willi.am/blog/2016/08/12/schrodingers-debugger-why-dev-tools-should-warn-you-about-side-effects</id>
+    <content type="html"><![CDATA[<p>Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
+In general, this is very useful.
+You can check the value of a variable, or even look at the results of more complex expressions.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-inspect-selection.gif" alt="Selecting Code and Hovering Shows The Result In Chrome DevTools" /></p>
+
+<p>This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it.</p>
+
+<p>First, a little physics.
+The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">Observer effect</a> refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
+That definition precisely describes the behavior of this Chrome DevTools feature.</p>
+
+<p>Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable <code>i</code>).
+Whenever I hover over the code, it re-runs that expression, and the value of <code>i</code> increases.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/debug-inspect-selection.gif" alt="Selecting a function call evaluates the function" /></p>
+
+<p>This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
+Worse, you could observe the value of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy object</a> without even knowing it might have side effects.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-proxy-hover.gif" alt="Hovering over Proxy properties evaluates their handler" /></p>
+
+<p>Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways.</p>
+
+<p>Several years ago, I wrote about <a href="http://willi.am/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/">verifying your tools</a> after a Fiddler visualizer made a debugging session take much longer than it should have taken.
+The same principal holds true here.
+Like many other professions, understanding how your tools behave is an important part of software development.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Docker for Windows: Dealing With Windows Line Endings]]></title>
@@ -24,7 +59,7 @@ This becomes a problem when you try to create a file in Windows and run it on a 
 
 <p>As a concrete example, if you try to clone the <a href="https://github.com/docker-library/wordpress">official WordPress docker image</a> and build the image on Windows, you&rsquo;ll run into problems when it tries to execute the <code>docker-entrypoint.sh</code> file.</p>
 
-<p>The first line of that file is <code>#!/bin/bash</code>, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix&amp;#41;">shebang</a> syntax to say &ldquo;run this file using /bin/bash&rdquo;</p>
+<p>The first line of that file is <code>#!/bin/bash</code>, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> syntax to say &ldquo;run this file using /bin/bash&rdquo;</p>
 
 <p>However, if the file originated in windows, that first line will be interpreted as &ldquo;run this file using /bin/bash\r&rdquo;, and &ldquo;bash\r&rdquo; of course doesn&rsquo;t exist, so you get this error:</p>
 
@@ -530,11 +565,17 @@ Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[React Native: Fix for "onlyChild must be passed a children with exactly one child"]]></title>
+    <title type="html"><![CDATA[React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child"]]></title>
     <link href="http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/"/>
     <updated>2015-05-08T07:37:37-07:00</updated>
     <id>http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child</id>
-    <content type="html"><![CDATA[<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
+    <content type="html"><![CDATA[<p>I recently ran into a new (to me) error in React Native.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Invariant Violation: onlyChild must be passed a children with exactly one child</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
 
 <p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
 
@@ -1253,120 +1294,6 @@ If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much
 
 <p>This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
 If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Understanding Node's require Function]]></title>
-    <link href="http://willi.am/blog/2014/10/12/understanding-nodes-require-function/"/>
-    <updated>2014-10-12T09:24:25-07:00</updated>
-    <id>http://willi.am/blog/2014/10/12/understanding-nodes-require-function</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s <code>require()</code> function, or simply fail to fully utilize it well.
-Let&rsquo;s talk about some examples.</p>
-
-<h2>Skipping the File Extension</h2>
-
-<p>When you <code>require()</code> a file in Node, it checks a few possibilities:</p>
-
-<ul>
-<li>The exact file name</li>
-<li>The file name with <code>.js</code> appended</li>
-<li>The file name with <code>.json</code> appended</li>
-</ul>
-
-
-<p><em>Note: In case you weren&rsquo;t aware, Node has built-in support for <code>require</code>ing JSON files.
-No need to manually read the file and call <code>JSON.parse</code>.</em></p>
-
-<p>This means instead of doing <code>require('./foo.js')</code> you can do <code>require('./foo')</code>, and Node will figure it out.
-I personally feel that it looks cleaner to leave off the file extension, but that&rsquo;s a matter of preference.
-There is, however, at least one case I&rsquo;m aware of where leaving off the file extension improves the flexibility of your code.</p>
-
-<p>Let&rsquo;s say you have a config for your app, stored in <code>config.json</code>.
-Throughout your app you <code>require('./config.json')</code> to load the config.
-Now what if you decide the config needs to execute dynamic code (to look up environment variables, for example)?
-If you&rsquo;ve hardcoded the <code>.json</code> in your code, you&rsquo;ll have to find everywhere you&rsquo;ve used it and change the extension.</p>
-
-<p>There are two ways to avoid this. The first is to just start with a <code>.js</code> file, even if it&rsquo;s a static config.
-The second is to just <code>require('./config')</code> in your code, so that you can change the file extension without needing to update your code base.</p>
-
-<h2>Modules Are Singletons</h2>
-
-<p>When you load a module/file in Node, you&rsquo;ll always get the same instance.
-Consider the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// a.js</span>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Intuitively, it seems like main.js would print 4 different random numbers, but it actually prints the same random number 4 times.
-This is because Node will only load a file once.
-If you <code>require</code> the same file multiple times (even from different parts of your code), you&rsquo;ll get the same instance.</p>
-
-<p>I&rsquo;ve seen code passing around objects between modules when they could just require the file again and get the same result.
-Obviously there are good reasons, like dependency injection, for passing objects around, but sometimes it adds useless complexity.
-In cases where you&rsquo;re only passing required objects around &ldquo;to get the same instance&rdquo;, just require the module where it&rsquo;s needed.</p>
-
-<p>Now the question you should be asking is &ldquo;what if I <em>do</em> want different instances?&rdquo;.
-The answer is to export a function, which can then be invoked to get a new instance.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// b.js</span>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">rand</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./b&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Don&rsquo;t Load a Module&rsquo;s Submodule</h2>
-
-<p>This example is obscure. I&rsquo;ve only seen it once, but it was a pain.</p>
-
-<p>You can <em>technically</em> do something like this: <code>require('some-module/node_modules/some-submodule')</code> to load a dependency of a module you depend on, but you shouldn&rsquo;t.</p>
-
-<p>The problem with this approach is that you&rsquo;re inferring a contract with the module&rsquo;s code that isn&rsquo;t present.
-The author of that module could easily switch out &ldquo;some-submodule&rdquo; for something else, without considering that a breaking change.
-Depending on how you&rsquo;re pinning your versions, you may find yourself with an updated module and broken code.</p>
-
-<p>Instead, stop being lazy and install &ldquo;some-submodule&rdquo; as a direct dependency.</p>
 ]]></content>
   </entry>
   

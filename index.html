@@ -7,33 +7,22 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="One of the issues with Docker (or any Linux/macOS based system) on Windows is the difference in how line endings are handled.
-Windows ends lines in &hellip;">
+	<meta name="description" content="Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" One of the issues with Docker (or any Linux/macOS based system) on Windows is the difference in how line endings are handled.
-Windows ends lines in a carriage return and a linefeed \r\n while Linux and macOS only use a linefeed \n.
-This becomes a problem when you try to create a file in Windows and run it on a Linux/macOS system, because those systems treat the \r as a piece of text rather than a newline. As a concrete example, if you try to clone the official WordPress docker image and build the image on Windows, you&rsquo;ll run into problems when it tries to execute the docker-entrypoint.sh file. The first line of that file is #!/bin/bash, which is the shebang syntax to say &ldquo;run this file using /bin/bash&rdquo; However, if the file originated in windows, that first line will be interpreted as &ldquo;run this file using /bin/bash\r&rdquo;, and &ldquo;bash\r&rdquo; of course doesn&rsquo;t exist, so you get this error: 1
-2
-$ docker run wordpress
-standard_init_linux.go:175: exec user process caused "no such file or directory" There are a couple of ways to handle this issue. Converting Line Endings During Build Unix has a handy CLI tool for converting line endings called dos2unix.
-If you want to create a robust image, you can install do2unix as a dependency, then convert any files that you copy into the image.
-Then as a cleanup step, you can uninstall do2unix from the image (unless the image depends on it after the build). Your Dockerfile might look something like this: 1
-2
-3
-4
-5
-6
-7
-8
-9
-FROM ubuntu:latest RUN apt-get update && apt-get install -y dos2unix COPY docker-entrypoint.sh /entrypoint.sh RUN dos2unix /entrypoint.sh && apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/* ENTRYPOINT ["/entrypoint.sh"] The main idea is to copy the script onto the machine, then use dos2unix to convert the line endings, and finally remove dos2unix from the machine (and clean up the files created by apt-get). This is a good option if you&rsquo;re managing the image, but what if you&rsquo;re trying to build an image that someone else maintains? Cloning Git Projects With Unix Line Endings If you just want to clone and build an existing Docker image, you can use a Git flag to store the repository locally with Unix style line endings. 1
-git clone git@github.com:docker-library/wordpress.git --config core.autocrlf=input However, it&rsquo;s worth noting that any new files you create will likely have Windows line endings, so you&rsquo;ll still need to convert them before using them inside the Docker image. Conclusion That should cover the basics of line endings between Windows and Linux/macOS.
-These techniques apply beyond just Docker, but hopefully the Docker-specific details will help someone who&rsquo;s struggling with Docker for Windows. Aug 11th, 2016 Docker " />
+    <meta name="twitter:description" content=" Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
+In general, this is very useful.
+You can check the value of a variable, or even look at the results of more complex expressions. This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it. First, a little physics.
+The Observer effect refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
+That definition precisely describes the behavior of this Chrome DevTools feature. Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable i).
+Whenever I hover over the code, it re-runs that expression, and the value of i increases. This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
+Worse, you could observe the value of a Proxy object without even knowing it might have side effects. Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways. Several years ago, I wrote about verifying your tools after a Fiddler visualizer made a debugging session take much longer than it should have taken.
+The same principal holds true here.
+Like many other professions, understanding how your tools behave is an important part of software development. Aug 12th, 2016 DevTools " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -107,6 +96,73 @@ These techniques apply beyond just Docker, but hopefully the Docker-specific det
     <article class="post">
 	<h2 class="title">
 		
+		<a href="/blog/2016/08/12/schrodingers-debugger-why-dev-tools-should-warn-you-about-side-effects/">
+		
+			The Observer Effect and Debugging: How Dev Tools Can Change Your Code&#8217;s Behavior</a>
+	</h2>
+	<div class="entry-content">
+		<p>Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
+In general, this is very useful.
+You can check the value of a variable, or even look at the results of more complex expressions.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-inspect-selection.gif" alt="Selecting Code and Hovering Shows The Result In Chrome DevTools" /></p>
+
+<p>This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it.</p>
+
+<p>First, a little physics.
+The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">Observer effect</a> refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
+That definition precisely describes the behavior of this Chrome DevTools feature.</p>
+
+<p>Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable <code>i</code>).
+Whenever I hover over the code, it re-runs that expression, and the value of <code>i</code> increases.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/debug-inspect-selection.gif" alt="Selecting a function call evaluates the function" /></p>
+
+<p>This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
+Worse, you could observe the value of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy object</a> without even knowing it might have side effects.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-proxy-hover.gif" alt="Hovering over Proxy properties evaluates their handler" /></p>
+
+<p>Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways.</p>
+
+<p>Several years ago, I wrote about <a href="/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/">verifying your tools</a> after a Fiddler visualizer made a debugging session take much longer than it should have taken.
+The same principal holds true here.
+Like many other professions, understanding how your tools behave is an important part of software development.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-08-12T20:37:26-07:00" pubdate data-updated="true">Aug 12<span>th</span>, 2016</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/devtools/'>DevTools</a>
+
+
+</div>
+	
+</div>
+</article>
+
+
+    <article class="post">
+	<h2 class="title">
+		
 		<a href="/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/">
 		
 			Docker for Windows: Dealing With Windows Line Endings</a>
@@ -118,7 +174,7 @@ This becomes a problem when you try to create a file in Windows and run it on a 
 
 <p>As a concrete example, if you try to clone the <a href="https://github.com/docker-library/wordpress">official WordPress docker image</a> and build the image on Windows, you&rsquo;ll run into problems when it tries to execute the <code>docker-entrypoint.sh</code> file.</p>
 
-<p>The first line of that file is <code>#!/bin/bash</code>, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix&amp;#41;">shebang</a> syntax to say &ldquo;run this file using /bin/bash&rdquo;</p>
+<p>The first line of that file is <code>#!/bin/bash</code>, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> syntax to say &ldquo;run this file using /bin/bash&rdquo;</p>
 
 <p>However, if the file originated in windows, that first line will be interpreted as &ldquo;run this file using /bin/bash\r&rdquo;, and &ldquo;bash\r&rdquo; of course doesn&rsquo;t exist, so you get this error:</p>
 
@@ -881,10 +937,16 @@ Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&
 		
 		<a href="/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/">
 		
-			React Native: Fix for &#8220;onlyChild Must Be Passed a Children With Exactly One Child&#8221;</a>
+			React Native: Fix for &#8220;Invariant Violation: onlyChild Must Be Passed a Children With Exactly One Child&#8221;</a>
 	</h2>
 	<div class="entry-content">
-		<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
+		<p>I recently ran into a new (to me) error in React Native.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Invariant Violation: onlyChild must be passed a children with exactly one child</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
 
 <p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
 
@@ -966,95 +1028,6 @@ Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&
 
 
 	<a class='category' href='/blog/categories/react/'>React</a>, <a class='category' href='/blog/categories/react-native/'>React Native</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2015/05/07/react-this-dot-state-is-undefined/">
-		
-			React: this.state Is Undefined</a>
-	</h2>
-	<div class="entry-content">
-		<p>I ran into this today, so I&rsquo;m writing it down in case it helps someone else.</p>
-
-<p>Running something like the following, I found that <code>this.state</code> was undefined during render.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">getInitialState</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="p">{</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div&gt;; /</span><span class="o">/</span> <span class="nb">Error</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="nx">is</span> <span class="kc">undefined</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After a little searching, I found the <a href="https://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#es6-classesa">release notes for React 0.13.0-beta-1</a>, where they explained that ES6 classes should set initial state in the constructor, rather than defining a <code>getInitialState</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div&gt;; /</span><span class="o">/</span> <span class="nx">Yay</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">works</span><span class="o">!</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Pretty simple, but not immediately obvious if you don&rsquo;t know about it.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-05-07T23:42:13-07:00" pubdate data-updated="true">May 7<span>th</span>, 2015</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/react/'>React</a>
 
 
 </div>

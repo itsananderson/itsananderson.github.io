@@ -1,0 +1,211 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior - Will Anderson" />
+    <meta name="twitter:description" content=" Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
+In general, this is very useful.
+You can check the value of a variable, or even look at the results of more complex expressions. This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it. First, a little physics.
+The Observer effect refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
+That definition precisely describes the behavior of this Chrome DevTools feature. Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable i).
+Whenever I hover over the code, it re-runs that expression, and the value of i increases. This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
+Worse, you could observe the value of a Proxy object without even knowing it might have side effects. Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways. Several years ago, I wrote about verifying your tools after a Fiddler visualizer made a debugging session take much longer than it should have taken.
+The same principal holds true here.
+Like many other professions, understanding how your tools behave is an important part of software development. I am now accepting new clients for part-time consulting and software development projects. Learn more Aug 12th, 2016 DevTools " />
+
+	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="http://william-backend.azurewebsites.net/feed/" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior</h2>
+	<div class="entry-content">
+		<p>Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
+In general, this is very useful.
+You can check the value of a variable, or even look at the results of more complex expressions.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-inspect-selection.gif" alt="Selecting Code and Hovering Shows The Result In Chrome DevTools" /></p>
+
+<p>This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it.</p>
+
+<p>First, a little physics.
+The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">Observer effect</a> refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
+That definition precisely describes the behavior of this Chrome DevTools feature.</p>
+
+<p>Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable <code>i</code>).
+Whenever I hover over the code, it re-runs that expression, and the value of <code>i</code> increases.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/debug-inspect-selection.gif" alt="Selecting a function call evaluates the function" /></p>
+
+<p>This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
+Worse, you could observe the value of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy object</a> without even knowing it might have side effects.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-proxy-hover.gif" alt="Hovering over Proxy properties evaluates their handler" /></p>
+
+<p>Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways.</p>
+
+<p>Several years ago, I wrote about <a href="/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/">verifying your tools</a> after a Fiddler visualizer made a debugging session take much longer than it should have taken.
+The same principal holds true here.
+Like many other professions, understanding how your tools behave is an important part of software development.</p>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-08-12T20:37:26-07:00" pubdate data-updated="true">Aug 12<span>th</span>, 2016</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/devtools/'>DevTools</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2016
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<!-- Drip -->
+<script type="text/javascript">
+  var _dcq = _dcq || [];
+  var _dcs = _dcs || {};
+  _dcs.account = '7508815';
+  (function() {
+    var dc = document.createElement('script');
+    dc.type = 'text/javascript'; dc.async = true;
+    dc.src = '//tag.getdrip.com/7508815.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(dc, s);
+  })();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

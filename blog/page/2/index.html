@@ -7,40 +7,34 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Every time I set up a new machine, I have to figure out how write posts on my Octopress blog. I usually follow these instructions, but have to tweak &hellip;">
+	<meta name="description" content="I ran into this today, so I&rsquo;m writing it down in case it helps someone else. Running something like the following, I found that this.state was &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" Every time I set up a new machine, I have to figure out how write posts on my Octopress blog. I usually follow these instructions, but have to tweak them slightly to work for me. I fanally decided to write down the exact steps I use so I don&rsquo;t have to figure them out every time. Hopefully it&rsquo;s useful for someone else as well. Step 1 &ndash; Run Octopress setup 1
+    <meta name="twitter:description" content=" I ran into this today, so I&rsquo;m writing it down in case it helps someone else. Running something like the following, I found that this.state was undefined during render. 1
 2
 3
 4
 5
 6
 7
-git clone git://github.com/imathis/octopress.git octopress
-cd octopress # If you use RVM, You'll be asked if you trust the .rvmrc file (say yes).
-ruby --version # Should report Ruby 1.9.3
-gem install bundler # On Linux/OSX you may need to run "sudo gem install bundler" instead
-bundle install
-rake install
-rake setup_github_pages The main purpose of setting up Octopress like this is to get the main layout configured correctly. Step 2 &ndash; Reset to your blog&rsquo;s branch tips 1
+8
+9
+class MyComponent extends Component { getInitialState() { return { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; // Error: this.state is undefined }
+} After a little searching, I found the release notes for React 0.13.0-beta-1, where they explained that ES6 classes should set initial state in the constructor, rather than defining a getInitialState method. 1
 2
 3
 4
 5
 6
 7
-git fetch origin source
-git branch --set-upstream-to=origin/source source
-git reset --hard origin/source
-cd _deploy
-git fetch origin master
-git branch --set-upstream-to=origin/master master
-git reset --hard origin master May 7th, 2015 Octopress " />
+8
+9
+class MyComponent extends Component { constructor() { this.state = { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; // Yay, it works! }
+} Pretty simple, but not immediately obvious if you don&rsquo;t know about it. May 7th, 2015 React " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -109,6 +103,95 @@ git reset --hard origin master May 7th, 2015 Octopress " />
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/05/07/react-this-dot-state-is-undefined/">
+		
+			React: this.state Is Undefined</a>
+	</h2>
+	<div class="entry-content">
+		<p>I ran into this today, so I&rsquo;m writing it down in case it helps someone else.</p>
+
+<p>Running something like the following, I found that <code>this.state</code> was undefined during render.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">getInitialState</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="p">{</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div&gt;; /</span><span class="o">/</span> <span class="nb">Error</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="nx">is</span> <span class="kc">undefined</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After a little searching, I found the <a href="https://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#es6-classesa">release notes for React 0.13.0-beta-1</a>, where they explained that ES6 classes should set initial state in the constructor, rather than defining a <code>getInitialState</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kr">class</span> <span class="nx">MyComponent</span> <span class="kr">extends</span> <span class="nx">Component</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">this</span><span class="p">.</span><span class="nx">state</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">count</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">render</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span><span class="p">{</span><span class="k">this</span><span class="p">.</span><span class="nx">state</span><span class="p">.</span><span class="nx">count</span><span class="p">}</span><span class="o">&lt;</span><span class="sr">/div&gt;; /</span><span class="o">/</span> <span class="nx">Yay</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">works</span><span class="o">!</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Pretty simple, but not immediately obvious if you don&rsquo;t know about it.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-07T23:42:13-07:00" pubdate data-updated="true">May 7<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/react/'>React</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -995,152 +1078,6 @@ If you want a more detailed explanation about how Git stores data, you can watch
 
 
 	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/10/12/understanding-nodes-require-function/">
-		
-			Understanding Node&#8217;s Require Function</a>
-	</h2>
-	<div class="entry-content">
-		<p>I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s <code>require()</code> function, or simply fail to fully utilize it well.
-Let&rsquo;s talk about some examples.</p>
-
-<h2>Skipping the File Extension</h2>
-
-<p>When you <code>require()</code> a file in Node, it checks a few possibilities:</p>
-
-<ul>
-<li>The exact file name</li>
-<li>The file name with <code>.js</code> appended</li>
-<li>The file name with <code>.json</code> appended</li>
-</ul>
-
-
-<p><em>Note: In case you weren&rsquo;t aware, Node has built-in support for <code>require</code>ing JSON files.
-No need to manually read the file and call <code>JSON.parse</code>.</em></p>
-
-<p>This means instead of doing <code>require('./foo.js')</code> you can do <code>require('./foo')</code>, and Node will figure it out.
-I personally feel that it looks cleaner to leave off the file extension, but that&rsquo;s a matter of preference.
-There is, however, at least one case I&rsquo;m aware of where leaving off the file extension improves the flexibility of your code.</p>
-
-<p>Let&rsquo;s say you have a config for your app, stored in <code>config.json</code>.
-Throughout your app you <code>require('./config.json')</code> to load the config.
-Now what if you decide the config needs to execute dynamic code (to look up environment variables, for example)?
-If you&rsquo;ve hardcoded the <code>.json</code> in your code, you&rsquo;ll have to find everywhere you&rsquo;ve used it and change the extension.</p>
-
-<p>There are two ways to avoid this. The first is to just start with a <code>.js</code> file, even if it&rsquo;s a static config.
-The second is to just <code>require('./config')</code> in your code, so that you can change the file extension without needing to update your code base.</p>
-
-<h2>Modules Are Singletons</h2>
-
-<p>When you load a module/file in Node, you&rsquo;ll always get the same instance.
-Consider the following:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// a.js</span>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./a&#39;</span><span class="p">));</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Intuitively, it seems like main.js would print 4 different random numbers, but it actually prints the same random number 4 times.
-This is because Node will only load a file once.
-If you <code>require</code> the same file multiple times (even from different parts of your code), you&rsquo;ll get the same instance.</p>
-
-<p>I&rsquo;ve seen code passing around objects between modules when they could just require the file again and get the same result.
-Obviously there are good reasons, like dependency injection, for passing objects around, but sometimes it adds useless complexity.
-In cases where you&rsquo;re only passing required objects around &ldquo;to get the same instance&rdquo;, just require the module where it&rsquo;s needed.</p>
-
-<p>Now the question you should be asking is &ldquo;what if I <em>do</em> want different instances?&rdquo;.
-The answer is to export a function, which can then be invoked to get a new instance.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// b.js</span>
-</span><span class='line'><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
-</span><span class='line'><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// main.js</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">rand</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./b&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span><span class='line'><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">rand</span><span class="p">());</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Don&rsquo;t Load a Module&rsquo;s Submodule</h2>
-
-<p>This example is obscure. I&rsquo;ve only seen it once, but it was a pain.</p>
-
-<p>You can <em>technically</em> do something like this: <code>require('some-module/node_modules/some-submodule')</code> to load a dependency of a module you depend on, but you shouldn&rsquo;t.</p>
-
-<p>The problem with this approach is that you&rsquo;re inferring a contract with the module&rsquo;s code that isn&rsquo;t present.
-The author of that module could easily switch out &ldquo;some-submodule&rdquo; for something else, without considering that a breaking change.
-Depending on how you&rsquo;re pinning your versions, you may find yourself with an updated module and broken code.</p>
-
-<p>Instead, stop being lazy and install &ldquo;some-submodule&rdquo; as a direct dependency.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-12T09:24:25-07:00" pubdate data-updated="true">Oct 12<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/node/'>Node</a>
 
 
 </div>

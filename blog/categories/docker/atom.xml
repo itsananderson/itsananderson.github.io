@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-11T11:29:02-07:00</updated>
+  <updated>2016-08-13T01:59:24-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -24,7 +24,7 @@ This becomes a problem when you try to create a file in Windows and run it on a 
 
 <p>As a concrete example, if you try to clone the <a href="https://github.com/docker-library/wordpress">official WordPress docker image</a> and build the image on Windows, you&rsquo;ll run into problems when it tries to execute the <code>docker-entrypoint.sh</code> file.</p>
 
-<p>The first line of that file is <code>#!/bin/bash</code>, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix&amp;#41;">shebang</a> syntax to say &ldquo;run this file using /bin/bash&rdquo;</p>
+<p>The first line of that file is <code>#!/bin/bash</code>, which is the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> syntax to say &ldquo;run this file using /bin/bash&rdquo;</p>
 
 <p>However, if the file originated in windows, that first line will be interpreted as &ldquo;run this file using /bin/bash\r&rdquo;, and &ldquo;bash\r&rdquo; of course doesn&rsquo;t exist, so you get this error:</p>
 
