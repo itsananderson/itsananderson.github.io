@@ -1,11 +1,10 @@
 ---
 layout: post
 title: "The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior"
-date: 2016-08-12 20:37:26 -0700
+date: 2016-08-13 08:39:00 -0700
 comments: true
 categories: DevTools
 ---
-
 
 
 Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
