@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DevTools | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/devtools/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-13T08:41:11-07:00</updated>
+  <updated>2016-08-13T09:19:23-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -27,7 +27,7 @@ You can check the value of a variable, or even look at the results of more compl
 <p>This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it.</p>
 
 <p>First, a little physics.
-The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">Observer effect</a> refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
+The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">observer effect</a> refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
 That definition precisely describes the behavior of this Chrome DevTools feature.</p>
 
 <p>Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable <code>i</code>).
