@@ -16,7 +16,7 @@ You can check the value of a variable, or even look at the results of more compl
 This is super useful, but it can also cause problems if you're not careful about how you use it.
 
 First, a little physics.
-The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">Observer effect</a> refers to "changes that the act of observation will make on a phenomenon being observed".
+The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">observer effect</a> refers to "changes that the act of observation will make on a phenomenon being observed".
 That definition precisely describes the behavior of this Chrome DevTools feature.
 
 Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable `i`).
