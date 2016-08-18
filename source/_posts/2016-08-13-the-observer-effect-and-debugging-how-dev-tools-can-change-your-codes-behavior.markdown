@@ -3,7 +3,10 @@ layout: post
 title: "The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior"
 date: 2016-08-13 08:39:00 -0700
 comments: true
-categories: DevTools
+categories:
+- DevTools
+- Debugging
+- JavaScript
 ---
 
 
