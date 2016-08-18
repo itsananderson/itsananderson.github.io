@@ -3,20 +3,18 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child" - Will Anderson</title>
+	<title>React Native: Fix for "onlyChild must be passed a children with exactly one child" - Will Anderson</title>
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I recently ran into a new (to me) error in React Native. 1
-Invariant Violation: onlyChild must be passed a children with exactly one child I couldn& &hellip;">
+	<meta name="description" content="If you&rsquo;ve run into onlyChild must be passed a children with exactly one child in React Native there&rsquo;s a simple fix. All of the &ldquo; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
-    <meta name="twitter:title" content="React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child" - Will Anderson" />
-    <meta name="twitter:description" content=" I recently ran into a new (to me) error in React Native. 1
-Invariant Violation: onlyChild must be passed a children with exactly one child I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out. All of the &ldquo;Touchable&rdquo; components in React Native do an onlyChild check on their children, which throws an error unless there&rsquo;s exactly one child. 1
+    <meta name="twitter:title" content="React Native: Fix for "onlyChild must be passed a children with exactly one child" - Will Anderson" />
+    <meta name="twitter:description" content=" If you&rsquo;ve run into onlyChild must be passed a children with exactly one child in React Native there&rsquo;s a simple fix. All of the &ldquo;Touchable&rdquo; components in React Native do an onlyChild check on their children, which throws an error unless there&rsquo;s exactly one child. 1
 2
 3
 4
@@ -106,15 +104,9 @@ TouchableWithFeedback Hopefully React Native can eventually provide a better mes
 		
 	
 	<div id="content" class="inner"><article class="post">
-	<h2 class="title">React Native: Fix for "Invariant Violation: onlyChild Must Be Passed a Children With Exactly One Child"</h2>
+	<h2 class="title">React Native: Fix for "onlyChild Must Be Passed a Children With Exactly One Child"</h2>
 	<div class="entry-content">
-		<p>I recently ran into a new (to me) error in React Native.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Invariant Violation: onlyChild must be passed a children with exactly one child</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
+		<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
 
 <p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
 

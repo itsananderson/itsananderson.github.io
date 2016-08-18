@@ -22,7 +22,7 @@ That definition precisely describes the behavior of this Chrome DevTools feature
 Whenever I hover over the code, it re-runs that expression, and the value of i increases. This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
 Worse, you could observe the value of a Proxy object without even knowing it might have side effects. Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways. Several years ago, I wrote about verifying your tools after a Fiddler visualizer made a debugging session take much longer than it should have taken.
 The same principal holds true here.
-Like many other professions, understanding how your tools behave is an important part of software development. Aug 13th, 2016 DevTools " />
+Like many other professions, understanding how your tools behave is an important part of software development. Aug 13th, 2016 Debugging, DevTools, JavaScript " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -151,7 +151,7 @@ Like many other professions, understanding how your tools behave is an important
 	<div class="tags">
 
 
-	<a class='category' href='/blog/categories/devtools/'>DevTools</a>
+	<a class='category' href='/blog/categories/debugging/'>Debugging</a>, <a class='category' href='/blog/categories/devtools/'>DevTools</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
 
 
 </div>
@@ -937,16 +937,10 @@ Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&
 		
 		<a href="/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/">
 		
-			React Native: Fix for &#8220;Invariant Violation: onlyChild Must Be Passed a Children With Exactly One Child&#8221;</a>
+			React Native: Fix for &#8220;onlyChild Must Be Passed a Children With Exactly One Child&#8221;</a>
 	</h2>
 	<div class="entry-content">
-		<p>I recently ran into a new (to me) error in React Native.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Invariant Violation: onlyChild must be passed a children with exactly one child</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
+		<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
 
 <p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
 
