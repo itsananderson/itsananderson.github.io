@@ -7,34 +7,14 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Node doesn&rsquo;t have a well documented way of checking whether a module is available.
-This is usually fine. You just include a package.json in &hellip;">
+	<meta name="description" content="After David wrote these nice blog posts at my request, I figured I should probably give Octopress the old college try. Mar 30th, 2014 Blogging, &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" Node doesn&rsquo;t have a well documented way of checking whether a module is available.
-This is usually fine. You just include a package.json in your project, and expect people to run npm install.
-This is how most popular Node frameworks work. But what if you have a devDependency entry that you want to include only if it is installed?
-I searched for an answer and didn&rsquo;t find anything conclusive, so I&rsquo;m documenting what I did find in case I forget later. Buried in NPM&rsquo;s package.json documentation is an example
-for handling a package that may or may not be installed. In short, you use a try/catch. Here&rsquo;s an example: 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-var program; try { program = require(&#39;commander&#39;);
-} catch (er) { // Any code to run if this module doesn&#39;t exist
-} if (program) { program.version(&#39;0.0.1&#39;) .option(&#39;-n, --name[name]&#39;, &#39;Your name&#39;) .parse(process.argv);
-} Mar 29th, 2014 NPM, Node " />
+    <meta name="twitter:description" content=" After David wrote these nice blog posts at my request, I figured I should probably give Octopress the old college try. Mar 30th, 2014 Blogging, Octopress " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -103,6 +83,47 @@ var program; try { program = require(&#39;commander&#39;);
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/03/30/hello-octopress/">
+		
+			Hello, Octopress!</a>
+	</h2>
+	<div class="entry-content">
+		<p>After <a href="https://twitter.com/druttka">David</a> wrote <a href="http://www.davidruttka.com/blog/2014/03/29/moving-from-wordpress-to-github-pages-using-jekyll-via-octopress/">these</a> nice <a href="http://www.davidruttka.com/blog/2014/03/29/setting-up-octopress-for-github-pages/">blog posts</a> at my request, I figured I should probably give Octopress the old college try.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-03-30T09:48:36-07:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/blogging/'>Blogging</a>, <a class='category' href='/blog/categories/octopress/'>Octopress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -973,158 +994,6 @@ Ideally, the inherited get_instance() method would return an instance of the act
 
 <time datetime="2011-09-05T13:09:43-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2011</time></div>
 	<div class="tags">
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2011/04/26/php-static-methods-in-wordpress-plugins/">
-		
-			PHP Static Methods in WordPress Plugins</a>
-	</h2>
-	<div class="entry-content">
-		<p><p style="background-color: #faa; padding: 5px">
-<strong>Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it difficult to mock dependencies for unit tests. I leave this post up for posterity, but I no longer recommend this design pattern.</strong><p></p>
-
-<p>This evening I was chatting with Nick Ohrn and I threw out an idea that I&rsquo;d been thinking about for a while. What if WordPress plugin developers used PHP static methods to namespace their plugins?</p>
-
-<h2>An Example Without PHP Static Methods</h2>
-
-<p>To understand what I&rsquo;m babbling on about, consider a very basic plugin that adds square brackets around post titles.</p>
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
-</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
-</span><span class='line'><span class="cm"> </em>/</span>
-</span><span class='line'><span class="k">function</span> <span class="nf">ab_add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="s1">&#39;ab_add_brackets&#39;</span> <span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>It really doesn&rsquo;t get much simpler than that, but the problem is that there might be another plugin that uses the same prefix. Also, if you decide to change the prefix, you&rsquo;ll have to go through and change all of your hook and action registrations too. What a pain.</p>
-
-<h2>Class Namespaces, but no PHP Static Methods</h2>
-
-<p>The next option is to use a class as a namespacing tool. This is fairly common among more experienced WordPress developers.</p>
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
-</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
-</span><span class='line'><span class="cm"> </em>/</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">class_exists</span><span class="p">(</span><span class="s1">&#39;Add_Brackets&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">class</span> <span class="nc">Add_Brackets</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;add_brackets&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span> <span class="k">null</span> <span class="o">==</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Add_Brackets</span><span class="p">();</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>            <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">public</span> <span class="k">function</span> <span class="nf">add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="nx">Add_Brackets</span><span class="o">::</span><span class="na">get_instance</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<h2>Utilizing PHP Static Methods</h2>
-
-<p>What I propose is developers use static methods instead. There&rsquo;s very little difference between a singleton class with instance methods and a class with static methods, and simply using static methods can simplify your code. Check out this example.</p>
-
-<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
-</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
-</span><span class='line'><span class="cm"> </em>/</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">class_exists</span><span class="p">(</span><span class="s1">&#39;Add_Brackets&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">class</span> <span class="nc">Add_Brackets</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nx"><strong>CLASS</strong></span><span class="p">,</span> <span class="s1">&#39;add_brackets&#39;</span> <span class="p">)</span> <span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="nx">Add_Brackets</span><span class="o">::</span><span class="na">start</span><span class="p">();</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
-
-<p>So that&rsquo;s that. All the advantages of namespacing with classes, with a small reduction in memory overhead (because you&rsquo;re passing around strings, rather than objects). Static methods are a PHP5 feature, but with PHP4 support being phased out in WordPress 3.2, this seems like a reasonable next step for WordPress developers to take.</p>
-
-<p>What do you think? Are there any issues with this technique that I&rsquo;ve missed? Are there any improvements that could be made? Let me know in the comments!</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-26T13:16:52-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
 
 </div>
 	

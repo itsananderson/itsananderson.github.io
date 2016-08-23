@@ -7,34 +7,37 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I ran into this today, so I&rsquo;m writing it down in case it helps someone else. Running something like the following, I found that this.state was &hellip;">
+	<meta name="description" content="I recently ran into a new (to me) error in React Native. 1
+Invariant Violation: onlyChild must be passed a children with exactly one child I couldn& &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" I ran into this today, so I&rsquo;m writing it down in case it helps someone else. Running something like the following, I found that this.state was undefined during render. 1
+    <meta name="twitter:description" content=" I recently ran into a new (to me) error in React Native. 1
+Invariant Violation: onlyChild must be passed a children with exactly one child I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out. All of the &ldquo;Touchable&rdquo; components in React Native do an onlyChild check on their children, which throws an error unless there&rsquo;s exactly one child. 1
+2
+3
+4
+return ( &lt;TouchableHighlight&gt; &lt;/TouchableHighlight&gt;
+); // Error: onlyChild must be passed a children with exactly one child Adding a child to the TouchableHighlight will fix the error 1
+2
+3
+4
+5
+return ( &lt;TouchableHighlight&gt; &lt;Text&gt;foo&lt;/Text&gt; &lt;/TouchableHighlight&gt;
+); // OK But adding multiple children will also cause an error 1
 2
 3
 4
 5
 6
-7
-8
-9
-class MyComponent extends Component { getInitialState() { return { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; // Error: this.state is undefined }
-} After a little searching, I found the release notes for React 0.13.0-beta-1, where they explained that ES6 classes should set initial state in the constructor, rather than defining a getInitialState method. 1
-2
-3
-4
-5
-6
-7
-8
-9
-class MyComponent extends Component { constructor() { this.state = { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; // Yay, it works! }
-} Pretty simple, but not immediately obvious if you don&rsquo;t know about it. May 7th, 2015 React " />
+return ( &lt;TouchableHighlight&gt; &lt;Text&gt;foo&lt;/Text&gt; &lt;Text&gt;bar&lt;/Text&gt; &lt;/TouchableHighlight&gt;
+); // Error: onlyChild must be passed a children with exactly one child A quick search through the React Native code reveals the components that verify onlyChild: TouchableBounce
+TouchableHighlight
+TouchableOpacity
+TouchableWithFeedback Hopefully React Native can eventually provide a better message for this issue, but until then, at least this blog post should pop up when you Google the error. May 8th, 2015 React, React Native " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -103,6 +106,110 @@ class MyComponent extends Component { constructor() { this.state = { count: 0 };
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/">
+		
+			React Native: Fix for &#8220;Invariant Violation: onlyChild Must Be Passed a Children With Exactly One Child&#8221;</a>
+	</h2>
+	<div class="entry-content">
+		<p>I recently ran into a new (to me) error in React Native.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Invariant Violation: onlyChild must be passed a children with exactly one child</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
+
+<p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">TouchableHighlight</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/TouchableHighlight&gt;</span>
+</span><span class='line'><span class="p">);</span> <span class="c1">// Error: onlyChild must be passed a children with exactly one child</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Adding a child to the TouchableHighlight will fix the error</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">TouchableHighlight</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">foo</span><span class="o">&lt;</span><span class="err">/Text&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/TouchableHighlight&gt;</span>
+</span><span class='line'><span class="p">);</span> <span class="c1">// OK</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>But adding multiple children will also cause an error</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="k">return</span> <span class="p">(</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="nx">TouchableHighlight</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">foo</span><span class="o">&lt;</span><span class="err">/Text&gt;</span>
+</span><span class='line'>      <span class="o">&lt;</span><span class="nx">Text</span><span class="o">&gt;</span><span class="nx">bar</span><span class="o">&lt;</span><span class="err">/Text&gt;</span>
+</span><span class='line'>  <span class="o">&lt;</span><span class="err">/TouchableHighlight&gt;</span>
+</span><span class='line'><span class="p">);</span> <span class="c1">// Error: onlyChild must be passed a children with exactly one child</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>A quick search through the React Native code reveals the components that verify onlyChild:</p>
+
+<ul>
+<li>TouchableBounce</li>
+<li>TouchableHighlight</li>
+<li>TouchableOpacity</li>
+<li>TouchableWithFeedback</li>
+</ul>
+
+
+<p>Hopefully React Native can eventually provide a better message for this issue, but until then, at least this blog post should pop up when you Google the error.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-08T07:37:37-07:00" pubdate data-updated="true">May 8<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/react/'>React</a>, <a class='category' href='/blog/categories/react-native/'>React Native</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1008,72 +1115,6 @@ Your packed objects are unpacked into <code>.git/objects/</code> folder.</p>
 
 
 <time datetime="2014-10-14T13:57:15-07:00" pubdate data-updated="true">Oct 14<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">
-		
-			For the Last Time: Git Stores Snapshots Not Diffs</a>
-	</h2>
-	<div class="entry-content">
-		<p>I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
-<strong>Git stores a snapshot of the entire file, not a diff</strong></p>
-
-<p>This is an understandable point of confusion, because most output from Git is in the form of diffs.
-Additionally, many other SCMs store changes as diffs instead of snapshots.
-However, Git stores an entire snapshot of each modified file.</p>
-
-<p>If you want to see an explanation from someone much smarter than me, check out <a href="https://www.youtube.com/watch?v=rALm7BCCY-0#t=6m28s">this video</a>.</p>
-
-<h2>Illustrating Snapshots</h2>
-
-<p>The easiest way to show how Git stores snapshots is create a project and show the relative sizes of the .git object folder.</p>
-
-<p>I&rsquo;ve created a <a href="https://github.com/itsananderson/alice">sample project on GitHub</a> that contains two commits.
-The first commit introduces the text of Alice&rsquo;s Adventures in Wonderland.
-The second commit makes a small modification to the text.</p>
-
-<p>If you clone the repository and unpack the individual objects, you&rsquo;ll see something like the following when you inspect the .git directory with <a href="http://windirstat.info/">WinDirStat</a>.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/alice-windirstat.png" alt="" /></p>
-
-<p>As you can see, Git stores two blobs of (nearly) identical size, one for each version of the text.
-If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much smaller blob (plus other objects for the tree etc.)</p>
-
-<p>This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
-If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-14T10:15:11-07:00" pubdate data-updated="true">Oct 14<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 

@@ -7,20 +7,24 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this: 1
-2
-$ git commit -m &quot &hellip;">
+	<meta name="description" content="I ran into an issue recently while writing a node module.
+My process would sometimes complete its work, but wouldn&rsquo;t end.
+After a bit of &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" If you&rsquo;ve ever committed to Git in either frustration or excitement, you&rsquo;ve probably seen a message like this: 1
-2
-$ git commit -m &quot;It works!&quot;
--bash: !&quot;: event not found When Bash encounters an exclamation mark under certain conditions, it tries to expand the expression to the last matching command in your history.
-For example: 1
+    <meta name="twitter:description" content=" I ran into an issue recently while writing a node module.
+My process would sometimes complete its work, but wouldn&rsquo;t end.
+After a bit of debugging, I figured out what was happening. I had implemented a handler for the HTTP &ldquo;location&rdquo; header.
+If a response came back with that header, I would ignore that response and go fetch the new location instead.
+Unfortunately, whenever I did that, the process would finish fetching the new location, and then just hang there for about a minute bofore exiting.
+The reason this happened was because I wasn&rsquo;t properly handling the first response. Here&rsquo;s an oversimplified explanation of what happens.
+This is from my limited understanding of Node internals, so the details may be slighly off, but the overall idea is correct. When you use the &ldquo;http&rdquo; module to make a request in Node, the response it gives you is a stream.
+If you don&rsquo;t do anything to consume that stream&rsquo;s data, Node doesn&rsquo;t exit because there&rsquo;s still work to be done (consuming the stream).
+In order to get Node to exit without something clunky like process.exit(), you just need to switch the stream to &ldquo;flowing&rdquo; mode. 1
 2
 3
 4
@@ -30,34 +34,13 @@ For example: 1
 8
 9
 10
-$ echo &quot;Hello, World&quot;
-Hello, World
-$ ls
-bin foo.sh
-$ !e
-echo &quot;Hello, World&quot;
-Hello, World
-$ !l
-ls
-bin foo.sh Notice that the second command !e was expanded to the previous echo "Hello, World" statement, and !l is expanded to the previous ls statement.
-This is cool, but can also be annoying if that&rsquo;s not what you want.
-Fortunately there&rsquo;s a workaround. 1
-2
-3
-4
-5
-6
-7
-8
-9
-# If you don&#39;t need variable substitution, use single quotes
-$ git commit -m &#39;It works!&#39; # If you need variable substitution, keep exclamation outside the quotes
-$ git commit -m &quot;Thanks $name&quot;\!
-# Or escape with single quotes
-$ git commit -m &quot;Thanks $name&quot;&#39;!&#39;
-# Also works in the middle of the line
-$ git commit -m &quot;Thanks&quot;\!&quot; $name&quot; As far as I can tell, these solutions work in both Linux, and Git Bash in Windows. You can also work around this by leaving of the -m and editing your commit message in vim like a real developer A couple pages I found helpful when figuring this out: http://superuser.com/questions/133780/in-bash-how-do-i-escape-an-exclamation-mark
-http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-bash-19252.html May 22nd, 2014 Bash " />
+11
+12
+var http = require(&#39;http&#39;); var responseHandler = function(response) { if (response.headers.location) { http.get(response.headers.location, responseHandler); response.resume(); } else { response.pipe(process.stdout); }
+}; http.get(process.argv[2], responseHandler); Notice on line 6 how I&rsquo;ve called response.resume().
+This switches the response stream to &ldquo;flowing&rdquo; mode.
+According to the streams documentation,
+this is the way to finish a stream if you don&rsquo;t care about consuming its data. Jun 2nd, 2014 Node " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -126,6 +109,93 @@ http://www.unixli.com/q/answers-why-does-the-exclamation-mark-sometimes-upset-ba
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/06/02/ending-a-stream-without-consuming-its-data/">
+		
+			Ending a Stream Without Consuming Its Data</a>
+	</h2>
+	<div class="entry-content">
+		<p>I ran into an issue recently while writing <a href="https://www.npmjs.org/package/placebase">a node module</a>.
+My process would sometimes complete its work, but wouldn&rsquo;t end.
+After a bit of debugging, I figured out what was happening.</p>
+
+<p>I had implemented a handler for the HTTP &ldquo;location&rdquo; header.
+If a response came back with that header, I would ignore that response and go fetch the new location instead.
+Unfortunately, whenever I did that, the process would finish fetching the new location, and then just hang there for about a minute bofore exiting.
+The reason this happened was because I wasn&rsquo;t properly handling the first response.</p>
+
+<p>Here&rsquo;s an oversimplified explanation of what happens.
+This is from my limited understanding of Node internals, so the details may be slighly off, but the overall idea is correct.</p>
+
+<p>When you use the &ldquo;http&rdquo; module to make a request in Node, the response it gives you is a stream.
+If you don&rsquo;t do anything to consume that stream&rsquo;s data, Node doesn&rsquo;t exit because there&rsquo;s still work to be done (consuming the stream).
+In order to get Node to exit without something clunky like process.exit(), you just need to switch the stream to &ldquo;flowing&rdquo; mode.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">responseHandler</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">location</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">location</span><span class="p">,</span> <span class="nx">responseHandler</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">response</span><span class="p">.</span><span class="nx">resume</span><span class="p">();</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">response</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nx">responseHandler</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Notice on line 6 how I&rsquo;ve called response.resume().
+This switches the response stream to &ldquo;flowing&rdquo; mode.
+According to the <a href="http://nodejs.org/api/stream.html#stream_readable_resume">streams documentation</a>,
+this is the way to finish a stream if you don&rsquo;t care about consuming its data.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-02T10:28:46-07:00" pubdate data-updated="true">Jun 2<span>nd</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1008,47 +1078,6 @@ Hopefully after reading this post, you&rsquo;ll feel the same way!</p>
 
 
 	<a class='category' href='/blog/categories/vim/'>Vim</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/03/30/hello-octopress/">
-		
-			Hello, Octopress!</a>
-	</h2>
-	<div class="entry-content">
-		<p>After <a href="https://twitter.com/druttka">David</a> wrote <a href="http://www.davidruttka.com/blog/2014/03/29/moving-from-wordpress-to-github-pages-using-jekyll-via-octopress/">these</a> nice <a href="http://www.davidruttka.com/blog/2014/03/29/setting-up-octopress-for-github-pages/">blog posts</a> at my request, I figured I should probably give Octopress the old college try.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-03-30T09:48:36-07:00" pubdate data-updated="true">Mar 30<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/blogging/'>Blogging</a>, <a class='category' href='/blog/categories/octopress/'>Octopress</a>
 
 
 </div>

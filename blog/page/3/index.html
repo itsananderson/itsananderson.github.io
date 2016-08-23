@@ -7,62 +7,22 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s require() function, or simply fail to fully utilize it well.
-Let&rsquo;s talk &hellip;">
+	<meta name="description" content="I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
+Git stores a snapshot of &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s require() function, or simply fail to fully utilize it well.
-Let&rsquo;s talk about some examples. Skipping the File Extension When you require() a file in Node, it checks a few possibilities: The exact file name
-The file name with .js appended
-The file name with .json appended Note: In case you weren&rsquo;t aware, Node has built-in support for requireing JSON files.
-No need to manually read the file and call JSON.parse. This means instead of doing require('./foo.js') you can do require('./foo'), and Node will figure it out.
-I personally feel that it looks cleaner to leave off the file extension, but that&rsquo;s a matter of preference.
-There is, however, at least one case I&rsquo;m aware of where leaving off the file extension improves the flexibility of your code. Let&rsquo;s say you have a config for your app, stored in config.json.
-Throughout your app you require('./config.json') to load the config.
-Now what if you decide the config needs to execute dynamic code (to look up environment variables, for example)?
-If you&rsquo;ve hardcoded the .json in your code, you&rsquo;ll have to find everywhere you&rsquo;ve used it and change the extension. There are two ways to avoid this. The first is to just start with a .js file, even if it&rsquo;s a static config.
-The second is to just require('./config') in your code, so that you can change the file extension without needing to update your code base. Modules Are Singletons When you load a module/file in Node, you&rsquo;ll always get the same instance.
-Consider the following: 1
-2
-// a.js
-module.exports = Math.random() 1
-2
-3
-4
-5
-// main.js
-console.log(require(&#39;./a&#39;));
-console.log(require(&#39;./a&#39;));
-console.log(require(&#39;./a&#39;));
-console.log(require(&#39;./a&#39;)); Intuitively, it seems like main.js would print 4 different random numbers, but it actually prints the same random number 4 times.
-This is because Node will only load a file once.
-If you require the same file multiple times (even from different parts of your code), you&rsquo;ll get the same instance. I&rsquo;ve seen code passing around objects between modules when they could just require the file again and get the same result.
-Obviously there are good reasons, like dependency injection, for passing objects around, but sometimes it adds useless complexity.
-In cases where you&rsquo;re only passing required objects around &ldquo;to get the same instance&rdquo;, just require the module where it&rsquo;s needed. Now the question you should be asking is &ldquo;what if I do want different instances?&rdquo;.
-The answer is to export a function, which can then be invoked to get a new instance. 1
-2
-3
-4
-// b.js
-module.exports = function() { return Math.random();
-}; 1
-2
-3
-4
-5
-6
-// main.js
-var rand = require(&#39;./b&#39;);
-console.log(rand());
-console.log(rand());
-console.log(rand());
-console.log(rand()); Don&rsquo;t Load a Module&rsquo;s Submodule This example is obscure. I&rsquo;ve only seen it once, but it was a pain. You can technically do something like this: require('some-module/node_modules/some-submodule') to load a dependency of a module you depend on, but you shouldn&rsquo;t. The problem with this approach is that you&rsquo;re inferring a contract with the module&rsquo;s code that isn&rsquo;t present.
-The author of that module could easily switch out &ldquo;some-submodule&rdquo; for something else, without considering that a breaking change.
-Depending on how you&rsquo;re pinning your versions, you may find yourself with an updated module and broken code. Instead, stop being lazy and install &ldquo;some-submodule&rdquo; as a direct dependency. Oct 12th, 2014 Node " />
+    <meta name="twitter:description" content=" I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
+Git stores a snapshot of the entire file, not a diff This is an understandable point of confusion, because most output from Git is in the form of diffs.
+Additionally, many other SCMs store changes as diffs instead of snapshots.
+However, Git stores an entire snapshot of each modified file. If you want to see an explanation from someone much smarter than me, check out this video. Illustrating Snapshots The easiest way to show how Git stores snapshots is create a project and show the relative sizes of the .git object folder. I&rsquo;ve created a sample project on GitHub that contains two commits.
+The first commit introduces the text of Alice&rsquo;s Adventures in Wonderland.
+The second commit makes a small modification to the text. If you clone the repository and unpack the individual objects, you&rsquo;ll see something like the following when you inspect the .git directory with WinDirStat. As you can see, Git stores two blobs of (nearly) identical size, one for each version of the text.
+If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much smaller blob (plus other objects for the tree etc.) This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
+If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation. Oct 14th, 2014 Git " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -131,6 +91,72 @@ Depending on how you&rsquo;re pinning your versions, you may find yourself with 
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">
+		
+			For the Last Time: Git Stores Snapshots Not Diffs</a>
+	</h2>
+	<div class="entry-content">
+		<p>I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
+<strong>Git stores a snapshot of the entire file, not a diff</strong></p>
+
+<p>This is an understandable point of confusion, because most output from Git is in the form of diffs.
+Additionally, many other SCMs store changes as diffs instead of snapshots.
+However, Git stores an entire snapshot of each modified file.</p>
+
+<p>If you want to see an explanation from someone much smarter than me, check out <a href="https://www.youtube.com/watch?v=rALm7BCCY-0#t=6m28s">this video</a>.</p>
+
+<h2>Illustrating Snapshots</h2>
+
+<p>The easiest way to show how Git stores snapshots is create a project and show the relative sizes of the .git object folder.</p>
+
+<p>I&rsquo;ve created a <a href="https://github.com/itsananderson/alice">sample project on GitHub</a> that contains two commits.
+The first commit introduces the text of Alice&rsquo;s Adventures in Wonderland.
+The second commit makes a small modification to the text.</p>
+
+<p>If you clone the repository and unpack the individual objects, you&rsquo;ll see something like the following when you inspect the .git directory with <a href="http://windirstat.info/">WinDirStat</a>.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/alice-windirstat.png" alt="" /></p>
+
+<p>As you can see, Git stores two blobs of (nearly) identical size, one for each version of the text.
+If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much smaller blob (plus other objects for the tree etc.)</p>
+
+<p>This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
+If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-14T10:15:11-07:00" pubdate data-updated="true">Oct 14<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1165,11 +1191,11 @@ They&rsquo;re important to understand, and they&rsquo;re the main reason I wrote
 		
 		<a href="/blog/2014/07/28/test-your-api-with-supertest/">
 		
-			How to Test Your API With Supertest</a>
+			Test Your API With Supertest</a>
 	</h2>
 	<div class="entry-content">
-		<p><a href="https://npmjs.org/package/supertest">Supertest</a> is a fantastic tool for testing your API.
-Here&rsquo;s how I use it to test APIs.</p>
+		<p>I recently discovered <a href="https://npmjs.org/package/supertest">supertest</a>, which is a fantastic tool for testing your API.
+Despite being new to me, the package has been around for about 2 years.</p>
 
 <h2>Setup</h2>
 
@@ -2074,386 +2100,6 @@ There are probably better ways of getting an evenly distributed selection of ima
 
 
 <time datetime="2014-07-09T21:16:08-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/azure/'>Azure</a>, <a class='category' href='/blog/categories/node/'>Node</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/07/08/azure-blob-storage-and-node-blob-metadata/">
-		
-			Azure Blob Storage and Node: Blob Metadata</a>
-	</h2>
-	<div class="entry-content">
-		<p><strong>This is part of a series on working with Azure Blob Storage in Node.</strong></p>
-
-<ol>
-<li><a href="/blog/2014/06/30/azure-blob-storage-and-node/">Introduction</a></li>
-<li><a href="/blog/2014/07/01/azure-blob-storage-and-node-first-steps/">First Steps</a></li>
-<li><a href="/blog/2014/07/02/azure-blob-storage-and-node-creating-blobs/">Creating Blobs</a></li>
-<li><a href="/blog/2014/07/03/azure-blob-storage-and-node-downloading-blobs/">Downloading Blobs</a></li>
-<li><a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">Listing Blobs</a></li>
-<li><strong>Blob Metadata</strong></li>
-<li><a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">All Together</a></li>
-</ol>
-
-
-<h2>Working With Azure Blob Metadata</h2>
-
-<p>In the <a href="/blog/2014/07/07/azure-blob-storage-and-node-listing-blobs/">previous post</a>, we talked about how to list blobs and containers in your account.
-Today we&rsquo;ll discuss how to work with blob properties and metadata.</p>
-
-<h3>Account Connection Boilerplate</h3>
-
-<p>To work with blob storage, you first need to create a client instance.
-To avoid duplicating code over and over, we&rsquo;ll do that once here, and assume it in the other code samples.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;azure-storage&#39;</span><span class="p">);</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobService</span> <span class="o">=</span> <span class="nx">storage</span><span class="p">.</span><span class="nx">createBlobService</span><span class="p">();</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">containerName</span> <span class="o">=</span> <span class="s1">&#39;your-container-name&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">createContainerIfNotExists</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t create container %s&quot;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s created&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Container %s already exists&#39;</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1">// Your code goes here</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Now for the rest of the code samples, we&rsquo;ll assume that they&rsquo;re replacing the &ldquo;Your code goes here&rdquo; placeholder in the code above.</p>
-
-<h3>Fetching Blob Properties</h3>
-
-<p>You can fetch the properties for a blob with the <code>getBlobProperties</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-blob&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobProperties</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t fetch properties for blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Blob %s wasn&#39;t found container %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Successfully fetched properties for blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The blob properties object includes the blob&rsquo;s metadata.
-If you only need the metadata, you can request just that with the next snippet.</p>
-
-<h3>Fetching Blob Metadata</h3>
-
-<p>You can fetch the properties for a blob with the <code>getBlobProperties</code> method.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-blob&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobMetadata</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t fetch metadata for blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">isSuccessful</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Blob %s wasn&#39;t found container %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="nx">containerName</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Successfully fetched metadata for blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">metadata</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Updating Blob Properties and Metadata</h3>
-
-<p>A blob&rsquo;s properties and metadata can be updated with the <code>setBlobProperties</code> and <code>setBlobMetadata</code> methods.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Error checking removed for simplicity</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-blob&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobProperties</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">properties</span> <span class="o">=</span> <span class="nx">result</span><span class="p">;</span>
-</span><span class='line'>        <span class="nx">properties</span><span class="p">.</span><span class="nx">contentType</span> <span class="o">=</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">;</span>
-</span><span class='line'>        <span class="nx">blobService</span><span class="p">.</span><span class="nx">setBlobProperties</span><span class="p">(</span>
-</span><span class='line'>            <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">properties</span><span class="p">,</span>
-</span><span class='line'>            <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Successfully updated properties for blob %s&#39;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Error checking removed for simplicity</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-blob&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobMetadata</span><span class="p">(</span>
-</span><span class='line'>    <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>    <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">metadata</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">metadata</span><span class="p">;</span>
-</span><span class='line'>        <span class="nx">metadata</span><span class="p">.</span><span class="nx">hitcount</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">hitcount</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>        <span class="nx">blobService</span><span class="p">.</span><span class="nx">setBlobMetadata</span><span class="p">(</span>
-</span><span class='line'>            <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">metadata</span><span class="p">,</span>
-</span><span class='line'>            <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Successfully updated metadata for blob %s&#39;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>    <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Avoiding Race Conditions</h3>
-
-<p>In the previous examples, there&rsquo;s a potential race condition.
-If the blob is updated between the time you fetch the properties/metadata and the time when you update them, the changes will override each other.</p>
-
-<p>You can avoid this problem by using &ldquo;leases&rdquo;.</p>
-
-<p>The idea of a blob lease is that it lets you temporarily &ldquo;lock&rdquo; a blob for modifications.
-Once a lease is acquired for a blob, any modifications must include that lease&rsquo;s Id.</p>
-
-<p>By default, leases don&rsquo;t have a set duration.
-This means they won&rsquo;t expire automatically, and will need to be manually released.</p>
-
-<p>The other alternative is to set a specific lease duration.
-This is a good failsafe.
-If your script throws an error and never releases the lease, it will still eventually expire.</p>
-
-<p>Valid lease durations are between 15 and 60 seconds.
-If you need a longer lease, you can renew the lease before it expires.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Recursively attempts to acquire a lease</span>
-</span><span class='line'><span class="kd">function</span> <span class="nx">acquireLease</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">blobService</span><span class="p">.</span><span class="nx">acquireLease</span><span class="p">(</span>
-</span><span class='line'>        <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>        <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>        <span class="p">{</span> <span class="nx">leaseDuration</span><span class="o">:</span> <span class="mi">15</span> <span class="p">},</span>
-</span><span class='line'>        <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="s1">&#39;LeaseAlreadyPresent&#39;</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>                        <span class="nx">acquireLease</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="nx">cb</span><span class="p">);</span>
-</span><span class='line'>                    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                    <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                <span class="nx">cb</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
-</span><span class='line'>            <span class="p">}</span>
-</span><span class='line'>        <span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="kd">var</span> <span class="nx">blobName</span> <span class="o">=</span> <span class="s1">&#39;my-awesome-blob&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="nx">acquireLease</span><span class="p">(</span><span class="nx">containerName</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">leaseId</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t acquire lease on blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">blobService</span><span class="p">.</span><span class="nx">getBlobMetadata</span><span class="p">(</span>
-</span><span class='line'>            <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>            <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>            <span class="p">{</span> <span class="nx">leaseId</span><span class="o">:</span> <span class="nx">leaseId</span> <span class="p">},</span>
-</span><span class='line'>            <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blob</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t get metadata for blob %s&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-</span><span class='line'>                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>                    <span class="kd">var</span> <span class="nx">metadata</span> <span class="o">=</span> <span class="nx">blob</span><span class="p">.</span><span class="nx">metadata</span><span class="p">;</span>
-</span><span class='line'>                    <span class="nx">metadata</span><span class="p">.</span><span class="nx">hitcount</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">metadata</span><span class="p">.</span><span class="nx">hitcount</span> <span class="o">||</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>                    <span class="nx">blobService</span><span class="p">.</span><span class="nx">setBlobMetadata</span><span class="p">(</span>
-</span><span class='line'>                        <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>                        <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>                        <span class="nx">metadata</span><span class="p">,</span>
-</span><span class='line'>                        <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">blob</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Blob %s metadata updated&quot;</span><span class="p">,</span> <span class="nx">blobName</span><span class="p">);</span>
-</span><span class='line'>                            <span class="nx">blobService</span><span class="p">.</span><span class="nx">releaseLease</span><span class="p">(</span>
-</span><span class='line'>                                <span class="nx">containerName</span><span class="p">,</span>
-</span><span class='line'>                                <span class="nx">blobName</span><span class="p">,</span>
-</span><span class='line'>                                <span class="nx">leaseId</span><span class="p">,</span>
-</span><span class='line'>                                <span class="kd">function</span><span class="p">()</span> <span class="p">{});</span>
-</span><span class='line'>                        <span class="p">});</span>
-</span><span class='line'>                <span class="p">}</span>
-</span><span class='line'>            <span class="p">});</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>Conclusion</h3>
-
-<p>In this post we covered interacting with blob properties and metadata.
-In the final post in this series, we&rsquo;ll talk about putting everything together to create an blob-backed web service.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-08T20:47:12-07:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 

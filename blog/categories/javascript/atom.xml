@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JavaScript | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-08-18T11:17:26-07:00</updated>
+  <updated>2016-08-22T21:34:16-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,41 +12,6 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
-  
-  <entry>
-    <title type="html"><![CDATA[The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior]]></title>
-    <link href="http://willi.am/blog/2016/08/13/the-observer-effect-and-debugging-how-dev-tools-can-change-your-codes-behavior/"/>
-    <updated>2016-08-13T08:39:00-07:00</updated>
-    <id>http://willi.am/blog/2016/08/13/the-observer-effect-and-debugging-how-dev-tools-can-change-your-codes-behavior</id>
-    <content type="html"><![CDATA[<p>Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
-In general, this is very useful.
-You can check the value of a variable, or even look at the results of more complex expressions.</p>
-
-<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-inspect-selection.gif" alt="Selecting Code and Hovering Shows The Result In Chrome DevTools" /></p>
-
-<p>This is super useful, but it can also cause problems if you&rsquo;re not careful about how you use it.</p>
-
-<p>First, a little physics.
-The <a href="https://en.wikipedia.org/wiki/Observer_effect_(physics)">observer effect</a> refers to &ldquo;changes that the act of observation will make on a phenomenon being observed&rdquo;.
-That definition precisely describes the behavior of this Chrome DevTools feature.</p>
-
-<p>Consider the following example where I highlight a call to a function that has a side effect (incrementing the variable <code>i</code>).
-Whenever I hover over the code, it re-runs that expression, and the value of <code>i</code> increases.</p>
-
-<p><img src="https://itsananderson.blob.core.windows.net/post-images/debug-inspect-selection.gif" alt="Selecting a function call evaluates the function" /></p>
-
-<p>This side effect is fairly benign and easy to detect, but imagine a more complex function with multiple dependencies and obscured side-effects.
-Worse, you could observe the value of a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy object</a> without even knowing it might have side effects.</p>
-
-<p><img src="https://itsananderson.blob.core.windows.net/post-images/chrome-proxy-hover.gif" alt="Hovering over Proxy properties evaluates their handler" /></p>
-
-<p>Obviously this also serves as a warning against side effects in proxy handlers, but the point here is that these previews can affect the behavior of your code in significant ways.</p>
-
-<p>Several years ago, I wrote about <a href="/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/">verifying your tools</a> after a Fiddler visualizer made a debugging session take much longer than it should have taken.
-The same principal holds true here.
-Like many other professions, understanding how your tools behave is an important part of software development.</p>
-]]></content>
-  </entry>
   
   <entry>
     <title type="html"><![CDATA[Obvious Code]]></title>
@@ -319,6 +284,81 @@ it(“has a bar”, function() {
 <p>This was a pretty useful discovery for me. Hopefully it is for you as well.</p>
 
 <p><strong>Update</strong>: <a href="http://davidruttka.com">David Ruttka</a> has pointed out that you can also use <code>xdescribe</code> and <code>xit</code> to <em>disable</em> individual suites and tests.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Resolving JavaScript Objects Containing Promises]]></title>
+    <link href="http://willi.am/blog/2014/06/15/resolving-javascript-objects-containing-promises/"/>
+    <updated>2014-06-15T15:12:43-07:00</updated>
+    <id>http://willi.am/blog/2014/06/15/resolving-javascript-objects-containing-promises</id>
+    <content type="html"><![CDATA[<p>Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
+Unlike callbacks, you can wait for multiple promises to complete before proceeding.
+For example, in the <a href="https://github.com/kriskowal/q">Q</a> framework, you can use the <code>Q.all()</code> function to wait for multiple promises to complete.</p>
+
+<p>```javascript
+function makePromise(val) {
+  var deferred = Q.defer();
+  deferred.resolve(val);
+  return deferred.promise;
+}</p>
+
+<p>var promises = [
+  makePromise(1),
+  makePromise(2),
+  makePromise(3),
+  makePromise(4),
+];</p>
+
+<p>Q.all(promises, function(results) {
+  console.log(results); // [1,2,3,4]
+});
+```</p>
+
+<p>Now, this works well for an array, but as promise dependencies increase, it may be useful to reference these values more descriptively than an array index.
+Usually, you&rsquo;d want to wrap dependencies in an object like this:</p>
+
+<p><code>javascript
+var dependencies = {
+  'db': connectToDb(),
+  'api': getApi(),
+  'third': someOtherDependency()
+}
+</code></p>
+
+<p>Now, Q doesn&rsquo;t have a way to await the promises inside this object.
+If you just pass it to <code>Q.all()</code> it will finish before the promises are resolved, because the &ldquo;dependencies&rdquo; variable is an object, not a promise.
+However, there is a pretty simple workaround using Lo-Dash (or Underscore):</p>
+
+<p><code>
+Q.all(_.values(dependencies)).then(function(results) {
+  return _.zipObject(_.keys(dependencies), results);
+}).then(function(deps) {
+  console.log(deps);
+  // {
+  //   "db": [db connection],
+  //   "api" [api object],
+  //   "third": [third dependency]
+  // }
+});
+</code></p>
+
+<p>Basically we&rsquo;re unzipping the keys and values from the &ldquo;dependencies&rdquo; object, then rezipping them with the <code>_.zipObject()</code> function when the promises are resolved.</p>
+
+<p>Note that you can safely mix promises and non-promises.
+For example:</p>
+
+<p><code>javascript
+var dependencies = {
+  'db': connectToDb(),
+  'name': 'Bob',
+  'version': 3
+}
+</code></p>
+
+<p>Also note that this only works on a &ldquo;flat&rdquo; object.
+Any nested objects won&rsquo;t be resolved.
+It wouldn&rsquo;t be terribly difficult to write a utility function for recursively traversing an object and awaiting its promises, but I&rsquo;ll leave that as an exercise for the reader.</p>
 ]]></content>
   </entry>
   

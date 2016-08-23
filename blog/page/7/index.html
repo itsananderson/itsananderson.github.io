@@ -7,14 +7,63 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Here are my WordCamp Seattle slides, along with my code samples. The slides are available as a PDF here. The WP_Ajax class is available as a zip &hellip;">
+	<meta name="description" content="Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" Here are my WordCamp Seattle slides, along with my code samples. The slides are available as a PDF here. The WP_Ajax class is available as a zip file here. The Simple Post Ratings plugin is available (also as a zip file) here. Here&rsquo;s a link to my WordCamp Seattle video on WordPress.tv. Apr 16th, 2011 WordPress " />
+    <meta name="twitter:description" content=" Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it difficult to mock dependencies for unit tests. I leave this post up for posterity, but I no longer recommend this design pattern. This evening I was chatting with Nick Ohrn and I threw out an idea that I&rsquo;d been thinking about for a while. What if WordPress plugin developers used PHP static methods to namespace their plugins? An Example Without PHP Static Methods To understand what I&rsquo;m babbling on about, consider a very basic plugin that adds square brackets around post titles. 1
+2
+3
+4
+5
+6
+7
+/ * Plugin Name: Add Brackets /
+function ab_add_brackets( $title ) { return &quot;[$title]&quot;;
+}
+add_filter( &#39;the_title&#39;, &#39;ab_add_brackets&#39; ); It really doesn&rsquo;t get much simpler than that, but the problem is that there might be another plugin that uses the same prefix. Also, if you decide to change the prefix, you&rsquo;ll have to go through and change all of your hook and action registrations too. What a pain. Class Namespaces, but no PHP Static Methods The next option is to use a class as a namespacing tool. This is fairly common among more experienced WordPress developers. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+/ * Plugin Name: Add Brackets /
+if ( !class_exists(&#39;Add_Brackets&#39;) ) { class Add_Brackets { private static $instance; private function __construct() { add_filter( &#39;the_title&#39;, array( $this, &#39;add_brackets&#39; ) ); } public static function get_instance() { if ( null == self::$instance ) { self::$instance = new Add_Brackets(); } return self::$instance; } public function add_brackets( $title ) { return &quot;[$title]&quot;; } } Add_Brackets::get_instance();
+} Utilizing PHP Static Methods What I propose is developers use static methods instead. There&rsquo;s very little difference between a singleton class with instance methods and a class with static methods, and simply using static methods can simplify your code. Check out this example. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+/ * Plugin Name: Add Brackets /
+if ( !class_exists(&#39;Add_Brackets&#39;) ) { class Add_Brackets { public static function start() { add_filter( &#39;the_title&#39;, array( CLASS, &#39;add_brackets&#39; ) ); } public static function add_brackets( $title ) { return &quot;[$title]&quot;; } } Add_Brackets::start();
+} So that&rsquo;s that. All the advantages of namespacing with classes, with a small reduction in memory overhead (because you&rsquo;re passing around strings, rather than objects). Static methods are a PHP5 feature, but with PHP4 support being phased out in WordPress 3.2, this seems like a reasonable next step for WordPress developers to take. What do you think? Are there any issues with this technique that I&rsquo;ve missed? Are there any improvements that could be made? Let me know in the comments! Apr 26th, 2011 WordPress " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -83,6 +132,158 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/04/26/php-static-methods-in-wordpress-plugins/">
+		
+			PHP Static Methods in WordPress Plugins</a>
+	</h2>
+	<div class="entry-content">
+		<p><p style="background-color: #faa; padding: 5px">
+<strong>Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it difficult to mock dependencies for unit tests. I leave this post up for posterity, but I no longer recommend this design pattern.</strong><p></p>
+
+<p>This evening I was chatting with Nick Ohrn and I threw out an idea that I&rsquo;d been thinking about for a while. What if WordPress plugin developers used PHP static methods to namespace their plugins?</p>
+
+<h2>An Example Without PHP Static Methods</h2>
+
+<p>To understand what I&rsquo;m babbling on about, consider a very basic plugin that adds square brackets around post titles.</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
+</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
+</span><span class='line'><span class="cm"> </em>/</span>
+</span><span class='line'><span class="k">function</span> <span class="nf">ab_add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="s1">&#39;ab_add_brackets&#39;</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>It really doesn&rsquo;t get much simpler than that, but the problem is that there might be another plugin that uses the same prefix. Also, if you decide to change the prefix, you&rsquo;ll have to go through and change all of your hook and action registrations too. What a pain.</p>
+
+<h2>Class Namespaces, but no PHP Static Methods</h2>
+
+<p>The next option is to use a class as a namespacing tool. This is fairly common among more experienced WordPress developers.</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
+</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
+</span><span class='line'><span class="cm"> </em>/</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">class_exists</span><span class="p">(</span><span class="s1">&#39;Add_Brackets&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">class</span> <span class="nc">Add_Brackets</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;add_brackets&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span> <span class="k">null</span> <span class="o">==</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Add_Brackets</span><span class="p">();</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">function</span> <span class="nf">add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">Add_Brackets</span><span class="o">::</span><span class="na">get_instance</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>Utilizing PHP Static Methods</h2>
+
+<p>What I propose is developers use static methods instead. There&rsquo;s very little difference between a singleton class with instance methods and a class with static methods, and simply using static methods can simplify your code. Check out this example.</p>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="cm">/<em></span>
+</span><span class='line'><span class="cm"> * Plugin Name: Add Brackets</span>
+</span><span class='line'><span class="cm"> </em>/</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nb">class_exists</span><span class="p">(</span><span class="s1">&#39;Add_Brackets&#39;</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">class</span> <span class="nc">Add_Brackets</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">add_filter</span><span class="p">(</span> <span class="s1">&#39;the_title&#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span> <span class="nx"><strong>CLASS</strong></span><span class="p">,</span> <span class="s1">&#39;add_brackets&#39;</span> <span class="p">)</span> <span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">add_brackets</span><span class="p">(</span> <span class="nv">$title</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="s2">&quot;[</span><span class="si">$title</span><span class="s2">]&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nx">Add_Brackets</span><span class="o">::</span><span class="na">start</span><span class="p">();</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>So that&rsquo;s that. All the advantages of namespacing with classes, with a small reduction in memory overhead (because you&rsquo;re passing around strings, rather than objects). Static methods are a PHP5 feature, but with PHP4 support being phased out in WordPress 3.2, this seems like a reasonable next step for WordPress developers to take.</p>
+
+<p>What do you think? Are there any issues with this technique that I&rsquo;ve missed? Are there any improvements that could be made? Let me know in the comments!</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-04-26T13:16:52-07:00" pubdate data-updated="true">Apr 26<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -956,81 +1157,6 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
 
 
 <time datetime="2010-03-12T21:08:59-08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2009/05/21/multiple-wordpress-blogs-on-one-wordpress-core/">
-		
-			Multiple WordPress Blogs on One WordPress Core</a>
-	</h2>
-	<div class="entry-content">
-		<p>Last Saturday I had the opportunity to listen to <a href="http://www.krotscheck.net/">Mike Krotscheck</a> talk about techniques for advanced WordPress installations. One of the most interesting things I took away from his talk was a way to install multiple WordPress blogs on one WordPress core. Note we&rsquo;re not talking about WordPress MU. When you only need 2 or 3 blogs, WordPress MU can be a bit overkill, but installing these blogs on the same WordPress core can save space and make updates easier. Here&rsquo;s how you do it.</p>
-
-<p>First of course you need to download WordPress and then upload it to your server. This is the easy part, and there are lots of instructions for how to do this, so I won&rsquo;t go through them. You&rsquo;ll also need a MySQL database, but again I won&rsquo;t go into that since there are lots of resources already available that explain how to do this.</p>
-
-<p>Let&rsquo;s suppose we&rsquo;re installing two blogs on domain1.com and domain2.com (lame I know, but give me a break). These should be pointing at the same server (your domain registrar can help you with this). If you navigate to your WordPress install, you&rsquo;ll be asked to go through the installation process. Let&rsquo;s start with domain1.com. Enter all your database information, but specify a custom table prefix (like &ldquo;domain1_&rdquo;) which will be unique to that domain. Once the installation is complete (make sure you save your password!) you need to delete the wp-config.php file.</p>
-
-<p>Now if you navigate with your other domain, you&rsquo;ll be asked to install WordPress again. This time, use a different table prefix (like &ldquo;domain2_&rdquo;). This will give you two different sets of WordPress tables in your database. The only problem is that you can&rsquo;t access both of them. We&rsquo;ll remedy this next.</p>
-
-<p>Go into your wp-config.php file and find the line that looks something like this.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$table_prefix</span>  <span class="o">=</span> <span class="s1">&#39;domain2_&#39;</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>We need this variable to be different, depending on what domain is being used to access your blog. Using the PHP $_SERVER super global, we can do this quite easily.</p>
-
-<p>Here&rsquo;s the new code you&rsquo;d want to use.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="s1">&#39;domain1.com&#39;</span> <span class="o">==</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_HOST&#39;</span><span class="p">]</span> <span class="p">)</span>  <span class="p">{</span>
-</span><span class='line'><span class="nv">$table_prefix</span> <span class="o">=</span> <span class="s1">&#39;domain1_&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'><span class="nv">$table_prefix</span> <span class="o">=</span> <span class="s1">&#39;domain2_&#39;</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>So now your server will display two different blogs, depending on what domain is used to access your site. Again, the advantage here is that you only use the space of one set of WordPress files, and you only have to do one update when a new version is released.</p>
-
-<p>Mike talked about some other cool things you can do with this, and talked about how you can address issues with plugins like Google SiteMaps. He promised to post his slides, so if you&rsquo;d like to learn more you should check out <a href="http://www.krotscheck.net/">his blog</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2009-05-21T22:14:53-07:00" pubdate data-updated="true">May 21<span>st</span>, 2009</time></div>
 	<div class="tags">
 
 
