@@ -341,6 +341,12 @@
         <lastmod>2016-08-22T21:33:37-07:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://willi.am/blog/2016/10/04/writing-useful-tests-naming-tests-and-writing-assertions/
+        </loc>
+        <lastmod>2016-10-04T01:16:25-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/404.html</loc>
         <lastmod>2016-07-30T17:41:12-07:00</lastmod>
     </url>
@@ -350,11 +356,11 @@
     </url>
     <url>
         <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2016-08-22T21:33:37-07:00</lastmod>
+        <lastmod>2016-10-04T01:16:25-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2016-08-22T21:33:37-07:00</lastmod>
+        <lastmod>2016-10-04T01:16:25-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/node-modules/</loc>

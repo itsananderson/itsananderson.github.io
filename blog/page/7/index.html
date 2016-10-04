@@ -7,24 +7,33 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it &hellip;">
+	<meta name="description" content="I posted a few months ago about using static methods in WordPress plugins.
+I&rsquo;ve used that method myself for the last few months, and I&rsquo; &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content=" Update 5/18/2014 This is a 3 year old post, and I&rsquo;ve learned a lot in that time. Using this method to namespace your plugins makes it difficult to mock dependencies for unit tests. I leave this post up for posterity, but I no longer recommend this design pattern. This evening I was chatting with Nick Ohrn and I threw out an idea that I&rsquo;d been thinking about for a while. What if WordPress plugin developers used PHP static methods to namespace their plugins? An Example Without PHP Static Methods To understand what I&rsquo;m babbling on about, consider a very basic plugin that adds square brackets around post titles. 1
+    <meta name="twitter:description" content=" I posted a few months ago about using static methods in WordPress plugins.
+I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
+One part, however, was a source of some pain: Inheritance.
+This can be solved by utilizing PHP&rsquo;s get_called_class() function to get called class names in from your static functions. To make a long story short, getting the actual class name of the current object in an instance method is easy, just call get_class( $this ).
+The problem is, $this doesn&rsquo;t exist in a static method, and just calling get_class() returns the current class (basically the same as CLASS), which isn&rsquo;t helpful if you actually want the name of a child class. Why You Might Want to Get Called Class Names Consider a base class which has a get_instance() function, for creating an instance of the class, or returning an existing instance if it has already been instantiated. 1
 2
 3
 4
 5
 6
 7
-/ * Plugin Name: Add Brackets /
-function ab_add_brackets( $title ) { return &quot;[$title]&quot;;
-}
-add_filter( &#39;the_title&#39;, &#39;ab_add_brackets&#39; ); It really doesn&rsquo;t get much simpler than that, but the problem is that there might be another plugin that uses the same prefix. Also, if you decide to change the prefix, you&rsquo;ll have to go through and change all of your hook and action registrations too. What a pain. Class Namespaces, but no PHP Static Methods The next option is to use a class as a namespacing tool. This is fairly common among more experienced WordPress developers. 1
+8
+9
+10
+11
+12
+class Singleton { private static $instance; public static function get_instance() { if ( is_null( self::$instance ) ) { self::$instance = new Singleton(); } return self::$instance; } private function __construct() { // Singleton constructor stuff }
+} How to Get Called Class Names and Improve Extensibility This is great, but the problem arises when we try to extend that singleton class.
+Ideally, the inherited get_instance() method would return an instance of the actual class, but with the above implementation, it would always return an instance of the Singleton class. Here&rsquo;s an alternative, which uses the get_called_class() function to get called class names. 1
 2
 3
 4
@@ -41,29 +50,9 @@ add_filter( &#39;the_title&#39;, &#39;ab_add_brackets&#39; ); It really doesn&rs
 15
 16
 17
-18
-19
-20
-21
-/ * Plugin Name: Add Brackets /
-if ( !class_exists(&#39;Add_Brackets&#39;) ) { class Add_Brackets { private static $instance; private function __construct() { add_filter( &#39;the_title&#39;, array( $this, &#39;add_brackets&#39; ) ); } public static function get_instance() { if ( null == self::$instance ) { self::$instance = new Add_Brackets(); } return self::$instance; } public function add_brackets( $title ) { return &quot;[$title]&quot;; } } Add_Brackets::get_instance();
-} Utilizing PHP Static Methods What I propose is developers use static methods instead. There&rsquo;s very little difference between a singleton class with instance methods and a class with static methods, and simply using static methods can simplify your code. Check out this example. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-/ * Plugin Name: Add Brackets /
-if ( !class_exists(&#39;Add_Brackets&#39;) ) { class Add_Brackets { public static function start() { add_filter( &#39;the_title&#39;, array( CLASS, &#39;add_brackets&#39; ) ); } public static function add_brackets( $title ) { return &quot;[$title]&quot;; } } Add_Brackets::start();
-} So that&rsquo;s that. All the advantages of namespacing with classes, with a small reduction in memory overhead (because you&rsquo;re passing around strings, rather than objects). Static methods are a PHP5 feature, but with PHP4 support being phased out in WordPress 3.2, this seems like a reasonable next step for WordPress developers to take. What do you think? Are there any issues with this technique that I&rsquo;ve missed? Are there any improvements that could be made? Let me know in the comments! Apr 26th, 2011 WordPress " />
+class Singleton { private static $instances = array(); public static function get_instance() { $class = get_called_class(); if ( empty( self::$instances[$class] ) ) { self::$instances[$class] = new $class(); } return self::$instance; } private function __construct() { // Singleton constructor stuff }
+} class Child extends Singleton { // Child class stuff
+} You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh? Sep 5th, 2011 " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -132,6 +121,124 @@ if ( !class_exists(&#39;Add_Brackets&#39;) ) { class Add_Brackets { public stati
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2011/09/05/get-called-class-name-in-php/">
+		
+			Get Called Class Name in PHP</a>
+	</h2>
+	<div class="entry-content">
+		<p>I posted a few months ago about <a href="http://www.itsananderson.com/2011/04/using-static-methods-in-wordpress-plugins/">using static methods in WordPress plugins</a>.
+I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
+One part, however, was a source of some pain: Inheritance.
+This can be solved by utilizing PHP&rsquo;s <code>get_called_class()</code> function to get called class names in from your static functions.</p>
+
+<p>To make a long story short, getting the actual class name of the current object in an instance method is easy, just call <code>get_class( $this )</code>.
+The problem is, $this doesn&rsquo;t exist in a static method, and just calling get_class() returns the current class (basically the same as <strong>CLASS</strong>), which isn&rsquo;t helpful if you actually want the name of a child class.</p>
+
+<h2>Why You Might Want to Get Called Class Names</h2>
+
+<p>Consider a base class which has a <code>get_instance()</code> function, for creating an instance of the class, or returning an existing instance if it has already been instantiated.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="nb">is_null</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Singleton</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>How to Get Called Class Names and Improve Extensibility</h2>
+
+<p>This is great, but the problem arises when we try to extend that singleton class.
+Ideally, the inherited get_instance() method would return an instance of the actual class, but with the above implementation, it would always return an instance of the Singleton class. Here&rsquo;s an alternative, which uses the get_called_class() function to get called class names.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="k">class</span> <span class="nc">Singleton</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">static</span> <span class="nv">$instances</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">get_instance</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$class</span> <span class="o">=</span> <span class="nb">get_called_class</span><span class="p">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span> <span class="k">empty</span><span class="p">(</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">self</span><span class="o">::</span><span class="nv">$instances</span><span class="p">[</span><span class="nv">$class</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nv">$class</span><span class="p">();</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nx">self</span><span class="o">::</span><span class="nv">$instance</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">private</span> <span class="k">function</span> <span class="nf">__construct</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1">// Singleton constructor stuff</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Child</span> <span class="k">extends</span> <span class="nx">Singleton</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Child class stuff</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh?</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-05T13:09:43-07:00" pubdate data-updated="true">Sep 5<span>th</span>, 2011</time></div>
+	<div class="tags">
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1013,154 +1120,6 @@ After a few instants he immerged, dizzy and disoriented. He spotted the entrance
 
 
 	<a class='category' href='/blog/categories/netbeans/'>Netbeans</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2010/03/12/wordpress-installation-script/">
-		
-			WordPress Installation Script</a>
-	</h2>
-	<div class="entry-content">
-		<p>The WordPress installation process is already incredibly simple, but because I often find myself setting up fresh installations of WordPress for various reasons, I decided to make it even easier.</p>
-
-<p>The following script takes a folder name as an argument, creates that folder in the website root (specified in a config variable of the script), downloads and extracts the latest version of WordPress into that folder, and runs the WordPress install. Finally, it sets the admin password to the password specified in another config variable and removes the password change nag.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c">#!/bin/bash</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="c"># configuration</span>
-</span><span class='line'><span class="c">#</span>
-</span><span class='line'><span class="nv">rootURL</span><span class="o">=</span><span class="s2">&quot;http://localhost&quot;</span> <span class="c"># your root URL. No trailing slash</span>
-</span><span class='line'><span class="nv">rootDIR</span><span class="o">=</span><span class="s2">&quot;/home/anderswc/public_html&quot;</span> <span class="c"># your document root. No trailing slash</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">dbname</span><span class="o">=</span><span class="s2">&quot;wordpress&quot;</span>
-</span><span class='line'><span class="nv">dbuser</span><span class="o">=</span><span class="s2">&quot;username&quot;</span>
-</span><span class='line'><span class="nv">dbpass</span><span class="o">=</span><span class="s2">&quot;password&quot;</span>
-</span><span class='line'><span class="nv">dbhost</span><span class="o">=</span><span class="s2">&quot;localhost&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">wppass</span><span class="o">=</span><span class="s2">&quot;password&quot;</span> <span class="c">#password to use for the admin account</span>
-</span><span class='line'><span class="nv">adminemail</span><span class="o">=</span><span class="s2">&quot;email@example.com&quot;</span> <span class="c">#email to use for the admin account</span>
-</span><span class='line'><span class="nv">blogtitle</span><span class="o">=</span><span class="nv">$1</span> <span class="c"># defaults to the specified directory name. can be anything</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;$1&quot;</span> <span class="o">]</span>
-</span><span class='line'><span class="k">then</span>
-</span><span class='line'>  <span class="c"># directory name must be specified</span>
-</span><span class='line'>  <span class="nb">echo</span> <span class="s2">&quot;Please specify an installation folder name&quot;</span>
-</span><span class='line'><span class="k">else</span>
-</span><span class='line'>  <span class="c"># ideally you shouldn&#39;t have to change anything past this point</span>
-</span><span class='line'>  <span class="nb">echo</span> <span class="s2">&quot;Creating a WordPress instance in $rootDIR/$1&quot;</span>
-</span><span class='line'>  <span class="c"># create the directory to install WordPress in</span>
-</span><span class='line'>  mkdir <span class="nv">$rootDIR</span>/<span class="nv">$1</span>
-</span><span class='line'>  <span class="c"># download the latest version of WordPress into the directory we just created</span>
-</span><span class='line'>  wget -o /dev/null -O <span class="nv">$rootDIR</span>/<span class="nv">$1</span>/wordpress.zip http://wordpress.org/latest.zip
-</span><span class='line'>  <span class="c"># unzip the archive containing WordPress. files will be inside a &#39;wordpress&#39; directory</span>
-</span><span class='line'>  unzip -q <span class="nv">$rootDIR</span>/<span class="nv">$1</span>/wordpress.zip -d <span class="nv">$rootDIR</span>/<span class="nv">$1</span>
-</span><span class='line'>  <span class="c"># move the files out of the &#39;wordpress&#39; directory into their intended location</span>
-</span><span class='line'>  mv <span class="nv">$rootDIR</span>/<span class="nv">$1</span>/wordpress/* <span class="nv">$rootDIR</span>/<span class="nv">$1</span>
-</span><span class='line'>  <span class="c"># remove the wordpress archive and the wordpress folder</span>
-</span><span class='line'>  rm <span class="nv">$rootDIR</span>/<span class="nv">$1</span>/wordpress.zip
-</span><span class='line'>  rmdir <span class="nv">$rootDIR</span>/<span class="nv">$1</span>/wordpress
-</span><span class='line'>  <span class="c"># make WordPress directory writeable by PHP so installation can take place</span>
-</span><span class='line'>  chmod -R 777 <span class="nv">$rootDIR</span>/<span class="nv">$1</span>
-</span><span class='line'>  <span class="c"># request the configuration file generation and blog installation webpages.</span>
-</span><span class='line'>  <span class="nv">postdata</span><span class="o">=</span><span class="s2">&quot;dbname=$dbname&amp;uname=$dbuser&amp;pwd=$dbpass&amp;dbhost=$dbhost&amp;prefix=$1_&quot;</span>
-</span><span class='line'>  wget -o /dev/null --post-data <span class="s2">&quot;$postdata&quot;</span> <span class="s2">&quot;$rootURL/$1/wp-admin/setup-config.php?step=2&quot;</span>
-</span><span class='line'>  <span class="nv">postdata</span><span class="o">=</span><span class="s2">&quot;weblog_title=$blogtitle&amp;admin_email=$adminemail&quot;</span>
-</span><span class='line'>  wget -o /dev/null --post-data <span class="s2">&quot;$postdata&quot;</span> <span class="s2">&quot;$rootURL/$1/wp-admin/install.php?step=2&quot;</span>
-</span><span class='line'>  <span class="c"># WordPress password was randomly generated</span>
-</span><span class='line'>  <span class="c"># change it to password in configuration and remove password change nag</span>
-</span><span class='line'>  <span class="nv">sqlcommand</span><span class="o">=</span><span class="s2">&quot;UPDATE $1_users SET user_pass=MD5(&#39;$wppass&#39;)&quot;</span>
-</span><span class='line'>  <span class="nv">sqlcommand</span><span class="o">=</span><span class="s2">&quot;$sqlcommand;DELETE FROM $1_usermeta WHERE meta_key=&#39;default_password_nag&#39;;&quot;</span>
-</span><span class='line'>  mysql -u <span class="nv">$dbuser</span> -p<span class="nv">$dbpass</span> -e <span class="s2">&quot;$sqlcommand&quot;</span> <span class="nv">$dbname</span>
-</span><span class='line'>  <span class="c"># uncomment the following line if you&#39;re running this script on a public server</span>
-</span><span class='line'>  <span class="c">#chmod -R 755 $rootDIR/$1</span>
-</span><span class='line'>  <span class="nb">echo</span> <span class="s2">&quot;Done&quot;</span>
-</span><span class='line'><span class="k">fi</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>If you think this might be useful, give it a shot and let me know what you think.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-03-12T21:08:59-08:00" pubdate data-updated="true">Mar 12<span>th</span>, 2010</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
 
 
 </div>
