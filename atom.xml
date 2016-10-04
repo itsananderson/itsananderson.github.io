@@ -4,7 +4,7 @@
   <title><![CDATA[Will Anderson]]></title>
   <link href="http://william-backend.azurewebsites.net/feed/" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2016-10-04T01:16:30-07:00</updated>
+  <updated>2016-10-04T09:42:56-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -729,17 +729,11 @@ Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[React Native: Fix for "Invariant Violation: onlyChild must be passed a children with exactly one child"]]></title>
+    <title type="html"><![CDATA[React Native: Fix for "onlyChild must be passed a children with exactly one child"]]></title>
     <link href="http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/"/>
     <updated>2015-05-08T07:37:37-07:00</updated>
     <id>http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child</id>
-    <content type="html"><![CDATA[<p>I recently ran into a new (to me) error in React Native.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Invariant Violation: onlyChild must be passed a children with exactly one child</span></code></pre></td></tr></table></div></figure>
-
-
-<p>I couldn&rsquo;t find any documentation on it, so I thought I&rsquo;d share what I figured out.</p>
+    <content type="html"><![CDATA[<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
 
 <p>All of the &ldquo;Touchable&rdquo; components in React Native do an <code>onlyChild</code> check on their children, which throws an error unless there&rsquo;s exactly one child.</p>
 
