@@ -144,7 +144,11 @@ http.get(requestOptions, function (httpResponse) {
         var writeStream = blobService.createWriteStreamToBlockBlob(
             containerName,
             fileName,
-            { contentType: 'text/html' },
+            {
+                contentSettings: {
+                    contentType: 'text/html'
+                }
+            },
             function(error, result, response){
                 if(error){
                     console.log("Couldn't upload file %s from %s", fileName, domain);
@@ -197,13 +201,12 @@ This determines the Content-Type header that will be set if the blob is accessed
 By default the content type is set to 'application/octet-stream'.
 If you create a blob with this type and try to access it with your browser, it will simply be downloaded rather than displayed as the desired type (text, html, image).
 
-To set a custom content type, pass something like `{ contentType: 'image/jpeg' }` before your callback function.
+To set a custom content type, pass something like `{ contentSettings: { contentType: 'image/jpeg' } }` before your callback function.
 Note that `createBlockBlobFromFile` will infer the content type from the file extension.
-Also,`createBlockBlobFromText` automatically sets the content type to `text/plain;charset="utf-9"` when it's given a string.
 
 There are a number of other properties that can be set on a blob, including contentEncoding, contentLanguage, and metadata (which will be covered in a later post).
 
-The easiest way to see the different options is to look in `lib\services\blob\blobservice.js` inside the azure-storage package.
+The easiest way to see the different options is to look in [lib\services\blob\blobservice.js](https://github.com/Azure/azure-storage-node/blob/master/lib/services/blob/blobservice.js) inside the azure-storage package.
 
 ### Conclusion
 
