@@ -2021,6 +2021,10 @@ This is useful for things like caching API responses.</p>
 <span class='line-number'>29</span>
 <span class='line-number'>30</span>
 <span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">);</span>
 </span><span class='line'>
 </span><span class='line'><span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="s1">&#39;index.html&#39;</span><span class="p">;</span>
@@ -2038,7 +2042,11 @@ This is useful for things like caching API responses.</p>
 </span><span class='line'>        <span class="kd">var</span> <span class="nx">writeStream</span> <span class="o">=</span> <span class="nx">blobService</span><span class="p">.</span><span class="nx">createWriteStreamToBlockBlob</span><span class="p">(</span>
 </span><span class='line'>            <span class="nx">containerName</span><span class="p">,</span>
 </span><span class='line'>            <span class="nx">fileName</span><span class="p">,</span>
-</span><span class='line'>            <span class="p">{</span> <span class="nx">contentType</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span> <span class="p">},</span>
+</span><span class='line'>            <span class="p">{</span>
+</span><span class='line'>                <span class="nx">contentSettings</span><span class="o">:</span> <span class="p">{</span>
+</span><span class='line'>                    <span class="nx">contentType</span><span class="o">:</span> <span class="s1">&#39;text/html&#39;</span>
+</span><span class='line'>                <span class="p">}</span>
+</span><span class='line'>            <span class="p">},</span>
 </span><span class='line'>            <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">,</span> <span class="nx">response</span><span class="p">){</span>
 </span><span class='line'>                <span class="k">if</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
 </span><span class='line'>                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Couldn&#39;t upload file %s from %s&quot;</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">,</span> <span class="nx">domain</span><span class="p">);</span>
@@ -2112,13 +2120,12 @@ This determines the Content-Type header that will be set if the blob is accessed
 <p>By default the content type is set to &lsquo;application/octet-stream&rsquo;.
 If you create a blob with this type and try to access it with your browser, it will simply be downloaded rather than displayed as the desired type (text, html, image).</p>
 
-<p>To set a custom content type, pass something like <code>{ contentType: 'image/jpeg' }</code> before your callback function.
-Note that <code>createBlockBlobFromFile</code> will infer the content type from the file extension.
-Also,<code>createBlockBlobFromText</code> automatically sets the content type to <code>text/plain;charset="utf-9"</code> when it&rsquo;s given a string.</p>
+<p>To set a custom content type, pass something like <code>{ contentSettings: { contentType: 'image/jpeg' } }</code> before your callback function.
+Note that <code>createBlockBlobFromFile</code> will infer the content type from the file extension.</p>
 
 <p>There are a number of other properties that can be set on a blob, including contentEncoding, contentLanguage, and metadata (which will be covered in a later post).</p>
 
-<p>The easiest way to see the different options is to look in <code>lib\services\blob\blobservice.js</code> inside the azure-storage package.</p>
+<p>The easiest way to see the different options is to look in <a href="https://github.com/Azure/azure-storage-node/blob/master/lib/services/blob/blobservice.js">lib\services\blob\blobservice.js</a> inside the azure-storage package.</p>
 
 <h3>Conclusion</h3>
 
