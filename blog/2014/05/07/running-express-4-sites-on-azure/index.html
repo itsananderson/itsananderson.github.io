@@ -14,18 +14,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Running Express 4 Sites On Azure - Will Anderson" />
-    <meta name="twitter:description" content=" If you&rsquo;ve created an Express 4 app with the new scaffold utility recently, you may have noticed that it doesn&rsquo;t work in Azure. When you try to load the site, it fails with the following error: The page cannot be displayed because an internal server error has occurred. The Diagnosis This is because of the new structure Express creates for its apps. Instead of app.js being the expected entry point, Express now specifies bin/www as the entry point for starting the server. I suspect the reason for this is so that the newly scaffolded app can be consumed as a module, allowing the consumer to worry about port binding etc. Unfortunately, this causes problems for Azure. When Azure starts a Node.js site, it looks for either a server.js or an app.js. As far as I can tell from my admittedly limited testing, it doesn&rsquo;t seem look at package.json for an alternate entry point. Because of this, when it includes app.js, nothing ever binds to the listening port, so the app immediately exits on startup. The Workaround Since Azure first looks for a server.js file when it starts a site, the easiest solution I&rsquo;ve found is to add a server.js file with the following contents. 1
-require(&#39;./bin/www&#39;); Now, when Azure starts your site, it will require server.js, which will require bin/www, which will require app.js. After that somewhat convoluted redirection chain, all will again be right in the world. The Azure documentation has an alternative workaround (see steps 4 and 5 of &ldquo;Install Express&rdquo;), but I don&rsquo;t care for it.
-The problem with their solution is that it duplicates the code from bin/www into server.js, which means any updates you make to bin/www will also need to be applied to server.js.
-Long story short, code duplication sucks. The Solution There are a couple of things that would properly solve this problem instead of just working around it. Express Scaffold Fix There are probably a few ways Express could fix this, but the simplest I can think of would be to add a server.js that does the same thing as my workaround.
-If that&rsquo;s not desirable for all sites, they could add a &ldquo;Azure compatibility&rdquo; flag that explicitly adds the sever.js workaround. Azure Fix In my oppinion, Azure should have a way to specify the entry-point in package.json rather than hardcoding to app.js and server.js. The conventional npm start configuration is a logical place to begin, since it&rsquo;s a supported spec from npm. 1
-2
-3
-4
-5
-{ "scripts": { "start" : "&lt;path&gt;" }
-} Azure relies on iisnode, which probably can&rsquo;t consume package.json directly.
-However, Azure could look at a setting in package.json during the site setup process (when it does stuff like package restore), and configure web.config, just like it does now to switch between app.js and server.js. I am now accepting new clients for part-time consulting and software development projects. Learn more May 7th, 2014 Azure, Express, Node " />
+    
+    <meta name="twitter:description" content="If you&rsquo;ve created an Express 4 app with the new scaffold utility recently, you may have noticed that it doesn&rsquo;t work in Azure. When you &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -203,7 +193,7 @@ However, Azure could look at a setting in package.json during the site setup pro
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2016
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Will Anderson
 

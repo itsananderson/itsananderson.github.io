@@ -15,14 +15,9 @@ Git stores a snapshot of &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="For the Last Time: Git Stores Snapshots Not Diffs - Will Anderson" />
-    <meta name="twitter:description" content=" I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
-Git stores a snapshot of the entire file, not a diff This is an understandable point of confusion, because most output from Git is in the form of diffs.
-Additionally, many other SCMs store changes as diffs instead of snapshots.
-However, Git stores an entire snapshot of each modified file. If you want to see an explanation from someone much smarter than me, check out this video. Illustrating Snapshots The easiest way to show how Git stores snapshots is create a project and show the relative sizes of the .git object folder. I&rsquo;ve created a sample project on GitHub that contains two commits.
-The first commit introduces the text of Alice&rsquo;s Adventures in Wonderland.
-The second commit makes a small modification to the text. If you clone the repository and unpack the individual objects, you&rsquo;ll see something like the following when you inspect the .git directory with WinDirStat. As you can see, Git stores two blobs of (nearly) identical size, one for each version of the text.
-If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much smaller blob (plus other objects for the tree etc.) This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
-If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation. I am now accepting new clients for part-time consulting and software development projects. Learn more Oct 14th, 2014 Git " />
+    
+    <meta name="twitter:description" content="I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
+Git stores a snapshot of &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -170,7 +165,7 @@ If you want a more detailed explanation about how Git stores data, you can watch
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2016
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Will Anderson
 

@@ -15,37 +15,9 @@ Today I want to look at why you should put thought into &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Writing Useful Tests: Naming Tests and Writing Assertions - Will Anderson" />
-    <meta name="twitter:description" content=" Last time I blogged about organizing your tests so that they&rsquo;re easier to maintain.
-Today I want to look at why you should put thought into naming your tests and writing assertions. When you first write your tests, you (hopefully) have all the context of the code you&rsquo;re testing.
-You know how the code should work, and you know what your test is trying to validate.
-However, if the test starts failing 6 months down the road, you probably won&rsquo;t have all that context.
-Writing verbose test names and assertion messages will make it much easier for you to regain that context. Naming Things It&rsquo;s Monday, and you just poured your first cup of &ldquo;Damn Fine Coffee&rdquo;. You&rsquo;re checking the morning influx of email and open an email about failing tests.
-You&rsquo;re greeted with this helpful summary: 1
-2
-3
-4
-Failing Tests: - User Creation Expected "false" to be "true" Well, that&rsquo;s helpful&hellip; Obviously this is a contrived example, but it illustrates two potential problems with your tests. Problem 1: Generic Names In the example above, the test is called &ldquo;User Creation&rdquo;, which isn&rsquo;t very descriptive.
-Now you have to find the code for the test and re-grok it, just to remember what the test does.
-Only then can you figure out why it&rsquo;s failing. It might be better to call this test something like &ldquo;User creation succeeds with valid email and matching passwords&rdquo; or &ldquo;User creation fails with an invalid email&rdquo;.
-If the test does more than what those detailed titles describe, it&rsquo;s probably time to break it into smaller tests. Problem 2: Generic Assertions The other thing you&rsquo;ll notice from the example is the reason the test failed: Expected "false" to be "true". That doesn&rsquo;t really help you track down the problem.
-You know there&rsquo;s probably a failing assertion, but if you have many &ldquo;assert&rdquo; statements in your test, it may not be immediately clear whith one failed.
-Adding a clear assertion message can make it much simpler to track down the part of the test that&rsquo;s failing. 1
-2
-3
-4
-5
-6
-7
-8
-9
-// Before
-var succeeded = false;
-assert(succeeded);
-// Expected &quot;false&quot; to be &quot;true&quot; // After
-var succeeded = false;
-assert(succeeded, &quot;User creation should have succeeded&quot;);
-// Expected &quot;false&quot; to be &quot;true&quot;. User creation should have succeeded Now it&rsquo;s easy to find the assertion in your code that&rsquo;s failing.
-Plus, your &ldquo;tests are failing&rdquo; email will tell you why the test is failing before you&rsquo;ve even fired up your editor. That Was Easy Ok. You&rsquo;ve fixed your tests. Time to treat yourself to more coffee, and maybe some donuts. Yes, I did just finish watching Twin Peaks. Why do you ask? I am now accepting new clients for part-time consulting and software development projects. Learn more Oct 4th, 2016 Testing " />
+    
+    <meta name="twitter:description" content="Last time I blogged about organizing your tests so that they&rsquo;re easier to maintain.
+Today I want to look at why you should put thought into &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -252,7 +224,7 @@ Plus, your &ldquo;tests are failing&rdquo; email will tell you why the test is f
 
 
 </div>
-	<footer id="footer" class="inner">Copyright &copy; 2016
+	<footer id="footer" class="inner">Copyright &copy; 2017
 
     Will Anderson
 
