@@ -16,10 +16,67 @@ about using them to look up someone&rsquo; &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Creating a Custom Chrome Search Engine - Will Anderson" />
-    
-    <meta name="twitter:description" content="Custom search engines in Chrome are a pretty cool feature.
+    <meta name="twitter:description" content=" Custom search engines in Chrome are a pretty cool feature.
 For example, Jimmy Theis has a great blog post
-about using them to look up someone&rsquo; &hellip;" />
+about using them to look up someone&rsquo;s Rose-Hulman class schedule. The one shortcoming I&rsquo;ve found is that you can&rsquo;t do any processing of the actual search term.
+In other words, you have to blindly jump to the search engine URL without evaluating the actual query. In the case of the Rose-Hulman lookup page, there are actually two parameters that it would be nice to query on.
+The first is the username of the person you&rsquo;re looking up, and the second is which quarter (Fall, Winter, Spring, Summer) to show.
+With Chrome&rsquo;s custom search engines, you can&rsquo;t specify multiple parameters, so you have to hardcode the quarter parameter (which is hardly convenient).
+To resolve this problem, I wrote a simple PHP script that takes in the search a search query (like anderswc 1 or jetheis 201130) and translates it to the correct schedule lookup page query (my fall schedule, or Jimmy&rsquo;s spring schedule last year).
+Here&rsquo;s the script: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+&lt;?php function get_academic_year() { if ( intval( date(&#39;n&#39;) ) &gt;= 8 ) { return date( &#39;Y&#39; ) + 1; } else { return intval( date( &#39;Y&#39; ) ); }
+} function get_quarter() { $month = intval( date( &#39;n&#39; ) ); $day = intval( date( &#39;j&#39; ) ); if ( 6 == $month || 7 == $month ) { return 40; } elseif ( ( 8 &lt;= $month &amp;&amp; 10 &gt;= $month ) || ( 11 == $month &amp;&amp; 20 &gt;= $day ) ) { return 10; } elseif ( 11 &lt;= $month || 2 &gt;= $month ) { return 20; } else { return 30; }
+} $search = $_GET[&#39;search&#39;]; $parts = explode( &#39; &#39;, $search ); if ( 1 == count( $parts ) ) { $term = get_academic_year() . get_quarter();
+} else { $term = $parts[1]; if ( strlen( $term ) == 1 ) { $term = get_academic_year() . $term . &#39;0&#39;; } elseif ( strlen( $term ) == 2 ) { $term = get_academic_year() . $term; } $term = intval( $term );
+}
+$url = &#39;https://prodweb.rose-hulman.edu/regweb-cgi/reg-sched.pl?termcode=&#39; . $term . &#39;&amp;view=tgrid&amp;id1=&#39; . $parts[0] . &#39;&amp;bt1=ID%2Username&#39;; header( &#39;Location: &#39; . $url ); Now you can create a custom search engine to point to this script (I&rsquo;ve got a copy running at http://itsananderson.com/schedule.php), and specify &ldquo;?search=%s&rdquo;.
+For example, this is the custom search engine definition I have: http://itsananderson.com/schedule.php?search=%s Search syntax is pretty simple. &ldquo;&lt;username>&rdquo; to look up a user&rsquo;s current schedule.
+&ldquo;&lt;username> &lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter this year.
+Specify quarters as either 1, 2, 3, 4 or 10, 20, 30, 40
+&ldquo;&lt;username> &lt;year>&lt;quarter>&rdquo; to look up a user&rsquo;s schedule for a specific quarter and academic year.
+Quarters must be formatted with a trailing zero. Example: 201220 is Winter quarter, 2011-2012 I am now accepting new clients for part-time consulting and software development projects. Learn more Nov 29th, 2011 Chrome, Rose-Hulman, " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

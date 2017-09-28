@@ -15,9 +15,10 @@ It would be shorter and more obvious if you wrote &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Obvious Code - Will Anderson" />
-    
-    <meta name="twitter:description" content="A week or two ago, I got this feedback on a code review: You&rsquo;re using foo ? foo : "" here.
-It would be shorter and more obvious if you wrote &hellip;" />
+    <meta name="twitter:description" content=" A week or two ago, I got this feedback on a code review: You&rsquo;re using foo ? foo : "" here.
+It would be shorter and more obvious if you wrote it as foo || "" This was valid feedback, and I updated the code. After I&rsquo;d checked in my changes, I got the following IM from a senior member of my team: I see you did foo || ""? What does the || mean? :) This was a good reminder of two things: &ldquo;Obvious code&rdquo; is a subjective concept
+No matter how experienced you are with something, you&rsquo;ll still find blind spots from time to time P.S. If that syntax is also new to you, it&rsquo;s taking advantage of how JavaScript does &ldquo;or&rdquo;.
+A JavaScript or returns the first truthy value, or the last value if none are truthy: e.g. (false || 0) === 0 and (0 || false) === false and (foo || "") === "" (assuming foo is &ldquo;falsey&rdquo;) Many JavaScript developers use this behavior as a shortcut for setting default values, because null and undefined are falsey. I am now accepting new clients for part-time consulting and software development projects. Learn more Mar 27th, 2015 JavaScript " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

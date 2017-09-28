@@ -15,9 +15,80 @@ I &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Thoughts On Implementing a REST Level 3 API in Node - Will Anderson" />
-    
-    <meta name="twitter:description" content="Warning: stream of consciousness ahead I&rsquo;ve been thinking about the the pieces that would be needed to implement a REST Level 3 API in Node.
-I &hellip;" />
+    <meta name="twitter:description" content=" Warning: stream of consciousness ahead I&rsquo;ve been thinking about the the pieces that would be needed to implement a REST Level 3 API in Node.
+I won&rsquo;t go into the details of REST Level 3 in this post, but the one of the most important concepts is that clients to the API don&rsquo;t manually build URIs for their API calls, but instead receive them as hypermedia metadata from other calls to your API. Node has some great frameworks for building web servers.
+I frequently use Express, which is built on top of the Connect middleware package.
+Unfortunately, Express doesn&rsquo;t make it easy to add hypermedia links to API responses in a DRY way. Another option is node-restify.
+This is a popular choice for building REST APIs in Node, but again, it falls down when it comes to Hypermedia.
+Here at least you can link to different API endpoints without hardcoding URLs, but there&rsquo;s still no unified way to automatically add hypermedia links to responses. I&rsquo;ve tried other frameworks as well.
+Hapi comes closest, but still doesn&rsquo;t quite solve my problems with hypermedia. Perhaps I&rsquo;m spoiled by the relatively elegant solutions that can be accomplished in strictly typed languages.
+In C#, for example, you can keep a registry of hypermedia providers associated with different types.
+When a response of a specific type is returned by a controller, the assocated hypermedia provider is invoked, and it returns a dictionary of URIs for that type.
+The controller doesn&rsquo;t even have to be aware of the hypermedia provider. In JavaScript, it&rsquo;s a little harder to associate types with providers, since most responses are just anonymous objects.
+I do have some alternative ideas, though.
+The first that comes to mind is to associate with URLs.
+Most importantly, being able to say &ldquo;this route, and any route below it uses the same provider&rdquo;.
+For example, consider the following routes. 1
+2
+3
+4
+5
+GET /users
+POST /users
+GET /users/1
+GET /users/1/edit
+GET /users/1/delete All of those URLs could probably use an identical (or almost identical) link provider.
+Something like the following would be useful: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+app.hypermedia(&#39;/users*&#39;, function(route, user) { if ( user ) { return { &quot;self&quot;: &quot;/users/&quot; + user.id, &quot;edit&quot;: &quot;/users/&quot; + user.id + &quot;/edit&quot;, &quot;delete&quot;: &quot;/users/&quot; + user.id + &quot;/delete&quot;, }; } else { return { &quot;find-all&quot;: &quot;/users&quot;, &quot;create&quot;: &quot;/users&quot;, }; }
+}); I&rsquo;m not really tied to that syntax, nor is this an awesome example.
+The main idea is, I want to abstract hypermedia so controllers don&rsquo;t have to worry about it. The other part of this is that controllers need to send their response back through a middleware, rather than directly to the client.
+In my mind, this means the best solution is to return the object.
+Since Node is async, simply returning the object probably isn&rsquo;t an option in most cases.
+This means the next best choice would be to return a promise from the controller.
+The middleware then waits for the promise to resolve, and then handles the result.
+Finally, the controller should still be able to send a response directly to the client through the res.send() function.
+In that case, no hypermedia links would be provided. If the controller needs to make an async call, but that call doesn&rsquo;t automatically provide a promise, a nice simplification would be to provide a function on the response object that does the same thing.
+For example: 1
+2
+3
+4
+5
+app.get(&#39;/user/:id&#39;, function(req, res) { db.getUser(req.params.id, function(err, user) { res.respond(user); // res.respond could invoke hypermedia providers before response });
+}); Of course you can usually use Q&rsquo;s &ldquo;denodify&rdquo; utilities, but the point here is a little flexibility. Here&rsquo;s how a Q promise might be returned. The framework would &ldquo;then&rdquo; the promise and essentially forward the result to req.respond(). 1
+2
+3
+app.get(&#39;/user/:id&#39;, function(req, res) { return Q.nfinvoke(db, &quot;getUser&quot;, req.params.id);
+}); If you want to do something with the promise result, you still can with promises. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+app.get(&#39;/user/:id&#39;, function(req, res) { return Q.nfinvoke(db, &quot;getUser&quot;, req.params.id) .then(function(user) { if (!user) { var err = new Error(&#39;User not found&#39;); err.status = 404; throw err; } else { return user; } });
+}); The other great thing to note here is that we don&rsquo;t have to call next(err) to pass this exception to our error handler. We can throw it, and let the framework .catch() the exception from the promise we return. The basic idea for an implementation of this is that the routing framework calls your endpoint handler, and expects it to do one of three things: Return a promise, or value (buffer, stream, string, javascript object)
+Call next() to pass controll to the next handler
+Call res.send(), res.write(), or res.end() like you would in Express In the first case, the framework can allow hypermedia providers, and theoretically anything, to modify the response &ldquo;on the way out the door&rdquo;.
+This would be my main objective in implementing something like this. I may take a stab at a prototype, but I realize that at this point, any Node web framework probably needs a name that starts with &ldquo;Yet Another&rdquo;.
+Mostly, I&rsquo;m curious how well it would work for &ldquo;real&rdquo; api development. Thoughts? Does something like this already exist? Hit me up on my Twitter account. I am now accepting new clients for part-time consulting and software development projects. Learn more Jun 27th, 2014 Node, REST " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

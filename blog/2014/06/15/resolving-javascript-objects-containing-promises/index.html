@@ -15,9 +15,58 @@ Unlike callbacks, you can wait for &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Resolving JavaScript Objects Containing Promises - Will Anderson" />
-    
-    <meta name="twitter:description" content="Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
-Unlike callbacks, you can wait for &hellip;" />
+    <meta name="twitter:description" content=" Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
+Unlike callbacks, you can wait for multiple promises to complete before proceeding.
+For example, in the Q framework, you can use the Q.all() function to wait for multiple promises to complete. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+function makePromise(val) { var deferred = Q.defer(); deferred.resolve(val); return deferred.promise;
+} var promises = [ makePromise(1), makePromise(2), makePromise(3), makePromise(4),
+]; Q.all(promises, function(results) { console.log(results); // [1,2,3,4]
+}); Now, this works well for an array, but as promise dependencies increase, it may be useful to reference these values more descriptively than an array index.
+Usually, you&rsquo;d want to wrap dependencies in an object like this: 1
+2
+3
+4
+5
+var dependencies = { &#39;db&#39;: connectToDb(), &#39;api&#39;: getApi(), &#39;third&#39;: someOtherDependency()
+} Now, Q doesn&rsquo;t have a way to await the promises inside this object.
+If you just pass it to Q.all() it will finish before the promises are resolved, because the &ldquo;dependencies&rdquo; variable is an object, not a promise.
+However, there is a pretty simple workaround using Lo-Dash (or Underscore): 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+Q.all(_.values(dependencies)).then(function(results) { return _.zipObject(_.keys(dependencies), results);
+}).then(function(deps) { console.log(deps); // { // &quot;db&quot;: [db connection], // &quot;api&quot; [api object], // &quot;third&quot;: [third dependency] // }
+}); Basically we&rsquo;re unzipping the keys and values from the &ldquo;dependencies&rdquo; object, then rezipping them with the _.zipObject() function when the promises are resolved. Note that you can safely mix promises and non-promises.
+For example: 1
+2
+3
+4
+5
+var dependencies = { &#39;db&#39;: connectToDb(), &#39;name&#39;: &#39;Bob&#39;, &#39;version&#39;: 3
+} Also note that this only works on a &ldquo;flat&rdquo; object.
+Any nested objects won&rsquo;t be resolved.
+It wouldn&rsquo;t be terribly difficult to write a utility function for recursively traversing an object and awaiting its promises, but I&rsquo;ll leave that as an exercise for the reader. I am now accepting new clients for part-time consulting and software development projects. Learn more Jun 15th, 2014 JavaScript, Promises " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

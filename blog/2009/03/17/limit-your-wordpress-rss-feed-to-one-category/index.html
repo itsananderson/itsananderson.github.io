@@ -14,8 +14,15 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Limit Your WordPress RSS Feed To One Category - Will Anderson" />
-    
-    <meta name="twitter:description" content="When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but &hellip;" />
+    <meta name="twitter:description" content=" When designing a recent website, I decided to use Posts for both news items and Portfolio entries. There were several advantages to doing this, but one issue I found was that everything was being thrown together in the RSS feed. I decided to look into filtering the RSS feed to only show posts from the News category. Here&rsquo;s how it works. As with just about anything in WordPress, you can use Actions and Filters to customize the way WordPress RSS Feeds. I chose to filter the query because it already has built in category filtering functionality. First I hooked into the query filter. 1
+add_filter(&#39;pre_get_posts&#39;, &#39;filterRSSQuery&#39;); Then I created a function called &lsquo;filterRSSQuery&rsquo; which does just what the name suggests. 1
+2
+3
+4
+5
+6
+function filterRSSQuery($query) { if ( $query-&gt;is_feed ) { $query-&gt;set(&#39;category_name&#39;, &#39;News&#39;); } return $query;
+} The code is pretty straight foreward, but here&rsquo;s a breakdown. First we test to see if the query is for a feed (we don&rsquo;t want to do this filtering anywhere else). Then we set the &lsquo;category_name&rsquo; argument to &lsquo;News&rsquo; (you would change this to whatever category you want to show up). Finally, you return the modified query object. Overall, this is pretty simple, but extremely powerful. I am now accepting new clients for part-time consulting and software development projects. Learn more Mar 17th, 2009 WordPress " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

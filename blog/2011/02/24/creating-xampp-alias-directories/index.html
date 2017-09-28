@@ -16,10 +16,55 @@ While WampServer has a nice (if &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Creating XAMPP Alias Directories - Will Anderson" />
-    
-    <meta name="twitter:description" content="If you&rsquo;ve read my post on adding aliases to WampServer,
+    <meta name="twitter:description" content=" If you&rsquo;ve read my post on adding aliases to WampServer,
 you may be curious about how to add aliases to XAMPP.
-While WampServer has a nice (if &hellip;" />
+While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
+Fortunately, creating XAMPP alias directories by hand is pretty easy. Preparing to Create XAMPP Alias Directories The first thing you&rsquo;ll want to do is add an alias directory to your XAMPP install.
+If you&rsquo;re running Windows, create the following folder. 1
+C:\xampp\apache\conf\alias Next, you&rsquo;ll need to change your Apache configuration file.
+You can find it under C:\xampp\apache\conf\httpd.conf.
+To make changes, you&rsquo;ll need to edit it as an administrator.
+If you&rsquo;re running Windows Vista or above, your best bet is to open Notepad as an administrator and then open httpd.conf.
+To open Notepad (or any other application) as an administrator, right-click on it and select &ldquo;Run as administrator&rdquo;.
+You can also launch Notepad as an administrator from the start menu with Ctrl+Shift+Enter while Notepad is selected. Once you&rsquo;ve opened httpd.conf, add the following to the end and save it. 1
+Include "conf/alias/*" Now Apache will look in the alias folder for more configuration files.
+This way you can add an alias by simply adding a new configuration file to the conf/alias/ folder. Creating XAMPP Alias Directories Let&rsquo;s add some XAMPP alias directories.
+Suppose you want to add an alias called &ldquo;dev&rdquo;.
+First, download this alias template file and place it in the alias folder.
+Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
+You&rsquo;ll need to edit the template (again, as an administrator) and replace &ldquo;DIRECTORY&rdquo; (it&rsquo;s there twice) with the path to the alias and &ldquo;ALIAS&rdquo; with the name of your alias.
+In our example, it looks something like this: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+&lt;directory "c:\users\foo\programming\dev"&gt; # # Possible values for the Options directive are "None", "All", # or any combination of: # Indexes Includes FollowSymLinks SymLinksifOwnerMatch ExecCGI MultiViews # # Note that "MultiViews" must be named *explicitly* --- "Options All" # doesn't give it to you. # # The Options directive is both complicated and important. Please see # http://httpd.apache.org/docs/2.2/mod/core.html#options # for more information. # Options Indexes FollowSymLinks Includes ExecCGI # # AllowOverride controls what directives may be placed in .htaccess files. # It can be "All", "None", or any combination of the keywords: # Options FileInfo AuthConfig Limit # AllowOverride All # # Controls who can get stuff from this server. # Order allow,deny Allow from all
+&lt;/Directory&gt; Alias /dev "C:\users\foo\programming\dev" Restart Apache (you can do so from the XAMPP control panel) and check out http://localhost/dev.
+You can repeat this process with other aliases to add more XAMPP alias directories. I am now accepting new clients for part-time consulting and software development projects. Learn more Feb 24th, 2011 Apache, XAMPP " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

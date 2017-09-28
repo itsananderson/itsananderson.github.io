@@ -15,9 +15,97 @@ Sometimes when a single test is failing, it&rsquo;s a pain to re-run every &hell
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Only Run One Suite or Spec in Jasmine - Will Anderson" />
-    
-    <meta name="twitter:description" content="My team uses Karma (and thus Jasmine) to test our AngularJS applications.
-Sometimes when a single test is failing, it&rsquo;s a pain to re-run every &hellip;" />
+    <meta name="twitter:description" content=" My team uses Karma (and thus Jasmine) to test our AngularJS applications.
+Sometimes when a single test is failing, it&rsquo;s a pain to re-run every test while you iterate on a fix. Turns out there&rsquo;s a way to only run a single suite of tests, or even a single test. Suppose you have the following tests: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+describe(“my feature a”, function() { it(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); describe(“my feature b”, function() { it(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); If you have tests failing in &ldquo;my feature a&rdquo;, you can just run those tests by changing the describe call to a ddescribe call. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+// Only this suite will run
+ddescribe(“my feature a”, function() { it(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); describe(“my feature b”, function() { it(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); If you&rsquo;ve narrowed down to a single spec, you can re-run that single spec by changing it to iit. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+describe(“my feature a”, function() { // Only this spec will run iit(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); describe(“my feature b”, function() { it(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); If you want to run multiple specs, you do that by simply changing each to iit. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+describe(“my feature a”, function() { // This spec will run iit(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); describe(“my feature b”, function() { // This spec will run iit(“has a foo”, function() { // ... }); it(“has a bar”, function() { // ... });
+}); This was a pretty useful discovery for me. Hopefully it is for you as well. Update: David Ruttka has pointed out that you can also use xdescribe and xit to disable individual suites and tests. I am now accepting new clients for part-time consulting and software development projects. Learn more Sep 25th, 2014 Jasmine, JavaScript, TDD " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

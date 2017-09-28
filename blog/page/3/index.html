@@ -14,8 +14,16 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    
-    <meta name="twitter:description" content="While writing the previous post, I discovered a cool Git command which I thought I&rsquo;d share. When you clone a Git repository, most Git hosts &hellip;" />
+    <meta name="twitter:description" content=" While writing the previous post, I discovered a cool Git command which I thought I&rsquo;d share. When you clone a Git repository, most Git hosts will send you a packed version of the database.
+This is much more efficient than sending the raw Git objects, because duplicate content can be compressed. However, if you want to inspect the object database with a file browser, it&rsquo;s hard to do so, because the content stays packed in a single file.
+Unpacking is pretty simple. If you unpack the .pack file while it&rsquo;s in the .git/object/pack folder, Git won&rsquo;t do anything, because it concludes that it already has all the objects contained in that .pack.
+However, if you move the .pack file somewhere else, you can unpack it into your repository&rsquo;s database. 1
+2
+3
+mv .git/object/pack/pack-*.pack .
+cat pack-*.pack | git unpack-objects
+rm pack-*.pack And there you have it.
+Your packed objects are unpacked into .git/objects/ folder. This isn&rsquo;t something I recommend doing as a general practice, since it can take up significantly more space, but it&rsquo;s a useful thing to be able to do if you want to manually inspect your Git database. Oct 14th, 2014 Git " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

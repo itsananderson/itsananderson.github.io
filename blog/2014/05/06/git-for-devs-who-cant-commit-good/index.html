@@ -14,8 +14,49 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Git for Devs Who Can't Commit Good - Will Anderson" />
-    
-    <meta name="twitter:description" content="Two big Git mantras are &ldquo;Commit early, commit often&rdquo; and &ldquo;Branches are cheap&rdquo;. When I started using Git, I had these ideas &hellip;" />
+    <meta name="twitter:description" content=" Two big Git mantras are &ldquo;Commit early, commit often&rdquo; and &ldquo;Branches are cheap&rdquo;. When I started using Git, I had these ideas in the back of my mind.
+Unfortunately, I only really thought of them after I&rsquo;d done a huge chunk of work without committing any code.
+I&rsquo;d type git status or git diff and scroll through my changes, but I&rsquo;d eventually admit defeat and commit everything.
+I&rsquo;d promise to commit more frequently &ldquo;next time&rdquo;, but it never seemed to happen. Frequent committing is something that you learn as a way to avoid pain.
+In a typical chunk of dev time, it&rsquo;s not uncommon to make a sweeping change, and then realize that the change was a bad decision.
+Without commit history, the only way to get back the previous version is to rely on your editor&rsquo;s undo function.
+This causes problems when you have a mix of changes that you want to keep and changes that you want to undo.
+Frequent, small commits can make it easier to jump pack to specific points. Creating Good Commits In addition to committing frequently, it&rsquo;s important to make good commits.
+There are several important features aspects in a good commit. Good Commit Messages Writing a good commit message takes more than avoiding &ldquo;did stuff&rdquo; messages. A good commit message is a love note to your future self, or anyone else who works on your code.
+A bad commit message is more of a suicide note. A technique I picked up from David, one of my coworkers, is to do commit messages along the lines of the following: &lt;short summary of changes in imperative voice&gt; &lt;longer paragraph describing the change&gt; Fixes/Implements: #&lt;issue or feature number&gt; Before:
+&lt;description of problem you are fixing or feature you are implementing&gt; After:
+&lt;how it behaves now that your change is applied&gt; How I Tested It:
+&lt;description of any unit tests, functional tests, or manual tests you ran to test this change&gt; This may seem verbose, but it really doesn&rsquo;t take long, and it gives you a huge advantage if you ever have to come back and figure out what this commit was all about. This doesn&rsquo;t apply to every change.
+If you&rsquo;re fixing a typo in a comment, or adding a missing semicolon to your JavaScript, you can probably get away with a one line commit message. A good rule of thumb is that a competent dev should be able to look at your commit message and (approximately) duplicate your work without looking at the code. Finally, your summary line should be written in imperative voice.
+&ldquo;Make changes&rdquo; not &ldquo;Made changes&rdquo; or &ldquo;Making changes&rdquo;.
+This guarantees that your messages will mesh with Git&rsquo;s auto-generated messages for things like revert and merge.
+It also makes it clear that you&rsquo;re talking about what this commit does, not what previous or future commits are doing. For more thoughts on commit messages, see A Note About Git Commit Messages. The Right Files It&rsquo;s tempting to use a -a flag to commit all pending changes, but in most cases you should put more thought into what files you include in a commit. Consider an example.
+Say you add a feature in file a.js, but in the process, you discover a typo in b.js.
+It&rsquo;s tempting to commit both changes as one, because the typo fix is so small, but consider what happens if you later need to revert your commit.
+Not only will you be reverting your feature, but you&rsquo;ll also be reverting the typo fix. This means you&rsquo;ll need to do a second commit to re-fix the typo change.
+If you instead do two distinct commits, you can safely undo the problematic feature without touching the typo fix. Of course, this doesn&rsquo;t mean you have to add each file individually.
+There are many handy shortcuts for adding exactly the files you intend. git add file1 file2 file3 &ndash; Adds multiple files in one command git add folder/ &ndash; Adds all changes under a folder git add . &ndash; Stages all modified and new files in the current folder git add -A . &ndash; Stages all modifed and new files as well as staging any deleted files in the current folder git add '*.txt' &ndash; Recursively adds all files ending in .txt git add *.txt &ndash; Adds all files in the current folder ending in .txt This approach doesn&rsquo;t just apply to different files.
+What if you add a feature and fix a typo in the same file?
+Fortunately, git add -p makes it easy to only stage parts of files. If you &ldquo;add&rdquo; (or stage) a file that you don&rsquo;t want to commit, it&rsquo;s easy to remove.
+Just run git reset HEAD &lt;file&gt;. Using these techniques, you can create concise, cohesive, good looking commits.
+Your future self will thank you. Learning to Do Other Stuff Good Too There are a number of other techniques for creating a useful commit history.
+Here are some that I&rsquo;ve found especially useful. NOTE: Only use these techniques if you haven&rsquo;t shared your changes.
+If you&rsquo;ve already pushed your changes, ammending your commit can cause problems for other collaborators on your project Fixing a Commit One of the great features of Git is the ability to rewrite history.
+The simplest way to do that is with the git commit --amend command.
+This will take your current staged changes and apply them to the previous commit, &ldquo;ammending&rdquo; it.
+You&rsquo;ll also get a chance to change the commit message. This is useful for in a number of cases: You make a commit and forgot to add a file
+You missed adding a part of a file
+You had a typo in one of your changes
+You had a typo, or missing information in your commit message Squashing Commits Sometimes you&rsquo;ll have silly commits like &ldquo;forgot a file&rdquo;, and you don&rsquo;t need them to be distinct.
+For the sake of your commit history, it can be good to flatten those commits.
+This allows you to pretend that you never make any mistakes :) Consider the following log 1
+2
+3
+4
+5
+6
+7
+8fb97b5 Implement bla bla bb0ee77 Address feedback bf582d6 Implement foo foo ... If your changes from Address feedback are just cleanups to Implement foo foo, you probably don&rsquo;t need that extra commit sitting in your commit history. I could walk through the process of rebasing, but there&rsquo;s already a pretty thorough tutorial on squashing commits with rebase In Conclusion Making throughful, atomic, thoroughly commented commits takes some practice, but it&rsquo;s totally worth it. In the next couple weeks, I plan to write some follow-up posts that cover other techniques for managing your commit history. I am now accepting new clients for part-time consulting and software development projects. Learn more May 6th, 2014 Git " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

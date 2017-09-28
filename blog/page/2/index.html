@@ -14,8 +14,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    
-    <meta name="twitter:description" content="React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and &hellip;" />
+    <meta name="twitter:description" content=" React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and rebuilds. However, if you link a Node module from a different directory, the packager won&rsquo;t see changes that are made to that package. It&rsquo;s fairly easy to specify custom folders for the packager to watch. Since the React Native client sets up an npm start command when it generates the project, you can simply modify that script to watch additional folders. 1
+"start": "node_modules/react-native/packager/packager.sh --root ~/custom-package/" Unfortunately, when you launch the project in Xcode, it runs the packager directly, rather than running the npm start command, but if you manually run npm start from a terminal window, React Native will use that rather than launching a new instance of the packager. I have an issue opened on the React Native project, suggesting that they run npm start from Xcode, but we&rsquo;ll see if it goes anywhere. May 24th, 2015 React Native " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -367,7 +367,7 @@
 </span><span class='line'>cd _deploy
 </span><span class='line'>git fetch origin master
 </span><span class='line'>git branch --set-upstream-to=origin/master master
-</span><span class='line'>git reset --hard origin master</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>git reset --hard origin/master</span></code></pre></td></tr></table></div></figure>
 
 
 		

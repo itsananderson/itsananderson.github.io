@@ -14,8 +14,8 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="WordPress Security Tip: Disable Folder Indexes - Will Anderson" />
-    
-    <meta name="twitter:description" content="I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice &hellip;" />
+    <meta name="twitter:description" content=" I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice security tip. Place empty index.php files in all directories that don&rsquo;t already have an index file. Directories like the /wp-content/plugins folder could be dangerous in the hands of hackers if one of the plugins you use has a security flaw. By obscuring the folder&rsquo;s contents you make it just a little harder for hackers to cause you problems. I went about creating these empty index files on my site, but soon discovered that there are hosts of folders that could use them (think about the date structure in /wp-content/uploads ). Then I remembered another tool. .htaccess. Add this line of code to your .htaccess file to keep file in any directory from being listed (this works on any site who&rsquo;s server supports .htaccess by the way, not just WordPress blogs). 1
+IndexIgnore * Really simple, I know, but I thought I&rsquo;d share it all the same. I am now accepting new clients for part-time consulting and software development projects. Learn more Dec 30th, 2008 Apache, WordPress " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

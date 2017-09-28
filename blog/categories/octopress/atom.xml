@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-04-05T13:55:30-07:00</updated>
+  <updated>2017-09-27T21:30:09-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -43,7 +43,7 @@ git reset --hard origin/source
 cd _deploy
 git fetch origin master
 git branch --set-upstream-to=origin/master master
-git reset --hard origin master
+git reset --hard origin/master
 </code></p>
 ]]></content>
   </entry>

@@ -14,8 +14,27 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="React: this.state is undefined - Will Anderson" />
-    
-    <meta name="twitter:description" content="I ran into this today, so I&rsquo;m writing it down in case it helps someone else. Running something like the following, I found that this.state was &hellip;" />
+    <meta name="twitter:description" content=" I ran into this today, so I&rsquo;m writing it down in case it helps someone else. Running something like the following, I found that this.state was undefined during render. 1
+2
+3
+4
+5
+6
+7
+8
+9
+class MyComponent extends Component { getInitialState() { return { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; // Error: this.state is undefined }
+} After a little searching, I found the release notes for React 0.13.0-beta-1, where they explained that ES6 classes should set initial state in the constructor, rather than defining a getInitialState method. 1
+2
+3
+4
+5
+6
+7
+8
+9
+class MyComponent extends Component { constructor() { this.state = { count: 0 }; } render() { return &lt;div&gt;{this.state.count}&lt;/div&gt;; // Yay, it works! }
+} Pretty simple, but not immediately obvious if you don&rsquo;t know about it. I am now accepting new clients for part-time consulting and software development projects. Learn more May 7th, 2015 React " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

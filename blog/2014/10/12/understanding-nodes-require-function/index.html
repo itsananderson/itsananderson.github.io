@@ -15,9 +15,54 @@ Let&rsquo;s talk &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Understanding Node's require Function - Will Anderson" />
-    
-    <meta name="twitter:description" content="I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s require() function, or simply fail to fully utilize it well.
-Let&rsquo;s talk &hellip;" />
+    <meta name="twitter:description" content=" I&rsquo;ve seen a few patterns lately that misunderstand Node&rsquo;s require() function, or simply fail to fully utilize it well.
+Let&rsquo;s talk about some examples. Skipping the File Extension When you require() a file in Node, it checks a few possibilities: The exact file name
+The file name with .js appended
+The file name with .json appended Note: In case you weren&rsquo;t aware, Node has built-in support for requireing JSON files.
+No need to manually read the file and call JSON.parse. This means instead of doing require('./foo.js') you can do require('./foo'), and Node will figure it out.
+I personally feel that it looks cleaner to leave off the file extension, but that&rsquo;s a matter of preference.
+There is, however, at least one case I&rsquo;m aware of where leaving off the file extension improves the flexibility of your code. Let&rsquo;s say you have a config for your app, stored in config.json.
+Throughout your app you require('./config.json') to load the config.
+Now what if you decide the config needs to execute dynamic code (to look up environment variables, for example)?
+If you&rsquo;ve hardcoded the .json in your code, you&rsquo;ll have to find everywhere you&rsquo;ve used it and change the extension. There are two ways to avoid this. The first is to just start with a .js file, even if it&rsquo;s a static config.
+The second is to just require('./config') in your code, so that you can change the file extension without needing to update your code base. Modules Are Singletons When you load a module/file in Node, you&rsquo;ll always get the same instance.
+Consider the following: 1
+2
+// a.js
+module.exports = Math.random() 1
+2
+3
+4
+5
+// main.js
+console.log(require(&#39;./a&#39;));
+console.log(require(&#39;./a&#39;));
+console.log(require(&#39;./a&#39;));
+console.log(require(&#39;./a&#39;)); Intuitively, it seems like main.js would print 4 different random numbers, but it actually prints the same random number 4 times.
+This is because Node will only load a file once.
+If you require the same file multiple times (even from different parts of your code), you&rsquo;ll get the same instance. I&rsquo;ve seen code passing around objects between modules when they could just require the file again and get the same result.
+Obviously there are good reasons, like dependency injection, for passing objects around, but sometimes it adds useless complexity.
+In cases where you&rsquo;re only passing required objects around &ldquo;to get the same instance&rdquo;, just require the module where it&rsquo;s needed. Now the question you should be asking is &ldquo;what if I do want different instances?&rdquo;.
+The answer is to export a function, which can then be invoked to get a new instance. 1
+2
+3
+4
+// b.js
+module.exports = function() { return Math.random();
+}; 1
+2
+3
+4
+5
+6
+// main.js
+var rand = require(&#39;./b&#39;);
+console.log(rand());
+console.log(rand());
+console.log(rand());
+console.log(rand()); Don&rsquo;t Load a Module&rsquo;s Submodule This example is obscure. I&rsquo;ve only seen it once, but it was a pain. You can technically do something like this: require('some-module/node_modules/some-submodule') to load a dependency of a module you depend on, but you shouldn&rsquo;t. The problem with this approach is that you&rsquo;re inferring a contract with the module&rsquo;s code that isn&rsquo;t present.
+The author of that module could easily switch out &ldquo;some-submodule&rdquo; for something else, without considering that a breaking change.
+Depending on how you&rsquo;re pinning your versions, you may find yourself with an updated module and broken code. Instead, stop being lazy and install &ldquo;some-submodule&rdquo; as a direct dependency. I am now accepting new clients for part-time consulting and software development projects. Learn more Oct 12th, 2014 Node " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

@@ -19,13 +19,218 @@ Blob &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    
-    <meta name="twitter:description" content="This is part of a series on working with Azure Blob Storage in Node. Introduction
+    <meta name="twitter:description" content=" This is part of a series on working with Azure Blob Storage in Node. Introduction
 First Steps
 Creating Blobs
 Downloading Blobs
 Listing Blobs
-Blob &hellip;" />
+Blob Metadata
+All Together Building a Complete Service Over Azure Blob Storage In the last post, we covered working with blob metadata.
+In this final post, we&rsquo;ll talk about putting all the previous pieces together to create a service that is backed by blob storage. As a concrete example, we&rsquo;ll implement the image serving portion of placebacon.
+To keep things simple, we won&rsquo;t go into the Jade views, just the part that actually serves images. Creating an Node Server We&rsquo;ll use Express to serve the images.
+We could work with any number of HTTP frameworks in Node, but Express is pretty simple to understand, so that&rsquo;s what we&rsquo;ll use. First, create a package.json file so we can save our npm dependencies. 1
+2
+3
+4
+npm init
+# Follow the prompts
+# If in doubt, keep the defaults
+# For &quot;entry point&quot;, enter &quot;server.js&quot; Next install some dependencies. 1
+npm install --save express azure-storage debug The &ldquo;express&rdquo; and &ldquo;azure-storage&rdquo; packages should be pretty self-explanatory.
+The &ldquo;debug&rdquo; prints debug output, and can be a selectively turned on and off.
+We&rsquo;ll talk about how to use &ldquo;debug&rdquo; in a bit. When we initialized the package.json, we set server.js as the entry point.
+Let&rsquo;s create that.
+(Skip ahead if you&rsquo;re familiar with Express) 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+var debug = require(&#39;debug&#39;)(&#39;placebacon:server&#39;), storage = require(&#39;azure-storage&#39;), http = require(&#39;http&#39;), util = require(&#39;util&#39;), express = require(&#39;express&#39;), app = express(); app.set(&#39;port&#39;, process.env.PORT || 3000); // TODO: add server routes var server = app.listen(app.get(&#39;port&#39;), function() { debug(&#39;Placebacon server listening on port %d&#39;, server.address().port);
+}); We&rsquo;re requiring the &ldquo;debug&rdquo; package, then calling the function it exports with &lsquo;placebacon:server&rsquo;.
+This tells &ldquo;debug&rdquo; to only print log output if the DEBUG environment variable matches &lsquo;placebacon:server&rsquo;.
+For example: 1
+2
+3
+4
+5
+6
+7
+8
+9
+node server.js
+# [no output] DEBUG=placebacon:server node server.js
+# =&gt; Placebacon server listening on port 3000 DEBUG=placebacon:* node server.js
+# =&gt; Placebacon server listening on port 3000 As you can see from the above examples, &ldquo;debug&rdquo; makes it easy to turn debugging statements on and off without modifying your code. Defining the Route Next let&rsquo;s add a route.
+In the javascript snippet above, replace the &ldquo;TODO&rdquo; line with the following code. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+// Matches /100/200 -&gt; 100x200 image
+// Matches /100 -&gt; 100x100 image
+app.get(&#39;/:width/:height?&#39;, function(req, res, next) { var width = parseInt(req.params.width); var height = req.params.height ? parseInt(req.params.height) : width; // If width or height isn&#39;t a number, go to next route if (isNaN(width) || isNaN(height)) { next(); return; } var selectedImage = 0; // TODO: choose a random image var urlTemplate = &#39;http://placebacon.net/%d/%d?image=%d&#39;; var imageUrl = util.format(urlTemplate, width, height, selectedImage); debug(&#39;Fetching from %s&#39;, imageUrl); http.get(imageUrl, function(imageResponse) { if (200 !== imageResponse.statusCode) { debug(&#39;Unexpected response: %d - %s&#39;, imageResponse.statusCode, imageResponse.statusMessage); res.send(502, imageResponse.statusMessage); return; } else { imageResponse.pipe(res); } }).on(&#39;error&#39;, function(err) { console.error(&#39;Error fetching from %s: %j&#39;, imageUrl, err); res.send(502, util.format(&quot;Error downloading %s: %s&quot;, imageUrl, e.message)); });
+}); At this point we have a fairly functional non-caching proxy.
+Let&rsquo;s briefly go over the code. First, the route is defined as /:width/:height?.
+This tells Express that we want to match routes with one or two parts (the question mark makes the second part optional).
+Those two parts will be mapped to req.params.width and req.params.height.
+If the second part is left off, req.params.height will be undefined. Inside our route handler, we first parse the width and height as integers.
+If the height is missing, it defaults to the value of &ldquo;width&rdquo;.
+This allows users to use /100 as a shortcut for /100/100. Next we check that width and height are actually integers.
+If they aren&rsquo;t, we call &ldquo;next()&rdquo;, to pass control onto the next route handler.
+In this case, there isn&rsquo;t another handler, so Express will send a 404. Next we select an image.
+In this sample, it&rsquo;s hardcoded to zero, but normally we&rsquo;ll want to select a random image based on width and height.
+We&rsquo;ll add that later. Based on the image selection and resolution, we construct a URL to our backend.
+In the sample it points at placebacon.com to make it easy to run the sample, but normally you&rsquo;d point this at whatever service you&rsquo;re using to resize your images.
+You&rsquo;ll also probably want to put the &ldquo;urlTemplate&rdquo; value in a config, but for the sake of code sample simplicity, it&rsquo;s hardcoded Finally, we make an http request to the image url and pipe the response to our client.
+The rest of the code is just error handling. Using Blob Storage In the code samples above, we don&rsquo;t actually use blob storage.
+Since blob storage is what this series is all about, let&rsquo;s integrate it as a caching layer. Resizing and cropping images can be an expensive operation.
+On placebacon, it can take a several seconds.
+Obviously that&rsquo;s not acceptible for every request, so generated images need to be cached to speed up responses. First, make sure you&rsquo;ve set up your site to connect to to blob storage.
+The &ldquo;First Steps&rdquo; post in this series has instructions on how to do that. Next, let&rsquo;s make sure the blob container exists. At the top of &ldquo;server.js&rdquo;, right below the requires, add the container creation boilerplate we saw in the previous posts. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+var blobService = storage.createBlobService();
+var containerName = &#39;placeholder-images&#39;;
+blobService.createContainerIfNotExists(containerName, function(err, result, response) { if (err) { console.log(&quot;Couldn&#39;t create container %s&quot;, containerName); console.error(err); } else { if (result) { console.log(&#39;Container %s created&#39;, containerName); } else { console.log(&#39;Container %s already exists&#39;, containerName); } } }); Now in the route handler, we can interact with the blob storage container. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+// Matches /100/200 -&gt; 100x200 image
+// Matches /100 -&gt; 100x100 image
+app.get(&#39;/:width/:height?&#39;, function(req, res, next) { var width = parseInt(req.params.width); var height = req.params.height ? parseInt(req.params.height) : width; // If width or height isn&#39;t a number, go to next route if (isNaN(width) || isNaN(height)) { next(); return; } var selectedImage = 0; // TODO: choose a random image var blobName = util.format(&quot;%d-%d-%s&quot;, width, height, selectedImage); blobService.getBlobProperties( containerName, blobName, function(err, properties, status) { if (status.isSuccessful) { res.header(&#39;Content-Type&#39;, &#39;image/jpeg&#39;); blobService.createReadStream(containerName, blobName).pipe(res); } else { // Blob doesn&#39;t exist // Fetch it from the service var urlTemplate = &#39;http://placebacon.net/%d/%d?image=%d&#39;; var imageUrl = util.format( urlTemplate, width, height, selectedImage); debug(&#39;Fetching from %s&#39;, imageUrl); http.get(imageUrl, function(imageResponse) { if (200 !== imageResponse.statusCode) { debug( &#39;Unexpected response: %d - %s&#39;, imageResponse.statusCode, imageResponse.statusMessage); res.send(502, imageResponse.statusMessage); return; } else { // Create a write stream var blob = blobService.createWriteStreamToBlockBlob( containerName, blobName, { contentType: &#39;image/jpeg&#39; }, function(error, result, response){ if(error){ console.log(&quot;Couldn&#39;t upload %s&quot;, blobName); console.error(error); } else { console.log(&#39;Blob %s uploaded&#39;, blobName); } }); imageResponse.pipe(blob); res.header(&#39;Content-Type&#39;, &#39;image/jpeg&#39;); imageResponse.pipe(res); } }).on(&#39;error&#39;, function(err) { console.error(&#39;Error fetching from %s: %j&#39;, imageUrl, err); res.send(502, util.format(&quot;Error downloading %s: %s&quot;, imageUrl, e.message)); }); } });
+}); Final Polish One last improvement we can make is to image selection.
+In the above example, we hardcoded to the &ldquo;0th&rdquo; image, but we really want to select a pseudo-random image.
+The only problem is, we want a specific resolution to always result in the same image, so using Math.random() isn&rsquo;t sufficient. Using crypto to hash the width/height is a pretty straightforward solution.
+There are probably better ways of getting an evenly distributed selection of images, but this works pretty well. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+var crypto = require(&#39;crypto&#39;);
+var imageCount = 10; function selectImage(width, height) { var md5 = crypto.createHash(&#39;md5&#39;); md5.update(width + &#39;-&#39; + height); // Digest and take the first handful of characters var hash = md5.digest(&#39;hex&#39;).substring(0, 8); return parseInt(hash, 16) % imageCount;
+} Sample Code If you want to try the code in this post, you can check out the GitHub project page. Jul 9th, 2014 Azure, Node " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

@@ -15,9 +15,44 @@ I&rsquo;ve used that method myself for the last few months, and I&rsquo; &hellip
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Get Called Class Name in PHP - Will Anderson" />
-    
-    <meta name="twitter:description" content="I posted a few months ago about using static methods in WordPress plugins.
-I&rsquo;ve used that method myself for the last few months, and I&rsquo; &hellip;" />
+    <meta name="twitter:description" content=" I posted a few months ago about using static methods in WordPress plugins.
+I&rsquo;ve used that method myself for the last few months, and I&rsquo;ve really grown to love the style of code that this technique produces.
+One part, however, was a source of some pain: Inheritance.
+This can be solved by utilizing PHP&rsquo;s get_called_class() function to get called class names in from your static functions. To make a long story short, getting the actual class name of the current object in an instance method is easy, just call get_class( $this ).
+The problem is, $this doesn&rsquo;t exist in a static method, and just calling get_class() returns the current class (basically the same as CLASS), which isn&rsquo;t helpful if you actually want the name of a child class. Why You Might Want to Get Called Class Names Consider a base class which has a get_instance() function, for creating an instance of the class, or returning an existing instance if it has already been instantiated. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+class Singleton { private static $instance; public static function get_instance() { if ( is_null( self::$instance ) ) { self::$instance = new Singleton(); } return self::$instance; } private function __construct() { // Singleton constructor stuff }
+} How to Get Called Class Names and Improve Extensibility This is great, but the problem arises when we try to extend that singleton class.
+Ideally, the inherited get_instance() method would return an instance of the actual class, but with the above implementation, it would always return an instance of the Singleton class. Here&rsquo;s an alternative, which uses the get_called_class() function to get called class names. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+class Singleton { private static $instances = array(); public static function get_instance() { $class = get_called_class(); if ( empty( self::$instances[$class] ) ) { self::$instances[$class] = new $class(); } return self::$instance; } private function __construct() { // Singleton constructor stuff }
+} class Child extends Singleton { // Child class stuff
+} You&rsquo;ll notice that there are a few changes here. First, the Singleton class now stores instances in an associative array, keyed by class name. Second, it uses get_called_class() to get the class on which this method was invoked. This means calling Child::get_instance() will return an instance of Child, not Singleton. Pretty sweet, huh? I am now accepting new clients for part-time consulting and software development projects. Learn more Sep 5th, 2011 " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

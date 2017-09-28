@@ -15,9 +15,144 @@ Paths for sources, paths for &hellip;">
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Gulp Automation: Path Abstraction - Will Anderson" />
-    
-    <meta name="twitter:description" content="If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths a lot.
-Paths for sources, paths for &hellip;" />
+    <meta name="twitter:description" content=" If you use Gulp for anything more than a trivial project, you&rsquo;ll find that you reference paths a lot.
+Paths for sources, paths for destinations.
+Paths to watch for changes.
+You get the picture. Without some organization, things can quickly get out of hand. Store Paths In Variables As tempting as it might be to shove an extra path into a task definition, resist the urge.
+Instead, define your paths as variables.
+This allows you to share and compose path groups without repetition. As an example, consider a common use case.
+You want to lint your JavaScript for your application code and tests, but you only want to minify your application code and run tests against your test code.
+You could approach it like this: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+gulp.task(&#39;lint&#39;, function() { gulp.src([&#39;app/*.js&#39;, &#39;test/*.js&#39;]) .pipe(lint());
+}); gulp.task(&#39;minify&#39;, function() { gulp.src([&#39;app/*.js&#39;]) .pipe(lint());
+}); gulp.task(&#39;test&#39;, function() { gulp.src([&#39;test/*.js&#39;]) .pipe(lint());
+}); This isn&rsquo;t bad, but things can quickly get out of hand.
+At this point already, if you moved your application code to a folder called &lsquo;src&rsquo;, you&rsquo;d have to update your gulpfile in two places.
+Three if you&rsquo;d added a &lsquo;watch&rsquo; task. When you abstract your paths, you can reuse them throughout your gulpfile. 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+var appPaths = [&#39;app/*.js&#39;];
+var testPaths = [&#39;test/*.js&#39;]; gulp.task(&#39;lint&#39;, function() { gulp.src(appPaths.concat(testPaths)) .pipe(lint());
+}); gulp.task(&#39;minify&#39;, function() { gulp.src(appPaths) .pipe(minify());
+}); gulp.task(&#39;test&#39;, function() { gulp.src(testPaths) .pipe(test());
+}); Again, this is a simple example, but hopefully it illustrates the point. Breaking Into requireable Pieces Once your paths are in variables, you can abstract them further by putting them their own file. To illustrate, suppose you have Karma tests.
+Karma uses its own configuration file, but gulp-karma overrides some if them, which can make it hard to avoid duplicating configurations.
+Consider the following config: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+// karma.conf.js
+module.exports = function (config) { config.set({ files: [ &#39;vendor/angular.js&#39;, &#39;app/*.js&#39;, &#39;test/*.js&#39; ], reporters: [&#39;spec&#39;], autoWatch: true, frameworks: [&#39;jasmine&#39;], browsers: [&#39;PhantomJS&#39;], plugins: [ &#39;karma-jasmine&#39;, &#39;karma-spec-reporter&#39;, &#39;karma-phantomjs-launcher&#39; ], });
+}; Not too bad, but again, we&rsquo;re duplicating logic.
+Back in the gulpfile, we&rsquo;ll have a task like this: 1
+2
+3
+4
+5
+6
+var vendorPaths = [&#39;vendor/angular.js&#39;]; gulp.task(&#39;karma&#39;, function() { gulp.src(vendorPaths.concat(appPaths).concat(testPaths)) .pipe(karma({ configFile: &#39;karma.conf.js&#39; }));
+}); Suddenly, there&rsquo;s path duplication between the Karma config file and the gulpfile.
+To fix this, simply define your paths in another file that&rsquo;s included by both. 1
+2
+3
+4
+5
+6
+7
+8
+9
+var app = [&#39;app/*.js&#39;];
+var test = [&#39;test/*.js&#39;];
+var vendor = [&#39;vendor/angular.js&#39;];
+module.exports = { app: app, test: test, vendor: vendor, karma: vendor.concat(app).concat(test)
+}; Then your gulpfile should look like this: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+var paths = require(&#39;./paths&#39;); gulp.task(&#39;lint&#39;, function() { gulp.src(paths.app.concat(paths.test)) .pipe(lint());
+}); gulp.task(&#39;minify&#39;, function() { gulp.src(paths.app) .pipe(minify());
+}); gulp.task(&#39;test&#39;, function() { gulp.src(paths.test) .pipe(test());
+}); gulp.task(&#39;karma&#39;, function() { gulp.src(paths.karma) .pipe(karma({ configFile: &#39;karma.conf.js&#39; }));
+}); And your karma.conf.js can look like this: 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+// karma.conf.js
+var paths = require(&#39;./paths&#39;); module.exports = function (config) { config.set({ files: paths.karma, reporters: [&#39;spec&#39;], autoWatch: true, frameworks: [&#39;jasmine&#39;], browsers: [&#39;PhantomJS&#39;], plugins: [ &#39;karma-jasmine&#39;, &#39;karma-spec-reporter&#39;, &#39;karma-phantomjs-launcher&#39; ], });
+}; There you have it.
+Nice and DRY. Here&rsquo;s a Gist of the completed example. I am now accepting new clients for part-time consulting and software development projects. Learn more Aug 16th, 2014 Gulp " />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
