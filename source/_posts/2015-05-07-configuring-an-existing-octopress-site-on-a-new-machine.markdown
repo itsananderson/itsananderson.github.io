@@ -31,5 +31,5 @@ git reset --hard origin/source
 cd _deploy
 git fetch origin master
 git branch --set-upstream-to=origin/master master
-git reset --hard origin master
+git reset --hard origin/master
 ```
