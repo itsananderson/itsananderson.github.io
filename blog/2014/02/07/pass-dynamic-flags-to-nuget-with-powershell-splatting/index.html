@@ -14,56 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Pass Dynamic Flags to NuGet With PowerShell Splatting - Will Anderson" />
-    <meta name="twitter:description" content=" While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I wanted to do something like the following: 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-Function Package-Project( [string]$folder, [switch]$build, [switch]$symbols
-) { pushd $folder $nugetArgs = @{Properties=&quot;Configuration=$configuration&quot;} if($build) { $nugetArgs.Build=$True } if($symbols) { $nugetArgs.Symbols=$True } nuget pack @nugetArgs popd
-} Package-Project ProjectA
-Package-Project ProjectB Even though I&rsquo;ve &ldquo;Splatted&rdquo; $nugetArgs into my NuGet call, the way NuGet handles arguments causes it to choke on the
-HashSet of arguments, and throw an error like the following: 1
-2
-3
-4
-5
-6
-nuget : Unknown option: &#39;-Build:True&#39;
-At line:1 char:38
-+ nuget pack $project $nugetArgs
-+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ + CategoryInfo : NotSpecified: (Unknown option: &#39;-Build:True&#39;:String) [], RemoteException + FullyQualifiedErrorId : NativeCommandError Digging into the source code,
-I found that they have a pretty customized argument parser, which seems to make passing a HashSet pretty much impossible.
-(If I&rsquo;m wrong, leave a comment!) Fortunately, there&rsquo;s a fairly reasonable workaround: Pass an array of arguments rather than a HashSet: 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-Function Package-Project( [string]$folder, [switch]$build, [switch]$symbols
-) { pushd $folder $nugetArgs = &quot;-Properties&quot;, &quot;Configuration=$configuration&quot; if($build) { $nugetArgs += &quot;-Build&quot; } if($symbols) { $nugetArgs += &quot;-Symbols&quot; } nuget pack @nugetArgs popd
-} Package-Project ProjectA
-Package-Project ProjectB So there you have it. Use a list of parameter names and values rather than a HashSet when dynamically invoking NuGet.
-This is actually somewhat intuitive from a classic CMD standpoint, but not so much from a PowerShell perspective. I am now accepting new clients for part-time consulting and software development projects. Learn more Feb 7th, 2014 NuGet, Powershell " />
+    <meta name="twitter:description" content="While working on a PowerShell script for packaging multiple NuGet packages, I discovered a peculiarity in calling NuGet with PowerShell splatting. I &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

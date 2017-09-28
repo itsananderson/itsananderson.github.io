@@ -15,83 +15,8 @@ Since JSON encodes newline characters, you can use newlines to separate entries.
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Storing Data as Newline Delimited JSON Entries - Will Anderson" />
-    <meta name="twitter:description" content=" You can store data as newline delimited JSON entries.
-Since JSON encodes newline characters, you can use newlines to separate entries. For more details, read on. Exporting Large Data In a recent project, I needed to export data, and then import it into another system.
-I decided to go with JSON as the export format, because it was structured data.
-The problem was, the data could be extremely large, so loading it all into memory and generating a single JSON object wasn&rsquo;t an option. As a first solution to the problem, I considered &ldquo;fake&rdquo; streaming to the file with the following pseudocode: 1
-2
-3
-4
-5
-6
-7
-8
-open the file
-write "["
-foreach entry: if not first entry: write "," write JSON serialized entry
-write "]"
-close the file This got the job done, but what about when I import the data?
-Since I wrote the data as one giant JSON array, I&rsquo;d have to load the entire thing to deserialize.
-(In Node, I could use a streaming JSON parser, but this project was in PHP). This means there&rsquo;s a limit to the amount of data I can import.
-Even on a host where I can control PHP&rsquo;s memory limit, there&rsquo;s still a limitation to how much data can reasonably be loaded into memory. Exporting Newline Delimited Data I finally realized that I was missing something important.
-JSON serializes newlines as &ldquo;\n&rdquo;, which means actual newlines can be safely used to delimit each JSON entry.
-(Assuming you don&rsquo;t &ldquo;pretty print&rdquo; your JSON). The new export method is as follows: 1
-2
-3
-4
-5
-6
-open the file
-foreach entry: if not first entry: write newline write JSON serialized entry
-close the file Already simpler. Yay. Importing Newline Delimited Data Now that we&rsquo;ve exported the data, it&rsquo;s time to import it.
-In PHP, this is still a challenge, because there&rsquo;s no elegant solution for streams.
-The closest you can get is the stream_get_line function.
-The problem with this function is that you have to specify a max length of characters to read.
-If the line is longer than those characters, you have to detect that, and keep searching until you get to the newline.
-There&rsquo;s a comment on the manual that outlines the solution. In pseudocode: 1
-2
-3
-4
-open the file
-while get line from file: import entry
-close the file Again, fairly simple (ignoring caveats with &ldquo;get line from file&rdquo;).
-The great thing about this solution is that we only have to load at most one entry at a time into memory. Bonus: Inspecting JSON Data From CLI If you want to inspect the data that you&rsquo;ve exported, you can use the handy &ldquo;json&rdquo; tool (requires Node).
-Not only does it pretty print, but it allows you to pull out specific data, and supports newline delimited JSON entries with the -g flag. 1
-2
-3
-4
-$ cat test.json
-{"name":"alice"}
-{"name":"bob"}
-{"name":"eve"} 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-$ cat test.json | json -g
-[ { "name": "alice" }, { "name": "bob" }, { "name": "eve" }
-] 1
-2
-3
-4
-$ cat test.json | json -ga name
-alice
-bob
-eve 1
-2
-3
-4
-$ cat test.json | json -ga nameLength name -e 'this.nameLength = this.name.length'
-5 alice
-3 bob
-3 eve Full Documentation I am now accepting new clients for part-time consulting and software development projects. Learn more Jul 16th, 2014 JSON " />
+    <meta name="twitter:description" content="You can store data as newline delimited JSON entries.
+Since JSON encodes newline characters, you can use newlines to separate entries. For more &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

@@ -14,20 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Using jQuery and Gmail's Plus-Addressing to Fight Email Spam - Will Anderson" />
-    <meta name="twitter:description" content=" Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com&rdquo;). This does an OK job, but it&rsquo;s also a royal pain for the visitor, who has to type in, or fix your email address if they want to send you an email. The ultimate spam fighting question arises: &ldquo;How do you keep bots out while letting real users in&rdquo;. GMail&rsquo;s plus-addressing feature and jQuery might be able to bring us one step closer to an answer. If you use Google&rsquo;s email services (GMail or Google Apps), you have a powerful email feature available. Plus-addressing means that bill&#64;gmail.com, bill+something&#64;gmail.com and bill+anything&#64;gmail.com all point to the same email address. When deciding what address to deliver the message to, Google drops everything after the plus sign. you can then actually use filters to move items to folders inside your mailbox (for example, you could use example+bank&#64;gmail.com for your banking). Doing this also makes it just a little harder (though not impossible) for bots to get your real email address. By default, you probably don&rsquo;t want to display a &ldquo;plus address&rdquo; on a contact page, jQuery comes to our rescue here, allowing us to remove the &ldquo;plus&rdquo; part for users with JavaScript support. The following script looks for all email links and removes the &ldquo;plus&rdquo; portion from the href and the inner text. 1
-2
-3
-4
-5
-6
-7
-8
-9
-jQuery(document).ready(function(){ jQuery(&#39;a[href^=mailto:]&#39;).each(removeSpamProtection);
-}); function removeSpamProtection(index, element){ var link = jQuery(element); link.attr(&#39;href&#39;, link.attr(&#39;href&#39;).replace(/\+[a-zA-Z]*/, &#39;&#39;)) .text(link.text().replace(/\+[a-zA-Z]*/, &#39;&#39;));
-} Now all visitors with JavaScript support will see something like: 1
-&lt;a href=&quot;mailto:example@example.com&quot;&gt;example@example.com&lt;/a&gt; Visitors without JavaScript support will see: 1
-&lt;a href=&quot;mailto:example+spamblock@example.com&quot;&gt;example+spamblock@example.com&lt;/a&gt; Normal visitors will see your real email address while bots and visitors without JavaScript will see something else. The bots will (hopefully) be confused by the plus sign. If not, they will be sending an email to an address that you can easily filter into a &ldquo;maybe spam&rdquo; folder. So there you have it. A very short piece of JavaScript (thanks to the wonders of jQuery) that you can include in your WordPress theme or install as a separate plugin. What do you do to protect your email online? Do you have another method that works better? If so, please share it in the comments! I am now accepting new clients for part-time consulting and software development projects. Learn more Feb 26th, 2009 Gmail, jQuery " />
+    <meta name="twitter:description" content="Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com& &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

@@ -14,40 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Customizing the P2 WordPress Theme - Will Anderson" />
-    <meta name="twitter:description" content=" As you may have seen, I launched a new blog about a week and a half ago to track how much sleep I&rsquo;m getting. I think tracking my sleeping patterns has helped me get more rest, but that&rsquo;s not really what this post is about. I thought it might be interesting to talk about some of the customizations I made to the P2 WordPress theme that I&rsquo;m using. True to the WordPress paradigm, I didn&rsquo;t actually change anything in the P2 theme, but rather wrote a plugin to modify its behavior with filters and actions. The most visible change I made was the addition of a &ldquo;Sleep Counter&rdquo; widget that displays the number of hours and minutes I&rsquo;ve slept since March 18th. This actually relies on the the other parts of the plugin, though, so I&rsquo;ll leave the discussion of this widget until later. The main purpose of this customization is to keep track of the hours I&rsquo;ve slept programmatically. I could have done this with post meta values, but that would defeat the purpose of P2 because I&rsquo;d have to go into the back end to create posts. Instead, I decided to simply put the information in the post and parse it using the wp_insert_post action. This hook is called whenever a post is saved, right after it has been written to the database. The function is passed the ID of the post that has been created/edited. What I do is get the post content, parse it to find the number of hours/minutes recorded, and save those values to two post metas (or update the post metas if I&rsquo;m editing the post). The function is as follows. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-function get_sleep_times($id) { $post = get_post($id); $content = $post-&gt;post_content; $matches = array(); // pretty lazy regex matching here, but it works $matched = preg_match(&#39;/hours[^0123456789]*([0-9]*).*minutes[^0123456789]*([0-9]*)/i&#39;, $content, $matches); if ($matched &lt; 1) // don&#39;t do anything if no sleep counts were posted. return; $hours = $matches[1]; $minutes = $matches[2]; update_post_meta($id, &#39;_sleep_hours&#39;, $hours); update_post_meta($id, &#39;_sleep_minutes&#39;, $minutes);
-} This code isn&rsquo;t perfect, but since I wrote it after about 24 hours without sleep and it is only intended to be used by myself, I&rsquo;ll give myself a break. The next step was to create the widget to display my total sleep count. I hadn&rsquo;t created any widgets since the new widget API was released in WordPress 2.8, but a great article by Justin Tadlock set me on the right track. I added some customization options for how the sleep count is displayed, but the more interesting part is the function that actually displays the widget. It gets the options for the widget, then calls a print_sleep_count function that I defined. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-function print_sleep_count($format = &#39;&#39;) { global $wpdb; $ajax = empty($format); $format = $format ? $format : SleepCounterWidget::$default_format; $query = &quot;SELECT COALESCE(SUM(meta_value), 0) as totalsum FROM {$wpdb-&gt;postmeta} &quot; . &quot;INNER JOIN {$wpdb-&gt;posts} ON {$wpdb-&gt;postmeta}.post_id = {$wpdb-&gt;posts}.ID &quot; . &quot;WHERE {$wpdb-&gt;posts}.post_status &lt;&gt; &#39;trash&#39; AND {$wpdb-&gt;postmeta}.meta_key = &#39;%s&#39;&quot;; $hours = intval($wpdb-&gt;get_var(sprintf($query, &#39;_sleep_hours&#39;))); $minutes = intval($wpdb-&gt;get_var(sprintf($query, &#39;_sleep_minutes&#39;))); printf($format, $hours + intval($minutes / 60), $minutes % 60); // exit if this is requested via AJAX // if we don&#39;t, WordPress will add &#39;0&#39; to the output !$ajax or die();
-} You&rsquo;ll notice some funky stuff with the $ajax variable. I&rsquo;ll explain that later. Just ignore it for now. The main magic here is the the SQL query. I decided to use a SQL query instead of the post meta API because I wanted get an aggregate of the post metas, and doing the aggregation from within SQL is much more efficient. I built a customizable query so I could use it to get both the number of hours slept and the number of minutes slept. I use sprintf to insert the meta key I&rsquo;m looking for when I send the query to $wpdb. The reason I decided against the $wpdb->prepare() function is efficiency. The result would have been the same, but that function does some argument escaping that isn&rsquo;t necessary because I know exactly what variables I&rsquo;m passing in. Once I get the total number of hours and minutes I&rsquo;ve slept, I convert it to actual hours and minutes. This takes care of the situation where the sum of minutes is greater than 60 (one hour). The final enhancement I made was some front end AJAX that updates the widget value whenever I create a new post. It&rsquo;s pretty basic, and just utilizes the Admin AJAX API available within WordPress. The way I decided to do it was to utilize my existing print_sleep_count function. I simply hooked to an AJAX request event. That&rsquo;s where the $ajax variable I mentioned earlier comes in. If the format argument isn&rsquo;t passed to print_sleep_count, I assume it is being called via AJAX and exit at the end of the function. You&rsquo;ll also notice that I&rsquo;ve got a widget on my main website that displays the same sleep count. It is mostly identical to the one on my Sleep blog, but the database tables are hard coded (because here $wpdb-&gt;tablename uses the wrong prefix). I also decided to have the sleep count link to my Sleep blog. And that&rsquo;s pretty much it. There are some enhancements I could probably make. For one thing, I could store the sleep count as one option in the options table to save myself from having to calculate an aggregate value every time, but with the number of visits I get each day, it&rsquo;s not enough of an issue to worry about. If you&rsquo;d like to see what the rest of the plugin looks like, you can download it and check it out. I am now accepting new clients for part-time consulting and software development projects. Learn more Mar 29th, 2010 WordPress " />
+    <meta name="twitter:description" content="As you may have seen, I launched a new blog about a week and a half ago to track how much sleep I&rsquo;m getting. I think tracking my sleeping &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

@@ -14,26 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="WordPress Custom Post Statuses - Will Anderson" />
-    <meta name="twitter:description" content=" WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of states and a WordPress custom post status. If you want to make certain posts stand out, or need a custom way to categorize your posts, this is simple way to do it. The following screenshot illustrates some of the default post states. Adding a new WordPress Custom Post Status Adding your own states is actually pretty easy. The following code snippet should get you going in the right direction. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-class My_Custom_Post_State { function My_Custom_Post_State() { $this-&gt;__construct(); } function __construct() { add_filter( &#39;display_post_states&#39;, array( $this, &#39;custom_post_state&#39; ) ); } function custom_post_state( $states ) { global $post; $show_custom_state = null !== get_post_meta( $post-&gt;ID, &#39;_some_costom_field&#39; ); if ( $show_custom_state ) { $states[] = __( &#39;Custom State&#39; ); } return $states; }
-}
-new My_Custom_Post_State(); Result of Adding a WordPress Custom Post Status Assuming you have code elsewhere that is adding the custom field to posts, you&rsquo;ll see something like this. If you added code to add a custom field called _some_custom_field to certain posts, those posts would show up with the &lsquo;Custom State&rsquo; status. You could further customize this example to check the value of the custom meta field, and change the post status based on that field. That&rsquo;s pretty much it. Obviously there are more useful examples, but this should be enough to get you started. I am now accepting new clients for part-time consulting and software development projects. Learn more Feb 19th, 2011 WordPress " />
+    <meta name="twitter:description" content="WordPress displays post states on post list tables to indicate that a post has a special condition. It&rsquo;s possible to hook into that list of &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

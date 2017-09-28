@@ -14,70 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="WordPress Installation Script - Will Anderson" />
-    <meta name="twitter:description" content=" The WordPress installation process is already incredibly simple, but because I often find myself setting up fresh installations of WordPress for various reasons, I decided to make it even easier. The following script takes a folder name as an argument, creates that folder in the website root (specified in a config variable of the script), downloads and extracts the latest version of WordPress into that folder, and runs the WordPress install. Finally, it sets the admin password to the password specified in another config variable and removes the password change nag. 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-#!/bin/bash
-#
-# configuration
-#
-rootURL=&quot;http://localhost&quot; # your root URL. No trailing slash
-rootDIR=&quot;/home/anderswc/public_html&quot; # your document root. No trailing slash dbname=&quot;wordpress&quot;
-dbuser=&quot;username&quot;
-dbpass=&quot;password&quot;
-dbhost=&quot;localhost&quot; wppass=&quot;password&quot; #password to use for the admin account
-adminemail=&quot;email@example.com&quot; #email to use for the admin account
-blogtitle=$1 # defaults to the specified directory name. can be anything if [ -z &quot;$1&quot; ]
-then # directory name must be specified echo &quot;Please specify an installation folder name&quot;
-else # ideally you shouldn&#39;t have to change anything past this point echo &quot;Creating a WordPress instance in $rootDIR/$1&quot; # create the directory to install WordPress in mkdir $rootDIR/$1 # download the latest version of WordPress into the directory we just created wget -o /dev/null -O $rootDIR/$1/wordpress.zip http://wordpress.org/latest.zip # unzip the archive containing WordPress. files will be inside a &#39;wordpress&#39; directory unzip -q $rootDIR/$1/wordpress.zip -d $rootDIR/$1 # move the files out of the &#39;wordpress&#39; directory into their intended location mv $rootDIR/$1/wordpress/* $rootDIR/$1 # remove the wordpress archive and the wordpress folder rm $rootDIR/$1/wordpress.zip rmdir $rootDIR/$1/wordpress # make WordPress directory writeable by PHP so installation can take place chmod -R 777 $rootDIR/$1 # request the configuration file generation and blog installation webpages. postdata=&quot;dbname=$dbname&amp;uname=$dbuser&amp;pwd=$dbpass&amp;dbhost=$dbhost&amp;prefix=$1_&quot; wget -o /dev/null --post-data &quot;$postdata&quot; &quot;$rootURL/$1/wp-admin/setup-config.php?step=2&quot; postdata=&quot;weblog_title=$blogtitle&amp;admin_email=$adminemail&quot; wget -o /dev/null --post-data &quot;$postdata&quot; &quot;$rootURL/$1/wp-admin/install.php?step=2&quot; # WordPress password was randomly generated # change it to password in configuration and remove password change nag sqlcommand=&quot;UPDATE $1_users SET user_pass=MD5(&#39;$wppass&#39;)&quot; sqlcommand=&quot;$sqlcommand;DELETE FROM $1_usermeta WHERE meta_key=&#39;default_password_nag&#39;;&quot; mysql -u $dbuser -p$dbpass -e &quot;$sqlcommand&quot; $dbname # uncomment the following line if you&#39;re running this script on a public server #chmod -R 755 $rootDIR/$1 echo &quot;Done&quot;
-fi If you think this might be useful, give it a shot and let me know what you think. I am now accepting new clients for part-time consulting and software development projects. Learn more Mar 12th, 2010 WordPress " />
+    <meta name="twitter:description" content="The WordPress installation process is already incredibly simple, but because I often find myself setting up fresh installations of WordPress for &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

@@ -14,27 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Mocha Error - this.timeout is undefined - Will Anderson" />
-    <meta name="twitter:description" content=" If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call this.timeout() from your Mocha tests. 1
-2
-3
-4
-it(&quot;foo&quot;, (done) =&gt; { this.timeout(1000); // test some things
-}); If you look at the compiled output, the source of the problem becomes evident.
-The compiler is taking the value of this from outside the test.
-This is also the behavior you&rsquo;d see if you used a JS engine with ES6 support. 1
-2
-3
-4
-5
-var _this = this;
-it(&quot;foo&quot;, function(done) { _this.timeout(1000); // test some things
-}); Arrow functions specify that the scope of the &ldquo;this&rdquo; variable inside the function is the same as its scope outside the function.
-Unfortunately, in this case, that isn&rsquo;t what we want. We want &ldquo;this&rdquo; to be the Mocha object that we can call this.timeout() on. Switching back to the old-school function style fixes the problem: 1
-2
-3
-4
-it(&quot;foo&quot;, function(done) { this.timeout(1000); // test some things
-}); And there you have it. Be careful with &ldquo;arrow&rdquo; functions in Mocha tests. They&rsquo;re fine to use in most cases, but if you need to call this.timeout(), make sure you switch back to the old-school function syntax. I am now accepting new clients for part-time consulting and software development projects. Learn more Jul 21st, 2015 Mocha, Node " />
+    <meta name="twitter:description" content="If you&rsquo;re using an ES6 compiler like TypeScript or Babel, you may have run into an odd error when you tried to call this.timeout() from your &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">

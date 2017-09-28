@@ -14,32 +14,7 @@
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Docker for Windows: Sharing Host Volumes - Will Anderson" />
-    <meta name="twitter:description" content=" I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across. Docker lets you share volumes between your containers and your host machine. This is handy during development time, when you want to be able to quickly iterate without having to continually rebuild your container. The Suspicious Empty Directory When I first tried sharing a volume, I typed this into PowerShell: 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-&gt; dir c:\docker Directory: C:\docker Mode LastWriteTime Length Name
----- ------------- ------ ----
--a---- 7/30/2016 9:47 PM 8 test.txt &gt; docker run -it -v c:/docker:/host ubuntu bash
-root@333a10babe3a:/# ls /host
-root@333a10babe3a:/# Hmm&hellip; As you can see, the c:\docker folder has a test file, but it doesn&rsquo;t show up in the Docker container.
-After some head scratching, I figured out the missing piece: Out of the box, Docker isn&rsquo;t configured with permissions to share your drives with your containers. Giving Docker Access To give Docker access to your computer&rsquo;s drives, right click on the Docker icon in your taskbar, then click &ldquo;Settings&hellip;&rdquo; Under the &ldquo;Shared Drives&rdquo; section, check the drives you&rsquo;d like to share, then click &ldquo;Apply&rdquo; Docker will ask you for credentials, which it uses to access the drives. (Note that if you log into your computer with a Windows Live account, your username should be something like &ldquo;MicrosoftAccount\you&#64;live.com&rdquo;) Once you save your credentials, you should be able to share volumes from your host computer to your containers. 1
-2
-3
-4
-&gt;docker run -it -v c:/docker:/host ubuntu bash
-root@00aca8c2f880:/# ls /host
-test.txt
-root@00aca8c2f880:/# I am now accepting new clients for part-time consulting and software development projects. Learn more Jul 30th, 2016 Docker " />
+    <meta name="twitter:description" content="I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across. &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
