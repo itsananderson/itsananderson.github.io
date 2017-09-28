@@ -4,7 +4,7 @@
   <title><![CDATA[Category: JSON | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/json/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T21:38:14-07:00</updated>
+  <updated>2017-09-27T22:13:08-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Consuming and Searching CSV Logs With JSON Tools]]></title>
+    <link href="http://willi.am/blog/2017/09/27/consuming-and-searching-csv-logs-with-json-tools/"/>
+    <updated>2017-09-27T21:47:27-07:00</updated>
+    <id>http://willi.am/blog/2017/09/27/consuming-and-searching-csv-logs-with-json-tools</id>
+    <content type="html"><![CDATA[<p>If you ever find yourself working with logs or traces stored as CSV files,
+it&rsquo;s fairly trivial to convert them to JSON to simplify searching and manipulating them.
+This blog post describes some tools that can help you filter and format the logs into something more useful.</p>
+
+<p>The two tools we&rsquo;ll be using are <code>csv2json</code> and <code>json</code>.
+These are Node modules, so you&rsquo;ll need to install Node first,
+then run the following command to install the two packages globally.</p>
+
+<p><code>
+npm install -g csv2json json
+</code></p>
+
+<p>These tools should now be on your path.
+To confirm, try running <code>csv2json --help</code></p>
+
+<p>You can use the <code>csv2json</code> to convert the CSV log files into JSON files.
+The JSON format places the column headers next to the column values,
+which is less space efficient, but makes it much easier to read the file.</p>
+
+<p><code>
+csv2json trace.csv trace.json
+</code></p>
+
+<p>The JSON traces will then look something like this:</p>
+
+<p><code>
+[
+{"PreciseTimeStamp":"3/24/2017 12:25:17 PM","ComponentGuid":"bd3facb0-1775-590d-e3ab-59f56bb23206","EventName":"DownloadStarted","AppId":"cd56de80-67c6-414a-a0af-f6b22a47b6d7"},
+{"PreciseTimeStamp":"3/24/2017 12:35:17 PM","ComponentGuid":"bd3facb0-1775-590d-e3ab-59f56bb23206","EventName":"DownloadCompleted","AppId":"cd56de80-67c6-414a-a0af-f6b22a47b6d7"}
+...
+...
+...
+]
+</code></p>
+
+<p>Now at least the column names/values are closer together, so it&rsquo;s easier to see what column type you&rsquo;re dealing with.
+However, it&rsquo;s still not easy to visually parse the data.
+That&rsquo;s where the <code>json</code> tool comes in.
+In its most basic form, it pretty-prints json, making it easier to visually parse:</p>
+
+<p>```
+cat trace.json | json
+[
+  {</p>
+
+<pre><code>"PreciseTimeStamp": "3/24/2017 12:25:17 PM",
+"ComponentGuid": "bd3facb0-1775-590d-e3ab-59f56bb23206",
+"EventName": "DownloadStarted",
+"AppId": "cd56de80-67c6-414a-a0af-f6b22a47b6d7"
+</code></pre>
+
+<p>  },
+  {</p>
+
+<pre><code>"PreciseTimeStamp": "3/24/2017 12:35:17 PM",
+"ComponentGuid": "bd3facb0-175-590d-e3ab-59f56bb23206",
+"EventName": "DownloadCompleted",
+"AppId": "cd56de80-67c6-414a-a0af-f6b22a47b6d7"
+</code></pre>
+
+<p>  }
+]
+```</p>
+
+<p>Now you can more easily scan down the columns, but it takes up a ton of space, and you probably don&rsquo;t care about most of the columns.
+If you only want a few columns, you can use the <code>json -a &lt;ColumnName1&gt; &lt;ColumnName2&gt;</code> command to output specific columns in plaintext.</p>
+
+<p><code>
+type trace.json | json -a PreciseTimeStamp EventName
+3/24/2017 12:25:17 PM DownloadStarted
+3/24/2017 12:35:17 PM DownloadCompleted
+</code></p>
+
+<p>If you don&rsquo;t want the intermediate JSON file, you can also pipe the output of <code>csv2json</code> directly to the <code>json</code> command.
+However, if you plan to run multiple calls to <code>json</code>, you will save execution time by only calling <code>csv2json</code> once.</p>
+
+<p><code>
+csv2json trace.csv | json -a PreciseTimeStamp EventName
+</code></p>
+
+<p>Also, if you already have a json file, you can provide its path to the <code>json</code> tool directly rather than using the <code>cat</code> command.
+This is really just a matter of preference:</p>
+
+<p>```
+json -f trace.json -a PreciseTimeStamp EventName</p>
+
+<h1>same as</h1>
+
+<p>cat trace.json | json -a PreciseTimeStamp EventName
+```</p>
+
+<p>If you want to filter the logs, you can use the <code>-c</code> flag.
+The syntax is JavaScript, and the <code>this</code> variable contains the JSON object for the specific row being filtered.</p>
+
+<p>For example, to filter to a specific <code>EventName</code>, you could use something like this:</p>
+
+<p><code>
+cat trace.json | json -a PreciseTimeStamp EventName -c 'this.EventName == "DownloadCompleted"'
+3/24/2017 12:35:17 PM DownloadCompleted
+</code></p>
+
+<p>There&rsquo;s lots more that the <code>json</code> tool can do. Check out the <a href="full%20docs%20here">http://trentm.com/json/</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Storing Data as Newline Delimited JSON Entries]]></title>

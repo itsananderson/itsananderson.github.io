@@ -7,14 +7,16 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="While writing the previous post, I discovered a cool Git command which I thought I&rsquo;d share. When you clone a Git repository, most Git hosts &hellip;">
+	<meta name="description" content="Debugging front-end JavaScript can sometimes be painful.
+When you rely on third-party libraries and frameworks, you find yourself stepping back and &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content="While writing the previous post, I discovered a cool Git command which I thought I&rsquo;d share. When you clone a Git repository, most Git hosts &hellip;" />
+    <meta name="twitter:description" content="Debugging front-end JavaScript can sometimes be painful.
+When you rely on third-party libraries and frameworks, you find yourself stepping back and &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -83,6 +85,83 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/10/28/ignoring-javascript-libraries-while-debugging/">
+		
+			Ignoring JavaScript Libraries While Debugging</a>
+	</h2>
+	<div class="entry-content">
+		<p>Debugging front-end JavaScript can sometimes be painful.
+When you rely on third-party libraries and frameworks, you find yourself stepping back and forth between the library&rsquo;s code and your own.
+Most of the time, it&rsquo;s safe to assume that these third-party libraries are working correctly, so ignoring them can make it easier to keep your own code in your head.</p>
+
+<p>Fortunately for us, Chrome, Firefox, and Internet Explorer each provide a way to ignore library code.</p>
+
+<h3>Chrome</h3>
+
+<p>In chrome, you can ignore a specific script by right clicking it in the &ldquo;Sources&rdquo; tab.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/chrome-blackbox-script.png" alt="" /></p>
+
+<p>You can view the currently ignored patterns in the devtools settings page.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/chrome-blackbox-patterns.png" alt="" /></p>
+
+<h3>Firefox</h3>
+
+<p>Firefox is similar to Chrome, but you select the script in the &ldquo;Debugger&rdquo; tab, and click the eye icon to &ldquo;Toggle Black Boxing&rdquo;.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/firefox-blackbox-script.png" alt="" /></p>
+
+<h3>Internet Explorer</h3>
+
+<p>Internet explorer uses a different term, but the concept is the same.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/internet-explorer-mark-as-library.png" alt="" /></p>
+
+<p>You can edit the exclusion list in:</p>
+
+<p><code>%APPDATA%\..\LocalLow\Microsoft\F12\header\MyCode.json</code></p>
+
+<p>or</p>
+
+<p><code>%APPDATA%\..\Local\Microsoft\F12\header\MyCode.json</code></p>
+
+<p>More info is available in the <a href="http://msdn.microsoft.com/en-us/library/ie/dn255007(v=vs.85).aspx#just_my_code">F12 tools documentation</a>.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-28T14:33:06-07:00" pubdate data-updated="true">Oct 28<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/debugging/'>Debugging</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -1485,194 +1564,6 @@ We call that at the end of the test when we&rsquo;ve actually had a chance to ve
 
 
 	<a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/testing/'>Testing</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/07/16/storing-data-as-newline-delimited-json-entries/">
-		
-			Storing Data as Newline Delimited JSON Entries</a>
-	</h2>
-	<div class="entry-content">
-		<p>You can store data as newline delimited JSON entries.
-Since JSON encodes newline characters, you can use newlines to separate entries.</p>
-
-<p>For more details, read on.</p>
-
-<h2>Exporting Large Data</h2>
-
-<p>In a recent project, I needed to export data, and then import it into another system.
-I decided to go with JSON as the export format, because it was structured data.
-The problem was, the data could be extremely large, so loading it all into memory and generating a single JSON object wasn&rsquo;t an option.</p>
-
-<p>As a first solution to the problem, I considered &ldquo;fake&rdquo; streaming to the file with the following pseudocode:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
-</span><span class='line'>write "["
-</span><span class='line'>foreach entry:
-</span><span class='line'>  if not first entry:
-</span><span class='line'>      write ","
-</span><span class='line'>  write JSON serialized entry
-</span><span class='line'>write "]"
-</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
-
-
-<p>This got the job done, but what about when I import the data?
-Since I wrote the data as one giant JSON array, I&rsquo;d have to load the entire thing to deserialize.
-(In Node, I could use a streaming JSON parser, but this project was in PHP).</p>
-
-<p>This means there&rsquo;s a limit to the amount of data I can import.
-Even on a host where I can control PHP&rsquo;s memory limit, there&rsquo;s still a limitation to how much data can reasonably be loaded into memory.</p>
-
-<h2>Exporting Newline Delimited Data</h2>
-
-<p>I finally realized that I was missing something important.
-JSON serializes newlines as &ldquo;\n&rdquo;, which means actual newlines can be safely used to delimit each JSON entry.
-(Assuming you don&rsquo;t &ldquo;pretty print&rdquo; your JSON).</p>
-
-<p>The new export method is as follows:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
-</span><span class='line'>foreach entry:
-</span><span class='line'>  if not first entry:
-</span><span class='line'>      write newline
-</span><span class='line'>  write JSON serialized entry
-</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Already simpler. Yay.</p>
-
-<h2>Importing Newline Delimited Data</h2>
-
-<p>Now that we&rsquo;ve exported the data, it&rsquo;s time to import it.
-In PHP, this is still a challenge, because there&rsquo;s no elegant solution for streams.
-The closest you can get is the <a href="http://php.net/manual/en/function.stream-get-line.php"><code>stream_get_line</code></a> function.
-The problem with this function is that you have to specify a max length of characters to read.
-If the line is longer than those characters, you have to detect that, and keep searching until you get to the newline.
-There&rsquo;s a <a href="http://php.net/manual/en/function.stream-get-line.php#109339">comment on the manual that outlines the solution</a>.</p>
-
-<p>In pseudocode:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>open the file
-</span><span class='line'>while get line from file:
-</span><span class='line'>  import entry
-</span><span class='line'>close the file</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Again, fairly simple (ignoring caveats with &ldquo;get line from file&rdquo;).
-The great thing about this solution is that we only have to load at most one entry at a time into memory.</p>
-
-<h2>Bonus: Inspecting JSON Data From CLI</h2>
-
-<p>If you want to inspect the data that you&rsquo;ve exported, you can use the handy &ldquo;<a href="http://npmjs.org/package/json">json</a>&rdquo; tool (requires Node).
-Not only does it pretty print, but it allows you to pull out specific data, and supports newline delimited JSON entries with the <code>-g</code> flag.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json
-</span><span class='line'>{"name":"alice"}
-</span><span class='line'>{"name":"bob"}
-</span><span class='line'>{"name":"eve"}</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -g
-</span><span class='line'>[
-</span><span class='line'>  {
-</span><span class='line'>    "name": "alice"
-</span><span class='line'>  },
-</span><span class='line'>  {
-</span><span class='line'>    "name": "bob"
-</span><span class='line'>  },
-</span><span class='line'>  {
-</span><span class='line'>    "name": "eve"
-</span><span class='line'>  }
-</span><span class='line'>]</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -ga name
-</span><span class='line'>alice
-</span><span class='line'>bob
-</span><span class='line'>eve</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ cat test.json | json -ga nameLength name -e 'this.nameLength = this.name.length'
-</span><span class='line'>5 alice
-</span><span class='line'>3 bob
-</span><span class='line'>3 eve</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="http://trentm.com/json/">Full Documentation</a></p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-07-16T13:48:29-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/json/'>JSON</a>
 
 
 </div>

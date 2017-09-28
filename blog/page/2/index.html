@@ -7,14 +7,30 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and &hellip;">
+	<meta name="description" content="If you want to view all released versions of an npm package, there&rsquo;s an easy way to do it: npm show react-native@* version 1
+2
+3
+4
+5
+6
+7
+8
+9 &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content="React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and &hellip;" />
+    <meta name="twitter:description" content="If you want to view all released versions of an npm package, there&rsquo;s an easy way to do it: npm show react-native@* version 1
+2
+3
+4
+5
+6
+7
+8
+9 &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -83,6 +99,175 @@
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2015/07/17/viewing-all-versions-of-an-npm-package-including-pre-release/">
+		
+			Viewing All Versions of an NPM Package (Including Pre-Release)</a>
+	</h2>
+	<div class="entry-content">
+		<p>If you want to view all released versions of an npm package, there&rsquo;s an easy way to do it:</p>
+
+<p><code>npm show react-native@* version</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>react-native@0.0.0 '0.0.0'
+</span><span class='line'>react-native@0.0.5 '0.0.5'
+</span><span class='line'>react-native@0.0.6 '0.0.6'
+</span><span class='line'>react-native@0.1.0 '0.1.0'
+</span><span class='line'>react-native@0.2.0 '0.2.0'
+</span><span class='line'>react-native@0.2.1 '0.2.1'
+</span><span class='line'>react-native@0.3.0 '0.3.0'
+</span><span class='line'>react-native@0.3.1 '0.3.1'
+</span><span class='line'>react-native@0.3.2 '0.3.2'
+</span><span class='line'>react-native@0.3.3 '0.3.3'
+</span><span class='line'>react-native@0.3.4 '0.3.4'
+</span><span class='line'>react-native@0.3.5 '0.3.5'
+</span><span class='line'>react-native@0.3.6 '0.3.6'
+</span><span class='line'>react-native@0.3.7 '0.3.7'
+</span><span class='line'>react-native@0.3.8 '0.3.8'
+</span><span class='line'>react-native@0.3.9 '0.3.9'
+</span><span class='line'>react-native@0.3.10 '0.3.10'
+</span><span class='line'>react-native@0.3.11 '0.3.11'
+</span><span class='line'>react-native@0.4.0 '0.4.0'
+</span><span class='line'>react-native@0.4.1 '0.4.1'
+</span><span class='line'>react-native@0.4.2 '0.4.2'
+</span><span class='line'>react-native@0.4.3 '0.4.3'
+</span><span class='line'>react-native@0.4.4 '0.4.4'
+</span><span class='line'>react-native@0.5.0 '0.5.0'
+</span><span class='line'>react-native@0.6.0 '0.6.0'
+</span><span class='line'>react-native@0.7.1 '0.7.1'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, this doesn&rsquo;t show pre-release versions. If you want to see <em>everything</em>, there&rsquo;s an equally easy (but undocumented) command:</p>
+
+<p><code>npm show react-native versions</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[ '0.0.0',
+</span><span class='line'>  '0.0.5',
+</span><span class='line'>  '0.0.6',
+</span><span class='line'>  '0.1.0',
+</span><span class='line'>  '0.2.0',
+</span><span class='line'>  '0.2.1',
+</span><span class='line'>  '0.3.0',
+</span><span class='line'>  '0.3.1',
+</span><span class='line'>  '0.3.2',
+</span><span class='line'>  '0.3.3',
+</span><span class='line'>  '0.3.4',
+</span><span class='line'>  '0.3.5',
+</span><span class='line'>  '0.3.6',
+</span><span class='line'>  '0.3.7',
+</span><span class='line'>  '0.3.8',
+</span><span class='line'>  '0.3.9',
+</span><span class='line'>  '0.3.10',
+</span><span class='line'>  '0.3.11',
+</span><span class='line'>  '0.4.0',
+</span><span class='line'>  '0.4.1',
+</span><span class='line'>  '0.4.2',
+</span><span class='line'>  '0.4.3',
+</span><span class='line'>  '0.4.4',
+</span><span class='line'>  '0.5.0-rc1',
+</span><span class='line'>  '0.5.0',
+</span><span class='line'>  '0.6.0-rc',
+</span><span class='line'>  '0.6.0',
+</span><span class='line'>  '0.7.0-rc',
+</span><span class='line'>  '0.7.0-rc.2',
+</span><span class='line'>  '0.7.1',
+</span><span class='line'>  '0.8.0-rc' ]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is super useful for finding what beta/pre-release versions of a package are available.</p>
+
+<p>You can also run <code>npm show react-native versions --json</code> for machine readable output.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-07-17T11:10:40-07:00" pubdate data-updated="true">Jul 17<span>th</span>, 2015</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/npm/'>NPM</a>, <a class='category' href='/blog/categories/node/'>Node</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -999,83 +1184,6 @@ That&rsquo;s why a developer tools team was so appealing to me, and why I&rsquo;
 
 
 	<a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/visual-studio/'>Visual Studio</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/10/28/ignoring-javascript-libraries-while-debugging/">
-		
-			Ignoring JavaScript Libraries While Debugging</a>
-	</h2>
-	<div class="entry-content">
-		<p>Debugging front-end JavaScript can sometimes be painful.
-When you rely on third-party libraries and frameworks, you find yourself stepping back and forth between the library&rsquo;s code and your own.
-Most of the time, it&rsquo;s safe to assume that these third-party libraries are working correctly, so ignoring them can make it easier to keep your own code in your head.</p>
-
-<p>Fortunately for us, Chrome, Firefox, and Internet Explorer each provide a way to ignore library code.</p>
-
-<h3>Chrome</h3>
-
-<p>In chrome, you can ignore a specific script by right clicking it in the &ldquo;Sources&rdquo; tab.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/chrome-blackbox-script.png" alt="" /></p>
-
-<p>You can view the currently ignored patterns in the devtools settings page.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/chrome-blackbox-patterns.png" alt="" /></p>
-
-<h3>Firefox</h3>
-
-<p>Firefox is similar to Chrome, but you select the script in the &ldquo;Debugger&rdquo; tab, and click the eye icon to &ldquo;Toggle Black Boxing&rdquo;.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/firefox-blackbox-script.png" alt="" /></p>
-
-<h3>Internet Explorer</h3>
-
-<p>Internet explorer uses a different term, but the concept is the same.</p>
-
-<p><img src="http://itsananderson.blob.core.windows.net/post-images/internet-explorer-mark-as-library.png" alt="" /></p>
-
-<p>You can edit the exclusion list in:</p>
-
-<p><code>%APPDATA%\..\LocalLow\Microsoft\F12\header\MyCode.json</code></p>
-
-<p>or</p>
-
-<p><code>%APPDATA%\..\Local\Microsoft\F12\header\MyCode.json</code></p>
-
-<p>More info is available in the <a href="http://msdn.microsoft.com/en-us/library/ie/dn255007(v=vs.85).aspx#just_my_code">F12 tools documentation</a>.</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-28T14:33:06-07:00" pubdate data-updated="true">Oct 28<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/debugging/'>Debugging</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
 
 
 </div>

@@ -7,18 +7,16 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="I&rsquo;ve decided I&rsquo;m too familiar with the languages I use every day.
-Well, I say that as if this is a recent realization.
-I decided this &hellip;">
+	<meta name="description" content="Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
+Unlike callbacks, you can wait for &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content="I&rsquo;ve decided I&rsquo;m too familiar with the languages I use every day.
-Well, I say that as if this is a recent realization.
-I decided this &hellip;" />
+    <meta name="twitter:description" content="Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
+Unlike callbacks, you can wait for &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -87,6 +85,149 @@ I decided this &hellip;" />
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/06/15/resolving-javascript-objects-containing-promises/">
+		
+			Resolving JavaScript Objects Containing Promises</a>
+	</h2>
+	<div class="entry-content">
+		<p>Dealing with multiple asynchronous calls makes JavaScript promises outshine the classic callback pattern.
+Unlike callbacks, you can wait for multiple promises to complete before proceeding.
+For example, in the <a href="https://github.com/kriskowal/q">Q</a> framework, you can use the <code>Q.all()</code> function to wait for multiple promises to complete.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">function</span> <span class="nx">makePromise</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">Q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+</span><span class='line'>  <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">var</span> <span class="nx">promises</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span>
+</span><span class='line'>  <span class="nx">makePromise</span><span class="p">(</span><span class="mi">4</span><span class="p">),</span>
+</span><span class='line'><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">promises</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">results</span><span class="p">);</span> <span class="c1">// [1,2,3,4]</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, this works well for an array, but as promise dependencies increase, it may be useful to reference these values more descriptively than an array index.
+Usually, you&rsquo;d want to wrap dependencies in an object like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;db&#39;</span><span class="o">:</span> <span class="nx">connectToDb</span><span class="p">(),</span>
+</span><span class='line'>  <span class="s1">&#39;api&#39;</span><span class="o">:</span> <span class="nx">getApi</span><span class="p">(),</span>
+</span><span class='line'>  <span class="s1">&#39;third&#39;</span><span class="o">:</span> <span class="nx">someOtherDependency</span><span class="p">()</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now, Q doesn&rsquo;t have a way to await the promises inside this object.
+If you just pass it to <code>Q.all()</code> it will finish before the promises are resolved, because the &ldquo;dependencies&rdquo; variable is an object, not a promise.
+However, there is a pretty simple workaround using Lo-Dash (or Underscore):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">Q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">)).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">_</span><span class="p">.</span><span class="nx">zipObject</span><span class="p">(</span><span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">dependencies</span><span class="p">),</span> <span class="nx">results</span><span class="p">);</span>
+</span><span class='line'><span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">deps</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">deps</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// {</span>
+</span><span class='line'>  <span class="c1">//   &quot;db&quot;: [db connection],</span>
+</span><span class='line'>  <span class="c1">//   &quot;api&quot; [api object],</span>
+</span><span class='line'>  <span class="c1">//   &quot;third&quot;: [third dependency]</span>
+</span><span class='line'>  <span class="c1">// }</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Basically we&rsquo;re unzipping the keys and values from the &ldquo;dependencies&rdquo; object, then rezipping them with the <code>_.zipObject()</code> function when the promises are resolved.</p>
+
+<p>Note that you can safely mix promises and non-promises.
+For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">dependencies</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>  <span class="s1">&#39;db&#39;</span><span class="o">:</span> <span class="nx">connectToDb</span><span class="p">(),</span>
+</span><span class='line'>  <span class="s1">&#39;name&#39;</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s1">&#39;version&#39;</span><span class="o">:</span> <span class="mi">3</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also note that this only works on a &ldquo;flat&rdquo; object.
+Any nested objects won&rsquo;t be resolved.
+It wouldn&rsquo;t be terribly difficult to write a utility function for recursively traversing an object and awaiting its promises, but I&rsquo;ll leave that as an exercise for the reader.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-15T15:12:43-07:00" pubdate data-updated="true">Jun 15<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/promises/'>Promises</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -912,122 +1053,6 @@ This allows you to pretend that you never make any mistakes :)</p>
 
 
 	<a class='category' href='/blog/categories/git/'>Git</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/04/08/a-lesson-in-debugging-verify-your-tools/">
-		
-			A Lesson in Debugging: Verify Your Tools</a>
-	</h2>
-	<div class="entry-content">
-		<p>This is a cautionary tale</p>
-
-<p>Yesterday I wasted a day of dev time.
-Worse than that, I was pairing with <a href="http://www.davidruttka.com/">two</a> of my <a href="http://msarchet.com/">co-workers</a> most of the day, so in the end we wasted about 2.5 days of dev time.</p>
-
-<p>We spent the day debugging an &ldquo;off by one (and sometimes two)&rdquo; error.</p>
-
-<p>David, one of my coworkers, <a href="http://www.davidruttka.com/blog/2014/04/09/principles-of-debugging-a-postmortem/">also blogged this experience</a>.
-It&rsquo;s an entertaining read.
-Check it out.</p>
-
-<h2>The Problem</h2>
-
-<p>The bug seemed simple.
-They always do.
-When you requested something by Id from our API, it returned with almost valid data.
-Except that the Id property in the JSON (a long) was frequently incremented or decremented by 1 or 2.</p>
-
-<p>We originally saw the issue in an Angular app.
-We were suspicious about potential JavaScript numeric issues, so of course we opened up Fiddler to get at the &ldquo;real&rdquo; data</p>
-
-<h2>The Fiddler Inspection</h2>
-
-<p>When we inspected the requests in Fiddler and looked at the JSON viewer, same &ldquo;off by [1-2]&rdquo; issue.
-In our minds, this confirmed that Angular and JavaScript weren&rsquo;t the issue.</p>
-
-<p>After going through the &ldquo;disable stuff until it works&rdquo; process with our API, we were still seeing the same problem.
-The only thing that fixed the issue was having Fiddler request XML instead of JSON. &ldquo;Ahh&rdquo;, we thought, &ldquo;The issue must be with our JSON serializer&rdquo;</p>
-
-<h2>Checking the Serializer</h2>
-
-<p>We spent a few minutes in LINQPad performing serializations with Json.NET, duplicating the problematic object as closely as possible.
-The object serialized without issue, which confirmed in our minds that Json.NET does not, in fact, mangle long values during serialization</p>
-
-<h2>The Reduction</h2>
-
-<p>We decided to build a reduction by creating an empty WebApi project and adding components until we reproduced the issue.
-We added a dummy controller that returns an object identical to the one with the serialization issues.
-We opened the new URL in the browser, and the serialization issues weren&rsquo;t there.
-We should have checked the reduction in Fiddler, but we didn&rsquo;t.</p>
-
-<h2>Patterns Emerge</h2>
-
-<p>Early on in our debugging session, I noticed that even Ids either remained unchanged or incremented/decremented by two.
-Odd Ids, on the other hand, always either incremented or decremented by one.</p>
-
-<p>I initially identified a simplified version of that pattern where even Ids don&rsquo;t change, so when counter-examples emerged, I abandoned the search for a pattern.</p>
-
-<p>As the afternoon wore on, we decided to generate a consecutive sequence of Ids to see if we could identify a pattern.
-What we discovered is that for large Ids, the numbers began &ldquo;snapping&rdquo; to multiples of four.
-Small Ids (like, say, 207) didn&rsquo;t change.</p>
-
-<h2>The Final Puzzle Piece</h2>
-
-<p>While David spun a series of object serializations through LINQPad, I began combining keywords in Bing to see if I could find anyone else with the same issue.</p>
-
-<p>Around the time David realized that LINQPad was spitting out serialized Ids with correct values, I discovered <a href="http://stackoverflow.com/questions/6571339/how-to-correctly-serialize-c-sharp-long-number-using-controllers-json-method-in">this StackOverflow post on &ldquo;correctly&rdquo; serializing longs</a>.
-As the answer explains, JavaScript doesn&rsquo;t have longs.
-All numbers are 64 bit floats.
-We&rsquo;d considered this, but had dismissed it because Fiddler was showing the same issue.</p>
-
-<p>Then it hit me.
-Fiddler is written in JScript, which means it has the same 64 bit float limitations.</p>
-
-<p>By implicitly trusting Fiddler&rsquo;s JSON viewer, we assumed the problem was incorrect data coming from our server.
-When we finally looked at the raw data in Fiddler, we saw that the correct Ids were coming across the wire.
-Fiddler&rsquo;s JSON viewer was parsing the long into a 64 bit float and tossing away the last 2 bits, which effectively &ldquo;snapped&rdquo; all Ids to multiples of 4.</p>
-
-<p>The problem wasn&rsquo;t with our API directly.
-The problem was the way JavaScript and JScript handle large numbers.</p>
-
-<h2>Lesson Learned</h2>
-
-<p>When debugging an issue like this, look at the raw data.
-Not some data viewer over the data.
-The <em>raw</em> data</p>
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-04-08T08:10:41-07:00" pubdate data-updated="true">Apr 8<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/debugging/'>Debugging</a>, <a class='category' href='/blog/categories/fiddler/'>Fiddler</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
 
 
 </div>
