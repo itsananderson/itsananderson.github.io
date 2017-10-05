@@ -4,7 +4,7 @@
   <title><![CDATA[Category: ASP.NET | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/asp-dot-net/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Live Compiling ASP.NET vNext With nodemon]]></title>
     <link href="http://willi.am/blog/2014/05/14/live-compiling-aspnet-vnext-with-nodemon/"/>
-    <updated>2014-05-14T12:47:24-07:00</updated>
+    <updated>2014-05-14T15:47:24-04:00</updated>
     <id>http://willi.am/blog/2014/05/14/live-compiling-aspnet-vnext-with-nodemon</id>
     <content type="html"><![CDATA[<p>Something cool that Scott Hanselman talked about in his <a href="http://www.hanselman.com/blog/IntroducingASPNETVNext.aspx">blog post on vNext</a>
 was the ability to save a C# file in Visual Studio and view the change in the browser without manually rebuilding.</p>
@@ -47,7 +47,7 @@ Replace &ldquo;web&rdquo; with &ldquo;run&rdquo; or whatever startup command is 
   <entry>
     <title type="html"><![CDATA[ASP.NET vNext Sounds Awesome]]></title>
     <link href="http://willi.am/blog/2014/05/12/net-vnext-sounds-awesome/"/>
-    <updated>2014-05-12T19:32:26-07:00</updated>
+    <updated>2014-05-12T22:32:26-04:00</updated>
     <id>http://willi.am/blog/2014/05/12/net-vnext-sounds-awesome</id>
     <content type="html"><![CDATA[<p>Microsoft made some anouncements about the <a href="http://blogs.msdn.com/b/dotnet/archive/2014/05/12/the-next-generation-of-net-asp-net-vnext.aspx">next generation of ASP.NET today</a>.</p>
 

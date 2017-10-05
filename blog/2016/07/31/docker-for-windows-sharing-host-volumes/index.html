@@ -1,0 +1,242 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Docker for Windows: Sharing Host Volumes - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across. &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="Docker for Windows: Sharing Host Volumes - Will Anderson" />
+    <meta name="twitter:description" content="I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across. &hellip;" />
+
+	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="http://william-backend.azurewebsites.net/feed/" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">Docker for Windows: Sharing Host Volumes</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across.</p>
+
+<p>Docker lets you share volumes between your containers and your host machine. This is handy during development time, when you want to be able to quickly iterate without having to continually rebuild your container.</p>
+
+<h3>The Suspicious Empty Directory</h3>
+
+<p>When I first tried sharing a volume, I typed this into PowerShell:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; dir c:\docker
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    Directory: C:\docker
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>Mode                LastWriteTime         Length Name
+</span><span class='line'>----                -------------         ------ ----
+</span><span class='line'>-a----        7/30/2016   9:47 PM              8 test.txt
+</span><span class='line'>
+</span><span class='line'>&gt; docker run -it -v c:/docker:/host ubuntu bash
+</span><span class='line'>root@333a10babe3a:/# ls /host
+</span><span class='line'>root@333a10babe3a:/#</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Hmm&hellip; As you can see, the <code>c:\docker</code> folder has a test file, but it doesn&rsquo;t show up in the Docker container.
+After some head scratching, I figured out the missing piece: Out of the box, Docker isn&rsquo;t configured with permissions to share your drives with your containers.</p>
+
+<h3>Giving Docker Access</h3>
+
+<p>To give Docker access to your computer&rsquo;s drives, right click on the Docker icon in your taskbar, then click &ldquo;Settings&hellip;&rdquo;</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-settings.gif" alt="" /></p>
+
+<p>Under the &ldquo;Shared Drives&rdquo; section, check the drives you&rsquo;d like to share, then click &ldquo;Apply&rdquo;</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-shared-drives.png" alt="" /></p>
+
+<p>Docker will ask you for credentials, which it uses to access the drives.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/docker-shared-drives-credentials.png" alt="" /></p>
+
+<p>(Note that if you log into your computer with a Windows Live account, your username should be something like &ldquo;MicrosoftAccount\you&#64;live.com&rdquo;)</p>
+
+<p>Once you save your credentials, you should be able to share volumes from your host computer to your containers.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&gt;docker run -it -v c:/docker:/host ubuntu bash
+</span><span class='line'>root@00aca8c2f880:/# ls /host
+</span><span class='line'>test.txt
+</span><span class='line'>root@00aca8c2f880:/#</span></code></pre></td></tr></table></div></figure>
+
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2016-07-31T00:15:38-04:00" pubdate data-updated="true">Jul 31<span>st</span>, 2016</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/docker/'>Docker</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2017
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<!-- Drip -->
+<script type="text/javascript">
+  var _dcq = _dcq || [];
+  var _dcs = _dcs || {};
+  _dcs.account = '7508815';
+  (function() {
+    var dc = document.createElement('script');
+    dc.type = 'text/javascript'; dc.async = true;
+    dc.src = '//tag.getdrip.com/7508815.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(dc, s);
+  })();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: NPM | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/npm/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Viewing All Versions of an NPM Package (Including Pre-Release)]]></title>
     <link href="http://willi.am/blog/2015/07/17/viewing-all-versions-of-an-npm-package-including-pre-release/"/>
-    <updated>2015-07-17T11:10:40-07:00</updated>
+    <updated>2015-07-17T14:10:40-04:00</updated>
     <id>http://willi.am/blog/2015/07/17/viewing-all-versions-of-an-npm-package-including-pre-release</id>
     <content type="html"><![CDATA[<p>If you want to view all released versions of an npm package, there&rsquo;s an easy way to do it:</p>
 
@@ -98,7 +98,7 @@ react-native@0.7.1 '0.7.1'
   <entry>
     <title type="html"><![CDATA[Testing Whether an NPM Module Is Installed]]></title>
     <link href="http://willi.am/blog/2014/03/29/testing-whether-an-npm-module-is-installed/"/>
-    <updated>2014-03-29T10:12:23-07:00</updated>
+    <updated>2014-03-29T13:12:23-04:00</updated>
     <id>http://willi.am/blog/2014/03/29/testing-whether-an-npm-module-is-installed</id>
     <content type="html"><![CDATA[<p>Node doesn&rsquo;t have a well documented way of checking whether a module is available.
 This is usually fine. You just include a package.json in your project, and expect people to run <code>npm install</code>.

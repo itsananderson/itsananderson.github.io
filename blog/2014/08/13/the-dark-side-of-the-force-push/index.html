@@ -1,0 +1,344 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>The Dark Side of the Force Push - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="Let&rsquo;s talk about force pushing in Git.
+We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely. TL;DR Do &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="The Dark Side of the Force Push - Will Anderson" />
+    <meta name="twitter:description" content="Let&rsquo;s talk about force pushing in Git.
+We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely. TL;DR Do &hellip;" />
+
+	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="http://william-backend.azurewebsites.net/feed/" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">The Dark Side of the Force Push</h2>
+	<div class="entry-content">
+		<p>Let&rsquo;s talk about force pushing in Git.
+We&rsquo;ll cover when you should do it, when you shouldn&rsquo;t, and how to do it safely.</p>
+
+<p>TL;DR</p>
+
+<p>Do this:</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/obi-wan-droids.gif" alt="Force Push Droids" /></p>
+
+<p>Not this:</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/obi-wan-hates.gif" alt="Force Push Fail" /></p>
+
+<h2>Pushing Changes</h2>
+
+<p>When you push changes to a remote server, Git prevents you from pushing your changes if the remote has changes you&rsquo;re missing.
+This feature is designed to prevent data loss.
+If you run into this, you&rsquo;ll likely see a message similar to this:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ git push origin my-branch
+</span><span class='line'>To git@github.com:itsananderson/foo.git
+</span><span class='line'> ! [rejected]        my-branch -&gt; my-branch (non-fast-forward)
+</span><span class='line'>error: failed to push some refs to 'git@github.com:itsananderson/foo.git'
+</span><span class='line'>hint: Updates were rejected because the tip of your current branch is behind
+</span><span class='line'>hint: its remote counterpart. Integrate the remote changes (e.g.
+</span><span class='line'>hint: 'git pull ...') before pushing again.
+</span><span class='line'>hint: See the 'Note about fast-forwards' in 'git push --help' for details.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>99% of the time, the appropriate solution to this message is to <code>git pull</code> to fetch changes from the server,
+then <code>git push origin my-branch</code> to push your updated branch to the server.</p>
+
+<h2>Rebasing</h2>
+
+<p>The only real exception to the &ldquo;always pull, then push&rdquo; rule, is rebasing.
+When you rebase, you&rsquo;re creating a copy of your commit history.
+Git treats this new copy of history as a completely different set of commits (because it is).</p>
+
+<p>I won&rsquo;t go into deep detail about rebasing, because it&rsquo;s been covered many times before.
+GitHub has a good <a href="https://help.github.com/articles/using-git-rebase">tutorial on rebasing</a>.
+If you want some <a href="http://willi.am/git-fundamentals-rebasing/">high-level concept slides on rebasing</a>, I wrote some for a team presentation.</p>
+
+<p>Point is, when you rebase a branch that you&rsquo;ve pushed to a remote server, your copy of the branch and the server&rsquo;s copy will be considered completely distinct.
+This means when you try to push, the remote server will reject your changes because they&rsquo;re not a fast-forward.
+However, if you <code>git pull</code>, you&rsquo;ll end up with two copies of the branch which are then merged with a merge commit.
+In addition to muddling your commit history, this will re-introduce whatever you were trying to change with your rebase.</p>
+
+<p>In this very specific case, the correct solution <em>might</em> be to <code>git push origin my-branch -f</code>.</p>
+
+<h2>Force Push Basics</h2>
+
+<p>So you have a branch that you&rsquo;ve rebased, and you want to force push it to the remote server.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/force-push-will-smith.gif" alt="Will Smith Force Push" /></p>
+
+<p>First, make sure nobody&rsquo;s pulled down your branch and done local work off of it.
+If they have, your force push may make it difficult for them to reconcile their changes with yours.</p>
+
+<p>If you&rsquo;re working on a team and need to rebase a shared branch, here are the steps:</p>
+
+<ol>
+<li>Make sure your team has committed and pushed any pending changes</li>
+<li>Ask your team to pause work on that branch temporarily</li>
+<li>Make sure you have the latest changes for that branch (git pull)</li>
+<li>Rebase, then <code>git push origin &lt;yourbranch&gt; -f</code></li>
+<li>Have your team fix up their local branches with <code>git checkout &lt;yourbranch&gt;</code>, <code>git fetch</code> and <code>git reset --hard origin/&lt;yourbranch&gt;</code></li>
+</ol>
+
+
+<p>As you can see, this is a complicated process.
+It requires team coordination, and potentially blocks team members from doing work while you rebase.
+As a general rule, avoid rebasing or otherwise modifying history on pushed branches unless you&rsquo;ve accidentally published <a href="https://help.github.com/articles/remove-sensitive-data">sensitive data</a>.</p>
+
+<p>If you&rsquo;re working alone, the process is a little simpler.
+Simply rebase and then <code>git push origin &lt;yourbranch&gt; -f</code>.
+Keep in mind, however, that you may still cause headaches for other people if you rebase on a public GitHub (Bitbucket, etc.) repository.</p>
+
+<h2>Aside: Understanding Remote Tracking Branches</h2>
+
+<p>Git uses the concept of remote tracking branches (or branch upstreams) to help you associate your local branches with the branches on remote servers.
+If you&rsquo;ve ever seen this message, that&rsquo;s what it&rsquo;s talking about: <code>Branch my-branch set up to track remote branch my-branch origin.</code></p>
+
+<p>Additionally, if you&rsquo;ve seen this message when you ran <code>git status</code>, it means your branch is tracking a remote branch:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>On branch my-branch
+</span><span class='line'>Your branch and 'origin/my-branch' have diverged,
+</span><span class='line'>and have 5 and 2 different commit each, respectively.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, when you run <code>git pull</code> or <code>git push</code>, Git can use the remote tracking branch to know which remote branch to interact with.
+This keeps you from having to type <code>git pull origin my-branch</code> every time.</p>
+
+<p>There&rsquo;s a blog post with more info on <a href="http://felipec.wordpress.com/2013/09/01/advanced-git-concepts-the-upstream-tracking-branch/">remote tracking branches and upstreams</a>.</p>
+
+<h2>Force Push Pitfalls</h2>
+
+<p>When you start force pushing, there are a few pitfalls you should be aware of.</p>
+
+<p><img src="http://itsananderson.blob.core.windows.net/post-images/force-push-yoda.gif" alt="Yoda Force Push" /></p>
+
+<h3>Overwriting Changes</h3>
+
+<p>Before you force push a branch, double check that nobody has pushed new changes to that branch.
+If they have, and you don&rsquo;t pull them in, you&rsquo;ll overwrite them when you force push.</p>
+
+<p>With online source control, you can just browse the repository and check the commit history for your branch.</p>
+
+<p>If you don&rsquo;t have a web UI, you can also check directly in the source.</p>
+
+<ol>
+<li>Run <code>git fetch</code> to pull down the latest changes to your machine</li>
+<li>Run <code>git log origin/&lt;yourbranch&gt;</code> to remote branch&rsquo;s log</li>
+<li>If you don&rsquo;t see any new commits, it&rsquo;s probably safe to proceed (ignoring developer race conditions)</li>
+<li>If you see new changes, resolve them into your local branch before you force push</li>
+</ol>
+
+
+<p>As with software, you can run into a race condition.
+If somebody pushes changes between when you fetch and when you push, you may still overwrite them.
+To avoid this, communicate with your team.
+A simple &ldquo;don&rsquo;t push anything on <yourbranch> for a minute&rdquo;, followed up by an &ldquo;all clear&rdquo; should do the trick.</p>
+
+<h3>Overwriting Other Branches</h3>
+
+<p>When you push and pull, Git can use remote tracking branches (see above) to infer which remote branch you want to push/pull from.
+This is generally ok for normal push/pull activity, but when you force push, it can be dangerous.</p>
+
+<p>By default, Git responds to <code>git push</code> by pushing <em>all</em> branches that exist on both your local machine and the remote server.
+This means, if you have commits on master and my-feature-branch, and you run <code>git push</code>, it will push your changes from both branches at once.</p>
+
+<p>In Git 2.0, this behavior was changed to only push the current branch, but older versions still have this unexpected behavior.
+To fix it, run the following command:</p>
+
+<p><code>git config --global push.default simple</code></p>
+
+<p>Now if you run <code>git push</code>, it will only try to push your current branch.</p>
+
+<p>The default push behavior becomes especially dangerous when you force push.
+If, for example, you run <code>git push -f</code>, and your master branch is behind the remote server&rsquo;s master,
+you may accidentally remove commits from master.</p>
+
+<p>For this reason, I recommend two things:</p>
+
+<ol>
+<li>Configure push.default with the safer <code>simple</code> setting</li>
+<li>Always explicitly state the remote and branch name when you force push: <code>git push -f origin my-feature-branch</code></li>
+</ol>
+
+
+<h2>In Conclusion</h2>
+
+<p>Hopefully this gives you a good overview of the how/why/when of force pushing.</p>
+
+<p>If you haven&rsquo;t already, be sure to read the section on force push pitfalls.
+They&rsquo;re important to understand, and they&rsquo;re the main reason I wrote this post.</p>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-13T02:26:08-04:00" pubdate data-updated="true">Aug 13<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/git/'>Git</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2017
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<!-- Drip -->
+<script type="text/javascript">
+  var _dcq = _dcq || [];
+  var _dcs = _dcs || {};
+  _dcs.account = '7508815';
+  (function() {
+    var dc = document.createElement('script');
+    dc.type = 'text/javascript'; dc.async = true;
+    dc.src = '//tag.getdrip.com/7508815.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(dc, s);
+  })();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

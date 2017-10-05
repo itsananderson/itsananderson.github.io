@@ -4,7 +4,7 @@
   <title><![CDATA[Category: React Native | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/react-native/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Watching Custom Directories From the React Native Packager]]></title>
     <link href="http://willi.am/blog/2015/05/24/watching-custom-directories-from-the-react-native-packager/"/>
-    <updated>2015-05-24T18:51:57-07:00</updated>
+    <updated>2015-05-24T21:51:57-04:00</updated>
     <id>http://willi.am/blog/2015/05/24/watching-custom-directories-from-the-react-native-packager</id>
     <content type="html"><![CDATA[<p>React Native projects ship with a packager that builds and serves your JavaScript resources. It also watches your project folder for changes, and rebuilds. However, if you link a Node module from a different directory, the packager won&rsquo;t see changes that are made to that package.</p>
 
@@ -33,7 +33,7 @@
   <entry>
     <title type="html"><![CDATA[React Native: Fix for "onlyChild must be passed a children with exactly one child"]]></title>
     <link href="http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/"/>
-    <updated>2015-05-08T07:37:37-07:00</updated>
+    <updated>2015-05-08T10:37:37-04:00</updated>
     <id>http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child</id>
     <content type="html"><![CDATA[<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
 

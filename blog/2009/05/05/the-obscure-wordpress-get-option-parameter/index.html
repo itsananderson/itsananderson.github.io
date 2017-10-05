@@ -1,0 +1,203 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>The Obscure WordPress get_option Parameter - Will Anderson</title>
+	<meta name="author" content="Will Anderson">
+
+	
+	<meta name="description" content="Any WordPress Plugin developer worth their salt knows about the get_option function, which allows options to be retrieved from the database. What I &hellip;">
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@itsananderson" />
+    <meta name="twitter:title" content="The Obscure WordPress get_option Parameter - Will Anderson" />
+    <meta name="twitter:description" content="Any WordPress Plugin developer worth their salt knows about the get_option function, which allows options to be retrieved from the database. What I &hellip;" />
+
+	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
+	<link rel="canonical" href="">
+	<link href="/favicon.ico" rel="shortcut icon">
+	<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+	<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+</head>
+
+
+<body>
+	<header id="header" class="inner"><h1><a href="/">Will Anderson</a></h1>
+<nav id="main-nav"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</nav>
+<nav id="mobile-nav">
+	<div class="alignleft menu">
+		<a class="button">Menu</a>
+		<div class="container"><ul class="main">
+	<li><a href="/work-with-me">Work With Me</a></li>
+	<li><a href="/blog/archives">Archives</a></li>
+</ul>
+</div>
+	</div>
+	<div class="alignright search">
+		<a class="button"></a>
+		<div class="container">
+			<form action="https://www.google.com/search" method="get">
+				<input type="text" name="q" results="0">
+				<input type="hidden" name="q" value="site:willi.am">
+			</form>
+		</div>
+	</div>
+</nav>
+<nav id="sub-nav" class="alignright">
+	<div class="social">
+		
+		
+		
+		<a class="twitter" href="http://twitter.com/itsananderson" title="Twitter">Twitter</a>
+		
+		
+		<a class="github" href="https://github.com/itsananderson" title="GitHub">GitHub</a>
+		
+    
+		
+		
+		
+		
+		
+		<a class="rss" href="http://william-backend.azurewebsites.net/feed/" title="RSS">RSS</a>
+		
+    
+	</div>
+	<form class="search" action="https://www.google.com/search" method="get">
+		<input class="alignright" type="text" name="q" results="0">
+		<input type="hidden" name="q" value="site:willi.am">
+	</form>
+</nav>
+
+</header>
+	
+		
+	
+	<div id="content" class="inner"><article class="post">
+	<h2 class="title">The Obscure WordPress Get_option Parameter</h2>
+	<div class="entry-content">
+		<p>Any WordPress Plugin developer worth their salt knows about the <code>get_option</code> function, which allows options to be retrieved from the database. What I recently discovered is that this function accepts a second parameter, indicating a default value to be returned if the option doesn&rsquo;t exist in the database.</p>
+
+<p>Here&rsquo;s a simple example of the &ldquo;old&rdquo; and &ldquo;new&rdquo; ways of retrieving options from the database:</p>
+
+<p>old:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span> <span class="s1">&#39;Option Name&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="k">if</span><span class="p">(</span> <span class="k">false</span> <span class="o">===</span> <span class="nv">$option</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="s1">&#39;My real option value.&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>new:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nv">$option</span> <span class="o">=</span> <span class="nx">get_option</span><span class="p">(</span><span class="s1">&#39;option_name&#39;</span><span class="p">,</span> <span class="s1">&#39;default&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>As you can see, this simplifies option retrieval and makes your code just a little easier to read.</p>
+
+<p><strong>EDIT:</strong> Thanks <a href="http://nickohrn.com/">Nick Ohrn</a> for pointing out a bug in the first code snippet. I&rsquo;ve updated it so nobody is confused.</p>
+
+		<div style="margin-top: 40px; background-color: #ffffdc; border: 1px solid #ffd9aa; padding: 5px;">
+			I am now accepting new clients for part-time consulting and software development projects.
+			<a href="/work-with-me">Learn more</a>
+		</div>
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-05T01:18:54-04:00" pubdate data-updated="true">May 5<span>th</span>, 2009</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
+
+	<div class="share">
+	<p style="text-align: center">
+		I haven't configured comments for this blog, but if you want to get in touch, you can find me on <a href="https://twitter.com/itsananderson">Twitter</a>
+	</p>
+	<!--<div class="addthis_toolbox addthis_default_style ">
+		
+		
+		<a class="addthis_button_tweet"></a>
+		
+		
+		
+	</div>
+	-->
+</div>
+
+
+
+</div>
+	<footer id="footer" class="inner">Copyright &copy; 2017
+
+    Will Anderson
+
+</footer>
+	<script src="/javascripts/slash.js"></script>
+
+
+
+
+
+<!-- Drip -->
+<script type="text/javascript">
+  var _dcq = _dcq || [];
+  var _dcs = _dcs || {};
+  _dcs.account = '7508815';
+  (function() {
+    var dc = document.createElement('script');
+    dc.type = 'text/javascript'; dc.async = true;
+    dc.src = '//tag.getdrip.com/7508815.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(dc, s);
+  })();
+</script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-6776456-2', 'willi.am');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

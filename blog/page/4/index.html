@@ -7,16 +7,18 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="You can store data as newline delimited JSON entries.
-Since JSON encodes newline characters, you can use newlines to separate entries. For more &hellip;">
+	<meta name="description" content="Supertest is a fantastic tool for testing your API.
+Here&rsquo;s how I use it to test APIs. Setup You can configure supertest in a couple ways.
+If &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content="You can store data as newline delimited JSON entries.
-Since JSON encodes newline characters, you can use newlines to separate entries. For more &hellip;" />
+    <meta name="twitter:description" content="Supertest is a fantastic tool for testing your API.
+Here&rsquo;s how I use it to test APIs. Setup You can configure supertest in a couple ways.
+If &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -85,6 +87,258 @@ Since JSON encodes newline characters, you can use newlines to separate entries.
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2014/07/28/test-your-api-with-supertest/">
+		
+			How to Test Your API With Supertest</a>
+	</h2>
+	<div class="entry-content">
+		<p><a href="https://npmjs.org/package/supertest">Supertest</a> is a fantastic tool for testing your API.
+Here&rsquo;s how I use it to test APIs.</p>
+
+<h2>Setup</h2>
+
+<p>You can configure supertest in a couple ways.
+If you&rsquo;re testing an external site, you can configure supertest with the site&rsquo;s base url:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;supertest&#39;</span><span class="p">)(</span><span class="s1">&#39;http://example.com/&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you&rsquo;re testing an Express app, you can pass the app to supertest, and let it worry about setup/teardown of your site.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">myApp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../app.js&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;supertest&#39;</span><span class="p">)(</span><span class="nx">myApp</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The great thing about this approach is that supertest takes care of starting up and shutting down your site on a random port.
+This allows you to just write your tests, without worrying about starting apps, conflicting ports, etc.</p>
+
+<h2>Writing a Test</h2>
+
+<p>Once you&rsquo;ve imported supertest, it&rsquo;s quite simple to use.
+In my examples, I&rsquo;ll be using the test framework provided by <a href="https://npmjs.org/package/mocha">Mocha</a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;my api&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;returns hello world&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">request</span><span class="p">.</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span class='line'>            <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Hello, World!&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is about as simple as the tests get.
+We call the root of the site, and expect the response body to equal &ldquo;Hello, World!&rdquo;.</p>
+
+<p>Since the request is async, we take in a &ldquo;done&rdquo; parameter (which Mocha passes to us).
+We call that at the end of the test when we&rsquo;ve actually had a chance to verify the server response.</p>
+
+<p>You can easily test a JSON response with supertest:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span><span class="p">.</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">message</span><span class="o">:</span> <span class="s2">&quot;Hello, World!&quot;</span><span class="p">},</span> <span class="nx">done</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Headers are also simple to verify.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span><span class="p">.</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Status codes are even easier.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/some-error-route&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="s1">&#39;Oops. Something went wrong&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can do non-GET requests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">};</span>
+</span><span class='line'><span class="nx">request</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/create-user&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">user</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="nx">done</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can set headers for the request.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You can match regular expressions against headers and bodies.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">request</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/redirect&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="s1">&#39;Location&#39;</span><span class="o">:</span> <span class="sr">/\/destination/</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">expect</span><span class="p">(</span><span class="mi">301</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you need to do multiple requests in series, you can chain the &ldquo;expect&rdquo; callbacks:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// Kick things off</span>
+</span><span class='line'><span class="nx">purgeUsers</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">purgeUsers</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">request</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users/purge&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="nx">checkNoUsers</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">checkNoUsers</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">request</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">([],</span> <span class="nx">addUser</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">addUser</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">request</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">send</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">})</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span><span class="kc">true</span><span class="p">},</span> <span class="nx">checkUsers</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">function</span> <span class="nx">checkUsers</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">done</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+</span><span class='line'>    <span class="nx">request</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/users&#39;</span><span class="p">)</span>
+</span><span class='line'>        <span class="p">.</span><span class="nx">expect</span><span class="p">([{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bob&#39;</span><span class="p">}],</span> <span class="nx">done</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Finally, if you need to do some custom processing on a result, use the <code>.end()</code> function.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">assert</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;assert&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="nx">request</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/foo&#39;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">assert</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">foo</span><span class="p">,</span> <span class="s1">&#39;Bar&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">done</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>There are probably more features that I&rsquo;m not aware of, but this is a rundown of the ones I&rsquo;m most familiar with.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-28T17:18:23-04:00" pubdate data-updated="true">Jul 28<span>th</span>, 2014</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/testing/'>Testing</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -262,7 +516,7 @@ Not only does it pretty print, but it allows you to pull out specific data, and 
   
 
 
-<time datetime="2014-07-16T13:48:29-07:00" pubdate data-updated="true">Jul 16<span>th</span>, 2014</time></div>
+<time datetime="2014-07-16T16:48:29-04:00" pubdate data-updated="true">Jul 16<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -278,7 +532,7 @@ Not only does it pretty print, but it allows you to pull out specific data, and 
     <article class="post">
 	<h2 class="title">
 		
-		<a href="/blog/2014/07/09/azure-blob-storage-and-node-all-together/">
+		<a href="/blog/2014/07/10/azure-blob-storage-and-node-all-together/">
 		
 			Azure Blob Storage and Node: All Together</a>
 	</h2>
@@ -748,7 +1002,7 @@ There are probably better ways of getting an evenly distributed selection of ima
   
 
 
-<time datetime="2014-07-09T21:16:08-07:00" pubdate data-updated="true">Jul 9<span>th</span>, 2014</time></div>
+<time datetime="2014-07-10T00:16:08-04:00" pubdate data-updated="true">Jul 10<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -1128,7 +1382,7 @@ In the final post in this series, we&rsquo;ll talk about putting everything toge
   
 
 
-<time datetime="2014-07-08T20:47:12-07:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time></div>
+<time datetime="2014-07-08T23:47:12-04:00" pubdate data-updated="true">Jul 8<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -1462,7 +1716,7 @@ In the next post, we&rsquo;ll cover <a href="/blog/2014/07/08/azure-blob-storage
   
 
 
-<time datetime="2014-07-07T17:33:03-07:00" pubdate data-updated="true">Jul 7<span>th</span>, 2014</time></div>
+<time datetime="2014-07-07T20:33:03-04:00" pubdate data-updated="true">Jul 7<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -1765,7 +2019,7 @@ In the next post, we&rsquo;ll cover <a href="/blog/2014/07/07/azure-blob-storage
   
 
 
-<time datetime="2014-07-03T16:23:46-07:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2014</time></div>
+<time datetime="2014-07-03T19:23:46-04:00" pubdate data-updated="true">Jul 3<span>rd</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -2124,7 +2378,7 @@ Next time we&rsquo;ll talk about <a href="/blog/2014/07/03/azure-blob-storage-an
   
 
 
-<time datetime="2014-07-02T13:27:10-07:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2014</time></div>
+<time datetime="2014-07-02T16:27:10-04:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -2308,7 +2562,7 @@ In the next post, we&rsquo;ll talk about <a href="/blog/2014/07/02/azure-blob-st
   
 
 
-<time datetime="2014-07-01T06:00:03-07:00" pubdate data-updated="true">Jul 1<span>st</span>, 2014</time></div>
+<time datetime="2014-07-01T09:00:03-04:00" pubdate data-updated="true">Jul 1<span>st</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -2389,7 +2643,7 @@ Then I put together an Azure website (in Node, of course) that requests resized 
   
 
 
-<time datetime="2014-06-30T14:09:17-07:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time></div>
+<time datetime="2014-06-30T17:09:17-04:00" pubdate data-updated="true">Jun 30<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
@@ -2587,68 +2841,11 @@ Mostly, I&rsquo;m curious how well it would work for &ldquo;real&rdquo; api deve
   
 
 
-<time datetime="2014-06-27T20:25:43-07:00" pubdate data-updated="true">Jun 27<span>th</span>, 2014</time></div>
+<time datetime="2014-06-27T23:25:43-04:00" pubdate data-updated="true">Jun 27<span>th</span>, 2014</time></div>
 	<div class="tags">
 
 
 	<a class='category' href='/blog/categories/node/'>Node</a>, <a class='category' href='/blog/categories/rest/'>REST</a>
-
-
-</div>
-	
-</div>
-</article>
-
-
-    <article class="post">
-	<h2 class="title">
-		
-		<a href="/blog/2014/06/20/editing-vim-macros/">
-		
-			Editing Vim Macros</a>
-	</h2>
-	<div class="entry-content">
-		<p>Vim macros are great.
-If you&rsquo;re not familiar with them, there&rsquo;s a great <a href="http://vim.wikia.com/wiki/Macros">Vim tips article</a>.</p>
-
-<p>Something cool I&rsquo;ve discovered is that you can edit macros.
-This is helpful if you accidentally mess up a macro recording, or decide you need to tweak it in some way.</p>
-
-<p>If you recorded a macro to register <code>a</code>, you can paste its contents into the current document with <code>"ap</code>.
-From there, you can edit the macro and then yank it back into the <code>a</code> register with <code>"ay</code></p>
-
-<p>This also makes it easy to paste your macros into your vimrc for future use.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='vim'><span class='line'><span class="c">&quot; delete first word of line</span>
-</span><span class='line'><span class="k">let</span> @<span class="k">d</span><span class="p">=</span><span class="s1">&#39;0dw&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-		
-		
-	</div>
-
-
-<div class="meta">
-	<div class="date">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-20T22:37:17-07:00" pubdate data-updated="true">Jun 20<span>th</span>, 2014</time></div>
-	<div class="tags">
-
-
-	<a class='category' href='/blog/categories/vim/'>Vim</a>
 
 
 </div>

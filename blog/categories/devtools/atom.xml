@@ -4,7 +4,7 @@
   <title><![CDATA[Category: DevTools | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/devtools/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[The Observer Effect and Debugging: How Dev Tools Can Change Your Code's Behavior]]></title>
     <link href="http://willi.am/blog/2016/08/13/the-observer-effect-and-debugging-how-dev-tools-can-change-your-codes-behavior/"/>
-    <updated>2016-08-13T08:39:00-07:00</updated>
+    <updated>2016-08-13T11:39:00-04:00</updated>
     <id>http://willi.am/blog/2016/08/13/the-observer-effect-and-debugging-how-dev-tools-can-change-your-codes-behavior</id>
     <content type="html"><![CDATA[<p>Chrome recently added a new feature to their JavaScript debugger where when you select a piece of code and hover over it, the code is evaluated and displayed in a little popover.
 In general, this is very useful.

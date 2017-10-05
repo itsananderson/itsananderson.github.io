@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Security | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/security/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[New Plugin: Minimum Password Strength]]></title>
     <link href="http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength/"/>
-    <updated>2011-12-14T14:09:34-08:00</updated>
+    <updated>2011-12-14T17:09:34-05:00</updated>
     <id>http://willi.am/blog/2011/12/14/new-plugin-minimum-password-strength</id>
     <content type="html"><![CDATA[<p>A couple of years ago I released a plugin called
 &ldquo;<a href="/plugins/minimum-password-length/">Minimum Password Length</a>&rdquo;.

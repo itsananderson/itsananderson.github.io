@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Dynamically Configure Your Git Email]]></title>
     <link href="http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email/"/>
-    <updated>2015-02-27T14:29:42-08:00</updated>
+    <updated>2015-02-27T17:29:42-05:00</updated>
     <id>http://willi.am/blog/2015/02/27/dynamically-configure-your-git-email</id>
     <content type="html"><![CDATA[<blockquote><p>This post is the second in a series on tuning your Git environment.
 The first post on <a href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/">customizing your git log</a> isn&rsquo;t a prerequisite, but may be useful.</p></blockquote>
@@ -78,13 +78,13 @@ I created a script and put it in <code>~/.git-scripts/email-guess.sh</code> (aga
 <h1>!/bin/bash</h1>
 
 <p>remote=<code>git remote -v | awk '/\(push\)$/ {print $2}'</code>
-email=<a href="&#109;&#97;&#105;&#x6c;&#x74;&#111;&#58;&#119;&#105;&#108;&#x6c;&#64;&#105;&#116;&#115;&#x61;&#x6e;&#97;&#x6e;&#100;&#x65;&#114;&#x73;&#111;&#x6e;&#46;&#x63;&#x6f;&#x6d;">&#x77;&#x69;&#x6c;&#108;&#x40;&#x69;&#x74;&#x73;&#x61;&#x6e;&#97;&#x6e;&#x64;&#101;&#114;&#x73;&#111;&#x6e;&#46;&#99;&#111;&#109;</a> # default</p>
+email=<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x77;&#x69;&#x6c;&#x6c;&#64;&#x69;&#x74;&#115;&#x61;&#110;&#97;&#110;&#100;&#x65;&#114;&#x73;&#111;&#x6e;&#46;&#99;&#x6f;&#109;">&#119;&#x69;&#108;&#108;&#64;&#105;&#116;&#115;&#x61;&#110;&#x61;&#110;&#x64;&#x65;&#x72;&#x73;&#111;&#x6e;&#x2e;&#99;&#x6f;&#109;</a> # default</p>
 
 <p>if [[ $remote == <em>github.com:Microsoft</em> ]]; then
-  email=<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x77;&#x69;&#x61;&#110;&#x64;&#x40;&#x6d;&#105;&#99;&#114;&#x6f;&#115;&#111;&#x66;&#x74;&#46;&#x63;&#111;&#109;">&#119;&#x69;&#97;&#110;&#x64;&#x40;&#109;&#x69;&#99;&#114;&#x6f;&#115;&#x6f;&#102;&#116;&#x2e;&#x63;&#x6f;&#109;</a>
+  email=<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x77;&#x69;&#97;&#110;&#100;&#64;&#109;&#105;&#x63;&#114;&#x6f;&#x73;&#111;&#102;&#116;&#x2e;&#x63;&#x6f;&#x6d;">&#119;&#x69;&#x61;&#x6e;&#x64;&#x40;&#109;&#105;&#x63;&#x72;&#x6f;&#x73;&#111;&#102;&#116;&#x2e;&#99;&#111;&#x6d;</a>
 fi
 if [[ $remote == <em>itsananderson.visualstudio.com</em> ]]; then
-  email=<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x77;&#105;&#x6c;&#x6c;&#64;&#x63;&#111;&#x64;&#x65;&#97;&#119;&#x68;&#x69;&#x6c;&#101;&#46;&#x63;&#x6f;&#109;">&#x77;&#x69;&#108;&#x6c;&#x40;&#x63;&#x6f;&#100;&#101;&#x61;&#119;&#104;&#105;&#108;&#x65;&#x2e;&#99;&#111;&#109;</a>
+  email=<a href="&#109;&#x61;&#105;&#108;&#116;&#111;&#58;&#x77;&#x69;&#x6c;&#108;&#x40;&#99;&#x6f;&#100;&#x65;&#97;&#x77;&#104;&#105;&#108;&#x65;&#x2e;&#99;&#x6f;&#109;">&#119;&#105;&#108;&#108;&#64;&#x63;&#111;&#100;&#x65;&#97;&#119;&#x68;&#x69;&#x6c;&#101;&#46;&#99;&#111;&#x6d;</a>
 fi</p>
 
 <p>echo &ldquo;Configuring user.email as $email&rdquo;
@@ -142,7 +142,7 @@ As I said in the previous post, you should take this as an example that you can 
   <entry>
     <title type="html"><![CDATA[Customize Your Git Log Format]]></title>
     <link href="http://willi.am/blog/2015/02/19/customize-your-git-log-format/"/>
-    <updated>2015-02-19T14:29:06-08:00</updated>
+    <updated>2015-02-19T17:29:06-05:00</updated>
     <id>http://willi.am/blog/2015/02/19/customize-your-git-log-format</id>
     <content type="html"><![CDATA[<p><blockquote><p>Over the last few months, I&rsquo;ve been learning about woodworking in my spare time. As I&rsquo;ve read articles and watched YouTube videos, I&rsquo;ve noticed that the most successful woodworkers have a detailed knowledge of their tools. Not only do they know how to use and maintain the tools of their craft, but they&rsquo;re not afraid to modify them to better serve their needs. When they need a custom tool or jig to speed up their work, they make one. Watching and reading about these craftsmen and their tools, I&rsquo;ve noticed parallels in my full time craft: Software Development.</p></p><p><p>In the next few posts, I&rsquo;ll share some of the software &ldquo;jigs&rdquo; I&rsquo;ve created to make myself more efficient. The primary focus posts will be configuration and customization of Git.</p></blockquote></p>
 
@@ -229,7 +229,7 @@ The whole point is to customize it to fit your needs.</p>
   <entry>
     <title type="html"><![CDATA[Unpacking a Git Database]]></title>
     <link href="http://willi.am/blog/2014/10/14/unpacking-a-git-database/"/>
-    <updated>2014-10-14T13:57:15-07:00</updated>
+    <updated>2014-10-14T16:57:15-04:00</updated>
     <id>http://willi.am/blog/2014/10/14/unpacking-a-git-database</id>
     <content type="html"><![CDATA[<p>While writing the <a href="/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/">previous post</a>, I discovered a cool Git command which I thought I&rsquo;d share.</p>
 
@@ -258,7 +258,7 @@ Your packed objects are unpacked into <code>.git/objects/</code> folder.</p>
   <entry>
     <title type="html"><![CDATA[For the Last Time: Git Stores Snapshots Not Diffs]]></title>
     <link href="http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs/"/>
-    <updated>2014-10-14T10:15:11-07:00</updated>
+    <updated>2014-10-14T13:15:11-04:00</updated>
     <id>http://willi.am/blog/2014/10/14/for-the-last-time-git-stores-snapshots-not-diffs</id>
     <content type="html"><![CDATA[<p>I have this discussion every month or two, so it&rsquo;s finally time to write a blog post I can point people to instead.
 <strong>Git stores a snapshot of the entire file, not a diff</strong></p>
@@ -291,9 +291,9 @@ If you want a more detailed explanation about how Git stores data, you can watch
   
   <entry>
     <title type="html"><![CDATA[Introducing Edge-Git]]></title>
-    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
-    <updated>2014-09-16T22:50:30-07:00</updated>
-    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
+    <link href="http://willi.am/blog/2014/09/17/introducing-edge-git/"/>
+    <updated>2014-09-17T01:50:30-04:00</updated>
+    <id>http://willi.am/blog/2014/09/17/introducing-edge-git</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
 The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
 Unfortunately both repositories are severely lacking in features and documentation.

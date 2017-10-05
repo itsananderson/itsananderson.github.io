@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Gmail | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/gmail/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using jQuery and Gmail's Plus-Addressing to Fight Email Spam]]></title>
-    <link href="http://willi.am/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam/"/>
-    <updated>2009-02-26T21:26:55-08:00</updated>
-    <id>http://willi.am/blog/2009/02/26/using-jquery-and-gmails-plus-addressing-to-fight-email-spam</id>
+    <link href="http://willi.am/blog/2009/02/27/using-jquery-and-gmails-plus-addressing-to-fight-email-spam/"/>
+    <updated>2009-02-27T00:26:55-05:00</updated>
+    <id>http://willi.am/blog/2009/02/27/using-jquery-and-gmails-plus-addressing-to-fight-email-spam</id>
     <content type="html"><![CDATA[<p>Many people fight spam bots by obfuscating their emails (for example &ldquo;joe [at] example [dot] com&rdquo; or &ldquo;joe@{REMOVETHIS}example.com&rdquo;). This does an OK job, but it&rsquo;s also a royal pain for the visitor, who has to type in, or fix your email address if they want to send you an email. The ultimate spam fighting question arises: &ldquo;How do you keep bots out while letting real users in&rdquo;. GMail&rsquo;s plus-addressing feature and jQuery might be able to bring us one step closer to an answer.</p>
 
 <p>If you use Google&rsquo;s email services (GMail or Google Apps), you have a powerful email feature available. Plus-addressing means that bill&#64;gmail.com, bill+something&#64;gmail.com and bill+anything&#64;gmail.com all point to the same email address. When deciding what address to deliver the message to, Google drops everything after the plus sign. you can then actually use filters to move items to folders inside your mailbox (for example, you could use example+bank&#64;gmail.com for your banking). Doing this also makes it just a little harder (though not impossible) for bots to get your real email address.</p>

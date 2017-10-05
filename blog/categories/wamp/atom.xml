@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Wamp | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/wamp/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-09-27T22:13:08-07:00</updated>
+  <updated>2017-10-05T17:58:23-04:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Wamp Alias Directories]]></title>
     <link href="http://willi.am/blog/2009/01/14/wamp-alias-directories/"/>
-    <updated>2009-01-14T12:45:43-08:00</updated>
+    <updated>2009-01-14T15:45:43-05:00</updated>
     <id>http://willi.am/blog/2009/01/14/wamp-alias-directories</id>
     <content type="html"><![CDATA[<p>I use <a href="http://www.wampserver.com/">Wamp Server</a> together with <a href="http://www.jetbrains.com/phpstorm/">PhpStorm</a> to develop PHP applications on my local machine.
 This works well because I can do debugging (thanks to <a href="http://www.xdebug.org/">xdebug</a>) and can readily view and edit files.
