@@ -20,17 +20,22 @@ I'm a full-time software developer at Dropbox, but in my evenings and weekends I
 
 While I've worked on projects across a broad range of technologies, the following areas are where I have the most experience and passion.
 
-Node.js APIs
+Scalable APIs with Node and Docker
 ---
 
-My passion for web APIs extends beyond WordPress. If you're building a web API from scratch, Node.js is a great way to do it. Node's high-performance language design makes it quick and easy to build APIs that scale to thousands of users.
+I love scalable systems, and I love JavaScript, so Docker and Node are two of my favorite tools for building scalable APIs.
+If you need an API or a web application that can scale with your needs, I would love to help you achieve your goals!
 
-WordPress Plugins
+
+WordPress Plugins and Auxiliary Services
 ---
 
-I've been writing custom software for WordPress since 2008. My primary focus is on custom plugin development, but I've also delivered a number of complete web applications using WordPress as the platform.
+I've been writing custom plugins and themes for WordPress since 2008.
+My primary focus is on custom plugin development, but I've also delivered a number of complete web applications using WordPress as a CMS.
 
-In recent years, my focus has narrowed to the WordPress REST API. This is an exciting space, because it enables websites and mobile apps to connect to the enormous WordPress ecosystem.
+While I enjoy building websites and web apps with WordPress, I really get excited about projects that combine WordPress with other parts of the web.
+This includes projects that harness the WordPress REST API, as well as projects that integrate WordPress with third-party services.
+If you need to build a service that connects to WordPress, or you want to connect WordPress to an existing service, I would love to help you!
 
 How To Reach Me
 ---
