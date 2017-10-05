@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/testing/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-05T17:58:23-04:00</updated>
+  <updated>2017-10-05T15:00:32-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Writing Useful Tests: Naming Tests and Writing Assertions]]></title>
     <link href="http://willi.am/blog/2016/10/04/writing-useful-tests-naming-tests-and-writing-assertions/"/>
-    <updated>2016-10-04T07:52:58-04:00</updated>
+    <updated>2016-10-04T04:52:58-07:00</updated>
     <id>http://willi.am/blog/2016/10/04/writing-useful-tests-naming-tests-and-writing-assertions</id>
     <content type="html"><![CDATA[<p>Last time I blogged about <a href="/blog/2016/08/22/writing-useful-tests-organization/">organizing your tests</a> so that they&rsquo;re easier to maintain.
 Today I want to look at why you should put thought into naming your tests and writing assertions.</p>
@@ -97,7 +97,7 @@ Plus, your &ldquo;tests are failing&rdquo; email will tell you why the test is f
   <entry>
     <title type="html"><![CDATA[Writing Useful Tests: Organization]]></title>
     <link href="http://willi.am/blog/2016/08/22/writing-useful-tests-organization/"/>
-    <updated>2016-08-22T23:31:32-04:00</updated>
+    <updated>2016-08-22T20:31:32-07:00</updated>
     <id>http://willi.am/blog/2016/08/22/writing-useful-tests-organization</id>
     <content type="html"><![CDATA[<p>Most people agree that writing tests is an important part of software development.
 However, not all tests are created equal.</p>
@@ -168,7 +168,7 @@ Putting effort and thought into your test structure now will pay dividends in th
   <entry>
     <title type="html"><![CDATA[How To Test Your API With Supertest]]></title>
     <link href="http://willi.am/blog/2014/07/28/test-your-api-with-supertest/"/>
-    <updated>2014-07-28T17:18:23-04:00</updated>
+    <updated>2014-07-28T14:18:23-07:00</updated>
     <id>http://willi.am/blog/2014/07/28/test-your-api-with-supertest</id>
     <content type="html"><![CDATA[<p><a href="https://npmjs.org/package/supertest">Supertest</a> is a fantastic tool for testing your API.
 Here&rsquo;s how I use it to test APIs.</p>

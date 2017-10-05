@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-05T17:58:23-04:00</updated>
+  <updated>2017-10-05T15:00:32-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Docker for Windows: Dealing With Windows Line Endings]]></title>
-    <link href="http://willi.am/blog/2016/08/12/docker-for-windows-dealing-with-windows-line-endings/"/>
-    <updated>2016-08-12T02:54:08-04:00</updated>
-    <id>http://willi.am/blog/2016/08/12/docker-for-windows-dealing-with-windows-line-endings</id>
+    <link href="http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings/"/>
+    <updated>2016-08-11T23:54:08-07:00</updated>
+    <id>http://willi.am/blog/2016/08/11/docker-for-windows-dealing-with-windows-line-endings</id>
     <content type="html"><![CDATA[<p>One of the issues with Docker (or any Linux/macOS based system) on Windows is the difference in how line endings are handled.
 Windows ends lines in a carriage return and a linefeed <code>\r\n</code> while Linux and macOS only use a linefeed <code>\n</code>.
 This becomes a problem when you try to create a file in Windows and run it on a Linux/macOS system, because those systems treat the <code>\r</code> as a piece of text rather than a newline.</p>
@@ -79,7 +79,7 @@ These techniques apply beyond just Docker, but hopefully the Docker-specific det
   <entry>
     <title type="html"><![CDATA[Docker for Windows: Interactive Sessions In MinTTY Git Bash]]></title>
     <link href="http://willi.am/blog/2016/08/08/docker-for-windows-interactive-sessions-in-mintty-git-bash/"/>
-    <updated>2016-08-08T22:01:41-04:00</updated>
+    <updated>2016-08-08T19:01:41-07:00</updated>
     <id>http://willi.am/blog/2016/08/08/docker-for-windows-interactive-sessions-in-mintty-git-bash</id>
     <content type="html"><![CDATA[<p>I recently installed Docker for Windows on my laptop. When I tried running the default <code>docker run -it ubuntu bash</code> demo from Git Bash, I ran into an issue I hadn&rsquo;t seen before.</p>
 
@@ -112,9 +112,9 @@ If you want to stick with MinTTY, you just need to prefix your interactive Docke
   
   <entry>
     <title type="html"><![CDATA[Docker for Windows: Sharing Host Volumes]]></title>
-    <link href="http://willi.am/blog/2016/07/31/docker-for-windows-sharing-host-volumes/"/>
-    <updated>2016-07-31T00:15:38-04:00</updated>
-    <id>http://willi.am/blog/2016/07/31/docker-for-windows-sharing-host-volumes</id>
+    <link href="http://willi.am/blog/2016/07/30/docker-for-windows-sharing-host-volumes/"/>
+    <updated>2016-07-30T21:15:38-07:00</updated>
+    <id>http://willi.am/blog/2016/07/30/docker-for-windows-sharing-host-volumes</id>
     <content type="html"><![CDATA[<p>I&rsquo;ve been playing with the new &ldquo;Docker for Windows&rdquo; tool recently, and I wanted to share a slightly obscure issue I ran across.</p>
 
 <p>Docker lets you share volumes between your containers and your host machine. This is handy during development time, when you want to be able to quickly iterate without having to continually rebuild your container.</p>

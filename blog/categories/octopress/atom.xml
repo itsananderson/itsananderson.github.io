@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-05T17:58:23-04:00</updated>
+  <updated>2017-10-05T15:00:32-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Configuring an Existing Octopress Site On a New Machine]]></title>
-    <link href="http://willi.am/blog/2015/05/08/configuring-an-existing-octopress-site-on-a-new-machine/"/>
-    <updated>2015-05-08T01:59:57-04:00</updated>
-    <id>http://willi.am/blog/2015/05/08/configuring-an-existing-octopress-site-on-a-new-machine</id>
+    <link href="http://willi.am/blog/2015/05/07/configuring-an-existing-octopress-site-on-a-new-machine/"/>
+    <updated>2015-05-07T22:59:57-07:00</updated>
+    <id>http://willi.am/blog/2015/05/07/configuring-an-existing-octopress-site-on-a-new-machine</id>
     <content type="html"><![CDATA[<p>Every time I set up a new machine, I have to figure out how write posts on my <a href="http://octopress.org">Octopress</a> blog. I usually follow <a href="https://github.com/colca/colca.github.com/blob/source/source/_posts/2014-01-27-octopress-sync-octopress-on-different-machines.markdown">these instructions</a>, but have to tweak them slightly to work for me. I fanally decided to write down the exact steps I use so I don&rsquo;t have to figure them out every time. Hopefully it&rsquo;s useful for someone else as well.</p>
 
 <h3>Step 1 &ndash; Run Octopress setup</h3>
@@ -51,7 +51,7 @@ git reset --hard origin/master
   <entry>
     <title type="html"><![CDATA[Use Blob Storage For Your Static Site Images]]></title>
     <link href="http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images/"/>
-    <updated>2014-09-24T04:37:53-04:00</updated>
+    <updated>2014-09-24T01:37:53-07:00</updated>
     <id>http://willi.am/blog/2014/09/24/use-blob-storage-for-your-static-site-images</id>
     <content type="html"><![CDATA[<p>The purpose of this post is to show how easy it is to use cloud storage for your static blog&rsquo;s binary resources.
 I&rsquo;ll be showing specific examples for Azure Blob Storage and GitHub Pages, but the same principles should apply to AWS, as well as any other static blogging service.</p>
@@ -96,7 +96,7 @@ If you have enough images, it may not be reasonable to manually update the posts
   <entry>
     <title type="html"><![CDATA[Hello, Octopress!]]></title>
     <link href="http://willi.am/blog/2014/03/30/hello-octopress/"/>
-    <updated>2014-03-30T12:48:36-04:00</updated>
+    <updated>2014-03-30T09:48:36-07:00</updated>
     <id>http://willi.am/blog/2014/03/30/hello-octopress</id>
     <content type="html"><![CDATA[<p>After <a href="https://twitter.com/druttka">David</a> wrote <a href="http://www.davidruttka.com/blog/2014/03/29/moving-from-wordpress-to-github-pages-using-jekyll-via-octopress/">these</a> nice <a href="http://www.davidruttka.com/blog/2014/03/29/setting-up-octopress-for-github-pages/">blog posts</a> at my request, I figured I should probably give Octopress the old college try.</p>
 ]]></content>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: React | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/react/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-05T17:58:23-04:00</updated>
+  <updated>2017-10-05T15:00:32-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[React Native: Fix for "onlyChild must be passed a children with exactly one child"]]></title>
     <link href="http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child/"/>
-    <updated>2015-05-08T10:37:37-04:00</updated>
+    <updated>2015-05-08T07:37:37-07:00</updated>
     <id>http://willi.am/blog/2015/05/08/react-native-fix-for-invariant-violation-onlychild-must-be-passed-a-children-with-exactly-one-child</id>
     <content type="html"><![CDATA[<p>If you&rsquo;ve run into <code>onlyChild must be passed a children with exactly one child</code> in React Native there&rsquo;s a simple fix.</p>
 
@@ -74,9 +74,9 @@ return (</p>
   
   <entry>
     <title type="html"><![CDATA[React: this.state is undefined]]></title>
-    <link href="http://willi.am/blog/2015/05/08/react-this-dot-state-is-undefined/"/>
-    <updated>2015-05-08T02:42:13-04:00</updated>
-    <id>http://willi.am/blog/2015/05/08/react-this-dot-state-is-undefined</id>
+    <link href="http://willi.am/blog/2015/05/07/react-this-dot-state-is-undefined/"/>
+    <updated>2015-05-07T23:42:13-07:00</updated>
+    <id>http://willi.am/blog/2015/05/07/react-this-dot-state-is-undefined</id>
     <content type="html"><![CDATA[<p>I ran into this today, so I&rsquo;m writing it down in case it helps someone else.</p>
 
 <p>Running something like the following, I found that <code>this.state</code> was undefined during render.</p>
