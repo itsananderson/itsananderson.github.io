@@ -42,13 +42,13 @@ Creating XAMPP Alias Directories
 
 Let's add some XAMPP alias directories.
 Suppose you want to add an alias called "dev".
-First, download [this alias template file](/uploads/xampp-alias-template.txt) and place it in the alias folder.
+First, download [this alias template file](/uploads/xampp-alias-template.conf) and place it in the alias folder.
 Rename it to "dev.conf" (or whatever you called your alias).
-You'll need to edit the template (again, as an administrator) and replace "DIRECTORY" (it's there twice) with the path to the alias and "ALIAS" with the name of your alias.
+You'll need to edit the template (again, as an administrator) and replace `c:\users\foo\programming\dev` (it's at the beginning of the file *and* at the end) with the path to the alias and `{ALIAS}` with the name of your alias.
 In our example, it looks something like this:
 
 ```
-<directory "c:\users\foo\programming\dev">
+<Directory "c:\users\foo\programming\dev">
     #
     # Possible values for the Options directive are "None", "All",
     # or any combination of:
@@ -72,11 +72,12 @@ In our example, it looks something like this:
 
     #
     # Controls who can get stuff from this server.
-    #     Order allow,deny
-    Allow from all
+    #
+    Require all granted
+
 </Directory>
 
-Alias /dev "C:\users\foo\programming\dev"
+Alias /dev "c:\users\foo\programming\dev"
 ```
 
 Restart Apache (you can do so from the XAMPP control panel) and check out http://localhost/dev.
