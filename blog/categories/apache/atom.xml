@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Apache | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/apache/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-05T15:23:25-07:00</updated>
+  <updated>2017-10-28T22:28:42-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -52,13 +52,13 @@ This way you can add an alias by simply adding a new configuration file to the c
 
 <p>Let&rsquo;s add some XAMPP alias directories.
 Suppose you want to add an alias called &ldquo;dev&rdquo;.
-First, download <a href="/uploads/xampp-alias-template.txt">this alias template file</a> and place it in the alias folder.
+First, download <a href="/uploads/xampp-alias-template.conf">this alias template file</a> and place it in the alias folder.
 Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
-You&rsquo;ll need to edit the template (again, as an administrator) and replace &ldquo;DIRECTORY&rdquo; (it&rsquo;s there twice) with the path to the alias and &ldquo;ALIAS&rdquo; with the name of your alias.
+You&rsquo;ll need to edit the template (again, as an administrator) and replace <code>c:\users\foo\programming\dev</code> (it&rsquo;s at the beginning of the file <em>and</em> at the end) with the path to the alias and <code>{ALIAS}</code> with the name of your alias.
 In our example, it looks something like this:</p>
 
 <p>```
-<directory "c:\users\foo\programming\dev"></p>
+<Directory "c:\users\foo\programming\dev"></p>
 
 <pre><code>#
 # Possible values for the Options directive are "None", "All",
@@ -83,13 +83,13 @@ AllowOverride All
 
 #
 # Controls who can get stuff from this server.
-#     Order allow,deny
-Allow from all
+#
+Require all granted
 </code></pre>
 
 <p></Directory></p>
 
-<p>Alias /dev &ldquo;C:\users\foo\programming\dev&rdquo;
+<p>Alias /dev &ldquo;c:\users\foo\programming\dev&rdquo;
 ```</p>
 
 <p>Restart Apache (you can do so from the XAMPP control panel) and check out <a href="http://localhost/dev.">http://localhost/dev.</a>
