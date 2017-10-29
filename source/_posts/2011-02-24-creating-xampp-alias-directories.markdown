@@ -8,7 +8,7 @@ categories: Apache XAMPP
 
 If you've read my post on [adding aliases to WampServer](/blog/2009/01/14/wamp-alias-directories/),
 you may be curious about how to add aliases to XAMPP.
-While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
+While WampServer has a tool for adding Apache aliases, XAMPP does not.
 Fortunately, creating XAMPP alias directories by hand is pretty easy.
 
 Preparing to Create XAMPP Alias Directories
@@ -31,7 +31,7 @@ You can also launch Notepad as an administrator from the start menu with `Ctrl+S
 Once you've opened httpd.conf, add the following to the end and save it.
 
 ```
-Include "conf/alias/*"
+Include "conf/alias/*.conf"
 ```
 
 Now Apache will look in the alias folder for more configuration files.
@@ -43,8 +43,8 @@ Creating XAMPP Alias Directories
 Let's add some XAMPP alias directories.
 Suppose you want to add an alias called "dev".
 First, download [this alias template file](/uploads/xampp-alias-template.conf) and place it in the alias folder.
-Rename it to "dev.conf" (or whatever you called your alias).
-You'll need to edit the template (again, as an administrator) and replace `c:\users\foo\programming\dev` (it's at the beginning of the file *and* at the end) with the path to the alias and `{ALIAS}` with the name of your alias.
+Rename it to "dev.conf" (or whatever you want to call your alias).
+You'll need to edit the template and replace `{DIRECTORY}` (it's at the beginning of the file *and* at the end) with the folder path, and replace `{ALIAS}` with the name of your alias.
 In our example, it looks something like this:
 
 ```
