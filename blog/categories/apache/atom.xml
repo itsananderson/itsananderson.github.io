@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Apache | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/apache/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-28T22:28:42-07:00</updated>
+  <updated>2017-10-28T22:39:01-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -20,7 +20,7 @@
     <id>http://willi.am/blog/2011/02/24/creating-xampp-alias-directories</id>
     <content type="html"><![CDATA[<p>If you&rsquo;ve read my post on <a href="/blog/2009/01/14/wamp-alias-directories/">adding aliases to WampServer</a>,
 you may be curious about how to add aliases to XAMPP.
-While WampServer has a nice (if somewhat buggy) tool for adding Apache aliases, XAMPP does not.
+While WampServer has a tool for adding Apache aliases, XAMPP does not.
 Fortunately, creating XAMPP alias directories by hand is pretty easy.</p>
 
 <h2>Preparing to Create XAMPP Alias Directories</h2>
@@ -42,7 +42,7 @@ You can also launch Notepad as an administrator from the start menu with <code>C
 <p>Once you&rsquo;ve opened httpd.conf, add the following to the end and save it.</p>
 
 <p><code>
-Include "conf/alias/*"
+Include "conf/alias/*.conf"
 </code></p>
 
 <p>Now Apache will look in the alias folder for more configuration files.
@@ -53,8 +53,8 @@ This way you can add an alias by simply adding a new configuration file to the c
 <p>Let&rsquo;s add some XAMPP alias directories.
 Suppose you want to add an alias called &ldquo;dev&rdquo;.
 First, download <a href="/uploads/xampp-alias-template.conf">this alias template file</a> and place it in the alias folder.
-Rename it to &ldquo;dev.conf&rdquo; (or whatever you called your alias).
-You&rsquo;ll need to edit the template (again, as an administrator) and replace <code>c:\users\foo\programming\dev</code> (it&rsquo;s at the beginning of the file <em>and</em> at the end) with the path to the alias and <code>{ALIAS}</code> with the name of your alias.
+Rename it to &ldquo;dev.conf&rdquo; (or whatever you want to call your alias).
+You&rsquo;ll need to edit the template and replace <code>{DIRECTORY}</code> (it&rsquo;s at the beginning of the file <em>and</em> at the end) with the folder path, and replace <code>{ALIAS}</code> with the name of your alias.
 In our example, it looks something like this:</p>
 
 <p>```
