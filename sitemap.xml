@@ -357,51 +357,27 @@
         <lastmod>2017-10-05T14:57:29-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/404.html</loc>
-        <lastmod>2017-09-27T21:26:38-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://willi.am/about/</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://willi.am/blog/archives/</loc>
-        <lastmod>2017-10-28T22:38:34-07:00</lastmod>
+        <loc>http://willi.am/blog/2018/03/25/simple-trick-for-juggling-related-git-branches/</loc>
+        <lastmod>2018-03-25T21:01:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/</loc>
-        <lastmod>2017-10-28T22:38:34-07:00</lastmod>
+        <lastmod>2018-03-25T21:01:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/node-modules/</loc>
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/plugins/code-snippets/</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://willi.am/plugins/dev-profiles/</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://willi.am/plugins/enable-codepress/</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://willi.am/plugins/</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+        <loc>http://willi.am/work-with-me-node/</loc>
+        <lastmod>2017-10-21T21:31:24-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/plugins/minimum-password-length/</loc>
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/plugins/minimum-password-strength/</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
-    </url>
-    <url>
-        <loc>http://willi.am/plugins/naughty-monkey/</loc>
+        <loc>http://willi.am/plugins/remove-editor-and-install-pages/</loc>
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
@@ -409,11 +385,31 @@
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
+        <loc>http://willi.am/plugins/naughty-monkey/</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/dev-profiles/</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/minimum-password-strength/</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/plugins/enable-codepress/</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+    </url>
+    <url>
         <loc>http://willi.am/plugins/random-headers/</loc>
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/plugins/remove-editor-and-install-pages/</loc>
+        <loc>http://willi.am/plugins/code-snippets/</loc>
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
@@ -425,19 +421,27 @@
         <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/robots.txt</loc>
-        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
+        <loc>http://willi.am/work-with-me-wordpress/</loc>
+        <lastmod>2017-10-21T21:30:54-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/404.html</loc>
+        <lastmod>2017-09-27T21:26:38-07:00</lastmod>
     </url>
     <url>
         <loc>http://willi.am/work-with-me/</loc>
         <lastmod>2017-10-28T22:23:04-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/work-with-me-node/</loc>
-        <lastmod>2017-10-21T21:31:24-07:00</lastmod>
+        <loc>http://willi.am/about/</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
     <url>
-        <loc>http://willi.am/work-with-me-wordpress/</loc>
-        <lastmod>2017-10-21T21:30:54-07:00</lastmod>
+        <loc>http://willi.am/blog/archives/</loc>
+        <lastmod>2018-03-25T21:01:24-07:00</lastmod>
+    </url>
+    <url>
+        <loc>http://willi.am/robots.txt</loc>
+        <lastmod>2017-09-27T21:26:39-07:00</lastmod>
     </url>
 </urlset>

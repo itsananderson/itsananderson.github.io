@@ -7,16 +7,14 @@
 	<meta name="author" content="Will Anderson">
 
 	
-	<meta name="description" content="Bread Crumbs are something that&rsquo;s been around for quite some time.
-I first remember seeing them in ANGEL when my dad was working for the &hellip;">
+	<meta name="description" content="I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice &hellip;">
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@itsananderson" />
     <meta name="twitter:title" content="Will Anderson" />
-    <meta name="twitter:description" content="Bread Crumbs are something that&rsquo;s been around for quite some time.
-I first remember seeing them in ANGEL when my dad was working for the &hellip;" />
+    <meta name="twitter:description" content="I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice &hellip;" />
 
 	<link href="http://william-backend.azurewebsites.net/feed/" rel="alternate" title="Will Anderson" type="application/atom+xml">
 	<link rel="canonical" href="">
@@ -85,6 +83,55 @@ I first remember seeing them in ANGEL when my dad was working for the &hellip;" 
 		
 	
 	<div id="content" class="inner">
+
+
+    <article class="post">
+	<h2 class="title">
+		
+		<a href="/blog/2008/12/30/wordpress-security-tip-disable-folder-indexes/">
+		
+			WordPress Security Tip: Disable Folder Indexes</a>
+	</h2>
+	<div class="entry-content">
+		<p>I&rsquo;ve been catching up on the WordPress Weekly Podcasts lately and while I was listening to one of the first shows I came across a nice security tip. Place empty index.php files in all directories that don&rsquo;t already have an index file. Directories like the /wp-content/plugins folder could be dangerous in the hands of hackers if one of the plugins you use has a security flaw. By obscuring the folder&rsquo;s contents you make it just a little harder for hackers to cause you problems.</p>
+
+<p>I went about creating these empty index files on my site, but soon discovered that there are hosts of folders that could use them (think about the date structure in /wp-content/uploads ). Then I remembered another tool. <code>.htaccess</code>. Add this line of code to your <code>.htaccess</code> file to keep file in <em>any</em> directory from being listed (this works on any site who&rsquo;s server supports <code>.htaccess</code> by the way, not just WordPress blogs).</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>IndexIgnore *</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Really simple, I know, but I thought I&rsquo;d share it all the same.</p>
+
+		
+		
+	</div>
+
+
+<div class="meta">
+	<div class="date">
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-12-30T21:49:40-08:00" pubdate data-updated="true">Dec 30<span>th</span>, 2008</time></div>
+	<div class="tags">
+
+
+	<a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/wordpress/'>WordPress</a>
+
+
+</div>
+	
+</div>
+</article>
 
 
     <article class="post">
@@ -212,7 +259,7 @@ I first remember seeing them in <a title="ANGEL Learning" href="http://angellear
     
     <div class="center"><a href="/blog/archives">Blog Archives</a></div>
 </nav></div>
-	<footer id="footer" class="inner">Copyright &copy; 2017
+	<footer id="footer" class="inner">Copyright &copy; 2018
 
     Will Anderson
 

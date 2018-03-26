@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Git | Will Anderson]]></title>
   <link href="http://willi.am/blog/categories/git/atom.xml" rel="self"/>
   <link href="http://willi.am/"/>
-  <updated>2017-10-28T22:39:01-07:00</updated>
+  <updated>2018-03-25T21:01:49-07:00</updated>
   <id>http://willi.am/</id>
   <author>
     <name><![CDATA[Will Anderson]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Simple Trick For Juggling Related Git Branches]]></title>
+    <link href="http://willi.am/blog/2018/03/25/simple-trick-for-juggling-related-git-branches/"/>
+    <updated>2018-03-25T13:47:12-07:00</updated>
+    <id>http://willi.am/blog/2018/03/25/simple-trick-for-juggling-related-git-branches</id>
+    <content type="html"><![CDATA[<p>At my job, it&rsquo;s not uncommon to work on a change that builds on another change which is still in code review. Sometimes a coworker is adding a component that I want to consume, and other times I&rsquo;m just breaking my own work into multiple stages to simplify code review.</p>
+
+<p>We squash commit to master rather than merging development branches, so whenever the code I depend on lands in master, I do an interactive rebase. This removes the unsquashed commits and cleans up my development branch. I also do a similar rebase if the code I&rsquo;m building on is updated while it&rsquo;s still in development.</p>
+
+<p>In either case, it can sometimes be tedious to figure out which commits in my branch are mine, and which commits I&rsquo;m building on. This is especially annoying if I&rsquo;m building on my own branch, because then all the commit authors looks the same. To solve this, I&rsquo;ve started leaving a marker for myself in the form of an empy commit to delineate my changes.</p>
+
+<p><code>
+git commit --allow-empty -m "============="
+</code></p>
+
+<p>This way when I rebase, I get a nice little marker in the interactive rebase screen that tells me where to start throwing away commits.</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/rebase-with-marker3.gif" style="border: 1px solid #aaa" /></p>
+
+<p>Because the commit is empty, the rebase command will automatically ignore it by commenting out the commit. If I&rsquo;m done with the marker, I&rsquo;ll remove it or just leave it commented out. Otherwise, I uncomment that line to keep the marker commit around after the rebase. Either way, since we squash commit to master, the empty commit eventually disappears and doesn&rsquo;t clutter up my Git history.</p>
+
+<p>This is also fairly trivial to even if you have an in-progress branch that you later decide to rebase onto another in-progress branch. Here&rsquo;s how I do it:</p>
+
+<p><img src="https://itsananderson.blob.core.windows.net/post-images/git-rebase-marker2.gif" style="border: 1px solid #aaa" /></p>
+
+<p>That&rsquo;s pretty much it. I&rsquo;ve found this to be a helpful way to leave myself breadcrumbs, especially when I haven&rsquo;t touched a branch for some time.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Dynamically Configure Your Git Email]]></title>
@@ -78,13 +107,13 @@ I created a script and put it in <code>~/.git-scripts/email-guess.sh</code> (aga
 <h1>!/bin/bash</h1>
 
 <p>remote=<code>git remote -v | awk '/\(push\)$/ {print $2}'</code>
-email=<a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#119;&#105;&#108;&#x6c;&#x40;&#105;&#x74;&#x73;&#x61;&#110;&#97;&#110;&#100;&#x65;&#x72;&#115;&#x6f;&#110;&#46;&#99;&#x6f;&#x6d;">&#119;&#x69;&#x6c;&#x6c;&#64;&#x69;&#116;&#x73;&#x61;&#x6e;&#97;&#x6e;&#100;&#x65;&#114;&#115;&#111;&#x6e;&#46;&#x63;&#111;&#109;</a> # default</p>
+email=<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#111;&#x3a;&#x77;&#x69;&#x6c;&#108;&#x40;&#105;&#x74;&#115;&#x61;&#110;&#x61;&#x6e;&#x64;&#101;&#x72;&#115;&#111;&#110;&#x2e;&#99;&#x6f;&#109;">&#x77;&#x69;&#108;&#108;&#x40;&#x69;&#x74;&#x73;&#97;&#x6e;&#97;&#110;&#x64;&#101;&#114;&#115;&#111;&#x6e;&#46;&#x63;&#111;&#x6d;</a> # default</p>
 
 <p>if [[ $remote == <em>github.com:Microsoft</em> ]]; then
-  email=<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x77;&#105;&#97;&#110;&#x64;&#x40;&#109;&#105;&#99;&#x72;&#111;&#x73;&#x6f;&#x66;&#x74;&#46;&#x63;&#x6f;&#x6d;">&#x77;&#105;&#97;&#x6e;&#100;&#64;&#109;&#x69;&#x63;&#x72;&#111;&#x73;&#111;&#102;&#x74;&#46;&#x63;&#111;&#109;</a>
+  email=<a href="&#109;&#x61;&#105;&#108;&#116;&#x6f;&#58;&#x77;&#x69;&#97;&#110;&#x64;&#64;&#x6d;&#x69;&#99;&#x72;&#x6f;&#x73;&#x6f;&#x66;&#116;&#x2e;&#99;&#x6f;&#109;">&#x77;&#x69;&#x61;&#110;&#x64;&#x40;&#x6d;&#x69;&#x63;&#x72;&#111;&#115;&#111;&#102;&#116;&#46;&#x63;&#111;&#109;</a>
 fi
 if [[ $remote == <em>itsananderson.visualstudio.com</em> ]]; then
-  email=<a href="&#x6d;&#97;&#105;&#x6c;&#x74;&#x6f;&#x3a;&#x77;&#105;&#108;&#108;&#x40;&#x63;&#111;&#x64;&#101;&#x61;&#x77;&#104;&#105;&#108;&#101;&#46;&#x63;&#111;&#109;">&#119;&#x69;&#x6c;&#x6c;&#x40;&#99;&#x6f;&#x64;&#101;&#x61;&#x77;&#x68;&#105;&#x6c;&#x65;&#46;&#99;&#x6f;&#x6d;</a>
+  email=<a href="&#109;&#97;&#x69;&#108;&#x74;&#111;&#x3a;&#119;&#105;&#x6c;&#x6c;&#64;&#x63;&#111;&#x64;&#x65;&#x61;&#x77;&#104;&#105;&#108;&#101;&#x2e;&#99;&#111;&#x6d;">&#119;&#x69;&#108;&#x6c;&#x40;&#x63;&#x6f;&#100;&#x65;&#x61;&#119;&#104;&#x69;&#108;&#101;&#46;&#99;&#x6f;&#109;</a>
 fi</p>
 
 <p>echo &ldquo;Configuring user.email as $email&rdquo;
@@ -286,30 +315,6 @@ If Git stored diffs, you&rsquo;d expect to see one large blob, and a second much
 
 <p>This isn&rsquo;t exactly a scientific proof about Git&rsquo;s behavior, but hopefully it illustrates it enough to get the point across.
 If you want a more detailed explanation about how Git stores data, you can watch the YouTube video above, or read the Git documentation.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Introducing Edge-Git]]></title>
-    <link href="http://willi.am/blog/2014/09/16/introducing-edge-git/"/>
-    <updated>2014-09-16T22:50:30-07:00</updated>
-    <id>http://willi.am/blog/2014/09/16/introducing-edge-git</id>
-    <content type="html"><![CDATA[<p>I&rsquo;ve recently been frustrated by the lack of functional Node bindings for <a href="https://libgit2.github.com/">libgit2</a>.
-The most prominent projects are <a href="https://github.com/libgit2/node-gitteh">node-gitteh</a> and <a href="">nodegit</a>.
-Unfortunately both repositories are severely lacking in features and documentation.
-I couldn&rsquo;t even install node-gitteh on Windows, and I spent an unsuccessful evening trying to get nodegit to do something as simple as fetching changes.</p>
-
-<p>Eventually I came to the conclusion that no libgit2 bindings for Node are functional enough for my use.</p>
-
-<p>I&rsquo;d used <a href="https://github.com/libgit2/libgit2sharp">LibGit2Sharp</a> for a .NET project in the past.
-It&rsquo;s an amazingly high-quality project.
-While the documentation is sparse, the copious unit tests make it easy to figure out how to accomplish different tasks.</p>
-
-<p>I&rsquo;d read about <a href="http://tjanczuk.github.io/edge/">Edge.js</a>, which lets you interop between .NET and Node, but hadn&rsquo;t actually done anything with it.
-Since I had a seemingly perfect use case, I decided to dive in.</p>
-
-<p>About a week later, I have a very basic initial release of <a href="https://www.npmjs.org/package/edge-git">edge-git.</a>
-About all you can do at this point is init, clone, and query branches/commits, but I&rsquo;m steadily adding more bindings to the existing LibGit2Sharp functionality.</p>
 ]]></content>
   </entry>
   
